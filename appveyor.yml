@@ -1,0 +1,58 @@
+#
+# Appveyor configuration
+#
+# Build the project on Visual Studio 2015, in debug and release mode, 64 bits.
+#
+# CMake flags :
+#   * PROJECT_CI_DEPLOY : enable install inside the build directory
+#   * PROJECT_COVERAGE : works only on Linux, using gcov
+#
+# Once a tag is pushed, the release build will be packed and push to GitHub.
+#
+
+version: '{branch}-{build}'
+
+clone_folder: C:\yall
+
+environment:
+    matrix:
+        - image: Visual Studio 2015
+          configuration: Debug
+          platform: x64
+          generator: "Visual Studio 14 2015 Win64"
+        - image: Visual Studio 2015
+          configuration: Release
+          platform: x64
+          generator: "Visual Studio 14 2015 Win64"
+
+artifacts:
+    - path: 'yall-*.tgz'
+      name: yall_pack
+
+before_build:
+    - cd c:\yall
+    - cmake -G"%generator%" -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off
+
+build_script:
+    - cmd: cmake --build . --config %configuration% --target ALL_BUILD
+
+before_test:
+    - cmd: cmake --build . --target yall_unit
+
+test_script:
+    - cmd: cmake --build . --target unit
+
+after_test:
+    - cmake --build . --target install
+    - cmake --build . --target dist
+
+deploy:
+    release: $(APPVEYOR_REPO_TAG_NAME)
+    provider: GitHub
+    artifact: yall_pack
+    auth_token:
+        secure: m1UyeZWsWwSM++DiS27kA2APSbG22p0SWb1YM2pdTOwTVQf0bBWg9MNlQtJSjcia
+    draft: false
+    on:
+        appveyor_repo_tag: true
+        Configuration: Release
