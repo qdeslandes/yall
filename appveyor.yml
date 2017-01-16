@@ -51,7 +51,7 @@ deploy:
     provider: GitHub
     artifact: yall_pack
     auth_token:
-        secure: m1UyeZWsWwSM++DiS27kA2APSbG22p0SWb1YM2pdTOwTVQf0bBWg9MNlQtJSjcia
+        secure: ZWCkNHmbrBurrU0WLBESAeFdNkhuUsae1TApe8LR/cakzx5Puw/akJZBC3uaISnw
     draft: false
     on:
         appveyor_repo_tag: true
