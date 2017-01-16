@@ -1,0 +1,10 @@
+# Folders
+build
+
+# Files
+*.todo
+*.swp
+out.txt
+
+# IDE
+*.kdev4
