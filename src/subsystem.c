@@ -150,7 +150,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 	if (! (s->name = malloc(strlen(name) + 1)))
 		goto err_free;
 
-	strcpy(s->name, name);
+	strncpy(s->name, name, strlen(name)+1);
 	s->log_level = log_level;
 	s->output_type = output_type;
 
@@ -158,7 +158,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 		if (! (s->output_file = malloc(strlen(output_file) + 1)))
 			goto err_free_name;
 
-		strcpy(s->output_file, output_file);
+		strncpy(s->output_file, output_file, strlen(output_file)+1);
 	}
 
 	return s;
@@ -216,7 +216,7 @@ void update_subsystem(struct yall_subsystem *s,
 	s->output_type = output_type;
 
 	if (output_file && (s->output_file = malloc(strlen(output_file) + 1)))
-		strcpy(s->output_file, output_file);
+		strncpy(s->output_file, output_file, strlen(output_file)+1);
 }
 
 struct yall_subsystem *remove_subsystem(const char *name)
