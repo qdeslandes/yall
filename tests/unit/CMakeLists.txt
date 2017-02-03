@@ -44,6 +44,7 @@ message(">     Linked libraries    : ${PROJECT_UNIT_LIBRARIES}")
 
 # Main library
 add_executable(${PROJECT_NAME}_unit ${PROJECT_UNIT_SRCS} ${PROJECT_SRCS})
+include_directories("helpers")
 target_link_libraries(${PROJECT_NAME}_unit ${PROJECT_UNIT_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT_OUTPUT_NAME})
 
