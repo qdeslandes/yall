@@ -9,7 +9,16 @@ extern struct yall_subsystem *_get_subsystem(const char *name,
 // Test with empty subsystems list
 Test(subsystem, test__get_subsystem0)
 {
-	cr_assert(1);
+	extern struct yall_subsystem *subsystems;
+
+	// Without parameters
+	cr_assert_eq(_get_subsystem("", subsystems, NULL), NULL);
+	cr_assert_eq(_get_subsystem("test", subsystems, NULL), NULL);
+
+	// With parameters
+	struct yall_subsystem_params p = { 0 };
+	cr_assert_eq(_get_subsystem("", subsystems, &p), NULL);
+	cr_assert_eq(_get_subsystem("test", subsystems, &p), NULL);
 }
 
 // Test with filled subsystems list
