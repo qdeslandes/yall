@@ -12,9 +12,11 @@ IF (UNIX)# Build flags
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
 
+	set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
+
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage -Dstatic=")
+		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage")
 	endif ()
 
 	# Linked libraries
