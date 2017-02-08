@@ -8,7 +8,7 @@ project(yall)
 
 # Set version variables
 set(PROJECT_VERSION_MAJOR 1)
-set(PROJECT_VERSION_MINOR 0)
+set(PROJECT_VERSION_MINOR 1)
 set(PROJECT_VERSION_PATCH 0)
 
 # Options for CI and desktop build
