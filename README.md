@@ -1,6 +1,6 @@
 # Project yall
 
-[![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](COPYING)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](COPYING)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
 |master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)]()|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)]()|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
@@ -64,4 +64,4 @@ YALL_DEBUG("example_subsystem", "My message : %s", "error");
 
 ### Misc
 
-Feel free to contribute to the project and send a pull request. To get some personnal help or report a bug, you can contact `naccyde <at> naccyde <dot> eu` ;) .
+yall is an open-source project, feel free to contribute to the project and send a pull request. To get some personnal help or report a bug, you can contact `naccyde <at> naccyde <dot> eu` ;) .

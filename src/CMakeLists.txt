@@ -1,3 +1,7 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
 #
 # CMake configuration for main library
 #
@@ -58,7 +62,7 @@ else ()
 endif ()
 
 install(FILES ${CMAKE_SOURCE_DIR}/README.md DESTINATION ${CMAKE_INSTALL_PREFIX}/)
-install(FILES ${CMAKE_SOURCE_DIR}/COPYING DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 install(TARGETS ${PROJECT_NAME}_shared ${PROJECT_NAME}_static
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 	ARCHIVE	DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
