@@ -3,7 +3,7 @@
 #include <string.h>
 #include <yall/subsystem.h>
 
-static struct yall_subsystem *_subsystems[10] = { 0 };
+struct yall_subsystem *_subsystems[10] = { 0 };
 
 void create_subsystems(void)
 {
@@ -30,8 +30,8 @@ void create_subsystems(void)
 	_subsystems[4]->name = malloc(sizeof("00")+1);
 	strcpy(_subsystems[4]->name, "00");
 
-	_subsystems[4]->log_level = yall_debug;
-	_subsystems[4]->output_type = yall_console_output;
+	_subsystems[4]->log_level = yall_inherited_level;
+	_subsystems[4]->output_type = yall_inherited_output;
 	_subsystems[4]->previous = NULL;
 	_subsystems[4]->next = NULL;
 	_subsystems[4]->parent = _subsystems[0];
@@ -44,8 +44,8 @@ void create_subsystems(void)
 	_subsystems[5]->name = malloc(sizeof("01")+1);
 	strcpy(_subsystems[5]->name, "01");
 
-	_subsystems[5]->log_level = yall_debug;
-	_subsystems[5]->output_type = yall_console_output;
+	_subsystems[5]->log_level = yall_inherited_level;
+	_subsystems[5]->output_type = yall_inherited_output;
 	_subsystems[5]->previous = _subsystems[4];
 	_subsystems[5]->next = NULL;
 	_subsystems[5]->parent = _subsystems[0];
@@ -60,7 +60,7 @@ void create_subsystems(void)
 	_subsystems[6]->name = malloc(sizeof("02")+1);
 	strcpy(_subsystems[6]->name, "02");
 
-	_subsystems[6]->log_level = yall_debug;
+	_subsystems[6]->log_level = yall_warning;
 	_subsystems[6]->output_type = yall_console_output;
 	_subsystems[6]->previous = _subsystems[5];
 	_subsystems[6]->next = NULL;
@@ -108,7 +108,7 @@ void create_subsystems(void)
 	_subsystems[7]->name = malloc(sizeof("20")+1);
 	strcpy(_subsystems[7]->name, "20");
 
-	_subsystems[7]->log_level = yall_warning;
+	_subsystems[7]->log_level = yall_inherited_level;
 	_subsystems[7]->output_type = yall_console_output;
 	_subsystems[7]->previous = NULL;
 	_subsystems[7]->next = NULL;
@@ -122,8 +122,8 @@ void create_subsystems(void)
 	_subsystems[8]->name = malloc(sizeof("200")+1);
 	strcpy(_subsystems[8]->name, "200");
 
-	_subsystems[8]->log_level = yall_warning;
-	_subsystems[8]->output_type = yall_console_output;
+	_subsystems[8]->log_level = yall_inherited_level;
+	_subsystems[8]->output_type = yall_inherited_output;
 	_subsystems[8]->previous = NULL;
 	_subsystems[8]->next = NULL;
 	_subsystems[8]->parent = _subsystems[7];
@@ -136,8 +136,8 @@ void create_subsystems(void)
 	_subsystems[9]->name = malloc(sizeof("201")+1);
 	strcpy(_subsystems[9]->name, "201");
 
-	_subsystems[9]->log_level = yall_warning;
-	_subsystems[9]->output_type = yall_console_output;
+	_subsystems[9]->log_level = yall_debug;
+	_subsystems[9]->output_type = yall_inherited_output;
 	_subsystems[9]->previous = _subsystems[8];
 	_subsystems[9]->next = NULL;
 	_subsystems[9]->parent = _subsystems[7];
