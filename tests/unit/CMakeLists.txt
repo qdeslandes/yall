@@ -68,7 +68,7 @@ if (PROJECT_COVERAGE)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 		COMMENT "Prepare coverage target")
 	add_custom_target(coverage
-		COMMAND gcov -cbf `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+		COMMAND gcov -f `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
 	add_dependencies(coverage coverage_prepare)
