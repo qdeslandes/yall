@@ -165,7 +165,11 @@ void create_subsystems(void)
 void clean_subsystems(void)
 {
 	for (int i = 0; i < 10; ++i) {
-		free(_subsystems[i]->name);
-		free(_subsystems[i]);
+		if (_subsystems[i]) {
+			free(_subsystems[i]->name);
+			free(_subsystems[i]);
+		}
+
+		_subsystems[i] = NULL;
 	}
 }
