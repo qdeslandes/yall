@@ -93,12 +93,16 @@ static void _free_subsystem(struct yall_subsystem *s)
 
 /*
  * _free_subsystems : free the given subsystems tree through _free_subsystem
- * 	function.
+ * 	function. <s> is used as the root of the tree, so its parents will not
+ * 	be freed.
  */
 static void _free_subsystems(struct yall_subsystem *s)
 {
 	while (s) {
 		struct yall_subsystem *tmp = s->next;
+
+		if (s->parent)
+			s->parent->childs = NULL;
 
 		if (s->childs)
 			_free_subsystems(s->childs);
