@@ -6,6 +6,36 @@
 extern struct yall_subsystem *subsystems;
 struct yall_subsystem *_subsystems[10] = { 0 };
 
+struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_file)
+{
+	struct yall_subsystem *s = malloc(sizeof(struct yall_subsystem));
+	s->parent = NULL;
+	s->childs = NULL;
+	s->previous = NULL;
+	s->next = NULL;
+	s->output_file = NULL;
+
+	s->name = malloc(strlen(name) + 1);
+	strcpy(s->name, name);
+
+	if (output_file) {
+		s->output_file = malloc(strlen(output_file) + 1);
+		strcpy(s->output_file, output_file);
+	}
+
+	s->log_level = yall_debug;
+	s->output_type = yall_console_output;
+
+	return s;
+}
+
+void free_fake_subsystem(struct yall_subsystem *s)
+{
+	free(s->output_file);
+	free(s->name);
+	free(s);
+}
+
 void create_subsystems(void)
 {
 	/* Subsystem 0 */
