@@ -21,6 +21,10 @@ Test(subsystem, test_create_subsystem0)
 	cr_assert_eq(s->output_type, yall_console_output);
 	cr_assert_eq(s->output_file, NULL);
 
+	free(s->output_file);
+	free(s->name);
+	free(s);
+
 	// With file output
 	s = create_subsystem("0", yall_debug, yall_console_output, "test");
 	cr_assert(s);
@@ -28,4 +32,8 @@ Test(subsystem, test_create_subsystem0)
 	cr_assert_eq(s->log_level, yall_debug);
 	cr_assert_eq(s->output_type, yall_console_output);
 	cr_assert_eq(strcmp(s->output_file, "test"), 0);
+
+	free(s->output_file);
+	free(s->name);
+	free(s);
 }
