@@ -11,12 +11,12 @@ file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 
+set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
+
 IF (UNIX)# Build flags
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
-
-	set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
