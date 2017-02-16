@@ -86,7 +86,8 @@ void update_subsystem(struct yall_subsystem *s,
 	const char *output_file);
 
 /*
- * remove_subsystem : remove a subsystem from the subsystem tree. <name> can
+ * remove_subsystem : remove a subsystem from the subsystem tree. If this
+ *  subsystem had childs, its childs will always be linked to it <name> can
  * 	not be NULL. If the subsystem is found, returns it, otherwise returns
  * 	NULL and must be a NULL terminated string.
  */
