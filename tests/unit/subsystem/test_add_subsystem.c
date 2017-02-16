@@ -44,4 +44,13 @@ Test(subsystem, test_add_subsystem0)
     add_subsystem(NULL, s);
     cr_assert_eq(subsystems->next->next->next, s);
     cr_assert_eq(s->previous, subsystems->next->next);
+
+    free_fake_subsystem(subsystems->next->next->next);
+    free_fake_subsystem(subsystems->next->next->childs->next);
+    free_fake_subsystem(subsystems->next->next->childs);
+    free_fake_subsystem(subsystems->next->next);
+    free_fake_subsystem(subsystems->next);
+    free_fake_subsystem(subsystems->childs);
+    free_fake_subsystem(subsystems);
+    subsystems = NULL;
 }
