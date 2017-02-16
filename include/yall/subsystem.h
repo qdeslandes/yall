@@ -52,6 +52,9 @@ struct yall_subsystem_params {
  * get_subsystem : if a subsystem of the given <name> is available,
  * 	returns it. If not, the function returns NULL.
  * 	<name> can not be NULL and must be a NULL terminated string.
+ * 	<params> is a struct which will contains the subsystem's parameters.
+ * 	It will be filled with the default parameters in case some parameters
+ * 	are missing in the subsystem's.
  */
 struct yall_subsystem *get_subsystem(const char *name,
 	struct yall_subsystem_params *params);
