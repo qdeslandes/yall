@@ -49,10 +49,10 @@ build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
 
 before_test:
-    - cmd: if "%generator" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target yall_unit
+    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target yall_unit
 
 test_script:
-    - cmd: if "%generator" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
+    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 after_test:
     - cmake --build . --target install
