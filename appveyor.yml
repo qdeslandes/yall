@@ -28,6 +28,14 @@ environment:
           configuration: Release
           platform: x64
           generator: "Visual Studio 14 2015 Win64"
+        - image: Visual Studio 2015
+          configuration: Debug
+          platform: x64
+          generator: "Visual Studio 12 2013 Win64"
+        - image: Visual Studio 2015
+          configuration: Release
+          platform: x64
+          generator: "Visual Studio 12 2013 Win64"
 
 artifacts:
     - path: 'yall-*.tgz'
