@@ -28,6 +28,14 @@ environment:
           configuration: Release
           platform: x64
           generator: "Visual Studio 14 2015 Win64"
+        - image: Visual Studio 2015
+          configuration: Debug
+          platform: x64
+          generator: "Visual Studio 12 2013 Win64"
+        - image: Visual Studio 2015
+          configuration: Release
+          platform: x64
+          generator: "Visual Studio 12 2013 Win64"
 
 artifacts:
     - path: 'yall-*.tgz'
@@ -41,10 +49,10 @@ build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
 
 before_test:
-    - cmd: cmake --build . --target yall_unit
+    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target yall_unit
 
 test_script:
-    - cmd: cmake --build . --target unit
+    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 after_test:
     - cmake --build . --target install

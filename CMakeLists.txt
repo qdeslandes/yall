@@ -38,6 +38,8 @@ elseif (WIN32)
 
 	if (MSVC_VERSION EQUAL 1900)
 		set(COMPILER "msvc-14.0")
+	elseif (MSVC_VERSION EQUAL 1800)
+		set(COMPILER "msvc-12.0")
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
