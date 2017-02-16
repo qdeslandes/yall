@@ -1,5 +1,7 @@
 #include "h_stream.h"
 
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -11,7 +13,7 @@ void redirect_streams(void)
 {
     stderr_bak = dup(STDERR_FILENO);
 
-    freopen("tmp.txt", "w", stderr);
+    freopen("unit.log", "w", stderr);
 }
 
 void restore_streams(void)
@@ -20,11 +22,27 @@ void restore_streams(void)
     close(stderr_bak);
 }
 
-uint16_t content_size(const char *filename)
+uint8_t check_output(const char *filename, const char *content)
 {
-    struct stat sb;
+    FILE *f = fopen(filename, "r");
+    int ret = 0;
+    int length = 0;
+    char *buffer = NULL;
 
-    stat(filename, &sb);
+    if (f) {
+        fseek(f, 0, SEEK_END);
+        length = ftell(f);
+        fseek(f, 0, SEEK_SET);
+        buffer = malloc(length);
 
-    return sb.st_size;
+        if (buffer) {
+            fread(buffer, 1, length, f);
+            ret = strcmp(buffer, content);
+            free(buffer);
+        }
+
+        fclose(f);
+    }
+
+    return ret;
 }
