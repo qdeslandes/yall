@@ -5,6 +5,6 @@
 
 void redirect_streams(void);
 void restore_streams(void);
-uint8_t check_ouput(const char *filename, const char *content);
+uint8_t check_stderr(const char *content, int size);
 
 #endif

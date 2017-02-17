@@ -4,45 +4,33 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 static int stderr_bak = 0;
+static char buffer[1024] = { 0 };
 
 void redirect_streams(void)
 {
+    fflush(stderr);
     stderr_bak = dup(STDERR_FILENO);
 
-    freopen("unit.log", "w", stderr);
+    freopen("NULL", "a", stderr);
+    setvbuf(stderr, buffer, _IOFBF, 1024);
 }
 
 void restore_streams(void)
 {
+    freopen("NULL", "a", stderr);
     dup2(stderr_bak, STDERR_FILENO);
-    close(stderr_bak);
 }
 
-uint8_t check_output(const char *filename, const char *content)
+uint8_t check_stderr(const char *content, int size)
 {
-    FILE *f = fopen(filename, "r");
-    int ret = 0;
-    int length = 0;
-    char *buffer = NULL;
+    int ret = strncmp(buffer, content, size);
 
-    if (f) {
-        fseek(f, 0, SEEK_END);
-        length = ftell(f);
-        fseek(f, 0, SEEK_SET);
-        buffer = malloc(length);
+    for (int i = 0; i < 1024; ++i)
+        buffer[i] = 0;
 
-        if (buffer) {
-            fread(buffer, 1, length, f);
-            ret = strcmp(buffer, content);
-            free(buffer);
-        }
-
-        fclose(f);
-    }
+    fflush(stderr);
 
     return ret;
 }
