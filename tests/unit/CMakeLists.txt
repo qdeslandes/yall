@@ -56,7 +56,8 @@ set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT
 
 if (UNIX)
 	set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
-elseif (WIN32)	
+elseif (WIN32)
+	# Unit test are running only for MSVC14
 	if (MSVC_VERSION EQUAL 1900)
 		set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 	endif ()
