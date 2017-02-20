@@ -3,10 +3,6 @@
 #include "yall/errors.h"
 #include "h_stream.h"
 
-#include <semaphore.h>
-extern sem_t console_sem;
-extern sem_t file_sem;
-
 /*
  * It is not possible to test without initializing semaphores.
  * Currently, I can't test console / file output, so we only
