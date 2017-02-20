@@ -14,10 +14,10 @@ extern HANDLE console_sem;
 Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_streams)
 {
 #ifdef __linux__
-	sem_init(&console_sem, 0, 1)
+	sem_init(&console_sem, 0, 1);
 #elif _WIN32
 	console_sem = CreateMutex(NULL, FALSE, NULL);
-#endif;
+#endif
 
 #if __linux__
     cr_assert_eq(write_log_console(yall_debug, ""), YALL_OK);
@@ -51,16 +51,16 @@ Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_s
 	sem_destroy(&console_sem);
 #elif _WIN32
 	CloseHandle(console_sem);
-#endif;
+#endif
 }
 
 Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_streams)
 {
 #ifdef __linux__
-	sem_init(&console_sem, 0, 1)
+	sem_init(&console_sem, 0, 1);
 #elif _WIN32
 	console_sem = CreateMutex(NULL, FALSE, NULL);
-#endif;
+#endif
 
 #if __linux__
     cr_assert_eq(write_log_console(yall_debug, "test"), YALL_OK);
@@ -94,5 +94,5 @@ Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_s
 	sem_destroy(&console_sem);
 #elif _WIN32
 	CloseHandle(console_sem);
-#endif;
+#endif
 }
