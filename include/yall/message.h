@@ -32,6 +32,11 @@
 
 #define YALL_MSG_LEN	512
 
+/*
+ * generate_message : create the log message. It fills <buffer> we given data
+ * 	and specific format. No pointer argument can be NULL, but <args> can be
+ * 	empty.
+ */
 uint8_t generate_message(char *buffer,
 	const char *format,
 	const char *subsystem,

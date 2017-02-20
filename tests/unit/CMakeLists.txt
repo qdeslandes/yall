@@ -11,6 +11,8 @@ file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 
+set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
+
 IF (UNIX)# Build flags
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
@@ -18,7 +20,7 @@ IF (UNIX)# Build flags
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage -Dstatic=")
+		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage")
 	endif ()
 
 	# Linked libraries
@@ -48,13 +50,14 @@ message(">     Linked libraries    : ${PROJECT_UNIT_LIBRARIES}")
 
 # Main library
 add_executable(${PROJECT_NAME}_unit ${PROJECT_UNIT_SRCS} ${PROJECT_SRCS})
+include_directories("helpers")
 target_link_libraries(${PROJECT_NAME}_unit ${PROJECT_UNIT_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT_OUTPUT_NAME})
 
 if (UNIX)
 	set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
-elseif (WIN32)	
-	# Unit test are running only for MSVC 14
+elseif (WIN32)
+	# Unit test are running only for MSVC14
 	if (MSVC_VERSION EQUAL 1900)
 		set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 	endif ()
@@ -72,7 +75,7 @@ if (PROJECT_COVERAGE)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 		COMMENT "Prepare coverage target")
 	add_custom_target(coverage
-		COMMAND gcov -cbf `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+		COMMAND gcov -f `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
 	add_dependencies(coverage coverage_prepare)

@@ -70,11 +70,6 @@ static uint8_t generate_header(char *buffer,
 	return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
 }
 
-/*
- * generate_message : create the log message. It fills <buffer> we given data
- * 	and specific format. No pointer argument can be NULL, but <args> can be
- * 	empty.
- */
 uint8_t generate_message(char *buffer,
 	const char *format,
 	const char *subsystem,

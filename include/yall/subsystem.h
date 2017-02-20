@@ -52,6 +52,9 @@ struct yall_subsystem_params {
  * get_subsystem : if a subsystem of the given <name> is available,
  * 	returns it. If not, the function returns NULL.
  * 	<name> can not be NULL and must be a NULL terminated string.
+ * 	<params> is a struct which will contains the subsystem's parameters.
+ * 	It will be filled with the default parameters in case some parameters
+ * 	are missing in the subsystem's.
  */
 struct yall_subsystem *get_subsystem(const char *name,
 	struct yall_subsystem_params *params);
@@ -83,7 +86,8 @@ void update_subsystem(struct yall_subsystem *s,
 	const char *output_file);
 
 /*
- * remove_subsystem : remove a subsystem from the subsystem tree. <name> can
+ * remove_subsystem : remove a subsystem from the subsystem tree. If this
+ *  subsystem had childs, its childs will always be linked to it <name> can
  * 	not be NULL. If the subsystem is found, returns it, otherwise returns
  * 	NULL and must be a NULL terminated string.
  */
