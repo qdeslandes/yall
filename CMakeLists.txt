@@ -18,15 +18,22 @@ set(PROJECT_VERSION_PATCH 0)
 # Options for CI and desktop build
 option(PROJECT_CI_DEPLOY "Special target for continuous integration deployment" OFF)
 option(PROJECT_COVERAGE "Enable unit test coverage report" OFF)
+option(PROJECT_YALL_SHARED "Enable unit test coverage report" ON)
+option(PROJECT_YALL_STATIC "Enable unit test coverage report" ON)
 
 # CMake internal configuration
+set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
+set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Debug;" CACHE STRING "" FORCE)
+set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Release;" CACHE STRING "" FORCE)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Build and platform specific configuration
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -std=c11 -fvisibility=hidden")
 include_directories(AFTER "include" "external/include")
+
 if (UNIX)
 	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
+	set(_CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -std=c11 -fvisibility=hidden")
 
 	if (CMAKE_COMPILER_IS_GNUCC)
 		set(COMPILER "gcc-${CMAKE_C_COMPILER_VERSION}")
@@ -34,12 +41,12 @@ if (UNIX)
 		set(COMPILER "gcc_unknow")
 	endif ()
 elseif (WIN32)
-	link_directories("${CMAKE_SOURCE_DIR}/external/lib/win32")
-
 	if (MSVC_VERSION EQUAL 1900)
-		set(COMPILER "msvc-14.0")
+		set(COMPILER "msvc14")
+		link_directories("${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14")
 	elseif (MSVC_VERSION EQUAL 1800)
-		set(COMPILER "msvc-12.0")
+		set(COMPILER "msvc12")
+		link_directories("${CMAKE_SOURCE_DIR}/external/lib/win32/msvc12")
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
