@@ -8,6 +8,7 @@ void set_color(enum yall_log_level log_level);
 
 Test(subsystem, test_set_color0, .init=redirect_streams, .fini=restore_streams)
 {
+#if __linux__
     set_color(yall_debug);
     cr_assert_eq(check_stderr("\033[97m", 5), 0);
 
@@ -31,4 +32,7 @@ Test(subsystem, test_set_color0, .init=redirect_streams, .fini=restore_streams)
 
     set_color(yall_emerg);
     cr_assert_eq(check_stderr("\033[91m", 5), 0);
+#elif _WIN32
+	cr_assert(1);
+#endif
 }
