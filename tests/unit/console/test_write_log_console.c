@@ -3,12 +3,21 @@
 #include "yall/errors.h"
 #include "h_stream.h"
 
+#ifdef __linux__
 #include <semaphore.h>
 extern sem_t console_sem;
+#elif _WIN32
+#include <Windows.h>
+extern HANDLE console_sem;
+#endif
 
 Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_streams)
 {
-    sem_init(&console_sem, 0, 1);
+#ifdef __linux__
+	sem_init(&console_sem, 0, 1)
+#elif _WIN32
+	console_sem = CreateMutex(NULL, FALSE, NULL);
+#endif;
 
     cr_assert_eq(write_log_console(yall_debug, ""), YALL_OK);
     cr_assert_eq(check_stderr("\033[97m\033[0m", 9), 0);
@@ -34,12 +43,20 @@ Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_s
     cr_assert_eq(write_log_console(yall_emerg, ""), YALL_OK);
     cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
 
-    sem_destroy(&console_sem);
+#ifdef __linux__
+	sem_destroy(&console_sem);
+#elif _WIN32
+	CloseHandle(console_sem);
+#endif;
 }
 
 Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_streams)
 {
-    sem_init(&console_sem, 0, 1);
+#ifdef __linux__
+	sem_init(&console_sem, 0, 1)
+#elif _WIN32
+	console_sem = CreateMutex(NULL, FALSE, NULL);
+#endif;
 
     cr_assert_eq(write_log_console(yall_debug, "test"), YALL_OK);
     cr_assert_eq(check_stderr("\033[97mtest\033[0m", 13), 0);
@@ -65,5 +82,9 @@ Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_s
     cr_assert_eq(write_log_console(yall_emerg, "test"), YALL_OK);
     cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
 
-    sem_destroy(&console_sem);
+#ifdef __linux__
+	sem_destroy(&console_sem);
+#elif _WIN32
+	CloseHandle(console_sem);
+#endif;
 }
