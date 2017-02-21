@@ -59,7 +59,7 @@ before_deploy:
     - cmake --build . --config Debug --target ALL_BUILD
     - cmake --build . --config Debug --target install
     - cmake --build . --config Release --target ALL_BUILD
-    - cmake --build . --config Release -target install
+    - cmake --build . --config Release --target install
     - cmake --build . --target dist
 
 deploy:
