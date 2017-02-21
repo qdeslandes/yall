@@ -50,7 +50,7 @@ before_test:
 test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
-before_deploy:
+after_test:
     - cmake -G"%generator%" -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off
     - cmake --build . --config Debug --target ALL_BUILD
     - cmake --build . --config Debug --target install
