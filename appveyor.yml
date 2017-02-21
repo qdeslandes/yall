@@ -37,10 +37,6 @@ environment:
           platform: x64
           generator: "Visual Studio 12 2013 Win64"
 
-artifacts:
-    - path: 'yall-*.tgz'
-      name: yall_pack
-
 before_build:
     - cd c:\yall
     - cmake -G"%generator%" -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off
@@ -61,6 +57,10 @@ before_deploy:
     - cmake --build . --config Release --target ALL_BUILD
     - cmake --build . --config Release --target install
     - cmake --build . --target dist
+
+artifacts:
+    - path: 'yall-*.tgz'
+      name: yall_pack
 
 deploy:
     release: $(APPVEYOR_REPO_TAG_NAME)
