@@ -26,7 +26,7 @@ ELSEIF (WIN32)
 	# Linked libraries
 	set(PROJECT_LINK_LIBRARIES)
 ENDIF ()
-	
+
 # Installation
 if (PROJECT_CI_DEPLOY)
 	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
@@ -49,8 +49,8 @@ IF (PROJECT_YALL_SHARED)
 		set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS_DEBUG} /Z7")
 		set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS_RELEASE}")
 	ENDIF ()
-	
-	
+
+
 	# CMake logging
 	message("> Add execuable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
 	message(">     Compile flags       :")
