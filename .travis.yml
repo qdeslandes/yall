@@ -80,6 +80,7 @@ deploy:
   file: yall*.tgz
   skip_cleanup: true
 # Disable this barrier while testing the feature
-#  on:
+  on:
 #    tags: true
-#    condition: $BUILD_TYPE = Release
+    branch: feature/ci_config
+    condition: $BUILD_TYPE = Release
