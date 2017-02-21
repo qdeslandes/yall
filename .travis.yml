@@ -64,6 +64,12 @@ after_success:
   - if [ "${BUILD_TYPE}" = "Release" ]; then sonar-scanner; fi
 
 before_deploy:
+  - make clean
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off .
+  - make
+  - make install
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Release -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off .
+  - make
   - make install
   - make dist
 
@@ -73,6 +79,7 @@ deploy:
   file_glob: true
   file: yall*.tgz
   skip_cleanup: true
-  on:
-    tags: true
-    condition: $BUILD_TYPE = Release
+# Disable this barrier while testing the feature
+#  on:
+#    tags: true
+#    condition: $BUILD_TYPE = Release
