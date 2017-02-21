@@ -61,7 +61,7 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 {
 	for (; s; s = s->next) {
 		// Write subsystem's parameters
-		if (s->childs || strcmp(s->name, name) == 0) {
+		if (s->childs || strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
 			if (params && s->log_level != yall_inherited_level)
 				params->log_level = s->log_level;
 
@@ -73,7 +73,7 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 		}
 
 		// Is it the researched subsystem ?
-		if (strcmp(s->name, name) == 0)
+		if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
 			return s;
 
 		struct yall_subsystem *sc = _get_subsystem(name, s->childs, params);
@@ -92,7 +92,6 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 static void _free_subsystem(struct yall_subsystem *s)
 {
 	free(s->output_file);
-	free(s->name);
 	free(s);
 }
 
@@ -155,25 +154,19 @@ struct yall_subsystem *create_subsystem(const char *name,
 	s->previous = NULL;
 	s->next = NULL;
 
-	// Copy name and parameters
-	if (! (s->name = malloc(strlen(name) + 1)))
-		goto err_free;
-
-	strncpy(s->name, name, strlen(name)+1);
+	strncpy(s->name, name, SUBSYS_NAME_LEN-1);
 	s->log_level = log_level;
 	s->output_type = output_type;
 
 	if (output_file) {
 		if (! (s->output_file = malloc(strlen(output_file) + 1)))
-			goto err_free_name;
+			goto err_free;
 
 		strncpy(s->output_file, output_file, strlen(output_file)+1);
 	}
 
 	return s;
 
-err_free_name:
-	free(s->name);
 err_free:
 	free(s);
 err:

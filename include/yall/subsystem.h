@@ -30,8 +30,10 @@
 #include "yall/log_levels.h"
 #include "yall/output_types.h"
 
+#define SUBSYS_NAME_LEN		16
+
 struct yall_subsystem {
-	char *name;
+	char name[SUBSYS_NAME_LEN];
 	enum yall_log_level log_level;
 	enum yall_output_type output_type;
 	char *output_file;
