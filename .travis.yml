@@ -63,7 +63,14 @@ after_success:
   - if [ "${BUILD_TYPE}" = "Release" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
   - if [ "${BUILD_TYPE}" = "Release" ]; then sonar-scanner; fi
 
+# On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
+  - make clean
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off .
+  - make
+  - make install
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Release -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off .
+  - make
   - make install
   - make dist
 
