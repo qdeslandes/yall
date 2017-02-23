@@ -78,5 +78,5 @@ if (PROJECT_COVERAGE)
 		COMMAND gcov -f `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
-	add_dependencies(coverage coverage_prepare)
+	add_dependencies(coverage coverage_prepare unit)
 endif ()
