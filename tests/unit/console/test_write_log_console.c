@@ -1,7 +1,10 @@
 #include <criterion/criterion.h>
+#include <criterion/parameterized.h>
+#include <criterion/redirect.h>
+
+#include "test_console.h"
 #include "yall/console.h"
 #include "yall/errors.h"
-#include "h_stream.h"
 
 #ifdef __linux__
 #include <semaphore.h>
@@ -11,88 +14,48 @@ extern sem_t console_sem;
 extern HANDLE console_sem;
 #endif
 
-Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_streams)
+void test_write_log_console_setup(void)
 {
 #ifdef __linux__
-	sem_init(&console_sem, 0, 1);
+    sem_init(&console_sem, 0, 1);
 #elif _WIN32
-	console_sem = CreateMutex(NULL, FALSE, NULL);
-#endif
-
-#if __linux__
-    cr_assert_eq(write_log_console(yall_debug, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[97m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_info, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_notice, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_warning, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[93m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_err, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_crit, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_alert, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_emerg, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
-
-#ifdef __linux__
-	sem_destroy(&console_sem);
-#elif _WIN32
-	CloseHandle(console_sem);
+    console_sem = CreaMutex(NULL, FALSE, NULL);
 #endif
 }
 
-Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_streams)
+void test_write_log_console_clean(void)
 {
 #ifdef __linux__
-	sem_init(&console_sem, 0, 1);
+    sem_destroy(&console_sem);
 #elif _WIN32
-	console_sem = CreateMutex(NULL, FALSE, NULL);
+    CloseHandle(console_sem);
 #endif
+}
 
-#if __linux__
-    cr_assert_eq(write_log_console(yall_debug, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[97mtest\033[0m", 13), 0);
+ParameterizedTestParameters(console, test_write_log_console0) {
+    return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
+}
 
-    cr_assert_eq(write_log_console(yall_info, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92mtest\033[0m", 13), 0);
+ParameterizedTest(struct param_set_color *p, console, test_write_log_console0, .init=test_write_log_console_setup, .fini=test_write_log_console_clean)
+{
+    cr_assert_eq(write_log_console(p->ll, ""), YALL_OK);
+    fflush(stderr);
 
-    cr_assert_eq(write_log_console(yall_notice, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92mtest\033[0m", 13), 0);
+    char output[10] = { 0 };
+    sprintf(output, "\033[%dm\033[0m", p->code);
+    cr_assert_stderr_eq_str(output);
+}
 
-    cr_assert_eq(write_log_console(yall_warning, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[93mtest\033[0m", 13), 0);
+ParameterizedTestParameters(console, test_write_log_console1) {
+    return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
+}
 
-    cr_assert_eq(write_log_console(yall_err, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
+ParameterizedTest(struct param_set_color *p, console, test_write_log_console1, .init=test_write_log_console_setup, .fini=test_write_log_console_clean)
+{
+    cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_OK);
+    fflush(stderr);
 
-    cr_assert_eq(write_log_console(yall_crit, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_alert, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_emerg, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
-
-#ifdef __linux__
-	sem_destroy(&console_sem);
-#elif _WIN32
-	CloseHandle(console_sem);
-#endif
+    char output[18] = { 0 };
+    sprintf(output, "\033[%dmsentence\033[0m", p->code);
+    cr_assert_stderr_eq_str(output);
 }
