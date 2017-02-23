@@ -36,7 +36,12 @@ ParameterizedTestParameters(console, test_write_log_console0) {
     return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
 }
 
-ParameterizedTest(struct param_set_color *p, console, test_write_log_console0, .init=test_write_log_console_setup, .fini=test_write_log_console_clean)
+ParameterizedTest(
+    struct param_set_color *p,
+    console,
+    test_write_log_console0,
+    .init=test_write_log_console_setup,
+    .fini=test_write_log_console_clean)
 {
     cr_assert_eq(write_log_console(p->ll, ""), YALL_OK);
     fflush(stderr);
@@ -50,7 +55,12 @@ ParameterizedTestParameters(console, test_write_log_console1) {
     return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
 }
 
-ParameterizedTest(struct param_set_color *p, console, test_write_log_console1, .init=test_write_log_console_setup, .fini=test_write_log_console_clean)
+ParameterizedTest(
+    struct param_set_color *p,
+    console,
+    test_write_log_console1,
+    .init=test_write_log_console_setup,
+    .fini=test_write_log_console_clean)
 {
     cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_OK);
     fflush(stderr);
