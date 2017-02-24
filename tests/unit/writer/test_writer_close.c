@@ -1,10 +1,14 @@
 #include <criterion/criterion.h>
+#include <semaphore.h>
+
 #include "yall/writer.h"
 #include "yall/errors.h"
-#include "h_stream.h"
 
-Test(subsystem, test_writer_close, .init=mutex_init)
+extern sem_t console_sem;
+extern sem_t file_sem;
+
+Test(writer, test_writer_close0)
 {
 	writer_close();
-	cr_assert(1);
+    cr_assert(1);
 }

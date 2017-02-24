@@ -13,26 +13,21 @@ static char buffer[1024] = { 0 };
 
 #ifdef __linux__
 #include <semaphore.h>
+#define NULL_OUTPUT "/dev/null"
 extern sem_t file_sem;
 extern sem_t console_sem;
 #elif _WIN32
 #include <Windows.h>
+#define NULL_OUTPUT "nul"
 extern HANDLE file_sem;
 extern HANDLE console_sem;
 #endif
 
-void redirect_streams(void)
+void redirect_stderr(void)
 {
-#ifdef __linux__
 	fflush(stderr);
-	stderr_bak = dup(STDERR_FILENO);
-#endif
-
-    freopen("NULL", "a", stderr);
-
-#ifdef __linux__
-	setvbuf(stderr, buffer, _IOFBF, 1024);
-#endif;
+    freopen(NULL_OUTPUT, "a", stderr);
+    setbuf(stderr, buffer);
 }
 
 void restore_streams(void)
@@ -44,6 +39,10 @@ void restore_streams(void)
 #endif
 }
 
+/*
+ * check_stderr : stderr is redirected to a char buffer. This function tests
+ *      if the output wrote on stderr (on the buffer) is correct.
+ */
 uint8_t check_stderr(const char *content, int size)
 {
     uint8_t ret = strncmp(buffer, content, size);

@@ -1,38 +1,23 @@
 #include <stdio.h>
 #include <criterion/criterion.h>
+#include <criterion/parameterized.h>
+#include <criterion/redirect.h>
+
+#include "test_console.h"
 #include "yall/console.h"
-#include "yall/errors.h"
-#include "h_stream.h"
 
 void set_color(enum yall_log_level log_level);
 
-Test(subsystem, test_set_color0, .init=redirect_streams, .fini=restore_streams)
+ParameterizedTestParameters(console, test_set_color0) {
+    return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
+}
+
+ParameterizedTest(struct param_set_color *p, console, test_set_color0)
 {
-#if __linux__
-    set_color(yall_debug);
-    cr_assert_eq(check_stderr("\033[97m", 5), 0);
+    set_color(p->ll);
+    fflush(stderr);
 
-    set_color(yall_info);
-    cr_assert_eq(check_stderr("\033[92m", 5), 0);
-
-    set_color(yall_notice);
-    cr_assert_eq(check_stderr("\033[92m", 5), 0);
-
-    set_color(yall_warning);
-    cr_assert_eq(check_stderr("\033[93m", 5), 0);
-
-    set_color(yall_err);
-    cr_assert_eq(check_stderr("\033[91m", 5), 0);
-
-    set_color(yall_crit);
-    cr_assert_eq(check_stderr("\033[91m", 5), 0);
-
-    set_color(yall_alert);
-    cr_assert_eq(check_stderr("\033[91m", 5), 0);
-
-    set_color(yall_emerg);
-    cr_assert_eq(check_stderr("\033[91m", 5), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
+    char output[6] = { 0 };
+    sprintf(output, "\033[%dm", p->code);
+    cr_assert_stderr_eq_str(output);
 }

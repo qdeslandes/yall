@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void redirect_streams(void);
+void redirect_stderr(void);
 void restore_streams(void);
 uint8_t check_stderr(const char *content, int size);
 
