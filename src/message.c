@@ -26,6 +26,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "yall/utils.h"
@@ -45,15 +46,13 @@ static char *log_levels_names[8] = {
 
 /*
  * trim_function_name : from a NULL terminated string representing the function
- *	name and the class / namespaces if any, the function returns the
- *	function name and the class only, without parenthesis :
+ *	name and the class / namespaces if any, <function_name> will be filled
+ *	with the function name and the class only, without parenthesis :
  *		main()				-> main
  *		Class::Method()			-> Class::Method
  *		Namespace::Class::Method()	-> Class::Method
- *	The parameter <length> is a pointer which will be filled with the
- *	length of the function name : 12 for function, 22 for classes. This
- *	allow to have the same name length for each function and class, for a
- *	better output.
+ *	This function returns the length to use to display the function name :
+ *	12 if it is a function name only, 22 if it contains namespace.
  */
 static uint8_t trim_function_name(char *function_name, const char *function)
 {
@@ -62,40 +61,31 @@ static uint8_t trim_function_name(char *function_name, const char *function)
 	 * can cut the string at the beggining of the class name, which prevent
 	 * us to display all the namespaces.
 	 */
-	int i = strlen(function);
-	int namespace = 0;
-	printf("\n==========\n");
-	for (; namespace != 3 && i >= 0; --i) {
-		printf("%d\n", i);
-		if (function[i] == ':') {
-			printf("\t%c\n", function[i]);
-			++namespace;
-			printf("\t%d\n", namespace);
-		}
+	uint8_t c_dots;
+	int16_t i = (int16_t)strlen(function);
+	for (c_dots = 0; i >= 0; --i) {
+		if (function[i] == ':')
+			++c_dots;
 
-		if (function[i] == ' ')
+		if (c_dots == 3 || function[i] == ' ')
 			break;
 	}
+
+	++i;
 
 	/*
 	 * Now that we got the beginning of the string, we copy each character
 	 * of it inside the final string, without undesired characters like
 	 * parenthesis.
 	 */
-	printf("%s\n", &function[i]);
-	++i;
-	printf("%s %s\n", function, &function[i]);
-	int j = 0;
-	for (; i < strlen(function); ++i) {
+	for (uint16_t j = 0; i < (int16_t)strlen(function); ++i) {
 		if (function[i] == '(' || function[i] == ')')
 			continue;
 
 		function_name[j++] = function[i];
 	}
 
-	function_name[j] = 0;
-
-	return namespace ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
+	return c_dots ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
 }
 
 /*
