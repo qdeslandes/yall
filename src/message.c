@@ -44,10 +44,67 @@ static char *log_levels_names[8] = {
 	};
 
 /*
+ * trim_function_name : from a NULL terminated string representing the function
+ *	name and the class / namespaces if any, the function returns the
+ *	function name and the class only, without parenthesis :
+ *		main()				-> main
+ *		Class::Method()			-> Class::Method
+ *		Namespace::Class::Method()	-> Class::Method
+ *	The parameter <length> is a pointer which will be filled with the
+ *	length of the function name : 12 for function, 22 for classes. This
+ *	allow to have the same name length for each function and class, for a
+ *	better output.
+ */
+static uint8_t trim_function_name(char *function_name, const char *function)
+{
+	/*
+	 * Go back from the end of the string to the beggining. This way we
+	 * can cut the string at the beggining of the class name, which prevent
+	 * us to display all the namespaces.
+	 */
+	int i = strlen(function);
+	int namespace = 0;
+	printf("\n==========\n");
+	for (; namespace != 3 && i >= 0; --i) {
+		printf("%d\n", i);
+		if (function[i] == ':') {
+			printf("\t%c\n", function[i]);
+			++namespace;
+			printf("\t%d\n", namespace);
+		}
+
+		if (function[i] == ' ')
+			break;
+	}
+
+	/*
+	 * Now that we got the beginning of the string, we copy each character
+	 * of it inside the final string, without undesired characters like
+	 * parenthesis.
+	 */
+	printf("%s\n", &function[i]);
+	++i;
+	printf("%s %s\n", function, &function[i]);
+	int j = 0;
+	for (; i < strlen(function); ++i) {
+		if (function[i] == '(' || function[i] == ')')
+			continue;
+
+		function_name[j++] = function[i];
+	}
+
+	function_name[j] = 0;
+
+	return namespace ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
+}
+
+/*
  * generate_header : function in charge to generate the message header. A char
  * 	array is passed to be filled by the parameters and the date. Once done,
  * 	the status is returned. All pointer can't be NULL and the value
  * 	<log_level> can't be equal to yall_inherited_level.
+ * 	If the function's name trimming fail, the function's name is not
+ * 	printed inside the header, but no error is shown. TODO : Fix it ?
  */
 static uint8_t generate_header(char *buffer,
 	const char *subsystem,
@@ -57,18 +114,27 @@ static uint8_t generate_header(char *buffer,
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 
-	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %s :: %04d-%02d-%02d %02d:%02d:%02d : ",
+	uint8_t function_name_len = 0;
+	char *function_name = malloc(strlen(function) + 1);
+	if (function_name)
+		function_name_len = trim_function_name(function_name, function);
+
+	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %-*.*s :: %04d-%02d-%02d %02d:%02d:%02d : ",
 		SUBSYS_NAME_LEN,
 		SUBSYS_NAME_LEN,
 		subsystem,
 		log_levels_names[log_level],
-		function,
+		function_name_len,
+		function_name_len,
+		function_name,
 		tm.tm_year + 1900,
 		tm.tm_mon + 1,
 		tm.tm_mday,
 		tm.tm_hour,
 		tm.tm_min,
 		tm.tm_sec);
+
+	free(function_name);
 
 	return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
 }

@@ -14,6 +14,21 @@ class Class {
 			YALL_ERR("class", "Constructor");
 		}
 };
+
+namespace othertest {
+class Test {
+	private:
+		int a;
+	public:
+		Test() {
+			YALL_WARNING("class", "Constructor");
+		}
+
+		void makeitwayne() {
+			YALL_NOTICE("class", "RAIN");
+		}
+};
+}
 };
 
 int main(void)
@@ -31,6 +46,8 @@ int main(void)
 	YALL_ERR("azertyazertyazerty", "test");
 
 	test::Class c = test::Class();
+	test::othertest::Test t = test::othertest::Test();
+	t.makeitwayne();
 
 	return 0;
 }
