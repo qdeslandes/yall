@@ -32,7 +32,7 @@ void redirect_streams(void)
 
 #ifdef __linux__
 	setvbuf(stderr, buffer, _IOFBF, 1024);
-#endif;
+#endif
 }
 
 void restore_streams(void)
