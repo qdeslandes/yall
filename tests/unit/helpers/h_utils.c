@@ -40,3 +40,11 @@ int _tests_sem_wait(sem_t *sem)
         return -1;
     return sem_wait(sem);
 }
+
+bool sem_init_fail = false;
+int _tests_sem_init(sem_t *sem, int pshared, unsigned int value)
+{
+    if (sem_init_fail)
+        return -1;
+    return sem_init(sem, pshared, value);
+}

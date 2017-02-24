@@ -64,4 +64,18 @@ int _tests_fprintf(FILE *stream, const char *format, ...);
 extern bool sem_wait_fail;
 int _tests_sem_wait(sem_t *sem);
 
+/*
+ * sem_init
+ */
+#define DISABLE_SEM_INIT() do{ \
+        sem_init_fail = true; \
+    } while (0)
+
+#define ENABLE_SEM_INIT() do { \
+        sem_init_fail = false; \
+    } while (0)
+
+extern bool sem_init_fail;
+int _tests_sem_init(sem_t *sem, int pshared, unsigned int value);
+
 #endif

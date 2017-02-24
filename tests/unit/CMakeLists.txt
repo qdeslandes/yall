@@ -10,7 +10,7 @@ file(GLOB_RECURSE PROJECT_UNIT_SRCS ./*.c)
 file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
-set(PROJECT_SRCS_COMPILE_FLAGS "-Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf -Dsnprintf=_tests_snprintf -Dvsnprintf=_tests_vsnprintf")
+set(PROJECT_SRCS_COMPILE_FLAGS "-Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf -Dsnprintf=_tests_snprintf -Dvsnprintf=_tests_vsnprintf -Dsem_init=_tests_sem_init")
 
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
