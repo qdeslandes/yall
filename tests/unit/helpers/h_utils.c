@@ -2,6 +2,18 @@
 
 #include <stdarg.h>
 
+bool snprintf_fail = false;
+int _tests_snprintf(char *str, size_t size, const char *format, ...)
+{
+    if (snprintf_fail)
+        return -1;
+
+    va_list args;
+    va_start(args, format);
+
+    return vsnprintf(str, size, format, args);
+}
+
 bool fprintf_fail = false;
 int _tests_fprintf(FILE *stream, const char *format, ...)
 {
