@@ -2,10 +2,25 @@
 #define _H_TESTS_UTILS
 
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <semaphore.h>
 
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))
+
+/*
+ * vsnprintf
+ */
+#define DISABLE_VSNPRINTF() do{ \
+        vsnprintf_fail = true; \
+    } while (0)
+
+#define ENABLE_VSNPRINTF() do { \
+        vsnprintf_fail = false; \
+    } while (0)
+
+extern bool vsnprintf_fail;
+int _tests_vsnprintf(char *str, size_t size, const char *format, va_list args);
 
 /*
  * snprintf

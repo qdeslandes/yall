@@ -1,6 +1,13 @@
 #include "h_utils.h"
 
-#include <stdarg.h>
+bool vsnprintf_fail = false;
+int _tests_vsnprintf(char *str, size_t size, const char *format, va_list args)
+{
+    if (vsnprintf_fail)
+        return -1;
+
+    return vsnprintf(str, size, format, args);
+}
 
 bool snprintf_fail = false;
 int _tests_snprintf(char *str, size_t size, const char *format, ...)
