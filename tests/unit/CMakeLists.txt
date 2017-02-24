@@ -10,6 +10,7 @@ file(GLOB_RECURSE PROJECT_UNIT_SRCS ./*.c)
 file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+set(PROJECT_SRCS_COMPILE_FLAGS "-Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf -Dsnprintf=_tests_snprintf -Dvsnprintf=_tests_vsnprintf")
 
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
@@ -20,7 +21,7 @@ IF (UNIX)# Build flags
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-        set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage -Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf -Dsnprintf=_tests_snprintf")
+        set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
 	endif ()
 
 	# Linked libraries
@@ -53,6 +54,7 @@ add_executable(${PROJECT_NAME}_unit ${PROJECT_UNIT_SRCS} ${PROJECT_SRCS})
 include_directories("helpers")
 target_link_libraries(${PROJECT_NAME}_unit ${PROJECT_UNIT_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT_OUTPUT_NAME})
+set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS ${PROJECT_SRCS_COMPILE_FLAGS})
 
 if (UNIX)
 	set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
