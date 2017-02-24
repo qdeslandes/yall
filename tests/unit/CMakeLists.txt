@@ -20,7 +20,7 @@ IF (UNIX)# Build flags
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage")
+        set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage -Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf")
 	endif ()
 
 	# Linked libraries
