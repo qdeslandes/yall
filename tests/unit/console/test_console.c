@@ -14,12 +14,12 @@ struct param_set_color ll_and_colors[8] = {
     { yall_emerg, 91 }
 };
 
-void tests_console_setup(void)
+static void tests_console_setup(void)
 {
     cr_redirect_stderr();
 }
 
-void tests_console_clean(void)
+static void tests_console_clean(void)
 {
 
 }
