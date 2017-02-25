@@ -15,5 +15,9 @@ int main(void)
 	YALL_ERR("test", "This is a test log message");
 	YALL_ERR("azertyazertyazerty", "test");
 
+#ifdef _WIN32
+	getchar();
+#endif
+
 	return 0;
 }

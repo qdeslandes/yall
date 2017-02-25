@@ -34,14 +34,4 @@
 #   endif
 #endif
 
-/*
- * This function will return a pointer to the function name or the function
- *	name and the class :
- *	- Namespace::Class::Method()	-> Class::Method()
- *	- int main()			-> main()
- *	- Class::Method()		-> Class::Method()
- *	<f> can't be NULL.
- */
-const char *_yall_funcname(const char *f);
-
 #endif
