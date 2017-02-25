@@ -26,6 +26,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "yall/utils.h"
@@ -44,10 +45,59 @@ static char *log_levels_names[8] = {
 	};
 
 /*
+ * trim_function_name : from a NULL terminated string representing the function
+ *	name and the class / namespaces if any, <function_name> will be filled
+ *	with the function name and the class only, without parenthesis :
+ *		main()				-> main
+ *		Class::Method()			-> Class::Method
+ *		Namespace::Class::Method()	-> Class::Method
+ *	This function returns the length to use to display the function name :
+ *	12 if it is a function name only, 22 if it contains namespace.
+ */
+static uint8_t trim_function_name(char *function_name, const char *function)
+{
+	/*
+	 * Go back from the end of the string to the beggining. This way we
+	 * can cut the string at the beggining of the class name, which prevent
+	 * us to display all the namespaces.
+	 */
+	uint8_t c_dots;
+	int16_t i = (int16_t)strlen(function);
+	for (c_dots = 0; i >= 0; --i) {
+		if (function[i] == ':')
+			++c_dots;
+
+		if (c_dots == 3 || function[i] == ' ')
+			break;
+	}
+
+	++i;
+
+	/*
+	 * Now that we got the beginning of the string, we copy each character
+	 * of it inside the final string, without undesired characters like
+	 * parenthesis.
+	 */
+	uint16_t j;
+	for (j = 0; i < (int16_t)strlen(function); ++i) {
+		if (function[i] == '(' || function[i] == ')')
+			continue;
+
+		function_name[j++] = function[i];
+	}
+
+	function_name[j] = 0;
+
+	return c_dots ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
+}
+
+/*
  * generate_header : function in charge to generate the message header. A char
  * 	array is passed to be filled by the parameters and the date. Once done,
  * 	the status is returned. All pointer can't be NULL and the value
  * 	<log_level> can't be equal to yall_inherited_level.
+ * 	If the function's name trimming fail, the function's name is not
+ * 	printed inside the header, but no error is shown. TODO : Fix it ?
  */
 static uint8_t generate_header(char *buffer,
 	const char *subsystem,
@@ -57,18 +107,27 @@ static uint8_t generate_header(char *buffer,
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 
-	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %s :: %04d-%02d-%02d %02d:%02d:%02d : ",
+	uint8_t function_name_len = 0;
+	char *function_name = malloc(strlen(function) + 1);
+	if (function_name)
+		function_name_len = trim_function_name(function_name, function);
+
+	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %-*.*s :: %04d-%02d-%02d %02d:%02d:%02d : ",
 		SUBSYS_NAME_LEN,
 		SUBSYS_NAME_LEN,
 		subsystem,
 		log_levels_names[log_level],
-		function,
+		function_name_len,
+		function_name_len,
+		function_name,
 		tm.tm_year + 1900,
 		tm.tm_mon + 1,
 		tm.tm_mday,
 		tm.tm_hour,
 		tm.tm_min,
 		tm.tm_sec);
+
+	free(function_name);
 
 	return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
 }

@@ -31,6 +31,8 @@
 #include "yall/log_levels.h"
 
 #define YALL_MSG_LEN	512
+#define C_FUNC_NAME_LEN		12
+#define CPP_FUNC_NAME_LEN	22
 
 /*
  * generate_message : create the log message. It fills <buffer> we given data

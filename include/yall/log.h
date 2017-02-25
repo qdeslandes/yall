@@ -25,6 +25,8 @@
 #ifndef _LOG_H
 #define _LOG_H
 
+#include "yall/utils.h"
+
 /*
  * Theses macros are used to generate log messages. There is two types of
  * 	logs :
@@ -51,11 +53,17 @@
 #define __func__ __FUNCTION__
 #endif
 
+#ifdef __linux__
+#define FUNCTION __PRETTY_FUNCTION__
+#elif _WIN32
+#define FUNCTION __FUNCTION__
+#endif
+
 #ifndef __cplusplus
 
 #define _YALL_LOG(subsystem, log_level, ...) \
 	do { \
-		yall_log(subsystem, log_level, __func__, ##__VA_ARGS__); \
+		yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__); \
 	} while (0)
 
 #else
@@ -64,14 +72,14 @@
 	do { \
 		std::ostringstream oss; \
 		oss << msg; \
-		yall_log(subsystem, log_level, __func__, oss.str().c_str()); \
+		yall_log(subsystem, log_level, FUNCTION, oss.str().c_str()); \
 	} while (0)
 
 #endif
 
 #define _YALL_CALL_LOG(subsystem, log_level, function, args) \
 	do { \
-		yall_call_log(subsystem, log_level, __func__, function, args); \
+		yall_call_log(subsystem, log_level, FUNCTION, function, args); \
 	} while (0)
 
 #define YALL_EMERG(subsystem, ...)	\
