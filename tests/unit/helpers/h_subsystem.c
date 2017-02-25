@@ -15,7 +15,6 @@ struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_f
 	s->next = NULL;
 	s->output_file = NULL;
 
-	s->name = malloc(strlen(name) + 1);
 	strcpy(s->name, name);
 
 	if (output_file) {
@@ -32,7 +31,6 @@ struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_f
 void free_fake_subsystem(struct yall_subsystem *s)
 {
 	free(s->output_file);
-	free(s->name);
 	free(s);
 }
 
@@ -42,7 +40,6 @@ void create_subsystems(void)
 	_subsystems[0] = malloc(sizeof(struct yall_subsystem));
 	subsystems = _subsystems[0];
 
-	_subsystems[0]->name = malloc(sizeof("0")+1);
 	strcpy(_subsystems[0]->name, "0");
 
 	_subsystems[0]->log_level = yall_debug;
@@ -57,7 +54,6 @@ void create_subsystems(void)
 	_subsystems[4] = malloc(sizeof(struct yall_subsystem));
 	subsystems->childs = _subsystems[4];
 
-	_subsystems[4]->name = malloc(sizeof("00")+1);
 	strcpy(_subsystems[4]->name, "00");
 
 	_subsystems[4]->log_level = yall_inherited_level;
@@ -72,7 +68,6 @@ void create_subsystems(void)
 	_subsystems[5] = malloc(sizeof(struct yall_subsystem));
 	subsystems->childs->next = _subsystems[5];
 
-	_subsystems[5]->name = malloc(sizeof("01")+1);
 	strcpy(_subsystems[5]->name, "01");
 
 	_subsystems[5]->log_level = yall_inherited_level;
@@ -89,7 +84,6 @@ void create_subsystems(void)
 	_subsystems[6] = malloc(sizeof(struct yall_subsystem));
 	subsystems->childs->next->next = _subsystems[6];
 
-	_subsystems[6]->name = malloc(sizeof("02")+1);
 	strcpy(_subsystems[6]->name, "02");
 
 	_subsystems[6]->log_level = yall_warning;
@@ -106,7 +100,6 @@ void create_subsystems(void)
 	_subsystems[1] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next = _subsystems[1];
 
-	_subsystems[1]->name = malloc(sizeof("1")+1);
 	strcpy(_subsystems[1]->name, "1");
 
 	_subsystems[1]->log_level = yall_notice;
@@ -123,7 +116,6 @@ void create_subsystems(void)
 	_subsystems[2] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next->next = _subsystems[2];
 
-	_subsystems[2]->name = malloc(sizeof("2")+1);
 	strcpy(_subsystems[2]->name, "2");
 
 	_subsystems[2]->log_level = yall_warning;
@@ -140,7 +132,6 @@ void create_subsystems(void)
 	_subsystems[7] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next->next->childs = _subsystems[7];
 
-	_subsystems[7]->name = malloc(sizeof("20")+1);
 	strcpy(_subsystems[7]->name, "20");
 
 	_subsystems[7]->log_level = yall_inherited_level;
@@ -155,7 +146,6 @@ void create_subsystems(void)
 	_subsystems[8] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next->next->childs->childs = _subsystems[8];
 
-	_subsystems[8]->name = malloc(sizeof("200")+1);
 	strcpy(_subsystems[8]->name, "200");
 
 	_subsystems[8]->log_level = yall_inherited_level;
@@ -170,7 +160,6 @@ void create_subsystems(void)
 	_subsystems[9] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next->next->childs->childs->next = _subsystems[9];
 
-	_subsystems[9]->name = malloc(sizeof("201")+1);
 	strcpy(_subsystems[9]->name, "201");
 
 	_subsystems[9]->log_level = yall_debug;
@@ -187,7 +176,6 @@ void create_subsystems(void)
 	_subsystems[3] = malloc(sizeof(struct yall_subsystem));
 	subsystems->next->next->next = _subsystems[3];
 
-	_subsystems[3]->name = malloc(sizeof("3")+1);
 	strcpy(_subsystems[3]->name, "3");
 
 	_subsystems[3]->log_level = yall_err;
@@ -205,7 +193,6 @@ void clean_subsystems(void)
 {
 	for (int i = 0; i < 10; ++i) {
 		if (_subsystems[i]) {
-			free(_subsystems[i]->name);
 			free(_subsystems[i]);
 		}
 

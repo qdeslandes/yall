@@ -21,7 +21,7 @@ Test(subsystem, test_create_subsystem0)
 	cr_assert_eq(s->output_type, yall_console_output);
 	cr_assert_eq(s->output_file, NULL);
 
-    free_fake_subsystem(s);
+	free_fake_subsystem(s);
 
 	// With file output
 	s = create_subsystem("0", yall_debug, yall_console_output, "test");
@@ -31,5 +31,15 @@ Test(subsystem, test_create_subsystem0)
 	cr_assert_eq(s->output_type, yall_console_output);
 	cr_assert_eq(strcmp(s->output_file, "test"), 0);
 
-    free_fake_subsystem(s);
+	free_fake_subsystem(s);
+
+	// Subsystem's name too long
+	s = create_subsystem("00000000000000000000", yall_debug, yall_console_output, "test");
+	cr_assert(s);
+	cr_assert_eq(strcmp(s->name, "000000000000000"), 0);
+	cr_assert_eq(s->log_level, yall_debug);
+	cr_assert_eq(s->output_type, yall_console_output);
+	cr_assert_eq(strcmp(s->output_file, "test"), 0);
+
+	free_fake_subsystem(s);
 }

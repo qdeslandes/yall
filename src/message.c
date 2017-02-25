@@ -30,6 +30,7 @@
 
 #include "yall/utils.h"
 #include "yall/errors.h"
+#include "yall/subsystem.h"
 
 static char *log_levels_names[8] = {
 		"DEBUG",
@@ -56,7 +57,9 @@ static uint8_t generate_header(char *buffer,
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 
-	int ret = snprintf(buffer, YALL_MSG_LEN, "%s ::: %-9s :: %s :: %04d-%02d-%02d %02d:%02d:%02d : ",
+	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %s :: %04d-%02d-%02d %02d:%02d:%02d : ",
+		SUBSYS_NAME_LEN,
+		SUBSYS_NAME_LEN,
 		subsystem,
 		log_levels_names[log_level],
 		function,
