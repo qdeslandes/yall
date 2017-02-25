@@ -25,7 +25,6 @@ extern HANDLE console_sem;
 
 void redirect_stderr(void)
 {
-	fflush(stderr);
     freopen(NULL_OUTPUT, "a", stderr);
     setbuf(stderr, buffer);
 }

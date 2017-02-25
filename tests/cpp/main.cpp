@@ -49,5 +49,9 @@ int main(void)
 	test::othertest::Test t = test::othertest::Test();
 	t.makeitwayne();
 
+#ifdef _WIN32
+	getchar();
+#endif
+
 	return 0;
 }

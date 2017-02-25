@@ -13,7 +13,11 @@ int main(void)
 	YALL_DEBUG("test", "This is a test log message");
 	YALL_WARNING("longsubsystem", "This is a test log message");
 	YALL_ERR("test", "This is a test log message");
-	YALL_ERR("azertyazertyazerty", "test");
+	YALL_ERR("azertyazertyazert", "test");
+
+#ifdef _WIN32
+	getchar();
+#endif
 
 	return 0;
 }
