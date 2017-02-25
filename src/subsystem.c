@@ -155,6 +155,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 	s->next = NULL;
 
 	strncpy(s->name, name, SUBSYS_NAME_LEN-1);
+	s->name[SUBSYS_NAME_LEN-1] = 0;
 	s->log_level = log_level;
 	s->output_type = output_type;
 
