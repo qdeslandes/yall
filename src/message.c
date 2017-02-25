@@ -146,6 +146,7 @@ uint8_t generate_message(char *buffer,
 		goto end;
 
 	size_t len = strlen(buffer);
+	printf("%d\n", len);
 	if (vsnprintf(&buffer[len], YALL_MSG_LEN - len, format, args) < 0)
 		ret = YALL_STRING_WRITE_ERR;
 

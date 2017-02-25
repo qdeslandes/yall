@@ -29,7 +29,7 @@ uint8_t wrapper(char *buffer,
  */
 Test(message, test_generate_message0)
 {
-    char buffer[32] = { 0 };
+    char buffer[YALL_MSG_LEN] = { 0 };
 
     DISABLE_SNPRINTF();
     cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
@@ -41,7 +41,7 @@ Test(message, test_generate_message0)
  */
 Test(message, test_generate_message1)
 {
-    char buffer[32] = { 0 };
+    char buffer[YALL_MSG_LEN] = { 0 };
 
     DISABLE_VSNPRINTF();
     cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
@@ -53,7 +53,7 @@ Test(message, test_generate_message1)
  */
 Test(message, test_generate_message2)
 {
-    char buffer[512] = { 0 };
+    char buffer[YALL_MSG_LEN] = { 0 };
     char too_long_string[512] = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
     cr_assert_eq(wrapper(buffer, too_long_string, "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
