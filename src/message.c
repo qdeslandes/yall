@@ -78,12 +78,15 @@ static uint8_t trim_function_name(char *function_name, const char *function)
 	 * of it inside the final string, without undesired characters like
 	 * parenthesis.
 	 */
-	for (uint16_t j = 0; i < (int16_t)strlen(function); ++i) {
+	uint16_t j;
+	for (j = 0; i < (int16_t)strlen(function); ++i) {
 		if (function[i] == '(' || function[i] == ')')
 			continue;
 
 		function_name[j++] = function[i];
 	}
+
+	function_name[j] = 0;
 
 	return c_dots ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
 }
