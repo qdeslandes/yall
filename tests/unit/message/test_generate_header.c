@@ -52,9 +52,9 @@ Test(message, test_generate_header1)
 {
     char buffer[32] = { 0 };
 
-    DISABLE_SNPRINTF();
+    disable_snprintf();
     cr_assert_eq(generate_header(buffer, "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
-    ENABLE_SNPRINTF();
+    enable_snprintf();
 }
 
 /*

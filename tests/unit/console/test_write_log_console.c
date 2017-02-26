@@ -85,9 +85,9 @@ Test(console,
     .init=test_write_log_console_setup,
     .fini=test_write_log_console_clean)
 {
-    DISABLE_SEM_WAIT();
-    cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_LOCK_ERR);
-    ENABLE_SEM_WAIT();
+	disable_sem_wait();
+	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_LOCK_ERR);
+	enable_sem_wait();
 }
 
 /*
@@ -98,7 +98,7 @@ Test(console,
     .init=test_write_log_console_setup,
     .fini=test_write_log_console_clean)
 {
-    DISABLE_FPRINTF();
+    disable_fprintf();
     cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_WRITE_ERR);
-    ENABLE_FPRINTF();
+    enable_fprintf();
 }

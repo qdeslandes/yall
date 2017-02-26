@@ -31,9 +31,9 @@ Test(message, test_generate_message0)
 {
     char buffer[YALL_MSG_LEN] = { 0 };
 
-    DISABLE_SNPRINTF();
+    disable_snprintf();
     cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
-    ENABLE_SNPRINTF();
+    enable_snprintf();
 }
 
 /*
@@ -43,9 +43,9 @@ Test(message, test_generate_message1)
 {
     char buffer[YALL_MSG_LEN] = { 0 };
 
-    DISABLE_VSNPRINTF();
-    cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
-    ENABLE_VSNPRINTF();
+	disable_vsnprintf();
+	cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
+	enable_vsnprintf();
 }
 
 /*

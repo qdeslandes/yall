@@ -17,7 +17,7 @@ Test(writer, test_writer_init0)
  */
 Test(writer, test_writer_init1)
 {
-    DISABLE_SEM_INIT();
-    cr_assert_eq(writer_init(), YALL_SEM_INIT_ERR);
-    ENABLE_SEM_INIT();
+	disable_sem_init();
+	cr_assert_eq(writer_init(), YALL_SEM_INIT_ERR);
+	enable_sem_init();
 }
