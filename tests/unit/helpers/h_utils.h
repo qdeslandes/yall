@@ -3,79 +3,38 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <semaphore.h>
 
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))
 
-/*
- * vsnprintf
- */
-#define DISABLE_VSNPRINTF() do{ \
-        vsnprintf_fail = true; \
-    } while (0)
+#define REDEF_LIGHT(function, fail_code) \
+	uint8_t function ## _fail = 0; \
+	void disable_ ## function() { function ## _fail = 1; } \
+	void enable_ ## function() { function ## _fail = 0; } \
+	void set_ ## function(uint8_t v) { function ## _fail = v; }
 
-#define ENABLE_VSNPRINTF() do { \
-        vsnprintf_fail = false; \
-    } while (0)
+#define REDEF(function, fail_code, proto, ...) \
+    REDEF_LIGHT(function, proto) \
+	uint8_t _tests_ ## function proto \
+	{ \
+		if (function ## _fail) \
+			return fail_code; \
+		return function(__VA_ARGS__); \
+	} \
 
-extern bool vsnprintf_fail;
-int _tests_vsnprintf(char *str, size_t size, const char *format, va_list args);
+#define REDEF_PROTO(function, proto) \
+	extern uint8_t  function ## _fail; \
+	uint8_t _tests_ ## function proto; \
+	void disable_ ## function(); \
+	void enable_ ## function(); \
+	void set_ ## function(uint8_t v)
 
-/*
- * snprintf
- */
-#define DISABLE_SNPRINTF() do{ \
-        snprintf_fail = true; \
-    } while (0)
-
-#define ENABLE_SNPRINTF() do { \
-        snprintf_fail = false; \
-    } while (0)
-
-extern bool snprintf_fail;
-int _tests_snprintf(char *str, size_t size, const char *format, ...);
-
-/*
- * fprintf
- */
-#define DISABLE_FPRINTF() do{ \
-        fprintf_fail = true; \
-    } while (0)
-
-#define ENABLE_FPRINTF() do { \
-        fprintf_fail = false; \
-    } while (0)
-
-extern bool fprintf_fail;
-int _tests_fprintf(FILE *stream, const char *format, ...);
-
-/*
- * sem_wait
- */
-#define DISABLE_SEM_WAIT() do{ \
-        sem_wait_fail = true; \
-    } while (0)
-
-#define ENABLE_SEM_WAIT() do { \
-        sem_wait_fail = false; \
-    } while (0)
-
-extern bool sem_wait_fail;
-int _tests_sem_wait(sem_t *sem);
-
-/*
- * sem_init
- */
-#define DISABLE_SEM_INIT() do{ \
-        sem_init_fail = true; \
-    } while (0)
-
-#define ENABLE_SEM_INIT() do { \
-        sem_init_fail = false; \
-    } while (0)
-
-extern bool sem_init_fail;
-int _tests_sem_init(sem_t *sem, int pshared, unsigned int value);
+REDEF_PROTO(snprintf, (char *str, size_t size, const char *format, ...));
+REDEF_PROTO(fprintf, (FILE *stream, const char *format, ...));
+REDEF_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
+REDEF_PROTO(sem_wait, (sem_t *sem));
+REDEF_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
 
 #endif

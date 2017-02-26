@@ -1,16 +1,7 @@
 #include "h_utils.h"
 
-bool vsnprintf_fail = false;
-int _tests_vsnprintf(char *str, size_t size, const char *format, va_list args)
-{
-    if (vsnprintf_fail)
-        return -1;
-
-    return vsnprintf(str, size, format, args);
-}
-
-bool snprintf_fail = false;
-int _tests_snprintf(char *str, size_t size, const char *format, ...)
+REDEF_LIGHT(snprintf, -1);
+uint8_t _tests_snprintf(char *str, size_t size, const char *format, ...)
 {
     if (snprintf_fail)
         return -1;
@@ -21,8 +12,8 @@ int _tests_snprintf(char *str, size_t size, const char *format, ...)
     return vsnprintf(str, size, format, args);
 }
 
-bool fprintf_fail = false;
-int _tests_fprintf(FILE *stream, const char *format, ...)
+REDEF_LIGHT(fprintf, -1);
+uint8_t _tests_fprintf(FILE *stream, const char *format, ...)
 {
     if (fprintf_fail)
         return -1;
@@ -33,18 +24,6 @@ int _tests_fprintf(FILE *stream, const char *format, ...)
     return vfprintf(stream, format, args);
 }
 
-bool sem_wait_fail = false;
-int _tests_sem_wait(sem_t *sem)
-{
-    if (sem_wait_fail)
-        return -1;
-    return sem_wait(sem);
-}
-
-bool sem_init_fail = false;
-int _tests_sem_init(sem_t *sem, int pshared, unsigned int value)
-{
-    if (sem_init_fail)
-        return -1;
-    return sem_init(sem, pshared, value);
-}
+REDEF(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
+REDEF(sem_wait, -1, (sem_t *sem), sem);
+REDEF(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
