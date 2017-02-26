@@ -1,0 +1,5 @@
+-Dfprintf=_tests_fprintf
+-Dsnprintf=_tests_snprintf
+-Dvsnprintf=_tests_vsnprintf
+-Dsem_init=_tests_sem_init
+-Dsem_wait=_tests_sem_wait

@@ -9,8 +9,10 @@
 file(GLOB_RECURSE PROJECT_UNIT_SRCS ./*.c)
 file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
+set(FUNC_REDEF "${CMAKE_CURRENT_SOURCE_DIR}/func_redef")
+
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
-set(PROJECT_SRCS_COMPILE_FLAGS "-Dsem_wait=_tests_sem_wait -Dfprintf=_tests_fprintf -Dsnprintf=_tests_snprintf -Dvsnprintf=_tests_vsnprintf -Dsem_init=_tests_sem_init")
+set(PROJECT_SRCS_COMPILE_FLAGS "@${FUNC_REDEF}")
 
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
@@ -77,7 +79,7 @@ if (PROJECT_COVERAGE)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 		COMMENT "Prepare coverage target")
 	add_custom_target(coverage
-		COMMAND gcov -f `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+		COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
 	add_dependencies(coverage coverage_prepare unit)
