@@ -1,7 +1,7 @@
 #include "h_utils.h"
 
 REDEF_LIGHT(snprintf, -1);
-uint8_t _tests_snprintf(char *str, size_t size, const char *format, ...)
+int _tests_snprintf(char *str, size_t size, const char *format, ...)
 {
     if (snprintf_fail)
         return -1;
@@ -13,7 +13,7 @@ uint8_t _tests_snprintf(char *str, size_t size, const char *format, ...)
 }
 
 REDEF_LIGHT(fprintf, -1);
-uint8_t _tests_fprintf(FILE *stream, const char *format, ...)
+int _tests_fprintf(FILE *stream, const char *format, ...)
 {
     if (fprintf_fail)
         return -1;

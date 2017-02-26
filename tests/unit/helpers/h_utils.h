@@ -7,6 +7,9 @@
 #include <stdbool.h>
 #include <semaphore.h>
 
+#include "yall/yall.h"
+#include "yall/message.h"
+
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))
 
 #define REDEF_LIGHT(function, fail_code) \
@@ -17,7 +20,7 @@
 
 #define REDEF(function, fail_code, proto, ...) \
     REDEF_LIGHT(function, proto) \
-	uint8_t _tests_ ## function proto \
+	int _tests_ ## function proto \
 	{ \
 		if (function ## _fail) \
 			return fail_code; \
@@ -26,7 +29,7 @@
 
 #define REDEF_PROTO(function, proto) \
 	extern uint8_t  function ## _fail; \
-	uint8_t _tests_ ## function proto; \
+	int _tests_ ## function proto; \
 	void disable_ ## function(); \
 	void enable_ ## function(); \
 	void set_ ## function(uint8_t v)
