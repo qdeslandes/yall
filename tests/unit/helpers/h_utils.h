@@ -34,6 +34,9 @@
 	void enable_ ## function(); \
 	void set_ ## function(uint8_t v)
 
+void _tests_mutex_init(void);
+void _tests_mutex_close(void);
+    
 REDEF_PROTO(snprintf, (char *str, size_t size, const char *format, ...));
 REDEF_PROTO(fprintf, (FILE *stream, const char *format, ...));
 REDEF_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));

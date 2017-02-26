@@ -1,5 +1,20 @@
 #include "h_utils.h"
 
+extern sem_t console_sem;
+extern sem_t file_sem;
+
+void _tests_mutex_init(void)
+{
+        sem_init(&console_sem, 0, 1);
+        sem_init(&file_sem, 0, 1);
+}
+
+void _tests_mutex_close(void)
+{
+        sem_destroy(&console_sem);
+        sem_destroy(&file_sem);
+}
+
 REDEF_LIGHT(snprintf, -1);
 int _tests_snprintf(char *str, size_t size, const char *format, ...)
 {

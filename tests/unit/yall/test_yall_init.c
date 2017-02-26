@@ -1,8 +1,8 @@
-#include <criterion/criterion.h>
 #include <stdbool.h>
+#include <criterion/criterion.h>
+
 #include "yall/yall.h"
 #include "yall/errors.h"
-#include "h_stream.h"
 
 extern bool initialized;
 
