@@ -83,4 +83,10 @@ if (PROJECT_COVERAGE)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
 	add_dependencies(coverage coverage_prepare unit)
+
+	add_custom_target(resume_coverage
+		COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+		COMMENT "Show coverage results in Firefox")
+	add_dependencies(resume_coverage coverage)
 endif ()
