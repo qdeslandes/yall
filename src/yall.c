@@ -42,15 +42,18 @@ uint8_t yall_init(void)
 
 	if (initialized) {
 		ret = YALL_ALREADY_INIT;
-		goto end;
+		goto err;
 	}
 
 	initialized = true;
 
 	if ((ret = writer_init()))
-		goto end;
+		goto err;
 
-end:
+	return ret;
+
+err:
+	initialized = false;
 	return ret;
 }
 
