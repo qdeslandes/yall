@@ -1,0 +1,57 @@
+#include "test_yall.h"
+
+extern struct yall_subsystem *subsystems;
+
+/*
+ * Empty subsystems list / failing yall_log
+ */
+Test(yall, test_yall_call_log0)
+{
+	cr_assert_eq(yall_call_log("", yall_debug, "", tests_call_log_function, NULL), YALL_SUBSYS_NOT_EXISTS);
+	cr_assert_eq(yall_call_log("nope", yall_debug, "", tests_call_log_function, NULL), YALL_SUBSYS_NOT_EXISTS);
+	cr_assert_eq(yall_call_log("toolongnameforasubsysteminthelibrary", yall_debug, "", tests_call_log_function, NULL), YALL_SUBSYS_NOT_EXISTS);
+}
+
+/*
+ * Test on getting subsystem and checking log level
+ */
+TheoryDataPoints(yall, test_yall_call_log1) = {
+	DataPoints(const char *, "0", "00", "01", "02", "1", "2", "20", "200", "201", "3"),
+	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
+	DataPoints(const char *, "toolongnameforafunctionnameinthelibrary", "main", "int main()", "main()", "Class::Method", "int Class::Method", "int Class::Method()"),
+};
+
+Theory((const char *s, enum yall_log_level ll, const char *f), yall, test_yall_call_log1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+{
+	uint8_t waiting_for = YALL_OK;
+	uint8_t ret = yall_call_log(s, ll, f, tests_call_log_function, NULL);
+	struct yall_subsystem_params p = { yall_warning, yall_file_output, "app.log" };
+	struct yall_subsystem *subsys = _get_subsystem(s, subsystems, &p);
+
+	if (ll < p.log_level)
+		waiting_for = YALL_LOG_LEVEL_TOO_LOW;
+
+	cr_assert_eq(ret, waiting_for);
+}
+
+/*
+ * Calling the logging function with parameters
+ */
+Test(yall, test_yall_call_log2, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+{
+	char buff[40] = { 0 };
+
+	cr_assert_eq(yall_call_log("01", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
+	cr_assert_eq(yall_call_log("1", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
+	cr_assert_eq(yall_call_log("200", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
+}
+
+/*
+ * Failed in writing message
+ */
+Test(yall, test_yall_call_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+{
+	disable_fprintf();
+	cr_assert_eq(yall_call_log("01", yall_emerg, "", tests_call_log_function, NULL), YALL_CONSOLE_WRITE_ERR);
+	enable_fprintf();
+}
