@@ -1,13 +1,26 @@
 #ifndef _H_TESTS_CONSOLE
 #define _H_TESTS_CONSOLE
 
+#include <stdio.h>
+#include <criterion/criterion.h>
+#include <criterion/redirect.h>
+#include <criterion/parameterized.h>
+
+#include "h_utils.h"
 #include "yall/yall.h"
+#include "yall/errors.h"
+#include "yall/console.h"
 
 struct param_set_color {
     enum yall_log_level ll;
     uint8_t code;
 };
 
-extern struct param_set_color ll_and_colors[8];
+struct param_set_color ll_and_colors[8];
+
+void reset_color(void);
+void set_color(enum yall_log_level log_level);
+void test_write_log_console_setup(void);
+void test_write_log_console_clean(void);
 
 #endif

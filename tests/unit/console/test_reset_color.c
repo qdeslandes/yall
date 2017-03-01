@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <criterion/criterion.h>
-#include <criterion/redirect.h>
-
-#include "yall/console.h"
-
-void reset_color(void);
+#include "test_console.h"
 
 Test(console, test_reset_color0)
 {

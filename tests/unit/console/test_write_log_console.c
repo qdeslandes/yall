@@ -1,37 +1,4 @@
-#include <criterion/criterion.h>
-#include <criterion/parameterized.h>
-#include <criterion/redirect.h>
-
-#include "h_utils.h"
 #include "test_console.h"
-#include "yall/console.h"
-#include "yall/errors.h"
-
-#ifdef __linux__
-#include <semaphore.h>
-extern sem_t console_sem;
-#elif _WIN32
-#include <Windows.h>
-extern HANDLE console_sem;
-#endif
-
-void test_write_log_console_setup(void)
-{
-#ifdef __linux__
-    sem_init(&console_sem, 0, 1);
-#elif _WIN32
-    console_sem = CreaMutex(NULL, FALSE, NULL);
-#endif
-}
-
-void test_write_log_console_clean(void)
-{
-#ifdef __linux__
-    sem_destroy(&console_sem);
-#elif _WIN32
-    CloseHandle(console_sem);
-#endif
-}
 
 /*
  * Empty sentence to display
