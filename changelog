@@ -2,6 +2,15 @@ Current version (1.1.0) changelog
 
 [FEATURES]
 [FIX]
+	* Change library license to MIT
+	* Set fixed size for subsystem name
+	* Show class and method name in C++
+	* Deploy release and debug builds
+	* update_subsystem() now clean parent, childs and other pointers
+	* YALL_MSG_LEN is now accessible from yall/yall.h
+	* Create MSVC 12 CI build
 [TEST]
 	* Updates tests with advanced Criterion features (parameterized tests,
 	theories)
+	* Refactor logging system
+	* Write tests for covering up to 50% at least
