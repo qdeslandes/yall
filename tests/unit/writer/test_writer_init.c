@@ -1,8 +1,4 @@
-#include <criterion/criterion.h>
-
-#include "h_utils.h"
-#include "yall/writer.h"
-#include "yall/errors.h"
+#include "test_writer.h"
 
 /*
  * Correct test

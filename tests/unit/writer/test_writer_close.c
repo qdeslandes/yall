@@ -1,8 +1,4 @@
-#include <criterion/criterion.h>
-#include <semaphore.h>
-
-#include "yall/writer.h"
-#include "yall/errors.h"
+#include "test_writer.h"
 
 extern sem_t console_sem;
 extern sem_t file_sem;

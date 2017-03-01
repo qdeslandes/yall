@@ -1,8 +1,4 @@
-#include <criterion/criterion.h>
-
-#include "h_utils.h"
-#include "yall/writer.h"
-#include "yall/errors.h"
+#include "test_writer.h"
 
 /*
  * This function only call a writer. No test is done on the data, so it can't
