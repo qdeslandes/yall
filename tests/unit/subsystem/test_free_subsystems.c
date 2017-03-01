@@ -14,7 +14,7 @@ Test(subsystem, test_free_subsystems0)
 
 Test(subsystem, test_free_subsystems1, .init=create_subsystems, .fini=clean_subsystems)
 {
-    free_subsystems();
+	free_subsystems();
 
 	for (int i = 0; i < 10; ++i)
 		_subsystems[i] = NULL;

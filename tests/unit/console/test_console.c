@@ -38,17 +38,17 @@ extern HANDLE console_sem;
 void test_write_log_console_setup(void)
 {
 #ifdef __linux__
-    sem_init(&console_sem, 0, 1);
+	sem_init(&console_sem, 0, 1);
 #elif _WIN32
-    console_sem = CreaMutex(NULL, FALSE, NULL);
+	console_sem = CreaMutex(NULL, FALSE, NULL);
 #endif
 }
 
 void test_write_log_console_clean(void)
 {
 #ifdef __linux__
-    sem_destroy(&console_sem);
+	sem_destroy(&console_sem);
 #elif _WIN32
-    CloseHandle(console_sem);
+	CloseHandle(console_sem);
 #endif
 }
