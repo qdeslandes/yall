@@ -37,13 +37,3 @@ Test(subsystem, test_create_subsystem1)
 	cr_assert(! create_subsystem("o", yall_debug, yall_console_output, NULL));
 	enable_malloc();
 }
-
-/*
- * 2nd malloc failing
- */
-Test(subsystem, test_create_subsystem2)
-{
-	disable_strlen();
-	cr_assert(! create_subsystem("o", yall_debug, yall_console_output, "o"));
-	enable_strlen();
-}
