@@ -47,7 +47,8 @@ void *_tests_malloc(size_t size)
 
 	return malloc(size);
 }
- 
+
 REDEF(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
 REDEF(sem_wait, -1, (sem_t *sem), sem);
 REDEF(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
+REDEF(strlen, -2, (const char *str), str);
