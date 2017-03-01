@@ -25,3 +25,8 @@ void tests_yall_log_clean()
 	yall_close();
 	
 }
+
+void tests_call_log_function(char *buffer, void *args)
+{
+
+}

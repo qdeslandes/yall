@@ -60,7 +60,6 @@ Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clea
 Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	disable_fprintf();
-	cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_CONSOLE_WRITE_ERR);
-	cr_assert_eq(yall_log("3", yall_emerg, "", "%X %d", 4, 3), YALL_CONSOLE_WRITE_ERR);
+	cr_assert_eq(yall_log("0", yall_emerg, "", ""), YALL_CONSOLE_WRITE_ERR);
 	enable_fprintf();
 }

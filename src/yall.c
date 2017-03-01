@@ -119,16 +119,8 @@ uint8_t yall_call_log(const char *subsystem,
 	char msg[YALL_CALL_BUFF_LEN] = { 0 };
 	struct yall_subsystem_params p = { 0 };
 
-	// Get subsystem
-	if (! get_subsystem(subsystem, &p)) {
-		ret = YALL_SUBSYS_NOT_EXISTS;
-		goto end;
-	}
-
-	if (log_level < p.log_level) {
-		ret = YALL_LOG_LEVEL_TOO_LOW;
-		goto end;
-	}
+	// Get subsystem's parameters. This can't fail.
+	get_subsystem(subsystem, &p);
 
 	function(msg, args);
 

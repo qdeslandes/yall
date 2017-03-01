@@ -19,5 +19,6 @@ struct yall_subsystem *_get_subsystem(const char *name,
 
 void tests_yall_log_setup(void);
 void tests_yall_log_clean(void);
+void tests_call_log_function(char *buffer, void *args);
 
 #endif
