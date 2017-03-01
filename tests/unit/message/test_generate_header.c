@@ -1,22 +1,4 @@
-#include <criterion/criterion.h>
-#include <criterion/parameterized.h>
-
-#include "h_utils.h"
-#include "yall/message.h"
-#include "yall/errors.h"
-#include "yall/log_levels.h"
-
-uint8_t generate_header(char *buffer,
-    const char *subsystem,
-    enum yall_log_level log_level,
-    const char *function);
-
-struct param_test_generate_header {
-    const char s[32];
-    enum yall_log_level ll;
-    const char f[32];
-    const char waited[96];
-};
+#include "test_message.h"
 
 struct param_test_generate_header message_params[9] = {
     { "", yall_debug, "", "                 ::: DEBUG     ::              :: " },

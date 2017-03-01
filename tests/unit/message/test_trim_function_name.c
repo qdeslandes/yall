@@ -1,15 +1,4 @@
-#include <criterion/criterion.h>
-#include <criterion/parameterized.h>
-
-#include "yall/message.h"
-
-extern uint8_t trim_function_name(char *function_name, const char *function);
-
-struct test_trim {
-	uint8_t length;
-	const char function[64];
-	char waited_function_name[64];
-};
+#include "test_message.h"
 
 ParameterizedTestParameters(message, test_trime_function0) {
 	static struct test_trim params[] = {
