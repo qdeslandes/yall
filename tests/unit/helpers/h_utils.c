@@ -15,7 +15,7 @@ void _tests_mutex_close(void)
         sem_destroy(&file_sem);
 }
 
-REDEF_LIGHT(snprintf, -1);
+REDEF_LIGHT(snprintf);
 int _tests_snprintf(char *str, size_t size, const char *format, ...)
 {
     if (snprintf_fail)
@@ -27,7 +27,7 @@ int _tests_snprintf(char *str, size_t size, const char *format, ...)
     return vsnprintf(str, size, format, args);
 }
 
-REDEF_LIGHT(fprintf, -1);
+REDEF_LIGHT(fprintf);
 int _tests_fprintf(FILE *stream, const char *format, ...)
 {
     if (fprintf_fail)
@@ -39,7 +39,15 @@ int _tests_fprintf(FILE *stream, const char *format, ...)
     return vfprintf(stream, format, args);
 }
 
+REDEF_LIGHT(malloc);
+void *_tests_malloc(size_t size)
+{
+	if (malloc_fail)
+		return NULL;
+
+	return malloc(size);
+}
+ 
 REDEF(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
 REDEF(sem_wait, -1, (sem_t *sem), sem);
 REDEF(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
-REDEF(malloc, NULL, (size_t size), size);
