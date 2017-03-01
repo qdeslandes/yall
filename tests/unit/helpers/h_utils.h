@@ -42,5 +42,6 @@ REDEF_PROTO(fprintf, (FILE *stream, const char *format, ...));
 REDEF_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
 REDEF_PROTO(sem_wait, (sem_t *sem));
 REDEF_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
+REDEF_PROTO(malloc, (size_t size));
 
 #endif
