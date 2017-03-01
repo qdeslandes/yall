@@ -1,9 +1,4 @@
-#include <criterion/criterion.h>
-#include "yall/subsystem.h"
-#include "h_subsystem.h"
-
-extern struct yall_subsystem *subsystems;
-extern struct yall_subsystem *_subsystems[10];
+#include "test_subsystem.h"
 
 extern void _free_subsystem(struct yall_subsystem *s);
 

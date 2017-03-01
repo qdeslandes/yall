@@ -1,45 +1,49 @@
-#include <criterion/criterion.h>
-#include "yall/subsystem.h"
-#include "h_subsystem.h"
+#include "test_subsystem.h"
 
-extern struct yall_subsystem *subsystems;
-extern struct yall_subsystem *_subsystems[10];
+/*
+ * Test parameters combination
+ */
+TheoryDataPoints(subsystem, test_create_subsystem0) = {
+	DataPoints(const char *, "short", "middlename", "toolongnameforasubsystemidkwhattodowiththat"),
+	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
+	DataPoints(enum yall_output_type, yall_console_output, yall_file_output, yall_inherited_output),
+	DataPoints(const char *, "log.log")
+};
 
-// Empty subsystems list
-Test(subsystem, test_create_subsystem0)
+Theory((const char *n, enum yall_log_level ll, enum yall_output_type ot, const char *of), subsystem, test_create_subsystem0)
 {
-	// Without console output
-	struct yall_subsystem *s = NULL;
-	s = create_subsystem("", yall_debug, yall_console_output, NULL);
+	char subsys_name[SUBSYS_NAME_LEN] = { 0 };
+	strncpy(subsys_name, n, SUBSYS_NAME_LEN - 1);
+
+	struct yall_subsystem *s = create_subsystem(n, ll, ot, of);
+	
 	cr_assert(s);
 	cr_assert_eq(s->parent, NULL);
 	cr_assert_eq(s->childs, NULL);
 	cr_assert_eq(s->previous, NULL);
 	cr_assert_eq(s->next, NULL);
-	cr_assert_eq(strcmp(s->name, ""), 0);
-	cr_assert_eq(s->log_level, yall_debug);
-	cr_assert_eq(s->output_type, yall_console_output);
-	cr_assert_eq(s->output_file, NULL);
+	cr_assert_str_eq(s->name, subsys_name);
+	cr_assert_eq(s->log_level, ll);
+	cr_assert_eq(s->output_type, ot);
+	cr_assert_str_eq(s->output_file, of);
+}
 
-	free_fake_subsystem(s);
+/*
+ * 1st malloc failing
+ */
+Test(subsystem, test_create_subsystem1)
+{
+	disable_malloc();
+	cr_assert(! create_subsystem("o", yall_debug, yall_console_output, NULL));
+	enable_malloc();
+}
 
-	// With file output
-	s = create_subsystem("0", yall_debug, yall_console_output, "test");
-	cr_assert(s);
-	cr_assert_eq(strcmp(s->name, "0"), 0);
-	cr_assert_eq(s->log_level, yall_debug);
-	cr_assert_eq(s->output_type, yall_console_output);
-	cr_assert_eq(strcmp(s->output_file, "test"), 0);
-
-	free_fake_subsystem(s);
-
-	// Subsystem's name too long
-	s = create_subsystem("00000000000000000000", yall_debug, yall_console_output, "test");
-	cr_assert(s);
-	cr_assert_eq(strcmp(s->name, "000000000000000"), 0);
-	cr_assert_eq(s->log_level, yall_debug);
-	cr_assert_eq(s->output_type, yall_console_output);
-	cr_assert_eq(strcmp(s->output_file, "test"), 0);
-
-	free_fake_subsystem(s);
+/*
+ * 2nd malloc failing
+ */
+Test(subsystem, test_create_subsystem2)
+{
+	disable_strlen();
+	cr_assert(! create_subsystem("o", yall_debug, yall_console_output, "o"));
+	enable_strlen();
 }
