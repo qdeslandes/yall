@@ -9,6 +9,7 @@ Current version (1.1.0) changelog
 	* update_subsystem() now clean parent, childs and other pointers
 	* YALL_MSG_LEN is now accessible from yall/yall.h
 	* Create MSVC 12 CI build
+	* Fix crash on create_subsystem() fail
 [TEST]
 	* Updates tests with advanced Criterion features (parameterized tests,
 	theories)
