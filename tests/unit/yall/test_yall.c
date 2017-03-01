@@ -23,4 +23,5 @@ void tests_yall_log_clean()
 {
 	clean_subsystems();
 	yall_close();
+	
 }
