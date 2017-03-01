@@ -1,25 +1,6 @@
-#include <criterion/criterion.h>
-#include <criterion/theories.h>
-
-#include "h_subsystem.h"
-#include "yall/yall.h"
-#include "yall/errors.h"
-#include "yall/subsystem.h"
+#include "test_yall.h"
 
 extern struct yall_subsystem *subsystems;
-
-void tests_yall_log_init()
-{
-	yall_init();
-	cr_redirect_stderr();
-	create_subsystems();
-}
-
-void tests_yall_log_clean()
-{
-	clean_subsystems();
-	yall_close();
-}
 
 /*
  * Empty subsystems list
@@ -41,7 +22,7 @@ TheoryDataPoints(yall, test_yall_log1) = {
 	DataPoints(const char *, "")
 };
 
-Theory((const char *s, enum yall_log_level ll, const char *f, const char *format), yall, test_yall_log1, .init=tests_yall_log_init, .fini=tests_yall_log_clean)
+Theory((const char *s, enum yall_log_level ll, const char *f, const char *format), yall, test_yall_log1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	uint8_t waiting_for = YALL_OK;
 	uint8_t ret = yall_log(s, ll, f, format);
@@ -57,7 +38,7 @@ Theory((const char *s, enum yall_log_level ll, const char *f, const char *format
 /*
  * Failing message string allocation
  */
-Test(yall, test_yall_log2, .init=tests_yall_log_init, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log2, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	disable_malloc();
 	cr_assert_eq(yall_log("3", yall_emerg, "", ""), YALL_NO_MEM);
@@ -67,7 +48,7 @@ Test(yall, test_yall_log2, .init=tests_yall_log_init, .fini=tests_yall_log_clean
 /*
  * Variadic parameters list
  */
-Test(yall, test_yall_log3, .init=tests_yall_log_init, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_OK);
 	cr_assert_eq(yall_log("3", yall_emerg, "", "%X %d", 4, 3), YALL_OK);
@@ -76,7 +57,7 @@ Test(yall, test_yall_log3, .init=tests_yall_log_init, .fini=tests_yall_log_clean
 /*
  * Writing message error
  */
-Test(yall, test_yall_log4, .init=tests_yall_log_init, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	disable_fprintf();
 	cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_CONSOLE_WRITE_ERR);

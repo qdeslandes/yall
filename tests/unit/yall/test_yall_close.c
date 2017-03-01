@@ -1,7 +1,4 @@
-#include <criterion/criterion.h>
-#include <stdbool.h>
-#include "yall/yall.h"
-#include "yall/errors.h"
+#include "test_yall.h"
 
 extern bool initialized;
 
