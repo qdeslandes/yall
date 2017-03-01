@@ -45,4 +45,6 @@
 
 #define YALL_SUBSYS_NOT_EXISTS	0x60
 
+#define YALL_CANT_CREATE_SUBSYS	0x70
+
 #endif

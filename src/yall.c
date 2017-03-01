@@ -153,10 +153,16 @@ uint8_t yall_set_subsystem(const char *name,
 
 	struct yall_subsystem *s = remove_subsystem(name);
 
-	if (! s)
+	if (! s) {
 		s = create_subsystem(name, log_level, output_type, output_file);
-	else
+
+		if (! s) {
+			ret = YALL_CANT_CREATE_SUBSYS;
+			goto end;
+		}
+	} else {
 		update_subsystem(s, log_level, output_type, output_file);
+	}
 
 	add_subsystem(parent, s);
 
