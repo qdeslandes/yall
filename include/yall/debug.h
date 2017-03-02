@@ -3,7 +3,11 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+
+#ifdef __linux__
 #include <semaphore.h>
+#elif _WIN32
+#endif
 
 #ifdef YALL_COVERAGE
 #define fprintf     _tests_fprintf
@@ -18,9 +22,12 @@ void *_tests_malloc(size_t size);
 int _tests_fprintf(FILE *stream, const char *format, ...);
 int _tests_snprintf(char *str, size_t size, const char *format, ...);
 int _tests_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+int _tests_strlen(const char *s);
+
+#ifdef __linux__
 int _tests_sem_init(sem_t *sem, int pshared, unsigned int value);
 int _tests_sem_wait(sem_t *sem);
-int _tests_strlen(const char *s);
+#endif
 
 #endif
 

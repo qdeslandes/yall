@@ -42,16 +42,14 @@ void _tests_mutex_close(void);
 TESTS_REDEFINE_PROTO(snprintf, (char *str, size_t size, const char *format, ...));
 TESTS_REDEFINE_PROTO(fprintf, (FILE *stream, const char *format, ...));
 TESTS_REDEFINE_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
-TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
-TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
 TESTS_REDEFINE_PROTO(strlen, (const char *s));
 
 TESTS_REDEFINE_PROTO_LIGHT(malloc);
 void *_tests_malloc(size_t size);
 
 #ifdef __linux__
-REDEF_PROTO(sem_wait, (sem_t *sem));
-REDEF_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
+TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
+TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
 #elif _WIN32
 #endif
 
