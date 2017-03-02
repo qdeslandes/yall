@@ -1,18 +1,35 @@
 #include "h_utils.h"
 
+#ifdef __linux__
+#include <semaphore.h>
 extern sem_t console_sem;
 extern sem_t file_sem;
+#elif _WIN32
+#include <Windows.h>
+extern HANDLE console_sem;
+extern HANDLE file_sem;
+#endif
 
 void _tests_mutex_init(void)
 {
-		sem_init(&console_sem, 0, 1);
-		sem_init(&file_sem, 0, 1);
+#ifdef __linux__
+	sem_init(&console_sem, 0, 1);
+	sem_init(&file_sem, 0, 1);
+#elif _WIN32
+	console_sem = CreateMutex(NULL, FALSE, NULL);
+	file_sem = CreateMutex(NULL, FALSE, NULL);
+#endif
 }
 
 void _tests_mutex_close(void)
 {
-		sem_destroy(&console_sem);
-		sem_destroy(&file_sem);
+#ifdef __linux__
+	sem_destroy(&console_sem);
+	sem_destroy(&file_sem);
+#elif _WIN32
+	CloseHandle(console_sem);
+	CloseHandle(file_sem);
+#endif
 }
 
 REDEF_LIGHT(snprintf);
@@ -49,6 +66,10 @@ void *_tests_malloc(size_t size)
 }
 
 REDEF(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
+REDEF(strlen, -2, (const char *str), str);
+
+#ifdef __linux__
 REDEF(sem_wait, -1, (sem_t *sem), sem);
 REDEF(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
-REDEF(strlen, -2, (const char *str), str);
+#elif _WIN32
+#endif

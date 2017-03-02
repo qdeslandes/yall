@@ -29,7 +29,7 @@
 #   define _YALL_PUBLIC 	__attribute__((visibility("default")))
 #elif _WIN32
 #   define _YALL_PUBLIC 	__declspec(dllexport)
-#   if (_MSC_VER == 1800)
+#   if (_MSC_VER < 1900)
 #       define snprintf _snprintf
 #   endif
 #endif

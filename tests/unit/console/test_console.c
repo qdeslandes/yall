@@ -40,7 +40,7 @@ void test_write_log_console_setup(void)
 #ifdef __linux__
 	sem_init(&console_sem, 0, 1);
 #elif _WIN32
-	console_sem = CreaMutex(NULL, FALSE, NULL);
+	console_sem = CreateMutex(NULL, FALSE, NULL);
 #endif
 }
 

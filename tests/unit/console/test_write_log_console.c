@@ -52,9 +52,17 @@ Test(console,
 	.init=test_write_log_console_setup,
 	.fini=test_write_log_console_clean)
 {
-	disable_sem_wait();
+#ifdef __linux__
+	disable_sem_init();
+#elif _WIN32
+#endif
+
 	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_LOCK_ERR);
+
+#ifdef __linux__
 	enable_sem_wait();
+#elif _WIN32
+#endif
 }
 
 /*

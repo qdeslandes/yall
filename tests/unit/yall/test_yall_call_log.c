@@ -16,17 +16,17 @@ Test(yall, test_yall_call_log0)
  * Test on getting subsystem and checking log level
  */
 TheoryDataPoints(yall, test_yall_call_log1) = {
-	DataPoints(const char *, "0", "00", "01", "02", "1", "2", "20", "200", "201", "3"),
+	DataPoints(char *, "0", "00", "01", "02", "1", "2", "20", "200", "201", "3"),
 	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
-	DataPoints(const char *, "toolongnameforafunctionnameinthelibrary", "main", "int main()", "main()", "Class::Method", "int Class::Method", "int Class::Method()"),
+	DataPoints(char *, "toolongnameforafunctionnameinthelibrary", "main", "int main()", "main()", "Class::Method", "int Class::Method", "int Class::Method()"),
 };
 
-Theory((const char *s, enum yall_log_level ll, const char *f), yall, test_yall_call_log1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Theory((char *s, enum yall_log_level ll, char *f), yall, test_yall_call_log1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
 	uint8_t waiting_for = YALL_OK;
 	uint8_t ret = yall_call_log(s, ll, f, tests_call_log_function, NULL);
 	struct yall_subsystem_params p = { yall_warning, yall_file_output, "app.log" };
-	struct yall_subsystem *subsys = _get_subsystem(s, subsystems, &p);
+	_get_subsystem(s, subsystems, &p);
 
 	if (ll < p.log_level)
 		waiting_for = YALL_LOG_LEVEL_TOO_LOW;

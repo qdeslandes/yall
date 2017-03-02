@@ -1,8 +1,5 @@
 #include "test_writer.h"
 
-extern sem_t console_sem;
-extern sem_t file_sem;
-
 /*
  * Can't test if the semaphore has been destroyed.
  */

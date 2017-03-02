@@ -1,7 +1,6 @@
 #ifndef _H_TESTS_WRITER
 #define _H_TESTS_WRITER
 
-#include <semaphore.h>
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 
