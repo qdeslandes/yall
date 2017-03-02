@@ -33,6 +33,7 @@
 #include "yall/writer.h"
 #include "yall/message.h"
 #include "yall/subsystem.h"
+#include "yall/debug.h"
 
 static bool initialized = false;
 
