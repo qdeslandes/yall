@@ -29,6 +29,7 @@
 
 #include "yall/utils.h"
 #include "yall/errors.h"
+#include "yall/debug.h"
 
 static struct yall_subsystem *subsystems = NULL;
 

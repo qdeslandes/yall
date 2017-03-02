@@ -34,6 +34,7 @@
 #include "yall/errors.h"
 #include "yall/console.h"
 #include "yall/file.h"
+#include "yall/debug.h"
 
 #ifdef __linux__
 sem_t file_sem;

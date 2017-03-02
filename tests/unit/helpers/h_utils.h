@@ -14,13 +14,13 @@
 
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))
 
-#define REDEF_LIGHT(function) \
+#define TESTS_REDEFINE_LIGHT(function) \
 	int function ## _fail = 0; \
 	void disable_ ## function() { function ## _fail = 1; } \
-	void enable_ ## function() { function ## _fail = 0; } 
+	void enable_ ## function() { function ## _fail = 0; }
 
-#define REDEF(function, fail_code, proto, ...) \
-	REDEF_LIGHT(function) \
+#define TESTS_REDEFINE(function, fail_code, proto, ...) \
+	TESTS_REDEFINE_LIGHT(function) \
 	int _tests_ ## function proto \
 	{ \
 		if (function ## _fail) \
@@ -28,26 +28,26 @@
 		return function(__VA_ARGS__); \
 	}
 
-#define REDEF_PROTO_LIGHT(function) \
-	extern int  function ## _fail; \
+#define TESTS_REDEFINE_PROTO_LIGHT(function) \
+    int  function ## _fail; \
 	void disable_ ## function(); \
 	void enable_ ## function();
 
-#define REDEF_PROTO(function, proto) \
-	REDEF_PROTO_LIGHT(function); \
+#define TESTS_REDEFINE_PROTO(function, proto) \
+	TESTS_REDEFINE_PROTO_LIGHT(function); \
 	int _tests_ ## function proto;
 
 void _tests_mutex_init(void);
 void _tests_mutex_close(void);
-	
-REDEF_PROTO(snprintf, (char *str, size_t size, const char *format, ...));
-REDEF_PROTO(fprintf, (FILE *stream, const char *format, ...));
-REDEF_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
-REDEF_PROTO(sem_wait, (sem_t *sem));
-REDEF_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
-REDEF_PROTO(strlen, (const char *s));
 
-REDEF_PROTO_LIGHT(malloc);
+TESTS_REDEFINE_PROTO(snprintf, (char *str, size_t size, const char *format, ...));
+TESTS_REDEFINE_PROTO(fprintf, (FILE *stream, const char *format, ...));
+TESTS_REDEFINE_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
+TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
+TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
+TESTS_REDEFINE_PROTO(strlen, (const char *s));
+
+TESTS_REDEFINE_PROTO_LIGHT(malloc);
 void *_tests_malloc(size_t size);
 
 #endif
