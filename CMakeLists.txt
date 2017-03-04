@@ -14,6 +14,7 @@ project(yall)
 set(PROJECT_VERSION_MAJOR 1)
 set(PROJECT_VERSION_MINOR 1)
 set(PROJECT_VERSION_PATCH 0)
+configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 
 # Options for CI and desktop build
 option(PROJECT_CI_DEPLOY "Special target for continuous integration deployment" OFF)
@@ -30,7 +31,7 @@ set(CMAKE_DEBUG_POSTFIX d)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Build and platform specific configuration
-include_directories(AFTER "include" "external/include")
+include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
 
 if (UNIX)
 	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
