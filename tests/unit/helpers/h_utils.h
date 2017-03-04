@@ -44,6 +44,8 @@
 	TESTS_REDEFINE_PROTO_LIGHT(function); \
 	int _tests_ ## function proto;
 
+void _tests_hide_stderr(void);
+void _tests_restore_stderr(void);
 void _tests_mutex_init(void);
 void _tests_mutex_close(void);
 

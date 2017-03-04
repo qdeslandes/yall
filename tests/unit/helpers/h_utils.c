@@ -10,6 +10,19 @@ extern HANDLE console_sem;
 extern HANDLE file_sem;
 #endif
 
+static int old_stderr;
+
+void _tests_hide_stderr(void)
+{
+	old_stderr = _dup(_fileno(stderr));
+	freopen("nul", "w", stderr);
+}
+
+void _tests_restore_stderr(void)
+{
+	_dup2(old_stderr, _fileno(stderr));
+}
+
 void _tests_mutex_init(void)
 {
 #ifdef __linux__

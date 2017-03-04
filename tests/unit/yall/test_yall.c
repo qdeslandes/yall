@@ -1,13 +1,16 @@
 #include "test_yall.h"
+#include <io.h>
+
+int err;
 
 static void tests_yall_setup(void)
 {
-	cr_redirect_stderr();
+	_tests_hide_stderr();
 }
 
 static void tests_yall_clean(void)
 {
-
+	_tests_restore_stderr();
 }
 
 TestSuite(yall, .init=tests_yall_setup, .fini=tests_yall_clean);
