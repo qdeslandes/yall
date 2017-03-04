@@ -6,6 +6,7 @@ int main(void)
 {
 	yall_init();
 
+	printf("%s, %d\n", yall_get_version_string(), yall_get_version());
 	yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("longsubsystem", NULL, yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("azertyazertyazerty", NULL, yall_debug, yall_console_output, NULL);

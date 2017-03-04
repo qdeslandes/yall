@@ -34,6 +34,22 @@
 #include "yall/message.h"
 #include "yall/subsystem.h"
 
+#include "version.h"
+#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) "." STRINGIFY(YALL_PATCH)
+
+static uint32_t version = (YALL_MAJOR << 16) | (YALL_MINOR << 8) | YALL_PATCH;
+static const char *version_string = "yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
+
+uint32_t yall_get_version(void)
+{
+	return version;
+}
+
+const char *yall_get_version_string(void)
+{
+	return version_string;
+}
+
 static bool initialized = false;
 
 uint8_t yall_init(void)
