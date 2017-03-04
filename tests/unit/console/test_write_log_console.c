@@ -89,7 +89,7 @@ Test(console,
 	.init=test_write_log_console_setup,
 	.fini=test_write_log_console_clean)
 {
-	//disable_fprintf();
+	disable_fprintf();
 	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_WRITE_ERR);
 	enable_fprintf();
 }
