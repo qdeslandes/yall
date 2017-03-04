@@ -72,4 +72,21 @@ TESTS_REDEFINE(strlen, -2, (const char *str), str);
 TESTS_REDEFINE(sem_wait, -1, (sem_t *sem), sem);
 TESTS_REDEFINE(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
 #elif _WIN32
+TESTS_REDEFINE_LIGHT(CreateMutex);
+HANDLE _tests_CreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName)
+{
+	if (CreateMutex_fail)
+		return NULL;
+
+	return CreateMutex(lpMutexAttributes, bInitialOwner, lpName);
+}
+
+TESTS_REDEFINE_LIGHT(WaitForSingleObject);
+DWORD _tests_WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds)
+{
+	if (WaitForSingleObject_fail)
+		return 1;
+
+	return WaitForSingleObject(hHandle, dwMilliseconds);
+}
 #endif

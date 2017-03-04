@@ -1,5 +1,7 @@
 #include "test_console.h"
 
+#ifdef __linux__
+
 Test(console, test_reset_color0)
 {
 	reset_color();
@@ -11,3 +13,5 @@ Test(console, test_reset_color0)
 	 * Currently crash if it is done.
 	 */
 }
+
+#endif

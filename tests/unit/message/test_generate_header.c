@@ -34,7 +34,7 @@ Test(message, test_generate_header1)
 {
 	char buffer[32] = { 0 };
 
-	disable_snprintf();
+	//disable_snprintf();
 	cr_assert_eq(generate_header(buffer, "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
 	enable_snprintf();
 }

@@ -11,6 +11,14 @@
 #include "yall/yall.h"
 #include "yall/message.h"
 
+#ifdef __linux__
+#include <semaphore.h>
+#define NULL_FILE "/dev/null"
+#elif _WIN32
+#include <Windows.h>
+#define NULL_FILE "nul"
+#endif
+
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))
 
 #define TESTS_REDEFINE_LIGHT(function) \
@@ -51,6 +59,11 @@ void *_tests_malloc(size_t size);
 TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
 TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
 #elif _WIN32
+TESTS_REDEFINE_PROTO_LIGHT(CreateMutex);
+HANDLE test(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName);
+
+TESTS_REDEFINE_PROTO_LIGHT(WaitForSingleObject);
+DWORD _tests_WaitForSingleObject( HANDLE hHandle,  DWORD dwMilliseconds);
 #endif
 
 #endif

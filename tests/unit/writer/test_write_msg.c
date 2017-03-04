@@ -8,5 +8,5 @@ Test(subsystem, test_write_msg, .init=_tests_mutex_init, .fini=_tests_mutex_clos
 {
 	cr_assert_eq(write_msg(yall_console_output, yall_debug, NULL, ""), YALL_OK);
 
-	cr_assert_eq(write_msg(yall_file_output, yall_debug, "/dev/null", ""), YALL_OK);
+	cr_assert_eq(write_msg(yall_file_output, yall_debug, NULL_FILE, ""), YALL_OK);
 }
