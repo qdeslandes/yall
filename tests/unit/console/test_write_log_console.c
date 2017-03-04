@@ -7,8 +7,6 @@ ParameterizedTestParameters(console, test_write_log_console0) {
 	return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
 }
 
-#include <Windows.h>
-
 ParameterizedTest(
 	struct param_set_color *p,
 	console,
@@ -67,7 +65,7 @@ Test(console,
 	.fini=test_write_log_console_clean)
 {
 #ifdef __linux__
-	disable_sem_init();
+	disable_sem_wait();
 #elif _WIN32
 	disable_WaitForSingleObject();
 #endif

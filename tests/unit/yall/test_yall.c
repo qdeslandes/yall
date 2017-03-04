@@ -1,7 +1,4 @@
 #include "test_yall.h"
-#include <io.h>
-
-int err;
 
 static void tests_yall_setup(void)
 {
@@ -26,7 +23,7 @@ void tests_yall_log_clean()
 {
 	clean_subsystems();
 	yall_close();
-	
+
 }
 
 void tests_call_log_function(char *buffer, void *args)

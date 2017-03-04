@@ -2,10 +2,18 @@
 
 #ifdef __linux__
 #include <semaphore.h>
+#include <unistd.h>
+
 extern sem_t console_sem;
 extern sem_t file_sem;
 #elif _WIN32
 #include <Windows.h>
+#include <io.h>
+
+#define dup _dup
+#define dup2 _dup2
+#define fileno _fileno
+
 extern HANDLE console_sem;
 extern HANDLE file_sem;
 #endif
@@ -14,13 +22,13 @@ static int old_stderr;
 
 void _tests_hide_stderr(void)
 {
-	old_stderr = _dup(_fileno(stderr));
-	freopen("nul", "w", stderr);
+	old_stderr = dup(fileno(stderr));
+	freopen(NULL_FILE, "w", stderr);
 }
 
 void _tests_restore_stderr(void)
 {
-	_dup2(old_stderr, _fileno(stderr));
+	dup2(old_stderr, fileno(stderr));
 }
 
 void _tests_mutex_init(void)
