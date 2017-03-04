@@ -1,5 +1,5 @@
-#ifndef _H_TESTS_WRITER
-#define _H_TESTS_WRITER
+#ifndef _TESTS_WRITER_H
+#define _TESTS_WRITER_H
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>

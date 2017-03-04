@@ -16,7 +16,7 @@ Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), su
 	strncpy(subsys_name, n, SUBSYS_NAME_LEN - 1);
 
 	struct yall_subsystem *s = create_subsystem(n, ll, ot, of);
-	
+
 	cr_assert(s);
 	cr_assert_eq(s->parent, NULL);
 	cr_assert_eq(s->childs, NULL);

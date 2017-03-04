@@ -14,4 +14,12 @@ Test(console, test_reset_color0)
 	 */
 }
 
+#elif _WIN32
+
+Test(console, test_reset_color0)
+{
+	cr_assert(1);
+	reset_color();
+}
+
 #endif

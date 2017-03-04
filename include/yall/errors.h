@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ERRORS_H
-#define _ERRORS_H
+#ifndef _YALL_ERRORS_H
+#define _YALL_ERRORS_H
 
 #define YALL_OK			0x00
 

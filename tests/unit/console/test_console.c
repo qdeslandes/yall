@@ -21,17 +21,13 @@ static void tests_console_clean(void)
 
 }
 
-/*
- * TODO : Write console tests for Windows.
- */
-
 TestSuite(console, .init=tests_console_setup, .fini=tests_console_clean);
 
 #ifdef __linux__
-#include <semaphore.h>
+#	include <semaphore.h>
 extern sem_t console_sem;
 #elif _WIN32
-#include <Windows.h>
+#	include <Windows.h>
 extern HANDLE console_sem;
 #endif
 

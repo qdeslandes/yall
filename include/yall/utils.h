@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 
-#ifndef _UTILS_H
-#define _UTILS_H
+#ifndef _YALL_UTILS_H
+#define _YALL_UTILS_H
 
 #ifdef __linux__
-#   define _YALL_PUBLIC 	__attribute__((visibility("default")))
+#	define _YALL_PUBLIC 	__attribute__((visibility("default")))
 #elif _WIN32
-#   define _YALL_PUBLIC 	__declspec(dllexport)
-#   if (_MSC_VER < 1900)
-#       define snprintf _snprintf
-#   endif
+#	define _YALL_PUBLIC 	__declspec(dllexport)
+#	if (_MSC_VER < 1900)
+#		define snprintf _snprintf
+#	endif
 #endif
 
 #endif

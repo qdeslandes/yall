@@ -1,5 +1,5 @@
-#ifndef _H_TESTS_MESSAGE
-#define _H_TESTS_MESSAGE
+#ifndef _TESTS_MESSAGE_H
+#define _TESTS_MESSAGE_H
 
 #include <stdarg.h>
 #include <criterion/criterion.h>

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _LOG_LEVELS_H
-#define _LOG_LEVELS_H
+#ifndef _YALL_LOG_LEVELS_H
+#define _YALL_LOG_LEVELS_H
 
 enum yall_log_level {
 	yall_debug,

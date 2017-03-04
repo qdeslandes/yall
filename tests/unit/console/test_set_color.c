@@ -16,4 +16,12 @@ ParameterizedTest(struct param_set_color *p, console, test_set_color0)
 	cr_assert_stderr_eq_str(output);
 }
 
+#elif _WIN32
+
+Test(console, test_set_color0)
+{
+	cr_assert(1);
+	set_color(yall_debug);
+}
+
 #endif

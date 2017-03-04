@@ -1,5 +1,5 @@
-#ifndef _H_TESTS_UTILS
-#define _H_TESTS_UTILS
+#ifndef _TESTS_HELPERS_UTILS_H
+#define _TESTS_HELPERS_UTILS_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,11 +12,11 @@
 #include "yall/message.h"
 
 #ifdef __linux__
-#include <semaphore.h>
-#define NULL_FILE "/dev/null"
+#	include <semaphore.h>
+#	define NULL_FILE "/dev/null"
 #elif _WIN32
-#include <Windows.h>
-#define NULL_FILE "nul"
+#	include <Windows.h>
+#	define NULL_FILE "nul"
 #endif
 
 #define RETURN_PARAM(type, name) return cr_make_param_array(type, name, sizeof(name)/sizeof(type))

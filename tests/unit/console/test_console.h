@@ -1,5 +1,5 @@
-#ifndef _H_TESTS_CONSOLE
-#define _H_TESTS_CONSOLE
+#ifndef _TESTS_CONSOLE_H
+#define _TESTS_CONSOLE_H
 
 #include <stdio.h>
 #include <criterion/criterion.h>

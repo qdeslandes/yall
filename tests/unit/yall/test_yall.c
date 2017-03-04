@@ -28,5 +28,7 @@ void tests_yall_log_clean()
 
 void tests_call_log_function(char *buffer, void *args)
 {
-
+	/*
+	 * Writing function used in yall_call_log.
+	 */
 }

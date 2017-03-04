@@ -219,10 +219,10 @@ void update_subsystem(struct yall_subsystem *s,
 	s->log_level = log_level;
 	s->output_type = output_type;
 
-    s->parent = NULL;
-    s->childs = NULL;
-    s->previous = NULL;
-    s->next = NULL;
+	s->parent = NULL;
+	s->childs = NULL;
+	s->previous = NULL;
+	s->next = NULL;
 
 	if (output_file && (s->output_file = malloc(strlen(output_file) + 1)))
 		strncpy(s->output_file, output_file, strlen(output_file)+1);

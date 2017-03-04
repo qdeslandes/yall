@@ -1,5 +1,5 @@
-#ifndef _H_TESTS_YALL
-#define _H_TESTS_YALL
+#ifndef _TESTS_YALL_H
+#define _TESTS_YALL_H
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
