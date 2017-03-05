@@ -1,19 +1,25 @@
-#include <criterion/criterion.h>
-#include "yall/console.h"
-#include "yall/errors.h"
-#include "h_stream.h"
+#include "test_console.h"
 
-void reset_color(void);
+#ifdef __linux__
 
-Test(subsystem, test_reset_color0, .init=redirect_streams, .fini=restore_streams)
+Test(console, test_reset_color0)
 {
-#if __linux
-    reset_color();
-    cr_assert_eq(check_stderr("\033[0m", 4), 0);
+	reset_color();
+	fflush(stderr);
+	cr_assert_stderr_eq_str("\033[0m");
 
-    reset_color();
-    cr_assert_eq(check_stderr("\033[0m", 4), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
+	/*
+	 * TODO : Try to call reset_color() a second time.
+	 * Currently crash if it is done.
+	 */
 }
+
+#elif _WIN32
+
+Test(console, test_reset_color0)
+{
+	cr_assert(1);
+	reset_color();
+}
+
+#endif

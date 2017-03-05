@@ -1,13 +1,46 @@
-#include <stdarg.h>
-#include <criterion/criterion.h>
-#include "yall/message.h"
-#include "yall/errors.h"
-#include "h_subsystem.h"
+#include "test_message.h"
 
-Test(subsystem, test_generate_message0)
+/*
+ * generate_header() failure
+ */
+Test(message, test_generate_message0)
 {
-#ifdef __linux__
-#warning This can't be tested currently, since generate_message require a va_list argument
-#endif
-    cr_assert(1);
+	char buffer[YALL_MSG_LEN] = { 0 };
+
+	disable_snprintf();
+	cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
+	enable_snprintf();
+}
+
+/*
+ * vsnprintf() failure
+ */
+Test(message, test_generate_message1)
+{
+	char buffer[YALL_MSG_LEN] = { 0 };
+
+	disable_vsnprintf();
+	cr_assert_eq(wrapper(buffer, "", "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
+	enable_vsnprintf();
+}
+
+/*
+ * Message too long
+ */
+Test(message, test_generate_message2)
+{
+	char buffer[YALL_MSG_LEN] = { 0 };
+	char too_long_string[512] =  "\
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000 \
+		000000000000000000000000000000000000000000000000  ";
+
+	cr_assert_eq(wrapper(buffer, too_long_string, "test", yall_debug, "test"), YALL_OK);
 }

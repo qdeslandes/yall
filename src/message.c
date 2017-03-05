@@ -32,6 +32,7 @@
 #include "yall/utils.h"
 #include "yall/errors.h"
 #include "yall/subsystem.h"
+#include "yall/debug.h"
 
 static char *log_levels_names[8] = {
 		"DEBUG",

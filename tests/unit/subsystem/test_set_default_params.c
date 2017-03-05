@@ -1,8 +1,4 @@
-#include <criterion/criterion.h>
-#include "yall/subsystem.h"
-#include "h_subsystem.h"
-
-extern void set_default_params(struct yall_subsystem_params *params);
+#include "test_subsystem.h"
 
 Test(subsystem, test_set_default_params)
 {

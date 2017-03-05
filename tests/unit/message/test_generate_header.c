@@ -1,21 +1,51 @@
-#include <criterion/criterion.h>
-#include "yall/message.h"
-#include "yall/errors.h"
-#include "h_subsystem.h"
+#include "test_message.h"
 
-uint8_t generate_header(char *buffer,
-    const char *subsystem,
-    enum yall_log_level log_level,
-    const char *function);
+struct param_test_generate_header message_params[9] = {
+	{ "", yall_debug, "", "                 ::: DEBUG     ::              :: " },
+	{ "", yall_warning, "", "                 ::: WARNING   ::              :: " },
+	{ "", yall_emerg, "", "                 ::: EMERGENCY ::              :: " },
+	{ "test", yall_debug, "", "test             ::: DEBUG     ::              :: " },
+	{ "test", yall_emerg, "", "test             ::: EMERGENCY ::              :: " },
+	{ "", yall_debug, "test", "                 ::: DEBUG     :: test         :: " },
+	{ "", yall_emerg, "test", "                 ::: EMERGENCY :: test         :: " },
+	{ "test", yall_debug, "test", "test             ::: DEBUG     :: test         :: " },
+	{ "test", yall_emerg, "test", "test             ::: EMERGENCY :: test         :: " }
+};
 
-// TODO : Test with a string too long (buffer overflow)
-Test(subsystem, test_generate_header)
+/*
+ * Valid snprintf
+ */
+ParameterizedTestParameters(message, test_generate_header0) {
+	RETURN_PARAM(struct param_test_generate_header, message_params);
+}
+
+ParameterizedTest(struct param_test_generate_header *p, message, test_generate_header0)
 {
-    char buffer[128] = { 0 };
+	char buffer[128] = { 0 };
 
-    cr_assert_eq(generate_header(buffer, "0", yall_debug, "call"), YALL_OK);
-    cr_assert_eq(strncmp(buffer, "0                ::: DEBUG     :: call :: ", 27), 0);
+	cr_assert_eq(generate_header(buffer, p->s, p->ll, p->f), YALL_OK);
+	cr_assert_eq(strncmp(buffer, p->waited, 50), 0);
+}
 
-    cr_assert_eq(generate_header(buffer, "00", yall_crit, "called"), YALL_OK);
-    cr_assert_eq(strncmp(buffer, "00               ::: CRITICAL  :: called :: ", 30), YALL_OK);
+/*
+ * Invalid snprintf
+ */
+Test(message, test_generate_header1)
+{
+	char buffer[32] = { 0 };
+
+	disable_snprintf();
+	cr_assert_eq(generate_header(buffer, "test", yall_debug, "test"), YALL_STRING_WRITE_ERR);
+	enable_snprintf();
+}
+
+/*
+ * Writing a too long string
+ */
+Test(message, test_generate_header2)
+{
+	char buffer[YALL_MSG_LEN] = { 0 };
+	char too_long_str[] = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+	cr_assert_eq(generate_header(buffer, "test", yall_debug, too_long_str), YALL_OK);
 }

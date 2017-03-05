@@ -1,4 +1,5 @@
 #include "h_subsystem.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <yall/subsystem.h>
@@ -192,9 +193,8 @@ void create_subsystems(void)
 void clean_subsystems(void)
 {
 	for (int i = 0; i < 10; ++i) {
-		if (_subsystems[i]) {
+		if (_subsystems[i])
 			free(_subsystems[i]);
-		}
 
 		_subsystems[i] = NULL;
 	}

@@ -33,6 +33,8 @@
 /*
  * writer_init : initialize some stuff for the console and file writers.
  * 	Currently initialize the semaphores. This should be called once.
+ * 	TODO : Manage to fail the initialization if the semaphore are already
+ * 	initialized.
  */
 uint8_t writer_init(void);
 
