@@ -104,7 +104,7 @@ uint8_t yall_log(const char *subsystem,
 
 	va_list args;
 	va_start(args, format);
-	ret = generate_message(msg,
+	generate_message(msg,
 		format,
 		subsystem,
 		log_level,
