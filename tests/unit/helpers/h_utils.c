@@ -1,9 +1,10 @@
 #include "h_utils.h"
 
+#include <fcntl.h>
+
 #ifdef __linux__
 #include <semaphore.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 extern sem_t console_sem;
 extern sem_t file_sem;
@@ -14,6 +15,9 @@ extern sem_t file_sem;
 #define dup _dup
 #define dup2 _dup2
 #define fileno _fileno
+#define open _open
+#define close _close
+#define O_RDWR _O_RDWR
 
 extern HANDLE console_sem;
 extern HANDLE file_sem;
