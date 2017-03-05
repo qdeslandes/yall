@@ -1,11 +1,11 @@
 # Project yall
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](COPYING)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
-|master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)]()|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)]()|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
+|master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
 |---|---|---|---|---|
-|develop >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux)]()|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows)]()|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall:develop/coverage.svg)]()|
+|develop >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall:develop/coverage.svg)]()|
 
 YALL is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
 
