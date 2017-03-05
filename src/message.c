@@ -79,11 +79,11 @@ static uint8_t trim_function_name(char *function_name, const char *function)
 	 * parenthesis.
 	 */
 	uint16_t j;
-	for (j = 0; i < (int16_t)strlen(function); ++i) {
-		if (function[i] == '(' || function[i] == ')')
-			continue;
+	uint16_t len = strlen(function);
 
-		function_name[j++] = function[i];
+	for (j = 0; i < len; ++i) {
+		if (function[i] != '(' && function[i] != ')')
+			function_name[j++] = function[i];
 	}
 
 	function_name[j] = 0;
