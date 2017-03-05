@@ -16,3 +16,4 @@ Current version (1.1.0) changelog
 	theories)
 	* Refactor logging system
 	* Write tests for covering up to 50% at least
+	* Add 'resume_coverage' target
