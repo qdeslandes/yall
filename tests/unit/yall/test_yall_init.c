@@ -1,14 +1,45 @@
-#include <criterion/criterion.h>
-#include <stdbool.h>
-#include "yall/yall.h"
-#include "yall/errors.h"
-#include "h_stream.h"
+#include "test_yall.h"
 
 extern bool initialized;
 
-Test(subsystem, test_yall_init0)
+/*
+ * Normal init
+ */
+Test(yall, test_yall_init0)
 {
 	cr_assert_eq(yall_init(), YALL_OK);
-	cr_assert_eq(initialized, true);
+	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+
+	yall_close();
+
+	cr_assert_eq(yall_init(), YALL_OK);
+	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+}
+
+/*
+ * Failed writer_init()
+ */
+Test(yall, test_yall_init1)
+{
+#ifdef __linux__
+	disable_sem_init();
+#elif _WIN32
+	disable_CreateMutex();
+#endif
+
+	cr_assert_eq(yall_init(), YALL_SEM_INIT_ERR);
+
+#ifdef __linux__
+	enable_sem_init();
+#elif _WIN32
+	enable_CreateMutex();
+#endif
+
+	cr_assert_eq(yall_init(), YALL_OK);
+	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+
+	yall_close();
+
+	cr_assert_eq(yall_init(), YALL_OK);
 	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
 }

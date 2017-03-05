@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _ERRORS_H
-#define _ERRORS_H
+#ifndef _YALL_ERRORS_H
+#define _YALL_ERRORS_H
 
 #define YALL_OK			0x00
 
@@ -44,5 +44,7 @@
 #define YALL_STRING_WRITE_ERR	0x50
 
 #define YALL_SUBSYS_NOT_EXISTS	0x60
+
+#define YALL_CANT_CREATE_SUBSYS	0x70
 
 #endif

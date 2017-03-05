@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _MESSAGE_H
-#define _MESSAGE_H
+#ifndef _YALL_MESSAGE_H
+#define _YALL_MESSAGE_H
 
 #include <stdint.h>
 #include <stdarg.h>

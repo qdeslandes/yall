@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _CONSOLE_H
-#define _CONSOLE_H
+#ifndef _YALL_CONSOLE_H
+#define _YALL_CONSOLE_H
 
 #include <stdint.h>
 

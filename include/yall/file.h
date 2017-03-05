@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _FILE_H
-#define _FILE_H
+#ifndef _YALL_FILE_H
+#define _YALL_FILE_H
 
 #include <stdint.h>
 

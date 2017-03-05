@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _OUTPUT_TYPES_H
-#define _OUTPUT_TYPES_H
+#ifndef _YALL_OUTPUT_TYPES_H
+#define _YALL_OUTPUT_TYPES_H
 
 /*
  * Theses values should always be powers of 2. This way we can easily define

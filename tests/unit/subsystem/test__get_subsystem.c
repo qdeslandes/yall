@@ -1,6 +1,4 @@
-#include <criterion/criterion.h>
-#include "yall/subsystem.h"
-#include "h_subsystem.h"
+#include "test_subsystem.h"
 
 /*
  * TODO : Check the returned file name in case of file output type.

@@ -1,9 +1,29 @@
-#include <criterion/criterion.h>
-#include "yall/writer.h"
-#include "yall/errors.h"
-#include "h_stream.h"
+#include "test_writer.h"
 
-Test(subsystem, test_writer_init)
+/*
+ * Correct test
+ */
+Test(writer, test_writer_init0)
 {
 	cr_assert_eq(writer_init(), YALL_OK);
+}
+
+/*
+ * sem_init() fail
+ */
+Test(writer, test_writer_init1)
+{
+#ifdef __linux__
+	disable_sem_init();
+#elif _WIN32
+	disable_CreateMutex();
+#endif
+
+	cr_assert_eq(writer_init(), YALL_SEM_INIT_ERR);
+
+#ifdef __linux__
+	enable_sem_init();
+#elif _WIN32
+	enable_CreateMutex();
+#endif
 }

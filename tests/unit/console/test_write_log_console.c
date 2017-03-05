@@ -1,98 +1,93 @@
-#include <criterion/criterion.h>
-#include "yall/console.h"
-#include "yall/errors.h"
-#include "h_stream.h"
+#include "test_console.h"
 
-#ifdef __linux__
-#include <semaphore.h>
-extern sem_t console_sem;
-#elif _WIN32
-#include <Windows.h>
-extern HANDLE console_sem;
-#endif
+/*
+ * Empty sentence to display
+ */
+ParameterizedTestParameters(console, test_write_log_console0) {
+	return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
+}
 
-Test(subsystem, test_write_log_console0, .init=redirect_streams, .fini=restore_streams)
+ParameterizedTest(
+	struct param_set_color *p,
+	console,
+	test_write_log_console0,
+	.init=test_write_log_console_setup,
+	.fini=test_write_log_console_clean)
 {
-#ifdef __linux__
-	sem_init(&console_sem, 0, 1);
-#elif _WIN32
-	console_sem = CreateMutex(NULL, FALSE, NULL);
-#endif
-
-#if __linux__
-    cr_assert_eq(write_log_console(yall_debug, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[97m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_info, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_notice, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_warning, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[93m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_err, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_crit, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_alert, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-
-    cr_assert_eq(write_log_console(yall_emerg, ""), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91m\033[0m", 9), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
+	cr_assert_eq(write_log_console(p->ll, ""), YALL_OK);
 
 #ifdef __linux__
-	sem_destroy(&console_sem);
-#elif _WIN32
-	CloseHandle(console_sem);
+	/*
+	 * This test does not works on Windows, I can't figure out why.
+	 */
+
+	fflush(stderr);
+
+	char output[10] = { 0 };
+	sprintf(output, "\033[%dm\033[0m", p->code);
+
+	cr_assert_stderr_eq_str(output);
 #endif
 }
 
-Test(subsystem, test_write_log_console1, .init=redirect_streams, .fini=restore_streams)
+/*
+ * Non empty sentence to display
+ */
+ParameterizedTestParameters(console, test_write_log_console1) {
+	return cr_make_param_array(struct param_set_color, ll_and_colors, 8);
+}
+
+ParameterizedTest(
+	struct param_set_color *p,
+	console,
+	test_write_log_console1,
+	.init=test_write_log_console_setup,
+	.fini=test_write_log_console_clean)
+{
+	cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_OK);
+	fflush(stderr);
+
+	char output[18] = { 0 };
+#ifdef __linux__
+	sprintf(output, "\033[%dmsentence\033[0m", p->code);
+#elif _WIN32
+	sprintf(output, "sentence");
+#endif
+	cr_assert_stderr_eq_str(output);
+}
+
+/*
+ * Failing sem_wait
+ */
+Test(console,
+	test_write_log_console2,
+	.init=test_write_log_console_setup,
+	.fini=test_write_log_console_clean)
 {
 #ifdef __linux__
-	sem_init(&console_sem, 0, 1);
+	disable_sem_wait();
 #elif _WIN32
-	console_sem = CreateMutex(NULL, FALSE, NULL);
+	disable_WaitForSingleObject();
 #endif
 
-#if __linux__
-    cr_assert_eq(write_log_console(yall_debug, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[97mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_info, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_notice, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[92mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_warning, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[93mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_err, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_crit, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_alert, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-
-    cr_assert_eq(write_log_console(yall_emerg, "test"), YALL_OK);
-    cr_assert_eq(check_stderr("\033[91mtest\033[0m", 13), 0);
-#elif _WIN32
-	cr_assert(1);
-#endif
+	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_LOCK_ERR);
 
 #ifdef __linux__
-	sem_destroy(&console_sem);
+	enable_sem_wait();
 #elif _WIN32
-	CloseHandle(console_sem);
+	enable_WaitForSingleObject();
 #endif
+}
+
+/*
+ * Failing fprintf
+ */
+Test(console,
+	test_write_log_console3,
+	.init=test_write_log_console_setup,
+	.fini=test_write_log_console_clean)
+{
+	disable_fprintf();
+	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_WRITE_ERR);
+	enable_fprintf();
 }
