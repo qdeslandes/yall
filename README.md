@@ -45,7 +45,7 @@ There is differents ways to log a message :
 * `YALL_CALL_<log_level>(<subsystem>, <function>, <args>)` : call <function> with a fixed length buffer and <args> as parameters. <function> must then fill the buffer which will be displayed with the given subsystem's parameters. Useful to display structure or classes content with in a readable way.
 * `YALL_CALL_<log_level>_IF(<subsystem>, <expr>, <function>, <args>)` : same as the previous function, but the message is displayed only if the expression evaluates to true.
 
-### About multithread
+### About multithreading
 
 Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
 
