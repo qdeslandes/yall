@@ -10,6 +10,7 @@ file(GLOB_RECURSE PROJECT_UNIT_SRCS ./*.c)
 file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+set(PROJECT_SRCS_COMPILE_FLAGS "-DYALL_UNIT")
 
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
@@ -20,7 +21,7 @@ IF (UNIX)# Build flags
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-		set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS "-coverage")
+        set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
 	endif ()
 
 	# Linked libraries
@@ -53,6 +54,7 @@ add_executable(${PROJECT_NAME}_unit ${PROJECT_UNIT_SRCS} ${PROJECT_SRCS})
 include_directories("helpers")
 target_link_libraries(${PROJECT_NAME}_unit ${PROJECT_UNIT_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT_OUTPUT_NAME})
+set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS ${PROJECT_SRCS_COMPILE_FLAGS})
 
 if (UNIX)
 	set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
@@ -75,8 +77,14 @@ if (PROJECT_COVERAGE)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 		COMMENT "Prepare coverage target")
 	add_custom_target(coverage
-		COMMAND gcov -f `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+		COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 		COMMENT "Run coverage target")
-	add_dependencies(coverage coverage_prepare)
+	add_dependencies(coverage coverage_prepare unit)
+
+	add_custom_target(resume_coverage
+		COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+		COMMENT "Show coverage results in Firefox")
+	add_dependencies(resume_coverage coverage)
 endif ()

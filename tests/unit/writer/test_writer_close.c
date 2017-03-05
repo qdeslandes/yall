@@ -1,9 +1,9 @@
-#include <criterion/criterion.h>
-#include "yall/writer.h"
-#include "yall/errors.h"
-#include "h_stream.h"
+#include "test_writer.h"
 
-Test(subsystem, test_writer_close, .init=mutex_init)
+/*
+ * Can't test if the semaphore has been destroyed.
+ */
+Test(writer, test_writer_close0)
 {
 	writer_close();
 	cr_assert(1);

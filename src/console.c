@@ -35,6 +35,7 @@
 
 #include "yall/utils.h"
 #include "yall/errors.h"
+#include "yall/debug.h"
 
 #ifdef __linux__
 extern sem_t console_sem;

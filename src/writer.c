@@ -34,6 +34,7 @@
 #include "yall/errors.h"
 #include "yall/console.h"
 #include "yall/file.h"
+#include "yall/debug.h"
 
 #ifdef __linux__
 sem_t file_sem;
@@ -48,15 +49,8 @@ uint8_t writer_init(void)
 	uint8_t ret = YALL_OK;
 
 #ifdef __linux__
-	if (sem_init(&file_sem, 0, 1)) {
+	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1))
 		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
-
-	if (sem_init(&console_sem, 0, 1)) {
-		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
 #elif _WIN32
 	if ((file_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
 		ret = YALL_SEM_INIT_ERR;

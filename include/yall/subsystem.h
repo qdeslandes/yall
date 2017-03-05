@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _SUBSYSTEM_H
-#define _SUBSYSTEM_H
+#ifndef _YALL_SUBSYSTEM_H
+#define _YALL_SUBSYSTEM_H
 
 #include <stdint.h>
 

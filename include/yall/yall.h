@@ -41,6 +41,20 @@ extern "C" {
 #define YALL_CALL_BUFF_LEN	1024
 
 /*
+ * yall_get_version : returns the library version as a 32bits integer with the
+ *	form :
+ *	* 16 bits : major
+ *	* 8 bits  : minor
+ *	* 8 bits  : patch
+ */
+_YALL_PUBLIC uint32_t yall_get_version(void);
+
+/* yall_get_version_string : returns a formated string containing the library
+ *	name, its version, and the developer name.
+ */
+_YALL_PUBLIC const char *yall_get_version_string(void);
+
+/*
  * yall_init : initialize the yall library. It set up the writers and the
  * 	<initialized> flag.
  * 	Returns a yall error code.

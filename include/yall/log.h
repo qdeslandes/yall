@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _LOG_H
-#define _LOG_H
+#ifndef _YALL_LOG_H
+#define _YALL_LOG_H
 
 #include "yall/utils.h"
 

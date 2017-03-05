@@ -1,11 +1,11 @@
 # Project yall
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](COPYING)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
-|master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)]()|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)]()|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
+|master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
 |---|---|---|---|---|
-|develop >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux)]()|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows)]()|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall:develop/coverage.svg)]()|
+|develop >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall:develop/coverage.svg)]()|
 
 YALL is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
 
@@ -44,6 +44,10 @@ There is differents ways to log a message :
 * `YALL_<log_level>(<subsystem>, <condition>, <format>, ...)` : same as the previous function, but log the message only if the <condition> evals to true.
 * `YALL_CALL_<log_level>(<subsystem>, <function>, <args>)` : call <function> with a fixed length buffer and <args> as parameters. <function> must then fill the buffer which will be displayed with the given subsystem's parameters. Useful to display structure or classes content with in a readable way.
 * `YALL_CALL_<log_level>_IF(<subsystem>, <expr>, <function>, <args>)` : same as the previous function, but the message is displayed only if the expression evaluates to true.
+
+### About multithreading
+
+Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
 
 ### Example
 

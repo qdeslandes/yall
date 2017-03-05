@@ -1,0 +1,7 @@
+/*
+ * Configuration file storing the project version.
+ */
+
+#define YALL_MAJOR	@PROJECT_VERSION_MAJOR@
+#define YALL_MINOR	@PROJECT_VERSION_MINOR@
+#define YALL_PATCH	@PROJECT_VERSION_PATCH@

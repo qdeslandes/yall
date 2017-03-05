@@ -33,6 +33,23 @@
 #include "yall/writer.h"
 #include "yall/message.h"
 #include "yall/subsystem.h"
+#include "yall/debug.h"
+
+#include "version.h"
+#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) "." STRINGIFY(YALL_PATCH)
+
+static uint32_t version = (YALL_MAJOR << 16) | (YALL_MINOR << 8) | YALL_PATCH;
+static const char *version_string = "yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
+
+uint32_t yall_get_version(void)
+{
+	return version;
+}
+
+const char *yall_get_version_string(void)
+{
+	return version_string;
+}
 
 static bool initialized = false;
 
@@ -42,15 +59,18 @@ uint8_t yall_init(void)
 
 	if (initialized) {
 		ret = YALL_ALREADY_INIT;
-		goto end;
+		goto err;
 	}
 
 	initialized = true;
 
 	if ((ret = writer_init()))
-		goto end;
+		goto err;
 
-end:
+	return ret;
+
+err:
+	initialized = false;
 	return ret;
 }
 
@@ -90,7 +110,7 @@ uint8_t yall_log(const char *subsystem,
 
 	va_list args;
 	va_start(args, format);
-	ret = generate_message(msg,
+	generate_message(msg,
 		format,
 		subsystem,
 		log_level,
@@ -128,16 +148,8 @@ uint8_t yall_call_log(const char *subsystem,
 	char msg[YALL_CALL_BUFF_LEN] = { 0 };
 	struct yall_subsystem_params p = { 0 };
 
-	// Get subsystem
-	if (! get_subsystem(subsystem, &p)) {
-		ret = YALL_SUBSYS_NOT_EXISTS;
-		goto end;
-	}
-
-	if (log_level < p.log_level) {
-		ret = YALL_LOG_LEVEL_TOO_LOW;
-		goto end;
-	}
+	// Get subsystem's parameters. This can't fail.
+	get_subsystem(subsystem, &p);
 
 	function(msg, args);
 
@@ -168,10 +180,16 @@ uint8_t yall_set_subsystem(const char *name,
 
 	struct yall_subsystem *s = remove_subsystem(name);
 
-	if (! s)
+	if (! s) {
 		s = create_subsystem(name, log_level, output_type, output_file);
-	else
+
+		if (! s) {
+			ret = YALL_CANT_CREATE_SUBSYS;
+			goto end;
+		}
+	} else {
 		update_subsystem(s, log_level, output_type, output_file);
+	}
 
 	add_subsystem(parent, s);
 
