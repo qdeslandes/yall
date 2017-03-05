@@ -3,6 +3,7 @@
 #ifdef __linux__
 #include <semaphore.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 extern sem_t console_sem;
 extern sem_t file_sem;
@@ -19,16 +20,19 @@ extern HANDLE file_sem;
 #endif
 
 static int old_stderr;
+static int tmp_fd;
 
 void _tests_hide_stderr(void)
 {
+	tmp_fd = open(NULL_FILE, O_RDWR);
 	old_stderr = dup(fileno(stderr));
-	freopen(NULL_FILE, "w", stderr);
+	dup2(tmp_fd, fileno(stderr));
 }
 
 void _tests_restore_stderr(void)
 {
 	dup2(old_stderr, fileno(stderr));
+	close(tmp_fd);
 }
 
 void _tests_mutex_init(void)

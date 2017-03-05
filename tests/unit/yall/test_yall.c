@@ -1,5 +1,7 @@
 #include "test_yall.h"
 
+#include <unistd.h>
+int old;
 static void tests_yall_setup(void)
 {
 	_tests_hide_stderr();
