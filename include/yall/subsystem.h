@@ -27,7 +27,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+
+#ifdef __linux__
 #include <stdatomic.h>
+#endif
 
 #include "yall/utils.h"
 #include "yall/file.h"
@@ -40,7 +43,11 @@
 struct yall_subsystem {
 	char name[SUBSYS_NAME_LEN];
 	enum yall_log_level log_level;
+#ifdef __linux__
 	_Atomic enum yall_subsys_status status;
+#elif _WIN32
+	enum yall_subsys_status status;
+#endif
 	enum yall_output_type output_type;
 	char *output_file;
 	bool delete_old_log_file;
