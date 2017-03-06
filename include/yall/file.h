@@ -35,4 +35,10 @@
  */
 uint8_t write_log_file(const char *file, const char *msg);
 
+/*
+ * delete_old_log_file : used to remove an old log file on subsystem
+ *	creation.
+ */
+void delete_old_log_file(const char *filepath);
+
 #endif

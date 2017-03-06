@@ -26,7 +26,9 @@
 #define _YALL_SUBSYSTEM_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
+#include "yall/file.h"
 #include "yall/log_levels.h"
 #include "yall/output_types.h"
 
@@ -37,6 +39,7 @@ struct yall_subsystem {
 	enum yall_log_level log_level;
 	enum yall_output_type output_type;
 	char *output_file;
+	bool delete_old_log_file;
 	struct yall_subsystem *parent;
 	struct yall_subsystem *childs;
 	struct yall_subsystem *previous;
