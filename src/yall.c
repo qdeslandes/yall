@@ -85,6 +85,11 @@ uint8_t yall_log(const char *subsystem,
 	char *msg = NULL;
 	struct yall_subsystem_params p = { 0 };
 
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
+
 	// Get subsystem
 	if (! get_subsystem(subsystem, &p)) {
 		ret = YALL_SUBSYS_NOT_EXISTS;
@@ -128,6 +133,11 @@ uint8_t yall_call_log(const char *subsystem,
 {
 	uint8_t ret = YALL_OK;
 
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
+
 	// Print the header
 	if ((ret = yall_log(subsystem, log_level, function_name, "")) != YALL_OK)
 		goto end;
@@ -154,6 +164,11 @@ uint8_t yall_set_subsystem(const char *name,
 	const char *output_file)
 {
 	uint8_t ret = YALL_OK;
+
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
 	if (! name) {
 		ret = YALL_NO_NAME;

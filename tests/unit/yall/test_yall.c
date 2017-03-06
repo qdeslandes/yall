@@ -13,6 +13,16 @@ static void tests_yall_clean(void)
 TestSuite(yall, .init=tests_yall_setup, .fini=tests_yall_clean);
 
 
+void tests_yall_init_lib(void)
+{
+	yall_init();
+}
+
+void tests_yall_close_lib(void)
+{
+	yall_close();
+}
+
 void tests_yall_log_setup(void)
 {
 	yall_init();

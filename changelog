@@ -12,6 +12,7 @@ Current version (1.1.0) changelog
 	* Create MSVC 12 CI build
 	* Fix crash on create_subsystem() fail
 	* Follow Linux libraries naming conventions (yall.so.x.x.x)
+	* Check initialization before loggint g
 [TEST]
 	* Updates tests with advanced Criterion features (parameterized tests,
 	theories)
