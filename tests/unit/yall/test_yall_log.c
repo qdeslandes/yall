@@ -36,7 +36,7 @@ Theory((char *s, enum yall_log_level ll, char *f, char *format), yall, test_yall
 {
 	uint8_t waiting_for = YALL_OK;
 	uint8_t ret = yall_log(s, ll, f, format);
-	struct yall_subsystem_params p = { yall_warning, yall_file_output, "app.log" };
+	struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "app.log" };
 	_get_subsystem(s, subsystems, &p);
 
 	if (ll < p.log_level)
