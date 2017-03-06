@@ -17,6 +17,8 @@ struct yall_subsystem *_get_subsystem(const char *name,
 	struct yall_subsystem *s,
 	struct yall_subsystem_params *params);
 
+void tests_yall_init_lib(void);
+void tests_yall_close_lib(void);
 void tests_yall_log_setup(void);
 void tests_yall_log_clean(void);
 void tests_call_log_function(char *buffer, void *args);
