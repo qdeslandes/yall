@@ -27,8 +27,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdatomic.h>
 
+#include "yall/utils.h"
 #include "yall/file.h"
+#include "yall/status.h"
 #include "yall/log_levels.h"
 #include "yall/output_types.h"
 
@@ -37,6 +40,7 @@
 struct yall_subsystem {
 	char name[SUBSYS_NAME_LEN];
 	enum yall_log_level log_level;
+	_Atomic enum yall_subsys_status status;
 	enum yall_output_type output_type;
 	char *output_file;
 	bool delete_old_log_file;
@@ -48,10 +52,22 @@ struct yall_subsystem {
 
 struct yall_subsystem_params {
 	enum yall_log_level log_level;
+	enum yall_subsys_status status;
 	enum yall_output_type output_type;
 	const char *output_file;
 };
 
+/*
+ * yall_disable_subsystem : this disable a given subsystem. The given name
+ *	can't be NULL. This function can be called from different threads.
+ */
+_YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
+
+/*
+ * yall_enable_subsystem : this enable a given subsystem. The given name can't
+ *	be NULL. This function can be called from different threads.
+ */
+_YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
 /*
  * get_subsystem : if a subsystem of the given <name> is available,

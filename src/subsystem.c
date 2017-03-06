@@ -35,6 +35,7 @@ static struct yall_subsystem *subsystems = NULL;
 
 static struct yall_subsystem_params default_params = {
 	yall_warning,
+	yall_subsys_enable,
 	yall_file_output,
 	"app.log"
 };
@@ -65,6 +66,9 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 		if (s->childs || strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
 			if (params && s->log_level != yall_inherited_level)
 				params->log_level = s->log_level;
+
+			if (params && s->status != yall_inherited_status)
+				params->status = s->status;
 
 			if (params && s->output_type != yall_inherited_output)
 				params->output_type = s->output_type;
@@ -125,8 +129,33 @@ static void _free_subsystems(struct yall_subsystem *s)
 static void set_default_params(struct yall_subsystem_params *params)
 {
 	params->log_level = default_params.log_level;
+	params->status = default_params.status;
 	params->output_type = default_params.output_type;
 	params->output_file = default_params.output_file;
+}
+
+/*
+ * set_subsys_status : change the status of a subsystem. The subsystem name
+ *	can't be NULL. Assignation is atomic.
+ */
+static void set_subsys_status(
+	const char *subsys_name,
+	enum yall_subsys_status status)
+{
+	struct yall_subsystem *s = get_subsystem(subsys_name, NULL);
+
+	if (s)
+		s->status = status;
+}
+
+void yall_disable_subsystem(const char *subsys_name)
+{
+	set_subsys_status(subsys_name, yall_subsys_disable);
+}
+
+void yall_enable_subsystem(const char *subsys_name)
+{
+	set_subsys_status(subsys_name, yall_subsys_enable);
 }
 
 struct yall_subsystem *get_subsystem(const char *name,
@@ -175,6 +204,8 @@ struct yall_subsystem *create_subsystem(const char *name,
 	s->delete_old_log_file = true;
 	delete_old_log_file(s->output_file);
 
+	s->status = yall_subsys_enable;
+
 	return s;
 
 err_free:
@@ -220,6 +251,7 @@ void update_subsystem(struct yall_subsystem *s,
 	/*
 	 * Always free output_file of the subsystem. It will be replaced in
 	 * every case.
+	 * The subsystem's status does not change.
 	 */
 	free(s->output_file);
 	s->output_file = NULL;
