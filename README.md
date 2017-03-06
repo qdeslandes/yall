@@ -37,6 +37,17 @@ Log level, output type and output file can be inherited from a parent.
 
 If a parameter of the subsystem is not correct, the default one will be used.
 
+#### Change a subsystem status
+
+Functions are available to enable / disable a given subsystem. By default, on creation, a subsystem is enabled. On subsystem update, the status is not changed. The status of a subsystem is inheritable.
+
+```
+yall_enable_subsystem(<name>);
+yall_disable_subsystem(<name>);
+```
+
+On a subsystem is disabled, no log message will be displayed of wrote.
+
 ### Calls
 
 There is differents ways to log a message :
@@ -48,6 +59,8 @@ There is differents ways to log a message :
 ### About multithreading
 
 Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
+
+On Linux, changing a subsystem status is atomic, it can be done from concurrent threads.
 
 ### Example
 

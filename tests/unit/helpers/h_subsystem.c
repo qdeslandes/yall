@@ -26,6 +26,9 @@ struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_f
 	s->log_level = yall_debug;
 	s->output_type = yall_console_output;
 
+	s->status = yall_subsys_enable;
+	s->delete_old_log_file = false;
+
 	return s;
 }
 
@@ -46,6 +49,8 @@ void create_subsystems(void)
 	_subsystems[0]->log_level = yall_debug;
 	_subsystems[0]->output_type = yall_console_output;
 	_subsystems[0]->output_file = NULL;
+	_subsystems[0]->status = yall_subsys_enable;
+	_subsystems[0]->delete_old_log_file = true;
 	_subsystems[0]->previous = NULL;
 	_subsystems[0]->next = NULL;
 	_subsystems[0]->parent = NULL;
@@ -60,6 +65,8 @@ void create_subsystems(void)
 	_subsystems[4]->log_level = yall_inherited_level;
 	_subsystems[4]->output_type = yall_inherited_output;
 	_subsystems[4]->output_file = NULL;
+	_subsystems[4]->status = yall_subsys_enable;
+	_subsystems[4]->delete_old_log_file = true;
 	_subsystems[4]->previous = NULL;
 	_subsystems[4]->next = NULL;
 	_subsystems[4]->parent = _subsystems[0];
@@ -74,6 +81,8 @@ void create_subsystems(void)
 	_subsystems[5]->log_level = yall_inherited_level;
 	_subsystems[5]->output_type = yall_inherited_output;
 	_subsystems[5]->output_file = NULL;
+	_subsystems[5]->status = yall_subsys_enable;
+	_subsystems[5]->delete_old_log_file = true;
 	_subsystems[5]->previous = _subsystems[4];
 	_subsystems[5]->next = NULL;
 	_subsystems[5]->parent = _subsystems[0];
@@ -90,6 +99,8 @@ void create_subsystems(void)
 	_subsystems[6]->log_level = yall_warning;
 	_subsystems[6]->output_type = yall_console_output;
 	_subsystems[6]->output_file = NULL;
+	_subsystems[6]->status = yall_subsys_enable;
+	_subsystems[6]->delete_old_log_file = true;
 	_subsystems[6]->previous = _subsystems[5];
 	_subsystems[6]->next = NULL;
 	_subsystems[6]->parent = _subsystems[0];
@@ -106,6 +117,8 @@ void create_subsystems(void)
 	_subsystems[1]->log_level = yall_notice;
 	_subsystems[1]->output_type = yall_console_output;
 	_subsystems[1]->output_file = NULL;
+	_subsystems[1]->status = yall_subsys_enable;
+	_subsystems[1]->delete_old_log_file = true;
 	_subsystems[1]->previous = _subsystems[0];
 	_subsystems[1]->next = NULL;
 	_subsystems[1]->parent = NULL;
@@ -122,6 +135,8 @@ void create_subsystems(void)
 	_subsystems[2]->log_level = yall_warning;
 	_subsystems[2]->output_type = yall_console_output;
 	_subsystems[2]->output_file = NULL;
+	_subsystems[2]->status = yall_subsys_enable;
+	_subsystems[2]->delete_old_log_file = true;
 	_subsystems[2]->previous = _subsystems[1];
 	_subsystems[2]->next = NULL;
 	_subsystems[2]->parent = NULL;
@@ -138,6 +153,8 @@ void create_subsystems(void)
 	_subsystems[7]->log_level = yall_inherited_level;
 	_subsystems[7]->output_type = yall_console_output;
 	_subsystems[7]->output_file = NULL;
+	_subsystems[7]->status = yall_subsys_enable;
+	_subsystems[7]->delete_old_log_file = true;
 	_subsystems[7]->previous = NULL;
 	_subsystems[7]->next = NULL;
 	_subsystems[7]->parent = _subsystems[2];
@@ -152,6 +169,8 @@ void create_subsystems(void)
 	_subsystems[8]->log_level = yall_inherited_level;
 	_subsystems[8]->output_type = yall_inherited_output;
 	_subsystems[8]->output_file = NULL;
+	_subsystems[8]->status = yall_subsys_enable;
+	_subsystems[8]->delete_old_log_file = true;
 	_subsystems[8]->previous = NULL;
 	_subsystems[8]->next = NULL;
 	_subsystems[8]->parent = _subsystems[7];
@@ -166,6 +185,8 @@ void create_subsystems(void)
 	_subsystems[9]->log_level = yall_debug;
 	_subsystems[9]->output_type = yall_inherited_output;
 	_subsystems[9]->output_file = NULL;
+	_subsystems[9]->status = yall_subsys_enable;
+	_subsystems[9]->delete_old_log_file = true;
 	_subsystems[9]->previous = _subsystems[8];
 	_subsystems[9]->next = NULL;
 	_subsystems[9]->parent = _subsystems[7];
@@ -182,6 +203,8 @@ void create_subsystems(void)
 	_subsystems[3]->log_level = yall_err;
 	_subsystems[3]->output_type = yall_console_output;
 	_subsystems[3]->output_file = NULL;
+	_subsystems[3]->status = yall_subsys_enable;
+	_subsystems[3]->delete_old_log_file = true;
 	_subsystems[3]->previous = _subsystems[2];
 	_subsystems[3]->next = NULL;
 	_subsystems[3]->parent = NULL;

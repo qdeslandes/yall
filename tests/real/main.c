@@ -10,11 +10,21 @@ int main(void)
 	yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("longsubsystem", NULL, yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("azertyazertyazerty", NULL, yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("status", NULL, yall_debug, yall_console_output, NULL);
 
 	YALL_DEBUG("test", "This is a test log message");
 	YALL_WARNING("longsubsystem", "This is a test log message");
 	YALL_ERR("test", "This is a test log message");
 	YALL_ERR("azertyazertyazert", "test");
+
+	/*
+	 * Subsystem status
+	 */
+	YALL_WARNING("status", "Activated");
+	yall_disable_subsystem("status");
+	YALL_ERR("status", "This should not appear");
+	yall_enable_subsystem("status");
+	YALL_ERR("status", "This should appear");
 
 #ifdef _WIN32
 	getchar();

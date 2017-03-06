@@ -83,6 +83,7 @@ uint8_t yall_log(const char *subsystem,
 	uint8_t ret = YALL_OK;
 
 	char *msg = NULL;
+	struct yall_subsystem *s = NULL;
 	struct yall_subsystem_params p = { 0 };
 
 	if (! initialized) {
@@ -90,9 +91,14 @@ uint8_t yall_log(const char *subsystem,
 		goto end;
 	}
 
-	// Get subsystem
-	if (! get_subsystem(subsystem, &p)) {
+	// Get subsystem and check its status
+	s = get_subsystem(subsystem, &p);
+
+	if (! s) {
 		ret = YALL_SUBSYS_NOT_EXISTS;
+		goto end;
+	} else if (p.status == yall_subsys_disable) {
+		ret = YALL_SUBSYS_DISABLED;
 		goto end;
 	}
 

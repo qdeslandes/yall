@@ -20,5 +20,6 @@ struct yall_subsystem *_get_subsystem(const char *name,
 void _free_subsystem(struct yall_subsystem *s);
 void _free_subsystems(struct yall_subsystem *s);
 void set_default_params(struct yall_subsystem_params *params);
+void set_subsys_status(const char *subsys_name, enum yall_subsys_status status);
 
 #endif
