@@ -60,7 +60,7 @@ There is differents ways to log a message :
 
 Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
 
-Changing a subsystem status is atomic, it can be done from concurrent threads.
+On Linux, changing a subsystem status is atomic, it can be done from concurrent threads.
 
 ### Example
 
