@@ -76,3 +76,8 @@ uint8_t write_log_file(const char *file, const char *msg)
 end:
 	return ret;
 }
+
+void delete_old_log_file(const char *filepath)
+{
+	remove(filepath);
+}

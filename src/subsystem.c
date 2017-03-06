@@ -167,6 +167,14 @@ struct yall_subsystem *create_subsystem(const char *name,
 		strncpy(s->output_file, output_file, strlen(output_file)+1);
 	}
 
+	/*
+	 * By default, the old log file will be delete each time the subsystem
+	 * is created. This can't be changed currently, but will be when the
+	 * library will load parameters from a configuration file.
+	 */
+	s->delete_old_log_file = true;
+	delete_old_log_file(s->output_file);
+
 	return s;
 
 err_free:
