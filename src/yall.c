@@ -85,7 +85,6 @@ uint8_t yall_log(const char *subsystem,
 	char *msg = NULL;
 	struct yall_subsystem_params p = { 0 };
 
-	// Is library initialized ?
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
 		goto end;
@@ -134,7 +133,6 @@ uint8_t yall_call_log(const char *subsystem,
 {
 	uint8_t ret = YALL_OK;
 
-	// Is library initialized ?
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
 		goto end;
@@ -167,7 +165,6 @@ uint8_t yall_set_subsystem(const char *name,
 {
 	uint8_t ret = YALL_OK;
 
-	// Is library initialized ?
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
 		goto end;
