@@ -8,6 +8,7 @@ static void tests_yall_setup(void)
 static void tests_yall_clean(void)
 {
 	_tests_restore_stderr();
+	remove(default_params.output_file);
 }
 
 TestSuite(yall, .init=tests_yall_setup, .fini=tests_yall_clean);
@@ -33,7 +34,6 @@ void tests_yall_log_clean()
 {
 	clean_subsystems();
 	yall_close();
-
 }
 
 void tests_call_log_function(char *buffer, void *args)

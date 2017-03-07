@@ -13,13 +13,13 @@ Test(yall, test_yall_log0)
 }
 
 /*
- * Empty subsystems list
+ * Empty subsystems list, so using the default subsystem
  */
 Test(yall, test_yall_log1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
 {
-	cr_assert_eq(yall_log("", yall_debug, "", ""), YALL_SUBSYS_NOT_EXISTS);
-	cr_assert_eq(yall_log("nope", yall_debug, "", ""), YALL_SUBSYS_NOT_EXISTS);
-	cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_debug, "", ""), YALL_SUBSYS_NOT_EXISTS);
+	cr_assert_eq(yall_log("", yall_debug, "", ""), YALL_LOG_LEVEL_TOO_LOW);
+	cr_assert_eq(yall_log("nope", yall_warning, "", ""), YALL_OK);
+	cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", ""), YALL_OK);
 }
 
 /*
@@ -36,7 +36,7 @@ Theory((char *s, enum yall_log_level ll, char *f, char *format), yall, test_yall
 {
 	uint8_t waiting_for = YALL_OK;
 	uint8_t ret = yall_log(s, ll, f, format);
-	struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "app.log" };
+	struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "yall_default.log" };
 	_get_subsystem(s, subsystems, &p);
 
 	if (ll < p.log_level)

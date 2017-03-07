@@ -7,5 +7,5 @@ Test(subsystem, test_set_default_params)
 	set_default_params(&p);
 	cr_assert_eq(p.log_level, yall_warning);
 	cr_assert_eq(p.output_type, yall_file_output);
-	cr_assert_eq(strcmp(p.output_file, "app.log"), 0);
+	cr_assert_eq(strcmp(p.output_file, "yall_default.log"), 0);
 }
