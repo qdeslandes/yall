@@ -20,6 +20,7 @@ int main(void)
 	/*
 	 * Subsystem status
 	 */
+	YALL_WARNING("absent", "This subsystem does not exists");
 	YALL_WARNING("status", "Activated");
 	yall_disable_subsystem("status");
 	YALL_ERR("status", "This should not appear");

@@ -91,13 +91,14 @@ uint8_t yall_log(const char *subsystem,
 		goto end;
 	}
 
-	// Get subsystem and check its status
-	s = get_subsystem(subsystem, &p);
+	/*
+	 * Find the subsystem's parameters. Useless to get the subsystem, or
+	 * to know if it is found. If the subsystem is not found, we use the
+	 * default parameters.
+	 */
+	get_subsystem(subsystem, &p);
 
-	if (! s) {
-		ret = YALL_SUBSYS_NOT_EXISTS;
-		goto end;
-	} else if (p.status == yall_subsys_disable) {
+	if (p.status == yall_subsys_disable) {
 		ret = YALL_SUBSYS_DISABLED;
 		goto end;
 	}
