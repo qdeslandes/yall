@@ -37,7 +37,7 @@ static struct yall_subsystem_params default_params = {
 	yall_warning,
 	yall_subsys_enable,
 	yall_file_output,
-	"app.log"
+	"yall_default.log"
 };
 
 /*
