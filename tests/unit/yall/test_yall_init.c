@@ -8,12 +8,16 @@ extern bool initialized;
 Test(yall, test_yall_init0)
 {
 	cr_assert_eq(yall_init(), YALL_OK);
+        cr_assert_eq(initialized, true);
 	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+        cr_assert_eq(initialized, true);
 
 	yall_close();
 
 	cr_assert_eq(yall_init(), YALL_OK);
+        cr_assert_eq(initialized, true);
 	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+        cr_assert_eq(initialized, true);
 }
 
 /*
