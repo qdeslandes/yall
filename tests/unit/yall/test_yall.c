@@ -33,8 +33,8 @@ void tests_yall_log_setup(void)
 void tests_yall_log_clean()
 {
 	clean_subsystems();
-	
-        while (yall_close() != YALL_NOT_INIT) ;
+
+        while (yall_close() != YALL_NOT_INIT);
 }
 
 void tests_call_log_function(char *buffer, void *args)

@@ -219,3 +219,21 @@ uint8_t yall_close(void)
 end:
 	return ret;
 }
+
+uint8_t yall_close_all(void)
+{
+        uint8_t ret = YALL_OK;
+
+        if (! initialized) {
+                ret = YALL_NOT_INIT;
+                goto end;
+        }
+
+        initialized = 0;
+
+        writer_close();
+        free_subsystems();
+
+end:
+        return ret;
+}
