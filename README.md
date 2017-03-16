@@ -56,6 +56,10 @@ There is differents ways to log a message :
 * `YALL_CALL_<log_level>(<subsystem>, <function>, <args>)` : call <function> with a fixed length buffer and <args> as parameters. <function> must then fill the buffer which will be displayed with the given subsystem's parameters. Useful to display structure or classes content with in a readable way.
 * `YALL_CALL_<log_level>_IF(<subsystem>, <expr>, <function>, <args>)` : same as the previous function, but the message is displayed only if the expression evaluates to true.
 
+### Close the library
+
+The yall library contain a flag which store the number of times it has been initialized. Each library initializing the library with `yall_init()` will increment this counter. This allow us to keep track of the number of library using the library at runtime. This way, if a library close yall through `yall_close()`, the other parts of the application can still use it. Once the counter fall to 0, the library is freed. The endpoint of the application can call `yall_close_all()` which will close the library regardless of the number of instances.
+
 ### About multithreading
 
 Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
