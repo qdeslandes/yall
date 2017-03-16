@@ -21,7 +21,7 @@ void tests_yall_init_lib(void)
 
 void tests_yall_close_lib(void)
 {
-	yall_close();
+	while (yall_close() != YALL_NOT_INIT) ;
 }
 
 void tests_yall_log_setup(void)
@@ -33,7 +33,8 @@ void tests_yall_log_setup(void)
 void tests_yall_log_clean()
 {
 	clean_subsystems();
-	yall_close();
+	
+        while (yall_close() != YALL_NOT_INIT) ;
 }
 
 void tests_call_log_function(char *buffer, void *args)
