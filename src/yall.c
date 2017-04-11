@@ -84,7 +84,6 @@ uint8_t yall_log(const char *subsystem,
 	uint8_t ret = YALL_OK;
 
 	char *msg = NULL;
-	struct yall_subsystem *s = NULL;
 	struct yall_subsystem_params p = { 0 };
 
 	if (! initialized) {
@@ -139,7 +138,7 @@ uint8_t yall_call_log(const char *subsystem,
 	void (*function)(char *buffer, void *args),
 	void *args)
 {
-	uint8_t ret = YALL_OK;
+        uint8_t ret = YALL_OK;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
