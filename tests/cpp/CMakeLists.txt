@@ -11,17 +11,17 @@ file(GLOB_RECURSE PROJECT_CPP_SRCS ./*.cpp)
 set(PROJECT_CPP_OUTPUT_NAME ${PROJECT_NAME}_cpp-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 
 IF (UNIX)# Build flags
-	set(CMAKE_C_FLAGS "${_CMAKE_C_FLAGS}")
-	set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} -g -O0")
-	set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} -O3")
+	set(CMAKE_CXX_FLAGS "${_CMAKE_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS_DEBUG "${_CMAKE_CXX_FLAGS} -g -O0")
+	set(CMAKE_CXX_FLAGS_RELEASE "${_CMAKE_CXX_FLAGS} -O3")
 
 	# Linked libraries
 	set(PROJECT_CPP_LIBRARIES yall_static pthread)
 ELSEIF (WIN32)
 	# Compile flags
-	set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
-	set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} /DEBUG /Z7")
-	set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} /MP")
+	set(CMAKE_CXX_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
+	set(CMAKE_CXX_FLAGS_DEBUG "${_CMAKE_CXX__FLAGS} /DEBUG /Z7")
+	set(CMAKE_CXX_FLAGS_RELEASE "${_CMAKE_CXX__FLAGS} /MP")
 
 	# Linked libraries
 	set(PROJECT_CPP_LIBRARIES yall_static)
@@ -29,8 +29,8 @@ ENDIF ()
 
 message("> Add execuable ${PROJECT_NAME}_cpp : ${PROJECT_CPP_OUTPUT_NAME}")
 message(">     Compile flags       :")
-message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
-message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
+message(">         Debug   : ${CMAKE_CXX_FLAGS_DEBUG}")
+message(">         Release : ${CMAKE_CXX_FLAGS_RELEASE}")
 message(">     Linked libraries    : ${PROJECT_CPP_LIBRARIES}")
 
 

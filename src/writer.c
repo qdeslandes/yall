@@ -61,9 +61,9 @@ uint8_t writer_init(void)
 		ret = YALL_SEM_INIT_ERR;
 		goto end;
 	}
+end:
 #endif
 
-end:
 	return ret;
 }
 
