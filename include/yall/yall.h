@@ -41,6 +41,14 @@ extern "C" {
 #define YALL_CALL_BUFF_LEN	1024
 
 /*
+ * These functions are defined inside subsystem.c, but due to incompatibility
+ *      between <atomic> (C++) and <stdatomic.h> (C), subsystem.h can't be
+ *      included here.
+ */
+_YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
+_YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
+
+/*
  * yall_get_version : returns the library version as a 32bits integer with the
  *	form :
  *	* 16 bits : major
@@ -55,8 +63,8 @@ _YALL_PUBLIC uint32_t yall_get_version(void);
 _YALL_PUBLIC const char *yall_get_version_string(void);
 
 /*
- * yall_init : initialize the yall library. It set up the writers and the
- * 	<initialized> flag.
+ * yall_init : initialize the yall library. It set up the writers and increment
+ *      the <initialized> flag each time called.
  * 	Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_init(void);
@@ -105,10 +113,17 @@ _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
 
 /*
  * yall_close : close all the yall library set up. The function fail only
- *	if yall has not been initialized previously.
+ *	if yall has not been initialized previously. If the function succeed,
+ *	the <initialized> value is decremented.
  *	Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_close(void);
+
+/*
+ * yall_close_all : close the yall library for each time it has been
+ *      initialized.
+ */
+_YALL_PUBLIC uint8_t yall_close_all(void);
 
 #ifdef __cplusplus
 }

@@ -5,6 +5,7 @@ build
 *.todo
 *.swp
 out.txt
+.vimrc
 
 # IDE
 *.kdev4

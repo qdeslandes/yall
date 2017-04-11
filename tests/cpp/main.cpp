@@ -45,7 +45,6 @@ int main(void)
 	YALL_ERR("test", "This is a test log message");
 	YALL_ERR("azertyazertyazerty", "test");
 
-	test::Class c = test::Class();
 	test::othertest::Test t = test::othertest::Test();
 	t.makeitwayne();
 
