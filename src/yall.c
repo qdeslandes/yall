@@ -51,27 +51,28 @@ const char *yall_get_version_string(void)
 	return version_string;
 }
 
-static bool initialized = false;
+static uint16_t initialized = 0;
 
 uint8_t yall_init(void)
 {
 	uint8_t ret = YALL_OK;
 
-	if (initialized) {
+    if (initialized) {
+        ++initialized;
 		ret = YALL_ALREADY_INIT;
-		goto err;
+        goto end;
 	}
 
-	initialized = true;
+        ++initialized;
 
-	if ((ret = writer_init()))
-		goto err;
+        if ((ret = writer_init()))
+                goto err;
 
-	return ret;
-
+end:
+        return ret;
 err:
-	initialized = false;
-	return ret;
+        --initialized;
+        return ret;
 }
 
 uint8_t yall_log(const char *subsystem,
@@ -83,7 +84,6 @@ uint8_t yall_log(const char *subsystem,
 	uint8_t ret = YALL_OK;
 
 	char *msg = NULL;
-	struct yall_subsystem *s = NULL;
 	struct yall_subsystem_params p = { 0 };
 
 	if (! initialized) {
@@ -138,7 +138,7 @@ uint8_t yall_call_log(const char *subsystem,
 	void (*function)(char *buffer, void *args),
 	void *args)
 {
-	uint8_t ret = YALL_OK;
+        uint8_t ret = YALL_OK;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
@@ -201,7 +201,6 @@ end:
 	return ret;
 }
 
-
 uint8_t yall_close(void)
 {
 	uint8_t ret = YALL_OK;
@@ -211,11 +210,29 @@ uint8_t yall_close(void)
 		goto end;
 	}
 
-	initialized = false;
+        --initialized;
 
 	writer_close();
 	free_subsystems();
 
 end:
 	return ret;
+}
+
+uint8_t yall_close_all(void)
+{
+        uint8_t ret = YALL_OK;
+
+        if (! initialized) {
+                ret = YALL_NOT_INIT;
+                goto end;
+        }
+
+        initialized = 0;
+
+        writer_close();
+        free_subsystems();
+
+end:
+        return ret;
 }

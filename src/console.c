@@ -48,12 +48,13 @@ static uint8_t colors[8] = { 97, 92, 92, 93, 91, 91, 91, 91 };
 
 static void set_color(enum yall_log_level log_level)
 {
-	fprintf(stderr, "\033[%dm", colors[log_level]);
+        // Escape sequence is inside its own litteral to get a clearer code.
+	fprintf(stderr, "\033" "[%dm", colors[log_level]);
 }
 
 static void reset_color(void)
 {
-	fprintf(stderr, "\033[0m");
+	fprintf(stderr, "\033" "[0m");
 }
 #elif _WIN32
 static uint8_t colors[8] = { 15, 10, 10, 14, 12, 12, 12, 12 };
