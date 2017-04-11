@@ -16,6 +16,8 @@ Test(yall, test_yall_init0)
 
 	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
         cr_assert_eq(initialized, 2);
+	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+        cr_assert_eq(initialized, 3);
 }
 
 /*

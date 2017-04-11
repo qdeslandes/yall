@@ -57,10 +57,10 @@ uint8_t yall_init(void)
 {
 	uint8_t ret = YALL_OK;
 
-	if (initialized) {
-                ++initialized;
+    if (initialized) {
+        ++initialized;
 		ret = YALL_ALREADY_INIT;
-                goto end;
+        goto end;
 	}
 
         ++initialized;
@@ -69,7 +69,7 @@ uint8_t yall_init(void)
                 goto err;
 
 end:
-	return ret;
+        return ret;
 err:
         --initialized;
         return ret;
