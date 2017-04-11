@@ -41,6 +41,14 @@ extern "C" {
 #define YALL_CALL_BUFF_LEN	1024
 
 /*
+ * These functions are defined inside subsystem.c, but due to incompatibility
+ *      between <atomic> (C++) and <stdatomic.h> (C), subsystem.h can't be
+ *      included here.
+ */
+_YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
+_YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
+
+/*
  * yall_get_version : returns the library version as a 32bits integer with the
  *	form :
  *	* 16 bits : major
