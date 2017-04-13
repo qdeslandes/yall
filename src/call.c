@@ -39,10 +39,27 @@ static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 
         return l;
 }
-{
-	struct yall_call_data d = { 0 };
 
-	formatter(&d, args);
+void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
+{
+        uint16_t msg_len = d->message_size;
+        uint16_t msg_curr_len = 0;
+
+        if (d->header) {
+                msg_curr_len = snprintf(buffer, len, d->header);
+                free(d->header);
+        } else {
+                msg_curr_len = snprintf(buffer, len, "\n");
+        }
+
+        struct yall_call_data_line *l = NULL;
+        while ((l = remove_first_line(d))) {
+                msg_curr_len += snprintf(&buffer[msg_curr_len], len - msg_curr_len, l->content);
+
+                free(l->content);
+                free(l);
+        }
+}
 
 	char *buffer = malloc(d.message_size + 1);
 	if (! buffer)
