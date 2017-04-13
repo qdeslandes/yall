@@ -25,9 +25,20 @@ static void add_line(struct yall_call_data *d, char *content)
         l->next = NULL;
 }
 
-const char *call_custom_formatter(
-	void (*formatter)(yall_call_data *d, void *args),
-	void *args)
+/*
+ * remove_first_line : remove and return the first line of the given data <d>.
+ */
+static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
+{
+        struct yall_call_data_line *l = d->lines;
+
+        if (l) {
+                d->lines = l->next;
+                d->message_size -= strlen(l->content);
+        }
+
+        return l;
+}
 {
 	struct yall_call_data d = { 0 };
 
