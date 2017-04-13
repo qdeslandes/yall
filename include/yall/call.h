@@ -2,8 +2,11 @@
 #define _YALL_CALL_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #include "yall/utils.h"
+
+#define DEFAULT_LINE_SIZE       1024
 
 struct yall_call_data_line {
 	char *content;
@@ -17,14 +20,31 @@ typedef struct yall_call_data {
 } yall_call_data;
 
 /*
- * call_custom_formatter : main function of this module. Its purprose is to
- *	call the provided format with the proper argument to generate a custom
- *	message. <formatter> can't be NULL. Once the formatter finished, a
- *	single message is generated and contains a printable string. This
- *	message is returned. It must be freed.
+ * call_data_to_buffer : fill the <buffer> of size <len> with the data of <d>.
+ *      None of theses pointers can be NULL.
  */
-const char *call_custom_formatter(
-	void (*formatter)(yall_call_data *d, void *args),
-	void *args);
+void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d);
+
+/*
+ * yall_call_set_header : called by the user's formatter function, it allow to
+ *      define the header of the log message. This header will be added just
+ *      after the standard info header (with subsystem name, date, ...).
+ *      Both <d> and <format> parameters can't be NULL.
+ */
+_YALL_PUBLIC void yall_call_set_header(
+        yall_call_data *d,
+        const char *format,
+        ...);
+
+/*
+ * yall_call_add_line : called by the user's formatter function, it allow to
+ *      add a line to the custom message. <indent> is the number of time plus
+ *      one that '\t' will be added before the message. <d> and <format> can't
+ *      be NULL.
+ */
+_YALL_PUBLIC void yall_call_add_line(
+        yall_call_data *d,
+        uint8_t indent,
+        const char *format, ...);
 
 #endif
