@@ -30,9 +30,23 @@
 
 #include "yall/log_levels.h"
 
-#define YALL_MSG_LEN	512
+#define YALL_MSG_LEN	        512
+#define MSG_HEADER_LEN          82
 #define C_FUNC_NAME_LEN		12
 #define CPP_FUNC_NAME_LEN	22
+
+/*
+ * generate_header : function in charge to generate the message header. A char
+ * 	array is passed to be filled by the parameters and the date. Once done,
+ * 	the status is returned. All pointer can't be NULL and the value
+ * 	<log_level> can't be equal to yall_inherited_level.
+ * 	If the function's name trimming fail, the function's name is not
+ * 	printed inside the header, but no error is shown. TODO : Fix it ?
+ */
+uint8_t generate_header(char *buffer,
+	const char *subsystem,
+	enum yall_log_level log_level,
+	const char *function);
 
 /*
  * generate_message : create the log message. It fills <buffer> we given data

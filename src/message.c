@@ -92,15 +92,7 @@ static uint8_t trim_function_name(char *function_name, const char *function)
 	return c_dots ? CPP_FUNC_NAME_LEN : C_FUNC_NAME_LEN;
 }
 
-/*
- * generate_header : function in charge to generate the message header. A char
- * 	array is passed to be filled by the parameters and the date. Once done,
- * 	the status is returned. All pointer can't be NULL and the value
- * 	<log_level> can't be equal to yall_inherited_level.
- * 	If the function's name trimming fail, the function's name is not
- * 	printed inside the header, but no error is shown. TODO : Fix it ?
- */
-static uint8_t generate_header(char *buffer,
+uint8_t generate_header(char *buffer,
 	const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function)
