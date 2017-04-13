@@ -83,9 +83,30 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
         free(_format);
 }
 
+void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, ...)
+{
+        ++indent; // To, defaultly, set all line at 1 tab
 
-	call_data_to_buffer(buffer, &d);
+        char *line_content = malloc(DEFAULT_LINE_SIZE);
 
-end:
-	return buffer;
+        // Create the proper format with \t and \n
+        uint8_t i = 0;
+        char *_format = malloc(strlen(format) + indent + 2);
+        for ( ; i < indent; ++i)
+                _format[i] = '\t';
+        sprintf(&_format[i], "%s%c", format, '\n');
+
+        // Create the message line
+        va_list args;
+        va_start(args, format);
+
+        vsnprintf(line_content, DEFAULT_LINE_SIZE, _format, args);
+
+        va_end(args);
+
+        // Add the line to the data list
+        add_line(d, line_content);
+        d->message_size += strlen(line_content);
+
+        free(_format);
 }
