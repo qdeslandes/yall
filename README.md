@@ -56,6 +56,14 @@ There is differents ways to log a message :
 * `YALL_CALL_<log_level>(<subsystem>, <function>, <args>)` : call <function> with a fixed length buffer and <args> as parameters. <function> must then fill the buffer which will be displayed with the given subsystem's parameters. Useful to display structure or classes content with in a readable way.
 * `YALL_CALL_<log_level>_IF(<subsystem>, <expr>, <function>, <args>)` : same as the previous function, but the message is displayed only if the expression evaluates to true.
 
+#### Call a custom function
+
+The function call mechanism has been improved to allow more flexibility and custom function call. To call the said custom function you must :
+* Create the proper function with the following prototype : `void function(yall_call_data *, void *args)`. This function makes calls to :
+  * `yall_call_set_header(yall_call_data *d, const char *header)` : the header used on the log message, the header can be unset.
+  * `yall_call_add_line(yall_call_data *d, int indent, const char *content)` : a new line to the log message.
+* Call to the proper macro : `YALL_CALL_<log_level>(<subsystem>, function, <args>)`.
+
 ### Close the library
 
 The yall library contain a flag which store the number of times it has been initialized. Each library initializing the library with `yall_init()` will increment this counter. This allow us to keep track of the number of library using the library at runtime. This way, if a library close yall through `yall_close()`, the other parts of the application can still use it. Once the counter fall to 0, the library is freed. The endpoint of the application can call `yall_close_all()` which will close the library regardless of the number of instances.
