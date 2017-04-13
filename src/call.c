@@ -61,9 +61,28 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
         }
 }
 
-	char *buffer = malloc(d.message_size + 1);
-	if (! buffer)
-		goto end;
+void yall_call_set_header(yall_call_data *d, const char *format, ...)
+{
+        if (d->header)
+                d->message_size -= strlen(d->header);
+        else
+                d->header = malloc(DEFAULT_LINE_SIZE);
+
+        // Create the proper format with \n
+        char *_format = malloc(strlen(format) + 2);
+        sprintf(_format, "%s%c", format, '\n');
+
+        va_list args;
+        va_start(args, format);
+
+        vsnprintf(d->header, DEFAULT_LINE_SIZE, _format, args);
+        d->message_size += strlen(d->header);
+
+        va_end(args);
+
+        free(_format);
+}
+
 
 	call_data_to_buffer(buffer, &d);
 
