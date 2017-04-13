@@ -1,4 +1,4 @@
-#include "test_writer.h"
+#include "test_call.h"
 
 static void tests_call_setup(void)
 {
