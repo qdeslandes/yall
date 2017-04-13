@@ -42,14 +42,13 @@ static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
-        uint16_t msg_len = d->message_size;
         uint16_t msg_curr_len = 0;
 
         if (d->header) {
-                msg_curr_len = snprintf(buffer, len, d->header);
+                msg_curr_len = snprintf(buffer, len, "%s", d->header);
                 free(d->header);
         } else {
-                msg_curr_len = snprintf(buffer, len, "\n");
+                msg_curr_len = snprintf(buffer, len, "%s", '\n');
         }
 
         struct yall_call_data_line *l = NULL;
