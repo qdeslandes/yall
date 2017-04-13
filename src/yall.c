@@ -27,6 +27,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "yall/utils.h"
 #include "yall/errors.h"
@@ -135,33 +136,44 @@ end:
 uint8_t yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
-	void (*function)(char *buffer, void *args),
+	void (*formatter)(yall_call_data *d, void *args),
 	void *args)
 {
         uint8_t ret = YALL_OK;
+        char *message = NULL;
+        struct yall_subsystem_params p = { 0 };
 
-	if (! initialized) {
-		ret = YALL_NOT_INIT;
-		goto end;
-	}
+        if (! initialized) {
+                ret = YALL_NOT_INIT;
+                goto end;
+        }
 
-	// Print the header
-	if ((ret = yall_log(subsystem, log_level, function_name, "")) != YALL_OK)
-		goto end;
+        get_subsystem(subsystem, &p);
 
-	// Call function to create the message and print it
-	char msg[YALL_CALL_BUFF_LEN] = { 0 };
-	struct yall_subsystem_params p = { 0 };
+        if (p.status == yall_subsys_disable) {
+                ret = YALL_SUBSYS_DISABLED;
+                goto end;
+        }
 
-	// Get subsystem's parameters. This can't fail.
-	get_subsystem(subsystem, &p);
+        if (log_level < p.log_level) {
+                ret = YALL_LOG_LEVEL_TOO_LOW;
+                goto end;
+        }
 
-	function(msg, args);
+        struct yall_call_data d = { 0 };
+        formatter(&d, args);
 
-	ret = write_msg(p.output_type, log_level, p.output_file, msg);
+        // All '+ 1' here are the \0 terminating character
+        message = malloc(MSG_HEADER_LEN + d.message_size + 1);
+        generate_header(message, subsystem, log_level, function_name);
+
+        convert_data_to_message(&message[strlen(message)], d.message_size + 1, &d);
+
+        ret = write_msg(p.output_type, log_level, p.output_file, message);
 
 end:
-	return ret;
+        free(message);
+        return ret;
 }
 
 uint8_t yall_set_subsystem(const char *name,
