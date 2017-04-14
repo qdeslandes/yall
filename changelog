@@ -1,4 +1,10 @@
-Current version (1.1.0) changelog
+Current version (1.2.0) changelog
+	[FEATURES]
+	[FIX]
+	[TEST]
+	[CI]
+
+Version 1.1.0 changelog
 	[FEATURES]
 		* Remove the old log file at subsystem creation
 		* Count number of initializations, and allow to close all instances of
