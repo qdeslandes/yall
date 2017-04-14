@@ -28,7 +28,7 @@ Test(call, test_convert_data_to_messsage0)
 
         convert_data_to_message(buf1, 4, &d1);
         cr_assert_str_eq(buf1, "Hel");
-        /*
+
         // With 2 lines
         char buf2[4] = { 0 };
         char *head2 = strdup("Hello, world !\n");
@@ -46,7 +46,6 @@ Test(call, test_convert_data_to_messsage0)
 
         convert_data_to_message(buf2, 4, &d2);
         cr_assert_str_eq(buf2, "Hel");
-        */
 }
 
 /*
