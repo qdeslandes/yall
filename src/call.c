@@ -48,7 +48,7 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
                 msg_curr_len = snprintf(buffer, len, "%s", d->header);
                 free(d->header);
         } else {
-                msg_curr_len = snprintf(buffer, len, "%s", '\n');
+                msg_curr_len = snprintf(buffer, len, "%s", "\n");
         }
 
         struct yall_call_data_line *l = NULL;
