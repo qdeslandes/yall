@@ -52,7 +52,7 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
         }
         printf("==\n");
         for (int i = 0; i < len; ++i)
-        printf("%d", buffer[i]);
+        printf("%d ", buffer[i]);
         printf("\n");
         printf("==\n");
 
