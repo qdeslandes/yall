@@ -42,14 +42,17 @@ static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
+        printf("============== START\n");
         uint16_t msg_curr_len = 0;
+        int8_t ret = 0;
 
         if (d->header) {
-                msg_curr_len = snprintf(buffer, len, "%s", d->header);
+                ret = snprintf(buffer, len, "%s", d->header);
                 free(d->header);
         } else {
-                msg_curr_len = snprintf(buffer, len, "%s", "\n");
+                ret = snprintf(buffer, len, "%s", "\n");
         }
+
         printf("==\n");
         for (int i = 0; i < len; ++i)
         printf("%d ", buffer[i]);
@@ -57,12 +60,17 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
         printf("==\n");
 
         struct yall_call_data_line *l = NULL;
-        while ((l = remove_first_line(d))) {
-                msg_curr_len += snprintf(&buffer[msg_curr_len], len - (msg_curr_len+1), l->content);
+        while (ret != -1 && (l = remove_first_line(d))) {
+                printf("Len : %d; curr len : %d\n", len, msg_curr_len);
+                printf("Before %d\n", msg_curr_len);
+                size_t curr_len = strlen(buffer);
+                ret = snprintf(&buffer[curr_len], len - curr_len, l->content);
+                printf("After %d\n", msg_curr_len);
 
                 free(l->content);
                 free(l);
         }
+        printf("================= end\n");
 }
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
