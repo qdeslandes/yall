@@ -18,7 +18,7 @@ Test(call, test_convert_data_to_messsage0)
         // Without 1 line
         char buf1[4] = { 0 };
         char *head1 = strdup("Hello, world !\n");
-        struct yall_call_data d1 = { 13, head1, NULL };
+        struct yall_call_data d1 = { 22, head1, NULL };
 
         struct yall_call_data_line *l0 = malloc(sizeof(struct yall_call_data_line));
         l0->content = strdup("content");
@@ -32,7 +32,7 @@ Test(call, test_convert_data_to_messsage0)
         // With 2 lines
         char buf2[4] = { 0 };
         char *head2 = strdup("Hello, world !\n");
-        struct yall_call_data d2 = { 13, head2, NULL };
+        struct yall_call_data d2 = { 35, head2, NULL };
 
         struct yall_call_data_line *l1 = malloc(sizeof(struct yall_call_data_line));
         l1->content = strdup("content ter");

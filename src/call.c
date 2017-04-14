@@ -51,12 +51,14 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
                 msg_curr_len = snprintf(buffer, len, "%s", "\n");
         }
         printf("==\n");
-        printf("%d %d\n", buffer[0], buffer[1]);
+        for (int i = 0; i < len; ++i)
+        printf("%d", buffer[i]);
+        printf("\n");
         printf("==\n");
 
         struct yall_call_data_line *l = NULL;
         while ((l = remove_first_line(d))) {
-                msg_curr_len += snprintf(&buffer[msg_curr_len], len - msg_curr_len, l->content);
+                msg_curr_len += snprintf(&buffer[msg_curr_len], len - (msg_curr_len+1), l->content);
 
                 free(l->content);
                 free(l);
