@@ -50,6 +50,9 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
         } else {
                 msg_curr_len = snprintf(buffer, len, "%s", "\n");
         }
+        printf("==\n");
+        printf("%d %d\n", buffer[0], buffer[1]);
+        printf("==\n");
 
         struct yall_call_data_line *l = NULL;
         while ((l = remove_first_line(d))) {
