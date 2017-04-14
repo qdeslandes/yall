@@ -31,9 +31,8 @@
 #include "yall/log_levels.h"
 
 #define YALL_MSG_LEN	        512
-#define MSG_HEADER_LEN          82
-#define C_FUNC_NAME_LEN		12
-#define CPP_FUNC_NAME_LEN	22
+#define MSG_HEADER_LEN          77
+#define FUNC_NAME_LEN		17
 
 /*
  * generate_header : function in charge to generate the message header. A char
