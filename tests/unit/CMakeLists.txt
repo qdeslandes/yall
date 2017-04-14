@@ -66,7 +66,7 @@ elseif (WIN32)
 endif ()
 
 add_custom_target(unit
-  COMMAND ${PROJECT_NAME}_unit
+  COMMAND ${PROJECT_NAME}_unit -j1 --verbose=1
   WORKING_DIRECTORY ${UNIT_TEST_WORKDIR}
   COMMENT "Run builded unit tests"
 )

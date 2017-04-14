@@ -43,10 +43,7 @@ Test(call, test_convert_data_to_messsage0)
         d2.lines = l2;
 
         convert_data_to_message(buf2, 4, &d2);
-        printf("==\n");
-        printf("%s\n", buf2);
         cr_assert_str_eq(buf2, "Hel");
-        printf("==\n");
 }
 
 /*
