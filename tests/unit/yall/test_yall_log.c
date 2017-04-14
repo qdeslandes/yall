@@ -1,6 +1,7 @@
 #include "test_yall.h"
 
 extern struct yall_subsystem *subsystems;
+extern struct yall_subsystem *_subsystems[10];
 
 /*
  * Library not initialized
@@ -72,4 +73,14 @@ Test(yall, test_yall_log5, .init=tests_yall_log_setup, .fini=tests_yall_log_clea
 	disable_fprintf();
 	cr_assert_eq(yall_log("0", yall_emerg, "", ""), YALL_CONSOLE_WRITE_ERR);
 	enable_fprintf();
+}
+
+/*
+ * Disabled subsystem
+ */
+Test(yall, test_yall_log6, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+{
+        _subsystems[0]->status = yall_subsys_disable;
+
+        cr_assert_eq(yall_log("0", yall_emerg, "", ""), YALL_SUBSYS_DISABLED);
 }

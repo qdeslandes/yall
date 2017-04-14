@@ -33,6 +33,7 @@ extern "C" {
 #include <stdint.h>
 
 #include "yall/log.h"
+#include "yall/call.h"
 #include "yall/utils.h"
 #include "yall/message.h"
 #include "yall/log_levels.h"
@@ -92,7 +93,7 @@ _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
 _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
-	void (*function)(char *buffer, void *args),
+	void (*formatter)(yall_call_data *d, void *args),
 	void *args);
 
 /*

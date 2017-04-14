@@ -4,6 +4,7 @@ Current version (1.1.0) changelog
 		* Count number of initializations, and allow to close all instances of
 		the library
 		* Allow subsystem activation / disactivation easily
+		* Improve function call subsystem
 	[FIX]
 		* Change library license to MIT
 		* Set fixed size for subsystem name
