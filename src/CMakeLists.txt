@@ -12,7 +12,7 @@ set(PROJECT_OUTPUT_NAME "${PROJECT_NAME}")
 
 IF (UNIX)
 	# Compile flags
-	set(_CMAKE_C_FLAGS "${_CMAKE_C_FLAGS} -fPIC")
+	set(_CMAKE_C_FLAGS "${_CMAKE_C_FLAGS} -pedantic -fPIC")
 	set(_CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} -g -O0")
 	set(_CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} -O3")
 
