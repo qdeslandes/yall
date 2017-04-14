@@ -70,7 +70,7 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 
         // Create the proper format with \n
         char *_format = malloc(strlen(format) + 2);
-        sprintf(_format, "%s%c", format, '\n');
+        snprintf(_format, strlen(format) + 2, "%s%c", format, '\n');
 
         va_list args;
         va_start(args, format);
@@ -94,7 +94,7 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, .
         char *_format = malloc(strlen(format) + indent + 2);
         for ( ; i < indent; ++i)
                 _format[i] = '\t';
-        sprintf(&_format[i], "%s%c", format, '\n');
+        snprintf(&_format[i], strlen(format) + 2, "%s%c", format, '\n');
 
         // Create the message line
         va_list args;
