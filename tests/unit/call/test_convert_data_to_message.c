@@ -10,9 +10,7 @@ Test(call, test_convert_data_to_messsage0)
         char *head0 = strdup("Hello, world\n");
         struct yall_call_data d0 = { 13, head0, NULL };
 
-        printf("HERE\n");
         convert_data_to_message(buf0, 2, &d0);
-        printf("LL\n");
         cr_assert_str_eq(buf0, "H");
 
         // Without 1 line

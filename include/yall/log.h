@@ -49,16 +49,11 @@
  * 		YALL_DEBUG(sub, "This is " << "my log " << "msg");
  */
 
-#ifdef __linux__
-#define FUNCTION __PRETTY_FUNCTION__
-#elif _WIN32
-
 #if (_MSC_VER == 1800)
 #define __func__ __FUNCTION__
 #endif
 
 #define FUNCTION __FUNCTION__
-#endif
 
 #ifndef __cplusplus
 
