@@ -44,7 +44,7 @@ void init_call_data(struct yall_call_data *d)
 {
     d->message_size = 1;
 
-    d->header = malloc(2 * sizeof(char));
+    d->header = malloc(DEFAULT_LINE_SIZE);
     d->header[0] = '\n';
     d->header[1] = 0;
 }
