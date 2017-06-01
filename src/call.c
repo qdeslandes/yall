@@ -53,12 +53,8 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
         int8_t ret = 0;
 
-        if (d->header) {
-                ret = snprintf(buffer, len, "%s", d->header);
-                free(d->header);
-        } else {
-                ret = snprintf(buffer, len, "%s", "\n");
-        }
+        ret = snprintf(buffer, len, "%s", d->header);
+        free(d->header);
 
         struct yall_call_data_line *l = NULL;
         while (ret != -1 && (l = remove_first_line(d))) {
