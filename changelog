@@ -1,6 +1,7 @@
 Current version (1.2.0) changelog
 	[FEATURES]
 	[FIX]
+		* Fix YALL_CALL_LOG buffer overrun
 	[TEST]
 	[CI]
 
