@@ -20,6 +20,12 @@ typedef struct yall_call_data {
 } yall_call_data;
 
 /*
+ * init_call_data : from a yall_call_data pointer, message_size is set to 1
+ *  and header contains "\n". The <d> pointer can't be NULL.
+ */
+void init_call_data(struct yall_call_data *d);
+
+/*
  * call_data_to_buffer : fill the <buffer> of size <len> with the data of <d>.
  *      None of theses pointers can be NULL.
  */

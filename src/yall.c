@@ -161,6 +161,8 @@ uint8_t yall_call_log(const char *subsystem,
         }
 
         struct yall_call_data d = { 0 };
+        init_call_data(&d);
+
         formatter(&d, args);
 
         // All '+ 1' here are the \0 terminating character
