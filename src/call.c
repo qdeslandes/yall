@@ -40,16 +40,21 @@ static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
         return l;
 }
 
+void init_call_data(struct yall_call_data *d)
+{
+    d->message_size = 1;
+
+    d->header = malloc(DEFAULT_LINE_SIZE);
+    d->header[0] = '\n';
+    d->header[1] = 0;
+}
+
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
         int8_t ret = 0;
 
-        if (d->header) {
-                ret = snprintf(buffer, len, "%s", d->header);
-                free(d->header);
-        } else {
-                ret = snprintf(buffer, len, "%s", "\n");
-        }
+        ret = snprintf(buffer, len, "%s", d->header);
+        free(d->header);
 
         struct yall_call_data_line *l = NULL;
         while (ret != -1 && (l = remove_first_line(d))) {
@@ -65,8 +70,6 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 {
         if (d->header)
                 d->message_size -= strlen(d->header);
-        else
-                d->header = malloc(DEFAULT_LINE_SIZE);
 
         // Create the proper format with \n
         char *_format = malloc(strlen(format) + 2);
