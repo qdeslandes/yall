@@ -3,9 +3,14 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
-|master >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall/coverage.svg)]()|
+https://sonarcloud.io/api/badges/gate?key=yall
+https://sonarcloud.io/api/badges/measure?key=yall&metric=coverage
+
+[Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)
+
+|master > | [![!][1mb]][1ml] | [![!][2mb]][2ml] | [![!][3mb]][3ml] | [![!][4mb]][4ml] |
 |---|---|---|---|---|
-|develop >|[![Travis branch](https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux)](https://travis-ci.org/Naccyde/yall/branches)|[![AppVeyor branch](https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows)](https://ci.appveyor.com/project/Naccyde/yall)|[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/yall:develop/coverage.svg)]()|
+|develop >| [![!][1db]][1dl] | [![!][2db]][2dl] | [![!][3db]][3dl] | [![!][4db]][4dl] |
 
 YALL is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
 
@@ -94,3 +99,22 @@ YALL_DEBUG("example_subsystem", "My message : %s", "error");
 ### Misc
 
 yall is an open-source project, feel free to contribute to the project and send a pull request. To get some personnal help or report a bug, you can contact `naccyde <at> naccyde <dot> eu` ;) .
+
+
+[1mb]: https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux
+[1ml]: https://travis-ci.org/Naccyde/yall/branches
+[2mb]: https://img.shields.io/appveyor/ci/Naccyde/yall/master.svg?label=windows
+[2ml]: https://ci.appveyor.com/project/Naccyde/yall
+[3mb]: https://sonarcloud.io/api/badges/gate?key=yall
+[3ml]: https://sonarcloud.io/dashboard?id=yall
+[4mb]: https://sonarcloud.io/api/badges/measure?key=yall&metric=coverage
+[4ml]: https://sonarcloud.io/dashboard?id=yall
+
+[1db]: https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux
+[1dl]: https://travis-ci.org/Naccyde/yall/branches
+[2db]: https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows
+[2dl]: https://ci.appveyor.com/project/Naccyde/yall
+[3db]: https://sonarcloud.io/api/badges/gate?key=yall:develop
+[3dl]: https://sonarcloud.io/dashboard?id=yall:develop
+[4db]: https://sonarcloud.io/api/badges/measure?key=yall:develop&metric=coverage
+[4dl]: https://sonarcloud.io/dashboard?id=yall:develop
