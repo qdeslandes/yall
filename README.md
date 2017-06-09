@@ -3,11 +3,6 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
-https://sonarcloud.io/api/badges/gate?key=yall
-https://sonarcloud.io/api/badges/measure?key=yall&metric=coverage
-
-[Travis branch](https://img.shields.io/travis/Naccyde/yall/master.svg?label=linux)
-
 |master > | [![!][1mb]][1ml] | [![!][2mb]][2ml] | [![!][3mb]][3ml] | [![!][4mb]][4ml] |
 |---|---|---|---|---|
 |develop >| [![!][1db]][1dl] | [![!][2db]][2dl] | [![!][3db]][3dl] | [![!][4db]][4dl] |
