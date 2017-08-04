@@ -22,16 +22,22 @@
  * SOFTWARE.
  */
 
-#include "yall/writer.h"
+#include "yall/writer/writer.h"
 
+<<<<<<< HEAD:src/writer.c
 #ifdef __linux__
 #       include <semaphore.h>
 #elif _WIN32
 #       include <Windows.h>
+=======
+#ifdef _WIN32
+#include <Windows.h>
+>>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
 #endif
 
 #include "yall/error.h"
 #include "yall/utils.h"
+<<<<<<< HEAD:src/writer.c
 #include "yall/console.h"
 #include "yall/file.h"
 #include "yall/debug.h"
@@ -45,9 +51,18 @@ HANDLE console_sem = NULL;
 #endif
 
 yall_error writer_init(void)
+=======
+#include "yall/errors.h"
+#include "yall/writer/console.h"
+#include "yall/writer/file.h"
+#include "yall/debug.h"
+
+uint8_t writer_init(void)
+>>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
 {
 	yall_error ret = YALL_SUCCESS;
 
+<<<<<<< HEAD:src/writer.c
 #ifdef __linux__
 	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1)) {
 		_YALL_DBG_ERR("Could not lock mutex.");
@@ -64,6 +79,8 @@ yall_error writer_init(void)
 end:
 #endif
 
+=======
+>>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
 	return ret;
 }
 
@@ -91,17 +108,4 @@ void writer_close(void)
 	 * Closing an invalid semaphore is okay, but closing an invalid HANDLE
 	 * will fuck this thing up. So we need to check that...
 	 */
-#ifdef __linux__
-	sem_destroy(&file_sem);
-	sem_destroy(&console_sem);
-#elif _WIN32
-	if (file_sem)
-		CloseHandle(file_sem);
-
-	if (console_sem)
-		CloseHandle(console_sem);
-
-	file_sem = NULL;
-	console_sem = NULL;
-#endif
 }
