@@ -24,3 +24,33 @@
 
 #include "yall/writer/thread.h"
 
+#include <pthread.h>
+
+#include "yall/errors.h"
+
+static pthread_t thread;
+static void *writer_thread_routine(void *args);
+
+uint8_t start_thread(uint16_t frequency)
+{
+	int ret = YALL_OK;
+	int thread_ret = pthread_create(&thread, NULL, writer_thread_routine, NULL);
+
+	if (thread_ret != 0) {
+		ret = YALL_CANT_CREATE_THREAD;
+		goto end;
+	}
+
+end:
+	return ret;
+}
+
+void stop_thread(void)
+{
+	pthread_cancel(thread);
+}
+
+static void *writer_thread_routine(void *args)
+{
+	printf("logging\n");
+}

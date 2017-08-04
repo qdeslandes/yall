@@ -52,7 +52,7 @@ if (UNIX)
 	else ()
 		set(COMPILER "gcc_unknow")
 	endif ()
-	
+
 	if (CMAKE_BUILD_TYPE MATCHES Debug)
 		add_definitions(-DDEBUG)
 	endif ()
@@ -66,9 +66,12 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
-	
+
 	set(_CMAKE_C_FLAGS_DEBUG "/DDEBUG")
 	set(_CMAKE_CXX_FLAGS_DEBUG "/DDEBUG")
+
+	# Specific windows headers directory
+	include_directories("${CMAKE_SOURCE_DIR}/external/include/yall_win32")
 endif ()
 
 install(FILES README.md DESTINATION share RENAME yall_README.md)

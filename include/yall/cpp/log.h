@@ -36,4 +36,5 @@
 #define _YALL_CALL_LOG(subsystem, log_level, function, args) \
 	Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
 		__FILE__, __LINE__, function, args)
+
 #endif

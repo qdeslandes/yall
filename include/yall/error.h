@@ -54,11 +54,13 @@ typedef enum {
 
 	YALL_CANT_CREATE_SUBSYS	= 0x0F,
 
+	YALL_CANT_CREATE_THREAD	= 0x10,
+
 	/*
 	 * This is used to check if the given code is defined. It is ugly, but
 	 * it's the best I can currently find.
 	 */
-	yall_err_end		= 0x10
+	yall_err_end		= 0x11
 } yall_error;
 
 _YALL_PUBLIC const char *yall_strerror(yall_error err);
