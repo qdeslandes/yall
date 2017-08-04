@@ -8,8 +8,8 @@
 
 #include "h_utils.h"
 #include "yall/yall.h"
-#include "yall/error.h"
-#include "yall/console.h"
+#include "yall/errors.h"
+#include "yall/writer/console.h"
 
 struct param_set_color {
         enum yall_log_level ll;

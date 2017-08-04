@@ -5,9 +5,6 @@
 #ifdef __linux__
 #include <semaphore.h>
 #include <unistd.h>
-
-extern sem_t console_sem;
-extern sem_t file_sem;
 #elif _WIN32
 #include <Windows.h>
 #include <io.h>
@@ -18,9 +15,6 @@ extern sem_t file_sem;
 #define open _open
 #define close _close
 #define O_RDWR _O_RDWR
-
-extern HANDLE console_sem;
-extern HANDLE file_sem;
 #endif
 
 static int old_stderr;
@@ -41,24 +35,10 @@ void _tests_restore_stderr(void)
 
 void _tests_mutex_init(void)
 {
-#ifdef __linux__
-        sem_init(&console_sem, 0, 1);
-        sem_init(&file_sem, 0, 1);
-#elif _WIN32
-        console_sem = CreateMutex(NULL, FALSE, NULL);
-        file_sem = CreateMutex(NULL, FALSE, NULL);
-#endif
 }
 
 void _tests_mutex_close(void)
 {
-#ifdef __linux__
-        sem_destroy(&console_sem);
-        sem_destroy(&file_sem);
-#elif _WIN32
-        CloseHandle(console_sem);
-        CloseHandle(file_sem);
-#endif
 }
 
 TESTS_REDEFINE_LIGHT(snprintf);

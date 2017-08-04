@@ -23,28 +23,14 @@ static void tests_console_clean(void)
 
 TestSuite(console, .init=tests_console_setup, .fini=tests_console_clean);
 
-#ifdef __linux__
-#       include <semaphore.h>
-extern sem_t console_sem;
-#elif _WIN32
-#       include <Windows.h>
-extern HANDLE console_sem;
+#ifdef _WIN32
+#	include <Windows.h>
 #endif
 
 void test_write_log_console_setup(void)
 {
-#ifdef __linux__
-        sem_init(&console_sem, 0, 1);
-#elif _WIN32
-        console_sem = CreateMutex(NULL, FALSE, NULL);
-#endif
 }
 
 void test_write_log_console_clean(void)
 {
-#ifdef __linux__
-        sem_destroy(&console_sem);
-#elif _WIN32
-        CloseHandle(console_sem);
-#endif
 }
