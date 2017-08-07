@@ -31,6 +31,20 @@
 #include "yall/header.h"
 #include "yall/call.h"
 
+struct message {
+	char *data;
+	enum yall_log_level log_level;
+	enum yall_output_type output_type;
+	char *output_file;
+};
+
+struct message *message_new(char *data,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	char *output_file);
+
+void message_delete(struct message *msg);
+
 /*
  * generate_message : create the log message. It fills <buffer> we given data
  *	and specific format. No pointer argument can be NULL, but <args> can be
