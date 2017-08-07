@@ -1,55 +1,107 @@
 #include <stdio.h>
 
+#include <stdbool.h>
+#include <pthread.h>
 #include <yall/yall.h>
 
-void formatter(struct yall_call_data *d, void *args)
-{
-        int lines = 3;
+#define N_THREADS	5
 
-        yall_call_set_header(d, (char *)args);
-        yall_call_add_line(d, 0, "Total lines : %d", lines);
-        yall_call_add_line(d, 0, "Languages :");
-        yall_call_add_line(d, 1, "C : 0");
-        yall_call_add_line(d, 1, "C++ : 3");
+static __declspec(align(64)) bool thread_run = true;
+
+void *t0(void *args)
+{
+	while (thread_run) {
+		YALL_INFO("t0", "Thread 0 message.");
+
+		Sleep(10);
+	}
+
+	return NULL;
 }
+
+void *t1(void *args)
+{
+	while (thread_run) {
+		YALL_WARNING("t1", "Thread 1 message.");
+
+		Sleep(20);
+	}
+
+	return NULL;
+}
+
+void *t2(void *args)
+{
+	while (thread_run) {
+		YALL_ERR("t2", "Thread 2 message.");
+
+		Sleep(30);
+	}
+
+	return NULL;
+}
+
+void *t3(void *args)
+{
+	while (thread_run) {
+		YALL_ERR("t3", "Thread 3 message.");
+
+		Sleep(25);
+	}
+
+	return NULL;
+}
+
+void *t4(void *args)
+{
+	while (thread_run) {
+		YALL_ERR("t4", "Thread 4 message.");
+
+		Sleep(25);
+	}
+
+	return NULL;
+}
+
+static pthread_t threads[N_THREADS];
+static void *(*tfunc[N_THREADS])(void *) = { t0, t1, t2, t3 ,t4 };
 
 int main(void)
 {
 	yall_init();
 
-	printf("%s, %d\n", yall_get_version_string(), yall_get_version());
-	yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL);
-	yall_set_subsystem("longsubsystem", NULL, yall_debug, yall_console_output, NULL);
-	yall_set_subsystem("azertyazertyazerty", NULL, yall_debug, yall_console_output, NULL);
-	yall_set_subsystem("status", NULL, yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("YALLreal", NULL, yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("setup", "YALLreal", yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("t0", "YALLreal", yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("t1", "YALLreal", yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("t2", "YALLreal", yall_debug, yall_console_output, NULL);
 
-	YALL_DEBUG("test", "This is a test log message");
-	YALL_WARNING("longsubsystem", "This is a test log message");
-	YALL_ERR("test", "This is a test log message");
-	YALL_ERR("azertyazertyazert", "test");
+	YALL_INFO("setup", "Starting threads.");
 
-	/*
-	 * Subsystem status
-	 */
-	YALL_WARNING("absent", "This subsystem does not exists");
-	YALL_WARNING("status", "Activated");
-	yall_disable_subsystem("status");
-	YALL_ERR("status", "This should not appear");
-	yall_enable_subsystem("status");
-	YALL_ERR("status", "This should appear");
+	for (int i = 0; i < N_THREADS; ++i) {
+		int ret = pthread_create(&threads[0], NULL, tfunc[i], NULL);
+		if (ret != 0)
+			YALL_ERR("setup", "Thread %d startup failed.", i);
+	}
 
-        YALL_CALL_DEBUG("test", formatter, "Data report for today :");
-
-        YALL_DEBUG("test", "lol");
+	YALL_INFO("setup", "Threads running, hit a key to stop.");
 
 #ifdef _WIN32
 	getchar();
 #endif
 
-        yall_close();
+	YALL_INFO("setup", "Closing threads.");
+
+	thread_run = false;
+	for (int i = 0; i < N_THREADS; ++i)
+		pthread_join(threads[i], NULL);
+
+	yall_close();
+
+	printf("Threads stopped, hit a quit to quit...\n");
 
 #ifdef _WIN32
-		getchar();
+	getchar();
 #endif
 
 	return 0;
