@@ -24,63 +24,24 @@
 
 #include "yall/writer/writer.h"
 
-<<<<<<< HEAD:src/writer.c
-#ifdef __linux__
-#       include <semaphore.h>
-#elif _WIN32
-#       include <Windows.h>
-=======
 #ifdef _WIN32
 #include <Windows.h>
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
 #endif
 
 #include "yall/error.h"
+#include "yall/writer/thread.h"
 #include "yall/utils.h"
-<<<<<<< HEAD:src/writer.c
-#include "yall/console.h"
-#include "yall/file.h"
-#include "yall/debug.h"
-
-#ifdef __linux__
-sem_t file_sem;
-sem_t console_sem;
-#elif _WIN32
-HANDLE file_sem = NULL;
-HANDLE console_sem = NULL;
-#endif
-
-yall_error writer_init(void)
-=======
 #include "yall/errors.h"
 #include "yall/writer/console.h"
 #include "yall/writer/file.h"
 #include "yall/debug.h"
 
-uint8_t writer_init(void)
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
+uint8_t writer_init(uint16_t frequency)
 {
 	yall_error ret = YALL_SUCCESS;
 
-<<<<<<< HEAD:src/writer.c
-#ifdef __linux__
-	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1)) {
-		_YALL_DBG_ERR("Could not lock mutex.");
-		ret = YALL_SEM_INIT_ERR;
-	}
-#elif _WIN32
-	file_sem = CreateMutex(NULL, FALSE, NULL);
-	console_sem = CreateMutex(NULL, FALSE, NULL);
-	if (! file_sem || ! console_sem) {
-		_YALL_DBG_ERR("Could not lock mutex.");
-		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
-end:
-#endif
+	ret = start_thread(frequency);
 
-=======
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/writer.c
 	return ret;
 }
 
@@ -102,10 +63,5 @@ yall_error write_msg(enum yall_output_type output_type,
 
 void writer_close(void)
 {
-	_YALL_DBG_INFO("Closing writers.");
-
-	/*
-	 * Closing an invalid semaphore is okay, but closing an invalid HANDLE
-	 * will fuck this thing up. So we need to check that...
-	 */
+	stop_thread();
 }

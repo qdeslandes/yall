@@ -25,14 +25,29 @@
 #include "yall/writer/thread.h"
 
 #include <pthread.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 #include "yall/errors.h"
+
+/*
+ * This should ensure atomicity of read / write on the variable. But, as
+ * Chris Hanson mention here https://stackoverflow.com/questions/78277/how-to-guarantee-64-bit-writes-are-atomic,
+ * there is many factors to check to be sure this will work. So, this is
+ * not sufficient, but... This variable is not business critical.
+ * Also, Intel assumes reading / writing a 64 bits aligned variable is 
+ * thread safe : https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf
+ * See also : http://preshing.com/20130618/atomic-vs-non-atomic-operations/
+ */
+static __declspec(align(64)) bool thread_run = true;
 
 static pthread_t thread;
 static void *writer_thread_routine(void *args);
 
 uint8_t start_thread(uint16_t frequency)
 {
+	// TODO : handle frequency
+
 	int ret = YALL_OK;
 	int thread_ret = pthread_create(&thread, NULL, writer_thread_routine, NULL);
 
@@ -47,10 +62,15 @@ end:
 
 void stop_thread(void)
 {
-	pthread_cancel(thread);
+	thread_run = false;
+	pthread_join(thread, NULL);
 }
 
 static void *writer_thread_routine(void *args)
 {
-	printf("logging\n");
+	while (thread_run) {
+		printf("logging\n");
+	}
+
+	printf("Stoping thread\n");
 }

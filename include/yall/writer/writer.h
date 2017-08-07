@@ -32,13 +32,10 @@
 #include "yall/error.h"
 
 /*
- * writer_init : initialize some stuff for the console and file writers.
- *      Currently initialize the semaphores. This should be called once.
- *      TODO : Manage to fail the initialization if the semaphore are already
- *      initialized.
- *	Returns a yall_error.
+ * writer_init : start the writing thread. Return YALL_OK on success, error
+ *	otherwise.
  */
-yall_error writer_init(void);
+uint8_t writer_init(uint16_t frequency);
 
 /*
  * write : write the message to the output medium. Returns a YALL_ERROR on

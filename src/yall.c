@@ -35,6 +35,8 @@
 #include "yall/subsystem.h"
 #include "yall/debug.h"
 
+#define WRITER_THREAD_FREQUENCY 60
+
 #include "version.h"
 #define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) \
 	"." STRINGIFY(YALL_PATCH)
@@ -72,6 +74,9 @@ yall_error yall_init(void)
 		goto err;
 
 	config_setup();
+
+        if ((ret = writer_init(WRITER_THREAD_FREQUENCY)))
+                goto err;
 
 end:
 	return ret;
