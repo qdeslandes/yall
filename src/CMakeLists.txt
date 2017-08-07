@@ -24,8 +24,8 @@ ELSEIF (WIN32)
         set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG}")
         set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} /MP")
 
-        # Linked libraries
-        set(PROJECT_LINK_LIBRARIES)
+	# Linked libraries
+	set(PROJECT_LINK_LIBRARIES pthreadVC2)
 ENDIF ()
 
 # CMake logging
