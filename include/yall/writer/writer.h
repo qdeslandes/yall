@@ -43,10 +43,7 @@ uint8_t writer_init(uint16_t frequency);
  *      is equals to yall_file_output or yall_both_output.
  *	Returns a yall_error.
  */
-yall_error write_msg(enum yall_output_type output_type,
-	enum yall_log_level log_level,
-	const char *output_file,
-	const char *msg);
+uint8_t write_msg(struct message *m);
 
 /*
  * writer_destroy : destroy all the writers semaphores.

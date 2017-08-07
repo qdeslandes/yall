@@ -34,6 +34,8 @@
 #include "yall/message.h"
 #include "yall/subsystem.h"
 #include "yall/debug.h"
+#include "yall/writer/writer.h"
+#include "yall/queue.h"
 
 #define WRITER_THREAD_FREQUENCY 60
 
@@ -69,10 +71,6 @@ yall_error yall_init(void)
 
 	++initialized;
 
-	ret = writer_init();
-	if (ret)
-		goto err;
-
 	config_setup();
 
         if ((ret = writer_init(WRITER_THREAD_FREQUENCY)))
@@ -106,6 +104,8 @@ yall_error yall_log(const char *subsystem,
 	size_t buff_len = 0;
 	struct header_content hc = { 0 };
 	struct yall_subsystem_params p = { 0 };
+	char *msg = NULL;
+	struct message *m = NULL;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
@@ -131,6 +131,9 @@ yall_error yall_log(const char *subsystem,
 
 	fill_header_content(&hc, subsystem, log_level, function, filename,
 		line);
+	// Create message
+	msg = malloc(YALL_MSG_LEN);
+	m = message_new(msg, log_level, p.output_type, p.output_file);
 
 	va_start(args, format);
 
@@ -163,8 +166,10 @@ yall_error yall_log(const char *subsystem,
 	// Write message
 	ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
-end:
 	free(buff);
+	ret = write_msg(m);
+
+end:
 	return ret;
 }
 
@@ -216,12 +221,13 @@ yall_error yall_call_log(const char *subsystem,
 	hdr_len = generate_call_hdr(NULL, 0, &hc);
 	buff_len = hdr_len + d.message_size + 1;
 
-	buff = malloc(buff_len);
+	msg = malloc(MSG_HEADER_LEN + d.message_size + 1);
+	m = message_new(msg, log_level, p.output_type, p.output_file);
 
-	generate_call_hdr(buff, hdr_len + 1, &hc);
-	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
+	generate_call_hdr(msg, hdr_len + 1, &hc);
+	generate_call_msg(&msg[hdr_len], buff_len - hdr_len, &d);
 
-	ret = write_msg(p.output_type, log_level, p.output_file, buff);
+	ret = write_msg(m);
 
 end:
 	free(buff);

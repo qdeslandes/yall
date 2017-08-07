@@ -34,6 +34,7 @@
 #include "yall/errors.h"
 #include "yall/writer/console.h"
 #include "yall/writer/file.h"
+#include "yall/message.h"
 #include "yall/debug.h"
 
 uint8_t writer_init(uint16_t frequency)
@@ -45,18 +46,11 @@ uint8_t writer_init(uint16_t frequency)
 	return ret;
 }
 
-yall_error write_msg(enum yall_output_type output_type,
-	enum yall_log_level log_level,
-	const char *output_file,
-	const char *msg)
+uint8_t write_msg(struct message *m)
 {
 	yall_error ret = YALL_SUCCESS;
 
-	if (yall_console_output & output_type)
-		ret = write_log_console(log_level, msg);
-
-	if (yall_file_output & output_type)
-		ret = write_log_file(output_file, msg);
+	enqueue(m);
 
 	return ret;
 }
