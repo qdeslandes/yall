@@ -25,9 +25,10 @@
 #include "yall/queue.h"
 
 #include <stdlib.h>
-
 #include <Windows.h>
 #include <malloc.h>
+
+#include "yall/message.h"
 
 static struct qnode *head = NULL;
 
@@ -41,8 +42,13 @@ volatile struct qnode *qnode_new(void *data)
 	return node;
 }
 
-void qnode_delete(volatile struct qnode *node)
+void qnode_delete(volatile struct qnode *node, void (*data_delete)(void *data))
 {
+	if (data_delete)
+		data_delete(node->data);
+	else
+		free(node->data);
+
 	_aligned_free((struct qnode *)node);
 }
 

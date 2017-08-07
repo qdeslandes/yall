@@ -31,7 +31,7 @@ struct qnode {
 };
 
 volatile struct qnode *qnode_new(void *data);
-void qnode_delete(volatile struct qnode *node);
+void qnode_delete(volatile struct qnode *node, void (*data_delete)(void *data));
 void enqueue(void *data);
 volatile struct qnode *swap_queue(void);
 
