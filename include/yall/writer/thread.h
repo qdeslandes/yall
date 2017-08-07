@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint8_t start_thread(uint16_t frequency);
+uint8_t start_thread(uint16_t f);
 void stop_thread(void);
 
 #endif

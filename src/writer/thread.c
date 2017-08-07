@@ -27,8 +27,12 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "yall/errors.h"
+#include "yall/queue.h"
+#include "yall/output_types.h"
+#include "yall/message.h"
 
 /*
  * This should ensure atomicity of read / write on the variable. But, as
@@ -41,14 +45,16 @@
  */
 static __declspec(align(64)) bool thread_run = true;
 
+static uint16_t frequency;
 static pthread_t thread;
 static void *writer_thread_routine(void *args);
 
-uint8_t start_thread(uint16_t frequency)
+uint8_t start_thread(uint16_t f)
 {
-	// TODO : handle frequency
-
 	int ret = YALL_OK;
+
+	frequency = f;
+
 	int thread_ret = pthread_create(&thread, NULL, writer_thread_routine, NULL);
 
 	if (thread_ret != 0) {
@@ -66,11 +72,37 @@ void stop_thread(void)
 	pthread_join(thread, NULL);
 }
 
+static void write_queue(struct qnode *msg_queue)
+{
+	if (! msg_queue)
+		return;
+
+	write_queue(msg_queue->next);
+
+	struct message *m = msg_queue->data;
+	if (yall_console_output & m->output_type)
+		write_log_console(m->log_level, m->data);
+
+	if (yall_file_output & m->output_type)
+		write_log_file(m->output_file, m->data);
+
+	qnode_delete(msg_queue, message_delete);
+}
+
 static void *writer_thread_routine(void *args)
 {
+	double loop_duration_ms = (1.0 / frequency) * 1000.0;
+
 	while (thread_run) {
-		printf("logging\n");
+		clock_t begin = clock();
+
+		struct qnode *msg_queue = swap_queue();
+
+		write_queue(msg_queue);
+
+		int wait_ms = loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0;
+		Sleep(wait_ms);
 	}
 
-	printf("Stoping thread\n");
+	printf("Thread stopped\n");
 }
