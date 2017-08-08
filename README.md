@@ -93,6 +93,8 @@ YALL_DEBUG("example_subsystem", "My message : %s", "error");
 
 ### Misc
 
+A log coloration scheme for NotePad++ is available in the resources folder.
+
 yall is an open-source project, feel free to contribute to the project and send a pull request. To get some personnal help or report a bug, you can contact `naccyde <at> naccyde <dot> eu` ;) .
 
 
