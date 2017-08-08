@@ -38,6 +38,7 @@ volatile struct qnode *qnode_new(void *data)
 
 	// Ensure <next> is set to NULL, as it is used to check queue's tail.
 	node->next = NULL;
+
 	node->data = data;
 
 	return node;
