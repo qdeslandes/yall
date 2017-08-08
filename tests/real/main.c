@@ -98,7 +98,7 @@ int main(void)
 
 	yall_close();
 
-	printf("Threads stopped, hit a quit to quit...\n");
+	printf("Threads stopped, hit a key to quit...\n");
 
 #ifdef _WIN32
 	getchar();
