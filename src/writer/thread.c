@@ -45,17 +45,17 @@
  */
 static __declspec(align(64)) bool thread_run = true;
 
-static uint16_t frequency;
+static uint16_t thread_frequency;
 static pthread_t thread;
 static void *writer_thread_routine(void *args);
 
-uint8_t start_thread(uint16_t f)
+uint8_t start_thread(uint16_t frequency)
 {
 	int ret = YALL_OK;
+	
+	thread_frequency = frequency;
 
-	frequency = f;
-
-	int thread_ret = pthread_create(&thread, NULL, writer_thread_routine, NULL);
+	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
 
 	if (thread_ret != 0) {
 		ret = YALL_CANT_CREATE_THREAD;
@@ -72,7 +72,7 @@ void stop_thread(void)
 	pthread_join(thread, NULL);
 }
 
-static void write_queue(struct qnode *msg_queue)
+static void write_queue_messages(struct qnode *msg_queue)
 {
 	if (! msg_queue)
 		return;
@@ -89,20 +89,18 @@ static void write_queue(struct qnode *msg_queue)
 	qnode_delete(msg_queue, message_delete);
 }
 
-static void *writer_thread_routine(void *args)
+static void *writer_thread(void *args)
 {
-	double loop_duration_ms = (1.0 / frequency) * 1000.0;
+	double loop_duration_ms = (1.0 / thread_frequency) * 1000.0;
 
 	while (thread_run) {
 		clock_t begin = clock();
 
 		struct qnode *msg_queue = swap_queue();
 
-		write_queue(msg_queue);
+		write_queue_messages(msg_queue);
 
 		int wait_ms = loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0;
 		Sleep(wait_ms);
 	}
-
-	printf("Thread stopped\n");
 }

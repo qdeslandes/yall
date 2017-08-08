@@ -30,12 +30,13 @@
 
 #include "yall/message.h"
 
-static struct qnode *head = NULL;
+static volatile struct qnode *head = NULL;
 
 volatile struct qnode *qnode_new(void *data)
 {
 	volatile struct qnode *node = _aligned_malloc(sizeof(struct qnode), 64);
 
+	// Ensure <next> is set to NULL, as it is used to check queue's tail.
 	node->next = NULL;
 	node->data = data;
 

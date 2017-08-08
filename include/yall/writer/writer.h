@@ -38,15 +38,13 @@
 uint8_t writer_init(uint16_t frequency);
 
 /*
- * write : write the message to the output medium. Returns a YALL_ERROR on
- *      error. <msg> must not be NULL, but <output_file> can if <output_type>
- *      is equals to yall_file_output or yall_both_output.
- *	Returns a yall_error.
+ * write : enqueue the given message to the lock-free queue. Returns a status
+ *	code.
  */
 uint8_t write_msg(struct message *m);
 
 /*
- * writer_destroy : destroy all the writers semaphores.
+ * writer_destroy : stop the writing thread.
  */
 void writer_close(void);
 

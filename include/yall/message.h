@@ -30,7 +30,17 @@
 
 #include "yall/header.h"
 #include "yall/call.h"
+#include "yall/log_levels.h"
 
+#define YALL_MSG_LEN	512
+#define MSG_HEADER_LEN	77
+#define FUNC_NAME_LEN	17
+
+/*
+ * struct message : this structure is used to store the content of a log
+ *	message, like the log level, the message itself, the output type, and
+ *	many other useful data. It will be pushed to the messages queue.
+ */
 struct message {
 	char *data;
 	enum yall_log_level log_level;
@@ -38,11 +48,21 @@ struct message {
 	char *output_file;
 };
 
+/*
+ * message_new : craete and return a new message with the given parameters.
+ *	This message must be freed with the proper function as internals must
+ *	be handled specifically. <data> and <output_file> can be NULL. It is
+ *	useless to test the return value, as it use malloc. If malloc fail,
+ *	your first problem won't be the NULL returning function.
+ */
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
 	char *output_file);
 
+/*
+ * message_delete : delete a given message. <msg> can't be NULL.
+ */
 void message_delete(struct message *msg);
 
 /*

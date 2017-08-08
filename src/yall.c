@@ -221,6 +221,7 @@ yall_error yall_call_log(const char *subsystem,
 	hdr_len = generate_call_hdr(NULL, 0, &hc);
 	buff_len = hdr_len + d.message_size + 1;
 
+	// All '+ 1' here are the \0 terminating character
 	msg = malloc(MSG_HEADER_LEN + d.message_size + 1);
 	m = message_new(msg, log_level, p.output_type, p.output_file);
 
