@@ -107,5 +107,15 @@ static void *writer_thread(void *args)
 		Sleep(wait_ms);
 	}
 
+	/*
+	 * Not the cleanest way to do this, but this line allow to write the
+	 * remaining log message added to the queue between swap_queue() and
+	 * the beginning of the loop. This way, all the log message added
+	 * between swap_queue() and thread_run = false assignation are displayed.
+	 */
+	write_queue_messages(swap_queue());
+
+	// When execution is here, the queue's head should be equal to NULL.
+
 	return NULL;
 }
