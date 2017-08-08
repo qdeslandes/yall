@@ -28,11 +28,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <Windows.h>
 
 #include "yall/errors.h"
 #include "yall/queue.h"
 #include "yall/output_types.h"
 #include "yall/message.h"
+#include "yall/writer/file.h"
+#include "yall/writer/console.h"
 
 /*
  * This should ensure atomicity of read / write on the variable. But, as
@@ -47,11 +50,11 @@ static __declspec(align(64)) bool thread_run = true;
 
 static uint16_t thread_frequency;
 static pthread_t thread;
-static void *writer_thread_routine(void *args);
+static void *writer_thread(void *args);
 
 uint8_t start_thread(uint16_t frequency)
 {
-	int ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 	
 	thread_frequency = frequency;
 
@@ -77,7 +80,7 @@ static void write_queue_messages(struct qnode *msg_queue)
 	if (! msg_queue)
 		return;
 
-	write_queue(msg_queue->next);
+	write_queue_messages(msg_queue->next);
 
 	struct message *m = msg_queue->data;
 	if (yall_console_output & m->output_type)
@@ -100,7 +103,9 @@ static void *writer_thread(void *args)
 
 		write_queue_messages(msg_queue);
 
-		int wait_ms = loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0;
+		int wait_ms = (int)(loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0);
 		Sleep(wait_ms);
 	}
+
+	return NULL;
 }

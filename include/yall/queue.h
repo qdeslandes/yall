@@ -40,7 +40,7 @@
  *	volatile as is should not be optimized too much by the compiler.
  */
 struct qnode {
-	volatile struct qnode *next;
+	struct qnode *next;
 	void *data;
 };
 
@@ -50,7 +50,7 @@ struct qnode {
  *	pointer. <next> pointer of the node *MUST* be set to NULL, as it is
  *	used to check the queue's tail.
  */
-volatile struct qnode *qnode_new(void *data);
+struct qnode *qnode_new(void *data);
 
 /*
  * qnode_delete : delete the given queue node. <data_delete> is a function
@@ -59,7 +59,7 @@ volatile struct qnode *qnode_new(void *data);
  *	aligned_malloc on qnode_new(). If NULL is given, qnode_delete will
  *	call free() on the data.
  */
-void qnode_delete(volatile struct qnode *node, void (*data_delete)(void *data));
+void qnode_delete(struct qnode *node, void (*data_delete)(void *data));
 
 /*
  * enqueue : create a node with the given data and add it to the queue.
@@ -72,6 +72,6 @@ void enqueue(void *data);
  *	current's queue head, and the set head to NULL. If the queue is empty,
  *	NULL is returned.
  */
-volatile struct qnode *swap_queue(void);
+struct qnode *swap_queue(void);
 
 #endif

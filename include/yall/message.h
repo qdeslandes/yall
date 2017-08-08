@@ -45,7 +45,7 @@ struct message {
 	char *data;
 	enum yall_log_level log_level;
 	enum yall_output_type output_type;
-	char *output_file;
+	const char *output_file;
 };
 
 /*
@@ -58,7 +58,7 @@ struct message {
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
-	char *output_file);
+	const char *output_file);
 
 /*
  * message_delete : delete a given message. <msg> can't be NULL.

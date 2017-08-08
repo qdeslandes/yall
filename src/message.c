@@ -50,7 +50,7 @@ static char *log_levels_names[8] = {
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
-	char *output_file)
+	const char *output_file)
 {
 	struct message *msg = malloc(sizeof(struct message));
 

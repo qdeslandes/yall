@@ -30,11 +30,16 @@
 
 #include "yall/message.h"
 
-static volatile struct qnode *head = NULL;
+/*
+ * Queue head is not set volatile as it would reduce code speed and not ensure
+ * atomicity of operations ;
+ * https://software.intel.com/en-us/blogs/2007/11/30/volatile-almost-useless-for-multi-threaded-programming
+ */
+static struct qnode *head = NULL;
 
-volatile struct qnode *qnode_new(void *data)
+struct qnode *qnode_new(void *data)
 {
-	volatile struct qnode *node = _aligned_malloc(sizeof(struct qnode), 64);
+	struct qnode *node = _aligned_malloc(sizeof(struct qnode), 64);
 
 	// Ensure <next> is set to NULL, as it is used to check queue's tail.
 	node->next = NULL;
@@ -44,7 +49,7 @@ volatile struct qnode *qnode_new(void *data)
 	return node;
 }
 
-void qnode_delete(volatile struct qnode *node, void (*data_delete)(void *data))
+void qnode_delete(struct qnode *node, void (*data_delete)(void *data))
 {
 	if (data_delete)
 		data_delete(node->data);
@@ -56,8 +61,8 @@ void qnode_delete(volatile struct qnode *node, void (*data_delete)(void *data))
 
 void enqueue(void *data)
 {
-	volatile struct qnode *new_node = qnode_new(data);
-	volatile struct qnode *orig_head = head;
+	struct qnode *new_node = qnode_new(data);
+	struct qnode *orig_head = head;
 
 	do {
 		orig_head = head;
@@ -65,12 +70,12 @@ void enqueue(void *data)
 	} while (orig_head != InterlockedCompareExchangePointer(&head, new_node, orig_head));
 }
 
-volatile struct qnode *swap_queue(void)
+struct qnode *swap_queue(void)
 {
 	if (! head)
 		return NULL;
 
-	volatile struct qnode *orig_head = NULL;
+	struct qnode *orig_head = NULL;
 
 	do {
 		orig_head = head;

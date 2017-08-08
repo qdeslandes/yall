@@ -28,8 +28,8 @@
 #include <stdint.h>
 
 #include "yall/output_types.h"
-#include "yall/log_level.h"
-#include "yall/error.h"
+#include "yall/log_levels.h"
+#include "yall/message.h"
 
 /*
  * writer_init : start the writing thread. Return YALL_OK on success, error

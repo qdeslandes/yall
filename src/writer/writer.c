@@ -34,8 +34,8 @@
 #include "yall/errors.h"
 #include "yall/writer/console.h"
 #include "yall/writer/file.h"
-#include "yall/message.h"
 #include "yall/debug.h"
+#include "yall/queue.h"
 
 uint8_t writer_init(uint16_t frequency)
 {
