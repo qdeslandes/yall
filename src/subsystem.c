@@ -69,8 +69,16 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 			if (params && s->log_level != yall_inherited_level)
 				params->log_level = s->log_level;
 
-			if (params && s->status != yall_inherited_status)
-				params->status = s->status;
+			/*
+			 * If a parent subsystem is disabled, do not override
+			 * the status with a child subsystem.
+			 * TODO : We could avoid parsing the tree if we return
+			 * once finding a disabled subsystem, but the caller
+			 * function must handle it.
+			 */
+			if (params && s->status != yall_inherited_status
+				&& params->status != yall_subsys_disable)
+ 				params->status = s->status;
 
 			if (params && s->output_type != yall_inherited_output)
 				params->output_type = s->output_type;
