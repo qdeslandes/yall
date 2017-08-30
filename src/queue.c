@@ -25,8 +25,17 @@
 #include "yall/queue.h"
 
 #include <stdlib.h>
-#include <Windows.h>
 #include <malloc.h>
+#include <stdatomic.h>
+
+#ifdef __linux__
+#define yall_aligned_alloc(alignment, size) aligned_alloc(alignment, size)
+#define yall_aligned_free(ptr) free(ptr)
+#elif _WIN32
+#include <Windows.h>
+#define yall_aligned_alloc(alignment, size) _aligned_malloc(size, alignment)
+#define yall_aligned_free(ptr) _aligned_free(ptr)
+#endif
 
 #include "yall/message.h"
 
@@ -39,7 +48,7 @@ static struct qnode *head = NULL;
 
 struct qnode *qnode_new(void *data)
 {
-	struct qnode *node = _aligned_malloc(sizeof(struct qnode), 64);
+	struct qnode *node = yall_aligned_alloc(64, sizeof(struct qnode));
 
 	// Ensure <next> is set to NULL, as it is used to check queue's tail.
 	node->next = NULL;
@@ -56,7 +65,7 @@ void qnode_delete(struct qnode *node, void (*data_delete)(void *data))
 	else
 		free(node->data);
 
-	_aligned_free((struct qnode *)node);
+	yall_aligned_free(node);
 }
 
 void enqueue(void *data)
@@ -67,7 +76,7 @@ void enqueue(void *data)
 	do {
 		orig_head = head;
 		new_node->next = orig_head;
-	} while (orig_head != InterlockedCompareExchangePointer(&head, new_node, orig_head));
+	} while (! atomic_compare_exchange_weak(&head, &orig_head, new_node));
 }
 
 struct qnode *swap_queue(void)
@@ -79,7 +88,7 @@ struct qnode *swap_queue(void)
 
 	do {
 		orig_head = head;
-	} while (orig_head != InterlockedCompareExchangePointer(&head, NULL, orig_head));
+	} while (! atomic_compare_exchange_weak(&head, &orig_head, NULL));
 
 	return orig_head;
 }

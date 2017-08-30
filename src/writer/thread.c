@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <Windows.h>
+#include <stdatomic.h>
 
 #include "yall/errors.h"
 #include "yall/queue.h"
@@ -37,16 +37,24 @@
 #include "yall/writer/file.h"
 #include "yall/writer/console.h"
 
+#ifdef __linux__
+#define yall_sleep(ms) usleep(ms * 1000)
+static atomic_bool thread_run = true;
+#elif _WIN32
+#include <Windows.h>
+#define yall_sleep(ms) Sleep(ms)
+static __declspec(align(64)) bool thread_run = true;
+#endif
+
 /*
  * This should ensure atomicity of read / write on the variable. But, as
  * Chris Hanson mention here https://stackoverflow.com/questions/78277/how-to-guarantee-64-bit-writes-are-atomic,
  * there is many factors to check to be sure this will work. So, this is
  * not sufficient, but... This variable is not business critical.
- * Also, Intel assumes reading / writing a 64 bits aligned variable is 
+ * Also, Intel assumes reading / writing a 64 bits aligned variable is
  * thread safe : https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf
  * See also : http://preshing.com/20130618/atomic-vs-non-atomic-operations/
  */
-static __declspec(align(64)) bool thread_run = true;
 
 static uint16_t thread_frequency;
 static pthread_t thread;
@@ -55,7 +63,7 @@ static void *writer_thread(void *args);
 uint8_t start_thread(uint16_t frequency)
 {
 	uint8_t ret = YALL_OK;
-	
+
 	thread_frequency = frequency;
 
 	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
@@ -104,7 +112,7 @@ static void *writer_thread(void *args)
 		write_queue_messages(msg_queue);
 
 		int wait_ms = (int)(loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0);
-		Sleep(wait_ms);
+		yall_sleep(wait_ms);
 	}
 
 	/*
