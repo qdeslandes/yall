@@ -9,3 +9,4 @@ out.txt
 
 # IDE
 *.kdev4
+*.vscode
