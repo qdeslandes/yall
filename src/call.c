@@ -103,9 +103,11 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, .
         va_end(args);
 
         // Manage \n
-        size_t len = strlen(line_content);
-        line_content[len-1] = '\n';
-        line_content[len] = '\0';
+        size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ? 
+                DEFAULT_LINE_SIZE - 2 : strlen(line_content);
+
+        line_content[lf] = '\n';
+        line_content[lf+1] = '\0';
 
         // Add the line to the data list
         add_line(d, line_content);
