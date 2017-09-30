@@ -7,15 +7,16 @@ extern uint16_t initialized;
  */
 Test(yall, test_yall_close_all0)
 {
-	cr_assert_eq(yall_close_all(), YALL_NOT_INIT);
-	cr_assert_eq(yall_close_all(), YALL_NOT_INIT);
+        yall_close_all();
+	cr_assert_eq(initialized, 0);
 }
 
 Test(yall, test_yall_close_all1)
 {
         initialized = 2;
-        cr_assert_eq(yall_close_all(), YALL_OK);
+        yall_close_all();
         cr_assert_eq(initialized, 0);
 
-        cr_assert_eq(yall_close_all(), YALL_NOT_INIT);
+        yall_close_all();
+        cr_assert_eq(initialized, 0);
 }
