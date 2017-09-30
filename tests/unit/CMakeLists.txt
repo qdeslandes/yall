@@ -21,7 +21,7 @@ IF (UNIX)# Build flags
 
 	if (PROJECT_COVERAGE)
 		# This is used to enable coverage analyse only on yall sources
-        set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
+        	set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
 	endif ()
 
 	# Linked libraries
