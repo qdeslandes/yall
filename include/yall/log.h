@@ -53,7 +53,7 @@
 #define __func__ __FUNCTION__
 #endif
 
-#define FUNCTION __FUNCTION__
+#define FUNCTION __func__
 
 #ifndef __cplusplus
 

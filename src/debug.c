@@ -1,6 +1,5 @@
 #include "yall/debug.h"
 
-#include "yall/yall.h"
 #include "yall/subsystem.h"
 
 static bool debug = false;
