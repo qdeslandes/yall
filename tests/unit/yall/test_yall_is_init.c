@@ -8,7 +8,7 @@ extern uint16_t initialized;
 Test(yall, test_yall_is_initl0)
 {
         cr_assert_eq(yall_is_init(), initialized);
-        
+
         initialized = 2;
         cr_assert_eq(yall_is_init(), initialized);
 

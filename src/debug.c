@@ -22,9 +22,9 @@ void yall_enable_debug(void)
          */
 
         yall_set_subsystem("yall", NULL, yall_debug, yall_console_output, NULL);
-        
+
         debug = true;
-        
+
         _YALL_DBG_DEBUG("Debug mode activated");
 #endif
 }

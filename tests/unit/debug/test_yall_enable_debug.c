@@ -13,7 +13,7 @@ Test(debug, test_yall_enable_debug0)
 
         yall_init();
         yall_enable_debug();
-        
+
         #ifdef DEBUG
         cr_assert_eq(debug, true);
         #else
@@ -35,7 +35,7 @@ Test(debug, test_yall_enable_debug1)
 {
         yall_init();
         yall_enable_debug();
-        
+
         #ifdef DEBUG
         cr_assert_eq(debug, true);
         struct yall_subsystem_params p = { 0 };

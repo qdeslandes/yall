@@ -40,7 +40,7 @@ extern "C" {
 #include "yall/log_levels.h"
 #include "yall/output_types.h"
 
-#define YALL_CALL_BUFF_LEN	1024
+#define YALL_CALL_BUFF_LEN      1024
 
 /*
  * These functions are defined inside subsystem.c, but due to incompatibility
@@ -52,22 +52,22 @@ _YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
 /*
  * yall_get_version : returns the library version as a 32bits integer with the
- *	form :
- *	* 16 bits : major
- *	* 8 bits  : minor
- *	* 8 bits  : patch
+ *      form :
+ *      * 16 bits : major
+ *      * 8 bits  : minor
+ *      * 8 bits  : patch
  */
 _YALL_PUBLIC uint32_t yall_get_version(void);
 
 /* yall_get_version_string : returns a formated string containing the library
- *	name, its version, and the developer name.
+ *      name, its version, and the developer name.
  */
 _YALL_PUBLIC const char *yall_get_version_string(void);
 
 /*
  * yall_init : initialize the yall library. It set up the writers and increment
  *      the <initialized> flag each time called.
- * 	Returns a yall error code.
+ *      Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_init(void);
 
@@ -78,52 +78,52 @@ _YALL_PUBLIC uint8_t yall_is_init(void);
 
 /*
  * yall_log : major logging function, used to forge the message and write it
- * 	on the medium. <subsystem>, <function> and <msg> can't be NULL.
- * 	Returns a yall error code.
+ *      on the medium. <subsystem>, <function> and <msg> can't be NULL.
+ *      Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function,
-	const char *format,
-	...);
+        enum yall_log_level log_level,
+        const char *function,
+        const char *format,
+        ...);
 
 /*
  * yall_call_log : another logging function which call the given <function>
- * 	parameter to change message format. It will get the subsystem's
- * 	parameters and use them to add header on the logging message. Then
- * 	it will call the given function with a buffer to fill.
- * 	The buffer will then be displayed.
- * 	The buffer length is defined by YALL_CALL_BUFF_LEN. <subsystem> and
- * 	<function> can't be NULL.
+ *      parameter to change message format. It will get the subsystem's
+ *      parameters and use them to add header on the logging message. Then
+ *      it will call the given function with a buffer to fill.
+ *      The buffer will then be displayed.
+ *      The buffer length is defined by YALL_CALL_BUFF_LEN. <subsystem> and
+ *      <function> can't be NULL.
  */
 _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function_name,
-	void (*formatter)(yall_call_data *d, void *args),
-	void *args);
+        enum yall_log_level log_level,
+        const char *function_name,
+        void (*formatter)(yall_call_data *d, void *args),
+        void *args);
 
 /*
  * yall_set_subsystem : this is the main subsystems function. This function
- *	handle subsystems creation and update. If <name> is the name of an
- *	existing subsystem, it is updated : removed from the subsystems tree,
- *	updated and replaced in its correct place with correct inheritance. If
- *	<name> is not the name of an existing subsystem, it is created with the
- *	proper parameters and inserted in the subsystems tree at the proper
- *	place.
- * 	<name> parameter must be a non NULL, NULL terminated string.
+ *      handle subsystems creation and update. If <name> is the name of an
+ *      existing subsystem, it is updated : removed from the subsystems tree,
+ *      updated and replaced in its correct place with correct inheritance. If
+ *      <name> is not the name of an existing subsystem, it is created with the
+ *      proper parameters and inserted in the subsystems tree at the proper
+ *      place.
+ *      <name> parameter must be a non NULL, NULL terminated string.
  */
 _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
-	const char *parent,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
-	const char *output_file);
+        const char *parent,
+        enum yall_log_level log_level,
+        enum yall_output_type output_type,
+        const char *output_file);
 
 /*
  * yall_close : close all the yall library set up. The function fail only
- *	if yall has not been initialized previously. If the function succeed,
- *	the <initialized> value is decremented. If <initialized> equals 0 once
- *	decremented, the library is cleaned.
- *	Returns a yall error code.
+ *      if yall has not been initialized previously. If the function succeed,
+ *      the <initialized> value is decremented. If <initialized> equals 0 once
+ *      decremented, the library is cleaned.
+ *      Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_close(void);
 

@@ -31,10 +31,10 @@
         #include <stdarg.h>
 
         #ifdef __linux__
-        #	include <semaphore.h>
+        #       include <semaphore.h>
         #elif _WIN32
-        #	include <Windows.h>
-        #	include <synchapi.h>
+        #       include <Windows.h>
+        #       include <synchapi.h>
         #endif
 
         #define fprintf     _tests_fprintf
@@ -71,12 +71,12 @@
  *      function must be called AFTER yall_init().
  */
 _YALL_PUBLIC void yall_enable_debug(void);
-        
+
 /*
  * yall_disable_debug : disable the debug mode.
  */
 _YALL_PUBLIC void yall_disable_debug(void);
-        
+
 /*
  * yall_is_debug : return the debug mode status.
  */
@@ -88,9 +88,9 @@ _YALL_PUBLIC bool yall_is_debug(void);
 
         #include "yall/log.h"
 
-        #define _YALL_DBG_EMERG(...)	\
+        #define _YALL_DBG_EMERG(...)    \
                 if (yall_is_debug()) _YALL_LOG("yall", yall_emerg, ##__VA_ARGS__)
-        #define _YALL_DBG_ALERT(...)	\
+        #define _YALL_DBG_ALERT(...)    \
                 if (yall_is_debug()) _YALL_LOG("yall", yall_alert, ##__VA_ARGS__)
         #define _YALL_DBG_CRIT(...) \
                 if (yall_is_debug()) _YALL_LOG("yall", yall_crit, ##__VA_ARGS__)

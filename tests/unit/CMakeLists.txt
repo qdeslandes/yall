@@ -15,31 +15,31 @@ set(PROJECT_SRCS_COMPILE_FLAGS "-DYALL_UNIT")
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
 
 IF (UNIX)# Build flags
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
-	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
 
-	if (PROJECT_COVERAGE)
-		# This is used to enable coverage analyse only on yall sources
-        	set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
-	endif ()
+        if (PROJECT_COVERAGE)
+                # This is used to enable coverage analyse only on yall sources
+                set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
+        endif ()
 
-	# Linked libraries
-	set(PROJECT_UNIT_LIBRARIES
-		m
-		pthread
-		gcov
-		criterion)
+        # Linked libraries
+        set(PROJECT_UNIT_LIBRARIES
+                m
+                pthread
+                gcov
+                criterion)
 ELSEIF (WIN32)
-	# Compile flags
-	set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
-	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} /DEBUG /Z7")
-	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} /MP")
+        # Compile flags
+        set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} /DEBUG /Z7")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} /MP")
 
-	# Linked libraries
-	set(PROJECT_UNIT_LIBRARIES
-		pthreadVC2
-		criterion)
+        # Linked libraries
+        set(PROJECT_UNIT_LIBRARIES
+                pthreadVC2
+                criterion)
 ENDIF ()
 
 message("> Add execuable ${PROJECT_NAME} : ${PROJECT_UNIT_OUTPUT_NAME}")
@@ -57,12 +57,12 @@ set_target_properties(${PROJECT_NAME}_unit PROPERTIES OUTPUT_NAME ${PROJECT_UNIT
 set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_FLAGS ${PROJECT_SRCS_COMPILE_FLAGS})
 
 if (UNIX)
-	set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
+        set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/linux)
 elseif (WIN32)
-	# Unit test are running only for MSVC14
-	if (MSVC_VERSION EQUAL 1900)
-		set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
-	endif ()
+        # Unit test are running only for MSVC14
+        if (MSVC_VERSION EQUAL 1900)
+                set(UNIT_TEST_WORKDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
+        endif ()
 endif ()
 
 add_custom_target(unit
@@ -72,19 +72,19 @@ add_custom_target(unit
 )
 
 if (PROJECT_COVERAGE)
-	add_custom_target(coverage_prepare
-		COMMAND mkdir -p coverage
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		COMMENT "Prepare coverage target")
-	add_custom_target(coverage
-		COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
-		COMMENT "Run coverage target")
-	add_dependencies(coverage coverage_prepare unit)
+        add_custom_target(coverage_prepare
+                COMMAND mkdir -p coverage
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                COMMENT "Prepare coverage target")
+        add_custom_target(coverage
+                COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+                COMMENT "Run coverage target")
+        add_dependencies(coverage coverage_prepare unit)
 
-	add_custom_target(resume_coverage
-		COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
-		COMMENT "Show coverage results in Firefox")
-	add_dependencies(resume_coverage coverage)
+        add_custom_target(resume_coverage
+                COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+                COMMENT "Show coverage results in Firefox")
+        add_dependencies(resume_coverage coverage)
 endif ()

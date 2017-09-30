@@ -31,9 +31,9 @@
 
 /*
  * write_log_console : write the log message on the console. The message can't
- * 	be NULL. The color of the message depend of the log level and the color
- * 	associated to this log level inside the source file. Also, <log_level>
- * 	must be different from yall_inherited_level.
+ *      be NULL. The color of the message depend of the log level and the color
+ *      associated to this log level inside the source file. Also, <log_level>
+ *      must be different from yall_inherited_level.
  */
 uint8_t write_log_console(enum yall_log_level log_level, const char *msg);
 
