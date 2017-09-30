@@ -58,10 +58,10 @@ uint8_t yall_init(void)
 {
 	uint8_t ret = YALL_OK;
 
-    if (initialized) {
-        ++initialized;
+	if (initialized) {
+		++initialized;
 		ret = YALL_ALREADY_INIT;
-        goto end;
+		goto end;
 	}
 
         ++initialized;
@@ -74,6 +74,11 @@ end:
 err:
         --initialized;
         return ret;
+}
+
+uint8_t yall_is_init(void)
+{
+	return initialized;
 }
 
 uint8_t yall_log(const char *subsystem,
@@ -223,30 +228,19 @@ uint8_t yall_close(void)
 		ret = YALL_NOT_INIT;
 		goto end;
 	}
-
-        --initialized;
-
-	writer_close();
-	free_subsystems();
+	
+	if (0 == --initialized) {
+		_YALL_DBG_INFO("Close library");
+		yall_disable_debug();
+		writer_close();
+		free_subsystems();
+	}
 
 end:
 	return ret;
 }
 
-uint8_t yall_close_all(void)
+void yall_close_all(void)
 {
-        uint8_t ret = YALL_OK;
-
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
-
-        initialized = 0;
-
-        writer_close();
-        free_subsystems();
-
-end:
-        return ret;
+	for ( ; yall_close() != YALL_NOT_INIT ; ) ;
 }

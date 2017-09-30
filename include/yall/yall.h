@@ -35,6 +35,7 @@ extern "C" {
 #include "yall/log.h"
 #include "yall/call.h"
 #include "yall/utils.h"
+#include "yall/debug.h"
 #include "yall/message.h"
 #include "yall/log_levels.h"
 #include "yall/output_types.h"
@@ -69,6 +70,11 @@ _YALL_PUBLIC const char *yall_get_version_string(void);
  * 	Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_init(void);
+
+/*
+ * yall_is_init : return the number of initializations required.
+ */
+_YALL_PUBLIC uint8_t yall_is_init(void);
 
 /*
  * yall_log : major logging function, used to forge the message and write it
@@ -115,7 +121,8 @@ _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
 /*
  * yall_close : close all the yall library set up. The function fail only
  *	if yall has not been initialized previously. If the function succeed,
- *	the <initialized> value is decremented.
+ *	the <initialized> value is decremented. If <initialized> equals 0 once
+ *	decremented, the library is cleaned.
  *	Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_close(void);
@@ -124,7 +131,7 @@ _YALL_PUBLIC uint8_t yall_close(void);
  * yall_close_all : close the yall library for each time it has been
  *      initialized.
  */
-_YALL_PUBLIC uint8_t yall_close_all(void);
+_YALL_PUBLIC void yall_close_all(void);
 
 #ifdef __cplusplus
 }
