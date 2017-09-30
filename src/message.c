@@ -81,8 +81,9 @@ uint8_t generate_message(char *buffer,
 	uint8_t ret = YALL_OK;
 
 	ret = generate_header(buffer, subsystem, log_level, function);
-	if (ret != YALL_OK)
+	if (ret != YALL_OK) {
 		goto end;
+	}
 
 	size_t len = strlen(buffer);
 	if (vsnprintf(&buffer[len], YALL_MSG_LEN - len, format, args) < 0)

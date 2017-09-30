@@ -122,6 +122,13 @@ void update_subsystem(struct yall_subsystem *s,
 struct yall_subsystem *remove_subsystem(const char *name);
 
 /*
+ * _free_subsystems : free the given subsystems tree through _free_subsystem
+ * 	function. <s> is used as the root of the tree, so its parents will not
+ * 	be freed.
+ */
+void _free_subsystems(struct yall_subsystem *s);
+
+/*
  * free_subsystems : free the library's subsystems list.
  */
 void free_subsystems(void);

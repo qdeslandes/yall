@@ -49,15 +49,19 @@ uint8_t writer_init(void)
 	uint8_t ret = YALL_OK;
 
 #ifdef __linux__
-	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1))
+	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1)) {
+		_YALL_DBG_ERR("Could not lock mutex.");
 		ret = YALL_SEM_INIT_ERR;
+	}
 #elif _WIN32
 	if ((file_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
+		_YALL_DBG_ERR("Could not lock mutex.");
 		ret = YALL_SEM_INIT_ERR;
 		goto end;
 	}
 
 	if ((console_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
+		_YALL_DBG_ERR("Could not lock mutex.");
 		ret = YALL_SEM_INIT_ERR;
 		goto end;
 	}
@@ -85,6 +89,8 @@ uint8_t write_msg(enum yall_output_type output_type,
 
 void writer_close(void)
 {
+	_YALL_DBG_INFO("Closing writers.");
+
 	/*
 	 * Closing an invalid semaphore is okay, but closing an invalid HANDLE
 	 * will fuck this thing up. So we need to check that...

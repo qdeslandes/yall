@@ -229,11 +229,14 @@ uint8_t yall_close(void)
 		goto end;
 	}
 	
-	if (0 == --initialized) {
+	if (1 == initialized) {
 		_YALL_DBG_INFO("Close library");
 		yall_disable_debug();
 		writer_close();
 		free_subsystems();
+		initialized = 0;
+	} else {
+		--initialized;
 	}
 
 end:

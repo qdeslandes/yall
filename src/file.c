@@ -34,6 +34,7 @@
 
 #include "yall/utils.h"
 #include "yall/errors.h"
+#include "yall/debug.h"
 
 #ifdef __linux__
 extern sem_t file_sem;
@@ -53,7 +54,6 @@ uint8_t write_log_file(const char *file, const char *msg)
 #endif
 
 	if (sem_ret != 0) {
-		fprintf(stderr, "DEBUG_YALL - Could not lock file_sem\n");
 		ret = YALL_FILE_LOCK_ERR;
 		goto end;
 	}

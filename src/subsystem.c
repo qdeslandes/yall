@@ -101,27 +101,6 @@ static void _free_subsystem(struct yall_subsystem *s)
 }
 
 /*
- * _free_subsystems : free the given subsystems tree through _free_subsystem
- * 	function. <s> is used as the root of the tree, so its parents will not
- * 	be freed.
- */
-static void _free_subsystems(struct yall_subsystem *s)
-{
-	while (s) {
-		struct yall_subsystem *tmp = s->next;
-
-		if (s->parent)
-			s->parent->childs = NULL;
-
-		if (s->childs)
-			_free_subsystems(s->childs);
-
-		_free_subsystem(s);
-		s = tmp;
-	}
-}
-
-/*
  * set_default_params : fill the given yall_subsystem_params with the proper
  * 	default values defined at the top of this source file inside
  * 	default_params. <params> can't be NULL.
@@ -150,11 +129,13 @@ static void set_subsys_status(
 
 void yall_disable_subsystem(const char *subsys_name)
 {
+	_YALL_DBG_INFO("Disable subsystem %s.", subsys_name);
 	set_subsys_status(subsys_name, yall_subsys_disable);
 }
 
 void yall_enable_subsystem(const char *subsys_name)
 {
+	_YALL_DBG_INFO("Enable subsystem %s.", subsys_name);
 	set_subsys_status(subsys_name, yall_subsys_enable);
 }
 
@@ -164,7 +145,12 @@ struct yall_subsystem *get_subsystem(const char *name,
 	if (params)
 		set_default_params(params);
 
-	return _get_subsystem(name, subsystems, params);
+	struct yall_subsystem *s = _get_subsystem(name, subsystems, params);
+
+	if (! s)
+		_YALL_DBG_WARNING("Could not find subsystem %s.", name);
+
+	return s;
 }
 
 struct yall_subsystem *create_subsystem(const char *name,
@@ -205,12 +191,15 @@ struct yall_subsystem *create_subsystem(const char *name,
 	delete_old_log_file(s->output_file);
 
 	s->status = yall_subsys_enable;
+	
+	_YALL_DBG_INFO("Subsystem %s created.", s->name);
 
 	return s;
 
 err_free:
 	free(s);
 err:
+	_YALL_DBG_ERR("Could not create subsystem %s.", name);
 	return NULL;
 }
 
@@ -287,9 +276,29 @@ struct yall_subsystem *remove_subsystem(const char *name)
 
 		if (subsystems == s)
 			subsystems = s->next;
+
+		_YALL_DBG_INFO("Subsystem %d removed.", name);
 	}
 
 	return s;
+}
+
+void _free_subsystems(struct yall_subsystem *s)
+{
+	_YALL_DBG_INFO("Cleaning subsystems.");
+
+	while (s) {
+		struct yall_subsystem *tmp = s->next;
+
+		if (s->parent)
+			s->parent->childs = NULL;
+
+		if (s->childs)
+			_free_subsystems(s->childs);
+
+		_free_subsystem(s);
+		s = tmp;
+	}
 }
 
 void free_subsystems(void)
