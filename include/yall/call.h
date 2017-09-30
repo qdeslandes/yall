@@ -9,14 +9,14 @@
 #define DEFAULT_LINE_SIZE       1024
 
 struct yall_call_data_line {
-	char *content;
-	struct yall_call_data_line *next;
+        char *content;
+        struct yall_call_data_line *next;
 };
 
 typedef struct yall_call_data {
-	uint16_t message_size;
-	char *header;
-	struct yall_call_data_line *lines;
+        uint16_t message_size;
+        char *header;
+        struct yall_call_data_line *lines;
 } yall_call_data;
 
 /*

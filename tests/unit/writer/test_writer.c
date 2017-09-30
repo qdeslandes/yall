@@ -2,7 +2,7 @@
 
 static void tests_writer_setup(void)
 {
-	cr_redirect_stderr();
+        cr_redirect_stderr();
 }
 
 static void tests_writer_clean(void)

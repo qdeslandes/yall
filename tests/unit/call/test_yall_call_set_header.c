@@ -6,9 +6,9 @@
 Test(call, test_yall_call_set_header0)
 {
         struct yall_call_data d = { 1, NULL, NULL };
-		d.header = malloc(DEFAULT_LINE_SIZE);
-		d.header[0] = '\n';
-		d.header[1] = 0;
+                d.header = malloc(DEFAULT_LINE_SIZE);
+                d.header[0] = '\n';
+                d.header[1] = 0;
 
         yall_call_set_header(&d, "header");
         cr_assert_str_eq(d.header, "header\n");

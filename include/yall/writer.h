@@ -32,21 +32,21 @@
 
 /*
  * writer_init : initialize some stuff for the console and file writers.
- * 	Currently initialize the semaphores. This should be called once.
- * 	TODO : Manage to fail the initialization if the semaphore are already
- * 	initialized.
+ *      Currently initialize the semaphores. This should be called once.
+ *      TODO : Manage to fail the initialization if the semaphore are already
+ *      initialized.
  */
 uint8_t writer_init(void);
 
 /*
  * write : write the message to the output medium. Returns a YALL_ERROR on
- * 	error. <msg> must not be NULL, but <output_file> can if <output_type>
- * 	is equals to yall_file_output or yall_both_output.
+ *      error. <msg> must not be NULL, but <output_file> can if <output_type>
+ *      is equals to yall_file_output or yall_both_output.
  */
 uint8_t write_msg(enum yall_output_type output_type,
-	enum yall_log_level log_level,
-	const char *output_file,
-	const char *msg);
+        enum yall_log_level log_level,
+        const char *output_file,
+        const char *msg);
 
 /*
  * writer_destroy : destroy all the writers semaphores.

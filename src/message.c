@@ -35,66 +35,67 @@
 #include "yall/debug.h"
 
 static char *log_levels_names[8] = {
-		"DEBUG",
-		"INFO",
-		"NOTICE",
-		"WARNING",
-		"ERROR",
-		"CRITICAL",
-		"ALERT",
-		"EMERGENCY"
-	};
+                "DEBUG",
+                "INFO",
+                "NOTICE",
+                "WARNING",
+                "ERROR",
+                "CRITICAL",
+                "ALERT",
+                "EMERGENCY"
+        };
 
 uint8_t generate_header(char *buffer,
-	const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function)
+        const char *subsystem,
+        enum yall_log_level log_level,
+        const char *function)
 {
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
 
-	int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %-*.*s :: %04d-%02d-%02d %02d:%02d:%02d : ",
-		SUBSYS_NAME_LEN,
-		SUBSYS_NAME_LEN,
-		subsystem,
-		log_levels_names[log_level],
-		FUNC_NAME_LEN,
-		FUNC_NAME_LEN,
-		function,
-		tm.tm_year + 1900,
-		tm.tm_mon + 1,
-		tm.tm_mday,
-		tm.tm_hour,
-		tm.tm_min,
-		tm.tm_sec);
+        int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %-*.*s :: %04d-%02d-%02d %02d:%02d:%02d : ",
+                SUBSYS_NAME_LEN,
+                SUBSYS_NAME_LEN,
+                subsystem,
+                log_levels_names[log_level],
+                FUNC_NAME_LEN,
+                FUNC_NAME_LEN,
+                function,
+                tm.tm_year + 1900,
+                tm.tm_mon + 1,
+                tm.tm_mday,
+                tm.tm_hour,
+                tm.tm_min,
+                tm.tm_sec);
 
-	return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
+        return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
 }
 
 uint8_t generate_message(char *buffer,
-	const char *format,
-	const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function,
-	va_list args)
+        const char *format,
+        const char *subsystem,
+        enum yall_log_level log_level,
+        const char *function,
+        va_list args)
 {
-	uint8_t ret = YALL_OK;
+        uint8_t ret = YALL_OK;
 
-	ret = generate_header(buffer, subsystem, log_level, function);
-	if (ret != YALL_OK)
-		goto end;
+        ret = generate_header(buffer, subsystem, log_level, function);
+        if (ret != YALL_OK) {
+                goto end;
+        }
 
-	size_t len = strlen(buffer);
-	if (vsnprintf(&buffer[len], YALL_MSG_LEN - len, format, args) < 0)
-		ret = YALL_STRING_WRITE_ERR;
+        size_t len = strlen(buffer);
+        if (vsnprintf(&buffer[len], YALL_MSG_LEN - len, format, args) < 0)
+                ret = YALL_STRING_WRITE_ERR;
 
-	len = strlen(buffer);
-	if (len == YALL_MSG_LEN - 1)
-		--len;
+        len = strlen(buffer);
+        if (len == YALL_MSG_LEN - 1)
+                --len;
 
-	buffer[len] = '\n';
-	buffer[len+1] = '\0';
+        buffer[len] = '\n';
+        buffer[len+1] = '\0';
 
 end:
-	return ret;
+        return ret;
 }

@@ -103,7 +103,7 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, .
         va_end(args);
 
         // Manage \n
-        size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ? 
+        size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ?
                 DEFAULT_LINE_SIZE - 2 : strlen(line_content);
 
         line_content[lf] = '\n';

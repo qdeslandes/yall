@@ -7,5 +7,5 @@ add_subdirectory(cpp)
 
 # Unit testing can't be done on MSVC 12 because Criterion is not available
 if (NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800)
-	add_subdirectory(unit)
+        add_subdirectory(unit)
 endif ()

@@ -18,15 +18,15 @@ TestSuite(message, .init=tests_message_setup, .fini=tests_message_clean);
  * arguments.
  */
 uint8_t wrapper(char *buffer,
-	const char *format,
-	const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function,
-	...)
+        const char *format,
+        const char *subsystem,
+        enum yall_log_level log_level,
+        const char *function,
+        ...)
 {
-	va_list args;
-	va_start(args, function);
+        va_list args;
+        va_start(args, function);
 
-	return generate_message(buffer, format, subsystem, log_level, function, args);
+        return generate_message(buffer, format, subsystem, log_level, function, args);
 }
 
