@@ -50,8 +50,9 @@ uint8_t generate_header(char *buffer,
         enum yall_log_level log_level,
         const char *function)
 {
+        struct tm tm;
         time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
+        localtime_r(&t, &tm);
 
         int ret = snprintf(buffer, YALL_MSG_LEN, "%-*.*s ::: %-9s :: %-*.*s :: %04d-%02d-%02d %02d:%02d:%02d : ",
                 SUBSYS_NAME_LEN,

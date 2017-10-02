@@ -42,7 +42,7 @@ endif (CMAKE_BUILD_TYPE MATCHES Debug)
 
 if (UNIX)
 	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
-	set(_CMAKE_C_FLAGS "-Wall -Wextra -std=c11 -fvisibility=hidden")
+	set(_CMAKE_C_FLAGS "-Wall -Wextra -std=gnu11 -fvisibility=hidden")
         set(_CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11 -fvisibility=hidden")
 
 	if (CMAKE_COMPILER_IS_GNUCC)
