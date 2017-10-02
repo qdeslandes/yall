@@ -19,8 +19,11 @@ configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DI
 # Options for CI and desktop build
 option(PROJECT_CI_DEPLOY "Special target for continuous integration deployment" OFF)
 option(PROJECT_COVERAGE "Enable unit test coverage report" OFF)
-option(PROJECT_YALL_SHARED "Enable unit test coverage report" ON)
-option(PROJECT_YALL_STATIC "Enable unit test coverage report" ON)
+option(PROJECT_YALL_SHARED "Enable shared version" ON)
+option(PROJECT_YALL_STATIC "Enable static version" ON)
+option(PROJECT_UNIT_TESTS "Enable unit tests build" ON)
+option(PROJECT_REAL_TESTS "Enable real test build" ON)
+option(PROJECT_CPP_TESTS "Enable CPP test build" ON)
 
 # CMake internal configuration
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
