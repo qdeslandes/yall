@@ -31,8 +31,6 @@ ENDIF ()
 # Installation
 if (PROJECT_CI_DEPLOY)
         set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-else ()
-        set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif ()
 
 #
