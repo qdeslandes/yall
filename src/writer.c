@@ -25,9 +25,9 @@
 #include "yall/writer.h"
 
 #ifdef __linux__
-#	include <semaphore.h>
+#       include <semaphore.h>
 #elif _WIN32
-#	include <Windows.h>
+#       include <Windows.h>
 #endif
 
 #include "yall/utils.h"
@@ -46,60 +46,66 @@ HANDLE console_sem = NULL;
 
 uint8_t writer_init(void)
 {
-	uint8_t ret = YALL_OK;
+        uint8_t ret = YALL_OK;
 
 #ifdef __linux__
-	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1))
-		ret = YALL_SEM_INIT_ERR;
+        if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1)) {
+                _YALL_DBG_ERR("Could not lock mutex.");
+                ret = YALL_SEM_INIT_ERR;
+        }
 #elif _WIN32
-	if ((file_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
-		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
+        if ((file_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
+                _YALL_DBG_ERR("Could not lock mutex.");
+                ret = YALL_SEM_INIT_ERR;
+                goto end;
+        }
 
-	if ((console_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
-		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
+        if ((console_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
+                _YALL_DBG_ERR("Could not lock mutex.");
+                ret = YALL_SEM_INIT_ERR;
+                goto end;
+        }
 end:
 #endif
 
-	return ret;
+        return ret;
 }
 
 uint8_t write_msg(enum yall_output_type output_type,
-	enum yall_log_level log_level,
-	const char *output_file,
-	const char *msg)
+        enum yall_log_level log_level,
+        const char *output_file,
+        const char *msg)
 {
-	uint8_t ret = YALL_OK;
+        uint8_t ret = YALL_OK;
 
-	if (yall_console_output & output_type)
-		ret = write_log_console(log_level, msg);
+        if (yall_console_output & output_type)
+                ret = write_log_console(log_level, msg);
 
-	if (yall_file_output & output_type)
-		ret = write_log_file(output_file, msg);
+        if (yall_file_output & output_type)
+                ret = write_log_file(output_file, msg);
 
-	return ret;
+        return ret;
 }
 
 void writer_close(void)
 {
-	/*
-	 * Closing an invalid semaphore is okay, but closing an invalid HANDLE
-	 * will fuck this thing up. So we need to check that...
-	 */
+        _YALL_DBG_INFO("Closing writers.");
+
+        /*
+         * Closing an invalid semaphore is okay, but closing an invalid HANDLE
+         * will fuck this thing up. So we need to check that...
+         */
 #ifdef __linux__
-	sem_destroy(&file_sem);
-	sem_destroy(&console_sem);
+        sem_destroy(&file_sem);
+        sem_destroy(&console_sem);
 #elif _WIN32
-	if (file_sem)
-		CloseHandle(file_sem);
+        if (file_sem)
+                CloseHandle(file_sem);
 
-	if (console_sem)
-		CloseHandle(console_sem);
+        if (console_sem)
+                CloseHandle(console_sem);
 
-	file_sem = NULL;
-	console_sem = NULL;
+        file_sem = NULL;
+        console_sem = NULL;
 #endif
 }

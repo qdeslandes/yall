@@ -36,6 +36,10 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # Build and platform specific configuration
 include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-DDEBUG)
+endif (CMAKE_BUILD_TYPE MATCHES Debug)
+
 if (UNIX)
 	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
 	set(_CMAKE_C_FLAGS "-Wall -Wextra -std=c11 -fvisibility=hidden")

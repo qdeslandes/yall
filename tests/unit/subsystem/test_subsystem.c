@@ -2,7 +2,7 @@
 
 static void tests_subsystem_setup(void)
 {
-	cr_redirect_stderr();
+        cr_redirect_stderr();
 }
 
 static void tests_subsystem_clean(void)

@@ -30,9 +30,9 @@
  * target that will handle 2, 3 or more output types at once.
  */
 enum yall_output_type {
-	yall_inherited_output	= 0,
-	yall_console_output 	= 1 << 0,
-	yall_file_output 	= 1 << 1
+        yall_inherited_output   = 0,
+        yall_console_output     = 1 << 0,
+        yall_file_output        = 1 << 1
 };
 
 #endif

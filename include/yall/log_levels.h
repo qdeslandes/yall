@@ -26,15 +26,15 @@
 #define _YALL_LOG_LEVELS_H
 
 enum yall_log_level {
-	yall_debug,
-	yall_info,
-	yall_notice,
-	yall_warning,
-	yall_err,
-	yall_crit,
-	yall_alert,
-	yall_emerg,
-	yall_inherited_level
+        yall_debug,
+        yall_info,
+        yall_notice,
+        yall_warning,
+        yall_err,
+        yall_crit,
+        yall_alert,
+        yall_emerg,
+        yall_inherited_level
 };
 
 #endif

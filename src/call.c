@@ -13,9 +13,9 @@ static void add_line(struct yall_call_data *d, char *content)
 {
         struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 
-        if (d->lines == NULL)
+        if (d->lines == NULL) {
                 d->lines = l;
-        else {
+        } else {
                 struct yall_call_data_line *tmp = d->lines;
                 for ( ; tmp->next; tmp = tmp->next) ;
                 tmp->next = l;
@@ -51,15 +51,13 @@ void init_call_data(struct yall_call_data *d)
 
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
-        int8_t ret = 0;
-
-        ret = snprintf(buffer, len, "%s", d->header);
+        snprintf(buffer, len, "%s", d->header);
         free(d->header);
 
         struct yall_call_data_line *l = NULL;
-        while (ret != -1 && (l = remove_first_line(d))) {
+        while ((l = remove_first_line(d))) {
                 size_t curr_len = strlen(buffer);
-                ret = snprintf(&buffer[curr_len], len - curr_len, l->content);
+                snprintf(&buffer[curr_len], len - curr_len, l->content);
 
                 free(l->content);
                 free(l);
@@ -92,24 +90,26 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, .
 
         char *line_content = malloc(DEFAULT_LINE_SIZE);
 
-        // Create the proper format with \t and \n
         uint8_t i = 0;
-        char *_format = malloc(strlen(format) + indent + 2);
         for ( ; i < indent; ++i)
-                _format[i] = '\t';
-        snprintf(&_format[i], strlen(format) + 2, "%s%c", format, '\n');
+                line_content[i] = '\t';
 
         // Create the message line
         va_list args;
         va_start(args, format);
 
-        vsnprintf(line_content, DEFAULT_LINE_SIZE, _format, args);
+        vsnprintf(&line_content[i], DEFAULT_LINE_SIZE - indent, format, args);
 
         va_end(args);
+
+        // Manage \n
+        size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ?
+                DEFAULT_LINE_SIZE - 2 : strlen(line_content);
+
+        line_content[lf] = '\n';
+        line_content[lf+1] = '\0';
 
         // Add the line to the data list
         add_line(d, line_content);
         d->message_size += strlen(line_content);
-
-        free(_format);
 }

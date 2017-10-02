@@ -14,8 +14,8 @@
 #include "yall/subsystem.h"
 
 struct yall_subsystem *_get_subsystem(const char *name,
-	struct yall_subsystem *s,
-	struct yall_subsystem_params *params);
+        struct yall_subsystem *s,
+        struct yall_subsystem_params *params);
 struct yall_subsystem_params default_params;
 
 void tests_yall_init_lib(void);
