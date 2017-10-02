@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <yall/yall.h>
+#include <yall/Yall.hpp>
 
 namespace test {
 class Class {
