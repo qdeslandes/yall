@@ -50,33 +50,34 @@
  */
 
 #if (_MSC_VER == 1800)
-#define __func__ __FUNCTION__
+#	define __func__ __FUNCTION__
 #endif
 
 #define FUNCTION __func__
 
 #ifndef __cplusplus
+#	define _YALL_LOG(subsystem, log_level, ...) \
+		do { \
+			yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__); \
+		} while (0)
 
-#define _YALL_LOG(subsystem, log_level, ...) \
-        do { \
-                yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__); \
-        } while (0)
-
+#	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
+	do { \
+		yall_call_log(subsystem, log_level, FUNCTION, function, args); \
+	} while (0)
 #else
+#	define _YALL_LOG(subsystem, log_level, msg) \
+		do { \
+			std::ostringstream oss; \
+			oss << msg; \
+			yall_log(subsystem, log_level, FUNCTION, oss.str().c_str()); \
+		} while (0)
 
-#define _YALL_LOG(subsystem, log_level, msg) \
-        do { \
-                std::ostringstream oss; \
-                oss << msg; \
-                yall_log(subsystem, log_level, FUNCTION, oss.str().c_str()); \
-        } while (0)
-
+#	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
+		do { \
+			Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, function, args); \
+		} while (0)
 #endif
-
-#define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-        do { \
-                yall_call_log(subsystem, log_level, FUNCTION, function, args); \
-        } while (0)
 
 #define YALL_EMERG(subsystem, ...)      \
         _YALL_LOG(subsystem, yall_emerg, ##__VA_ARGS__)
@@ -157,4 +158,5 @@
                 if ((expr)) \
                         _YALL_CALL_LOG(subsystem, log_level, function, args); \
         } while (0)
+
 #endif
