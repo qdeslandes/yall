@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
- #ifndef _YALL
+#ifndef _YALL
 #define _YALL
 
 #include <cstdint>
@@ -70,8 +70,10 @@ public:
 	{
 		yall_call_set_header(_data, header.str().c_str());
 
-		for (std::stringstream *s : _lines)
-			yall_call_add_line(_data, 0, s->str().c_str());
+		for (std::stringstream *s : _lines) {
+            std::string ss = s->str();
+			yall_call_add_line(_data, 0, ss.c_str());
+        }
 
 		for (std::stringstream *s : _lines)
 			delete s;
@@ -85,12 +87,6 @@ private:
 
 class Yall
 {
-public:
-	static Yall &getInstance()
-	{
-		return _instance;
-	}
-
 private:
 	Yall()
 	{
@@ -138,7 +134,6 @@ private:
 		yall_disable_debug();
 	}
 
-
 	bool _isDebug()const
 	{
 		return yall_is_debug();
@@ -165,62 +160,60 @@ private:
 		yall_call_log(subsystem.c_str(), log_level, function_name.c_str(), Yall::__yall_cpp_formatter, (const void *)&p);
 	}
 
-	static Yall _instance;
-
 public:
 	Yall(Yall const &y) = delete;
 	void operator=(Yall const &y) = delete;
 
 	static uint32_t getVersion()
 	{
-		return _instance.getVersion();
+		return getInstance().getVersion();
 	}
 
 
 	static std::string getVersionStr()
 	{
-		return _instance._getVersionStr();
+		return getInstance()._getVersionStr();
 	}
 
 	static void setSubsystem(const std::string name, const std::string parent,
 		enum yall_log_level log_level, enum yall_output_type output_type,
 		const std::string output_file)
 	{
-		_instance._setSubsystem(name, parent, log_level, output_type, output_file);
+		getInstance()._setSubsystem(name, parent, log_level, output_type, output_file);
 	}
 
 	static void enableDebug()
 	{
-		_instance._enableDebug();
+		getInstance()._enableDebug();
 	}
 
 	static void disableDebug()
 	{
-		_instance._disableDebug();
+		getInstance()._disableDebug();
 	}
 
 	static bool isDebug()
 	{
-		return _instance.isDebug();
+		return getInstance().isDebug();
 	}
 
 	static void enableSubsystem(std::string subsystem_name)
 	{
-		_instance._enableSubsystem(subsystem_name);
+		getInstance()._enableSubsystem(subsystem_name);
 	}
 
 	static void disableSubsystem(std::string subsystem_name)
 	{
-		_instance._disableSubsystem(subsystem_name);
+		getInstance()._disableSubsystem(subsystem_name);
 	}
 
-	void __callLog(std::string subsystem,
+	static void __callLog(std::string subsystem,
 		enum yall_log_level log_level,
 		std::string function_name,
 		void (*formatter)(YallData &d, const void *args),
 		const void *args)
 	{
-		_instance._callLog(subsystem, log_level, function_name, formatter, args);
+		getInstance()._callLog(subsystem, log_level, function_name, formatter, args);
 	}
 
 	static void __yall_cpp_formatter(struct yall_call_data *d, const void *args)
@@ -232,8 +225,13 @@ public:
 
 		data.__process();
 	}
-};
+	
+	static Yall &getInstance()
+	{
+		static Yall instance;
 
-Yall Yall::_instance;
+		return instance;
+	}
+};
 
 #endif
