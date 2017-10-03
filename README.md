@@ -74,6 +74,10 @@ Subsystems creation and manipulation is not thread safe. Subsystems should not b
 
 On Linux, changing a subsystem status is atomic, it can be done from concurrent threads.
 
+### C++
+
+The `include` folder of the library contains `Yall.hpp` which defines a classe to handle Yall in a C++ way. It can be used the same way as the library, except it handle some features throughs C++ facilities, see `tests/cpp/main.cpp` for more informations.
+
 ### Debugging
 
 If yall produce a strange behaviour, it is possible to get debug informations in runtime. To do this, you must run the debug version of the library (`yalld`), and enable debug mode through `yall_enable_debug()`. The library will automatically create a `yall` subsystem and print the log messages. This subsystem write logs in console with a minimal log level of `yall_debug`.
