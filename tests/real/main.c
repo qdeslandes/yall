@@ -2,7 +2,7 @@
 
 #include <yall/yall.h>
 
-void formatter(struct yall_call_data *d, void *args)
+void formatter(struct yall_call_data *d, const void *args)
 {
         int lines = 3;
 
