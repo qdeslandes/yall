@@ -22,6 +22,6 @@ void tests_yall_init_lib(void);
 void tests_yall_close_lib(void);
 void tests_yall_log_setup(void);
 void tests_yall_log_clean(void);
-void tests_call_log_function(struct yall_call_data *d, void *args);
+void tests_call_log_function(struct yall_call_data *d, const void *args);
 
 #endif
