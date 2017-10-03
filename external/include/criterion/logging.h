@@ -71,7 +71,7 @@ CR_API void cr_log(enum criterion_severity severity, const char *msg, ...);
  * @param[in] ... Additional arguments depending on msg
  *
  *****************************************************************************/
-#define cr_log_info(...)     cr_log(CR_LOG_INFO, __VA_ARGS__)
+#define cr_log_info(...)    cr_log(CR_LOG_INFO, __VA_ARGS__)
 
 /**
  * Prints a warning message
@@ -83,7 +83,7 @@ CR_API void cr_log(enum criterion_severity severity, const char *msg, ...);
  * @param[in] ... Additional arguments depending on msg
  *
  *****************************************************************************/
-#define cr_log_warn(...)     cr_log(CR_LOG_WARNING, __VA_ARGS__)
+#define cr_log_warn(...)    cr_log(CR_LOG_WARNING, __VA_ARGS__)
 
 /**
  * Prints a error message
@@ -155,9 +155,9 @@ namespace criterion
       streambuf buf;
   };
 
-  stream info { CR_LOG_INFO };
-  stream warn { CR_LOG_WARNING };
-  stream error { CR_LOG_ERROR };
+  static stream info { CR_LOG_INFO };
+  static stream warn { CR_LOG_WARNING };
+  static stream error { CR_LOG_ERROR };
   } }
 #endif
 

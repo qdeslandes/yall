@@ -99,8 +99,8 @@ _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
 _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
         enum yall_log_level log_level,
         const char *function_name,
-        void (*formatter)(yall_call_data *d, void *args),
-        void *args);
+        void (*formatter)(yall_call_data *d, const void *args),
+        const void *args);
 
 /*
  * yall_set_subsystem : this is the main subsystems function. This function
