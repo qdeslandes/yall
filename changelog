@@ -4,6 +4,7 @@ Current version (1.2.0) changelog
 		* Create a C++ class to use Yall
 	[FIX]
 		* Fix YALL_CALL_LOG buffer overrun
+		* Use localtime_r instead of localtime
 	[TEST]
 	[CI]
 
