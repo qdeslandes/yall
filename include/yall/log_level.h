@@ -37,4 +37,6 @@ enum yall_log_level {
         yall_inherited_level
 };
 
+const char *get_log_level_name(enum yall_log_level log_level);
+
 #endif
