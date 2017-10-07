@@ -36,8 +36,9 @@ extern "C" {
 #include "yall/call.h"
 #include "yall/utils.h"
 #include "yall/debug.h"
+#include "yall/config.h"
 #include "yall/message.h"
-#include "yall/log_levels.h"
+#include "yall/log_level.h"
 #include "yall/output_types.h"
 
 #define YALL_CALL_BUFF_LEN      1024

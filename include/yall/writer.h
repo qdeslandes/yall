@@ -28,7 +28,7 @@
 #include <stdint.h>
 
 #include "yall/output_types.h"
-#include "yall/log_levels.h"
+#include "yall/log_level.h"
 
 /*
  * writer_init : initialize some stuff for the console and file writers.

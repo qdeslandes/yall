@@ -28,7 +28,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#include "yall/log_levels.h"
+#include "yall/header.h"
 
 #define YALL_MSG_LEN            512
 #define MSG_HEADER_LEN          77
