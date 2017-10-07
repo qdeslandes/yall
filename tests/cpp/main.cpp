@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include <yall/Yall.hpp>
 
 void formatter(YallData &d, const void *args)
@@ -26,14 +25,13 @@ int main(void)
 
         YALL_ERR("test", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
+	YALL_CALL_DEBUG("test", formatter, "Data report for today :");
+	yall_config_set_tab_width(2);
         YALL_CALL_DEBUG("test", formatter, "Data report for today :");
         Yall::setSubsystem("longsubsystem", "", yall_debug, yall_console_output, "");
         Yall::setSubsystem("azertyazertyazerty", "", yall_debug, yall_console_output, "");
         Yall::setSubsystem("status", "", yall_debug, yall_console_output, "");
 
-        /*
-         * Subsystem status
-         */
         YALL_DEBUG("test", "This is a test log message");
         YALL_WARNING("longsubsystem", "This is a test log message");
         YALL_ERR("test", "This is a test log message");
