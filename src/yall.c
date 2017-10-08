@@ -69,6 +69,8 @@ uint8_t yall_init(void)
         if ((ret = writer_init()))
                 goto err;
 
+	config_setup();
+
 end:
         return ret;
 err:
@@ -120,13 +122,14 @@ uint8_t yall_log(const char *subsystem,
                 goto end;
         }
 
+	struct header_content hc = { 0 };
+	fill_header_content(&hc, subsystem, log_level, function);
+
         va_list args;
         va_start(args, format);
         generate_message(msg,
                 format,
-                subsystem,
-                log_level,
-                function,
+                &hc,
                 args);
         va_end(args);
 
@@ -170,9 +173,12 @@ uint8_t yall_call_log(const char *subsystem,
 
         formatter(&d, args);
 
+	struct header_content hc = { 0 };
+	fill_header_content(&hc, subsystem, log_level, function_name);
+
         // All '+ 1' here are the \0 terminating character
-        message = malloc(MSG_HEADER_LEN + d.message_size + 1);
-        generate_header(message, subsystem, log_level, function_name);
+	message = malloc(MSG_HEADER_LEN + d.message_size + 1);
+        generate_header(message, &hc);
 
         convert_data_to_message(&message[strlen(message)], d.message_size + 1, &d);
 
