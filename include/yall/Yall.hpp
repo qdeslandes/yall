@@ -61,7 +61,7 @@ public:
 		std::stringstream *ss = new std::stringstream();
 		_lines.push_back(ss);
 
-		*ss << std::string(indent, '\t');
+		*ss << std::string(indent * yall_config_get_tab_width(), ' ');
 
 		return *ss;
 	}
@@ -71,9 +71,9 @@ public:
 		yall_call_set_header(_data, header.str().c_str());
 
 		for (std::stringstream *s : _lines) {
-            std::string ss = s->str();
+            		std::string ss = s->str();
 			yall_call_add_line(_data, 0, ss.c_str());
-        }
+       		}
 
 		for (std::stringstream *s : _lines)
 			delete s;
@@ -225,7 +225,7 @@ public:
 
 		data.__process();
 	}
-	
+
 	static Yall &getInstance()
 	{
 		static Yall instance;

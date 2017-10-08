@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "yall/config.h"
+
 /*
  * add_line : add the given <content> to a new line of the data <d>.
  *      <d> and <content> can't be NULL.
@@ -90,9 +92,10 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, .
 
         char *line_content = malloc(DEFAULT_LINE_SIZE);
 
-        uint8_t i = 0;
-        for ( ; i < indent; ++i)
-                line_content[i] = '\t';
+	uint8_t i = 0;
+	uint8_t tab_width = yall_config_get_tab_width();
+        for ( ; i < tab_width * indent; ++i)
+		line_content[i] = ' ';
 
         // Create the message line
         va_list args;
