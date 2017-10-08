@@ -32,38 +32,42 @@
 
 // TODO : set C++ wrapper for these functions
 
+struct yall_config {
+	char *header_template;
+	uint8_t tab_width;
+};
 static const struct yall_config default_config = {
-	.header_format = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
+	.header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
 	.tab_width = 4
 };
 
 static struct yall_config current_config = {
-	.header_format = NULL,
+	.header_template = NULL,
 	.tab_width = 0
 };
 
 void config_setup(void)
 {
-	yall_config_reset_header_format();
+	yall_config_reset_header_template();
 	yall_config_reset_tab_width();
 }
 
-void yall_config_set_header_format(const char *format)
+void yall_config_set_header_template(const char *header_template)
 {
-	free((void *)current_config.header_format);
+	free((void *)current_config.header_template);
 
-	current_config.header_format = strdup(format);
-	header_compile_format(current_config.header_format);
+	current_config.header_template = strdup(header_template);
+	header_compile_format(current_config.header_template);
 }
 
-void yall_config_reset_header_format(void)
+void yall_config_reset_header_template(void)
 {
-	yall_config_set_header_format(default_config.header_format);
+	yall_config_set_header_template(default_config.header_template);
 }
 
-const char *yall_config_get_header_format(void)
+const char *yall_config_get_header_template(void)
 {
-	return current_config.header_format;
+	return current_config.header_template;
 }
 
 void yall_config_set_tab_width(uint8_t tab_width)
