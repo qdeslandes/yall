@@ -37,6 +37,7 @@ struct yall_config {
 	char *call_header_template;
 	uint8_t tab_width;
 };
+
 static const struct yall_config default_config = {
 	.std_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
 	.call_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",

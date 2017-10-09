@@ -29,7 +29,22 @@
 
 #include "yall/utils.h"
 
+/*
+ * All these function handle the library parameters. No description is required
+ * for most of them, as they are short and the name describe itself.
+ * The current available parameters are :
+ * 	* Define the messages header
+ * 	* Define the call messages header
+ * 	* Define the indentation size for call messages log
+ *
+ * All these parameters can be set, reset or get'ed.
+ */
+
+/*
+ * config_setup : reset the parameters to the default values.
+ */
 void config_setup(void);
+
 _YALL_PUBLIC void yall_config_set_std_header_template(const char *std_header_template);
 _YALL_PUBLIC void yall_config_reset_std_header_template(void);
 _YALL_PUBLIC const char *yall_config_get_std_header_template(void);
