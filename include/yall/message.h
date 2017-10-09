@@ -29,19 +29,24 @@
 #include <stdarg.h>
 
 #include "yall/header.h"
-
-#define YALL_MSG_LEN            512
-#define MSG_HEADER_LEN          77
-#define FUNC_NAME_LEN           17
+#include "yall/call.h"
 
 /*
  * generate_message : create the log message. It fills <buffer> we given data
  *      and specific format. No pointer argument can be NULL, but <args> can be
  *      empty.
+ * 	Returns the number of characters wrote. It works the same way as
+ * 	snprintf and friends as if <len> equals 0, it returns the number of
+ * 	characters than would have been wrote.
  */
-uint8_t generate_message(char *buffer,
-	const char *format,
-	const struct header_content *hc,
-        va_list args);
+size_t generate_std_msg(char *log_buffer, size_t len,
+	const char *message_format, va_list args);
+
+/*
+ * generate_call_msg : create the log message from the call data. The call_data
+ * 	are freed after use.
+ * 	<buffer> and <d> can't be NULL.
+ */
+void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d);
 
 #endif

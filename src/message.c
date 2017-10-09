@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 
 #include "yall/utils.h"
 #include "yall/errors.h"
@@ -35,29 +36,34 @@
 #include "yall/debug.h"
 #include "yall/header.h"
 
-uint8_t generate_message(char *buffer,
-	const char *format,
-	const struct header_content *hc,
-        va_list args)
+size_t generate_std_msg(char *log_buffer, size_t len,
+	const char *message_format, va_list args)
 {
-	uint8_t ret = YALL_OK;
+	size_t ret = vsnprintf(log_buffer, len, message_format, args);
 
-        ret = generate_header(buffer, hc);
-        if (ret != YALL_OK) {
-                goto end;
-        }
+	if (log_buffer) {
+		log_buffer[len-2] = '\n';
+		log_buffer[len-1] = '\0';
+	}
 
-        size_t len = strlen(buffer);
-        if (vsnprintf(&buffer[len], YALL_MSG_LEN - len, format, args) < 0)
-                ret = YALL_STRING_WRITE_ERR;
+	return ret;
+}
 
-        len = strlen(buffer);
-        if (len == YALL_MSG_LEN - 1)
-                --len;
+void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d)
+{
+	snprintf(buffer, len, "%s", d->header);
+	free(d->header);
 
-        buffer[len] = '\n';
-        buffer[len+1] = '\0';
+	struct yall_call_data_line *l = NULL;
+	while ((l = remove_first_line(d))) {
+		size_t curr_len = strlen(buffer);
+		snprintf(&buffer[curr_len], len - curr_len, l->content);
 
-end:
-        return ret;
+		/*
+		 * TODO : call_data free should be call in the same scope as
+		 * it is created.
+		 */
+		free(l->content);
+		free(l);
+	}
 }
