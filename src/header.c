@@ -30,56 +30,58 @@
 #include <string.h>
 
 #include "yall/errors.h"
+#include "yall/debug.h"
 
+/*
+ * The behaviour of the following code is specific to header generation : the
+ * user can define a custom header to change the log level string position,
+ * remove the date, ... To generate a correct header from the given format,
+ * we define an array which will be used to match the given modifier (%s for
+ * a subsystem, %f for the function name, ...) with the proper string during
+ * header generation.
+ *
+ * Define the matches array size means no more than MATCHES_SIZE modifier will
+ * be allowed inside the header format string.
+ *
+ * The header format length is also limited to YALL_HEADER_LEN, which means the
+ * compiled header format can't exceed YALL_HEADER_LEN.
+ */
 #define MATCHES_SIZE	10
 #define NBR_MODIFIERS	5	// The first index returns an empty string
 
-static int8_t std_matches[MATCHES_SIZE] = { 0 };
-static int8_t call_matches[MATCHES_SIZE] = { 0 };
+enum yall_matches {
+	empty,
+	subsystem,
+	log_level,
+	function,
+	date
+};
+
+static enum yall_matches std_matches[MATCHES_SIZE] = { 0 };
+static enum yall_matches call_matches[MATCHES_SIZE] = { 0 };
 static char std_header_format[YALL_HEADER_LEN] = { 0 };
 static char call_header_format[YALL_HEADER_LEN] = { 0 };
 
 /*
- * Modifiers order:
- * 	BUT MATCHES[0] contains an empty content to print
- * 	subsystem
- * 	log_level
- * 	function
- * 	date
- * 	message
+ * is_modifier : returns true is the given character is a yall modifier, false
+ * 	otherwise. <match> is a pointer to an element of the matches array, it
+ * 	is used to order the modifier set in the header, and replace them
+ * 	properly during the header generation.
  */
-
-// TODO : header format size is hardcoded
-// TODO : matches size is hardcoded
-// TODO : prevent : this function is not thread safe
-// TODO : handle successive tokens
-// TODO : if token is null (with "" as string)
-// TODO : format can be modified by strtok
-// TODO : replacement size is hardcoded
-// Get modifier, convert it to "replacement" with the proper parameters
-
-	/*
-	clock_t start;
-	bool init = false;
-	if (! init) {
-		start = clock();
-		init = true;
-	}*/
-
-bool is_modifier(char c, int8_t *match)
+static inline bool is_modifier(char c, int8_t *match)
 {
 	switch (c) {
 	case 's':
-		*match = 1;
+		*match = subsystem;
 		break;
 	case 'l':
-		*match = 2;
+		*match = log_level;
 		break;
 	case 'f':
-		*match = 3;
+		*match = function;
 		break;
 	case 'd':
-		*match = 4;
+		*match = date;
 		break;
 	default:
 		return false;
@@ -89,46 +91,10 @@ bool is_modifier(char c, int8_t *match)
 	return true;
 }
 
-void header_compile_format(enum header_type hdr_type, char *format)
-{
-	int header_size = 0;
-	int match_idx = 0;
-	bool seek_modifier = false;
-	char *header = NULL;
-	int8_t *matches = NULL;
-
-	switch (hdr_type) {
-	case std_header:
-		matches = std_matches;
-		header = std_header_format;
-		break;
-	case call_header:
-		matches = call_matches;
-		header = call_header_format;
-		break;
-	default:
-		matches = std_matches;
-		header = std_header_format;
-		break;
-	}
-
-	memset(matches, 0, MATCHES_SIZE);
-
-	for ( ; *format && header_size < YALL_HEADER_LEN-1; ++format, ++header_size) {
-		if (*format == '%')
-			seek_modifier = true;
-
-		if (is_modifier(*format, &matches[match_idx])) {
-			++match_idx;
-			*header++ = 's';
-		} else {
-			*header++ = *format;
-		}
-	}
-
-	*header = '\0';
-}
-
+/*
+ * set_date : fill the <date> string pointer with the current date time,
+ * 	formatted in a generic way.
+ */
 static void set_date(char *date)
 {
 	struct tm tm;
@@ -149,7 +115,67 @@ static void set_date(char *date)
 		tm.tm_sec);
 }
 
-void fill_header_content(struct header_content *hc, const char *subsystem, enum yall_log_level log_level, const char *function_name)
+/*
+ * set_matches_and_header : from an <header_type>, it match the proper <header>
+ * 	and <matches> array. This avoid redundant code to manage std_header and
+ * 	call_header.
+ */
+static void set_matches_and_header(enum header_type hdr_type,
+	const char **header, const int8_t **matches)
+{
+	switch (hdr_type) {
+	case std_header:
+		*matches = std_matches;
+		*header = std_header_format;
+		break;
+	case call_header:
+		*matches = call_matches;
+		*header = call_header_format;
+		break;
+	default:
+		*matches = std_matches;
+		*header = std_header_format;
+		break;
+	}
+}
+
+void header_compile_format(enum header_type hdr_type, char *format)
+{
+	// TODO : avoid using "int", use more clear type : uint16_t, ...
+
+	int hdr_len = 0;
+	int match_idx = 0;
+	char *hdr = NULL;
+	int8_t *matches = NULL;
+	bool seek_modifier = false;
+	bool allow_modifier = true;
+
+	set_matches_and_header(hdr_type, &hdr, &matches);
+
+	memset(matches, 0, MATCHES_SIZE);
+
+	for ( ; *format && hdr_len < YALL_HEADER_LEN-1; ++format, ++hdr_len) {
+		if (*format == '%')
+			seek_modifier = true;
+
+		if (allow_modifier && is_modifier(*format, &matches[match_idx])) {
+			++match_idx;
+			*hdr++ = 's';
+
+			if (MATCHES_SIZE <= match_idx) {
+				_YALL_DBG_ERR("The header modifiers array is full.");
+				allow_modifier = false;
+			}
+		} else {
+			*hdr++ = *format;
+		}
+	}
+
+	*hdr = '\0';
+}
+
+void fill_header_content(struct header_content *hc, const char *subsystem,
+	enum yall_log_level log_level, const char *function_name)
 {
 	hc->subsystem = subsystem;
 	hc->log_level = get_log_level_name(log_level);
@@ -159,34 +185,23 @@ void fill_header_content(struct header_content *hc, const char *subsystem, enum 
 }
 
 /*
- * generate_header : function in charge to generate the message header. A char
- *      array is passed to be filled by the parameters and the date. Once done,
- *      the status is returned. All pointer can't be NULL and the value
- *      <log_level> can't be equal to yall_inherited_level.
- *      If the function's name trimming fail, the function's name is not
- *      printed inside the header, but no error is shown. TODO : Fix it ?
+ * generate_hdr : main function handling the header generation, the header
+ * 	format used depend of <hdr_type>. <buffer> will store the generated
+ * 	header, it won't write more than <len> (including the nul terminating
+ * 	character). <hc> can't be NULL.
+ * 	This function can be used as snprintf and friends, as if <len> is equals
+ * 	to 0, the number of characters that SHOULD HAVE been wrote will be
+ * 	returned.
  */
-static size_t generate_header(enum header_type hdr_type, size_t len, char *buffer, struct header_content *hc)
+static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
+	struct header_content *hc)
 {
-	char *header_format = NULL;
+	size_t wrote = 0;
+	char *hdr = NULL;
 	int8_t *matches = NULL;
 
-	switch (hdr_type) {
-	case std_header:
-		matches = std_matches;
-		header_format = std_header_format;
-		break;
-	case call_header:
-		matches = call_matches;
-		header_format = call_header_format;
-		break;
-	default:
-		matches = std_matches;
-		header_format = std_header_format;
-		break;
-	}
+	set_matches_and_header(hdr_type, &hdr, &matches);
 
-	// TODO : the way the header is printed is ABSOLUTELY BARBARIC
 	const char *ordered_content[NBR_MODIFIERS] = {
 		"",
 		hc->subsystem,
@@ -195,28 +210,23 @@ static size_t generate_header(enum header_type hdr_type, size_t len, char *buffe
 		hc->date_long
 	};
 
-        size_t wrote = snprintf(buffer, len, header_format,
-		ordered_content[matches[0]],
-		ordered_content[matches[1]],
-		ordered_content[matches[2]],
-		ordered_content[matches[3]],
-		ordered_content[matches[4]],
-		ordered_content[matches[5]],
-		ordered_content[matches[6]],
-		ordered_content[matches[7]],
-		ordered_content[matches[8]],
-		ordered_content[matches[9]]
-	);
+	// TODO : the way the header is printed is ABSOLUTELY BARBARIC
+        wrote = snprintf(buffer, len, hdr, ordered_content[matches[0]],
+		ordered_content[matches[1]], ordered_content[matches[2]],
+		ordered_content[matches[3]], ordered_content[matches[4]],
+		ordered_content[matches[5]], ordered_content[matches[6]],
+		ordered_content[matches[7]], ordered_content[matches[8]],
+		ordered_content[matches[9]]);
 
         return wrote;
 }
 
-size_t generate_std_header(char *buffer, size_t len, struct header_content *hc)
+size_t generate_std_hdr(char *buffer, size_t len, struct header_content *hc)
 {
-	generate_header(std_header, len, buffer, hc);
+	return generate_hdr(std_header, buffer, len, hc);
 }
 
-size_t generate_call_header(char *buffer, size_t len, struct header_content *hc)
+size_t generate_call_hdr(char *buffer, size_t len, struct header_content *hc)
 {
-	generate_header(call_header, len, buffer, hc);
+	return generate_hdr(call_header, buffer, len, hc);
 }

@@ -46,9 +46,33 @@ struct header_content {
 	const char date_long[YALL_DATE_LONG_LEN];
 };
 
+/*
+ * header_compile_format : compile the given format to a printf ready format and
+ * 	store the modifiers order for proper log message header generation.
+ * 	<format> can't be NULL.
+ */
 void header_compile_format(enum header_type hdr_type, char *format);
-size_t generate_std_header(char *buffer, size_t len, struct header_content *hc);
-size_t generate_call_header(char *buffer, size_t len, struct header_content *hc);
-void fill_header_content(struct header_content *hc, const char *subsystem, enum yall_log_level log_level, const char *function_name);
+
+/*
+ * fill_header_content : from a header_content structure, fill the fields with
+ * 	the given parameters and set the date field.
+ * 	<hc> can't be NULL.
+ */
+void fill_header_content(struct header_content *hc, const char *subsystem,
+	enum yall_log_level log_level, const char *function_name);
+
+/*
+ * generate_std_hdr : generate the standard header inside <buffer> with a
+ * 	maximum length of <len>. The content of <hc> is printed to generate the
+ * 	header. No memory is allocated of freed. The log level inside <hc>
+ * 	can't be yall_inherited_level.
+ */
+size_t generate_std_hdr(char *buffer, size_t len, struct header_content *hc);
+
+/*
+ * generate_call_hdr : same prerequisites and constraints as
+ * 	generate_std_header().
+ */
+size_t generate_call_hdr(char *buffer, size_t len, struct header_content *hc);
 
 #endif
