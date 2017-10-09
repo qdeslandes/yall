@@ -33,41 +33,63 @@
 // TODO : set C++ wrapper for these functions
 
 struct yall_config {
-	char *header_template;
+	char *std_header_template;
+	char *call_header_template;
 	uint8_t tab_width;
 };
 static const struct yall_config default_config = {
-	.header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
+	.std_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
+	.call_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
 	.tab_width = 4
 };
 
 static struct yall_config current_config = {
-	.header_template = NULL,
+	.std_header_template = NULL,
+	.call_header_template = NULL,
 	.tab_width = 0
 };
 
 void config_setup(void)
 {
-	yall_config_reset_header_template();
+	yall_config_reset_std_header_template();
+	yall_config_reset_call_header_template();
 	yall_config_reset_tab_width();
 }
 
-void yall_config_set_header_template(const char *header_template)
+void yall_config_set_std_header_template(const char *std_header_template)
 {
-	free((void *)current_config.header_template);
+	free((void *)current_config.std_header_template);
 
-	current_config.header_template = strdup(header_template);
-	header_compile_format(current_config.header_template);
+	current_config.std_header_template = strdup(std_header_template);
+	header_compile_format(std_header, current_config.std_header_template);
 }
 
-void yall_config_reset_header_template(void)
+void yall_config_reset_std_header_template(void)
 {
-	yall_config_set_header_template(default_config.header_template);
+	yall_config_set_std_header_template(default_config.std_header_template);
 }
 
-const char *yall_config_get_header_template(void)
+const char *yall_config_get_std_header_template(void)
 {
-	return current_config.header_template;
+	return current_config.std_header_template;
+}
+
+void yall_config_set_call_header_template(const char *call_header_template)
+{
+	free((void *)current_config.call_header_template);
+
+	current_config.call_header_template = strdup(call_header_template);
+	header_compile_format(call_header, current_config.call_header_template);
+}
+
+void yall_config_reset_call_header_template(void)
+{
+	yall_config_set_call_header_template(default_config.call_header_template);
+}
+
+const char *yall_config_get_call_header_template(void)
+{
+	return current_config.call_header_template;
 }
 
 void yall_config_set_tab_width(uint8_t tab_width)

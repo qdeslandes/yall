@@ -31,12 +31,13 @@
 
 #include "yall/errors.h"
 
-#define HEADER_SIZE	64
 #define MATCHES_SIZE	10
 #define NBR_MODIFIERS	5	// The first index returns an empty string
 
-static int8_t matches[MATCHES_SIZE] = { 0 };
-static char header_format[HEADER_SIZE] = { 0 };
+static int8_t std_matches[MATCHES_SIZE] = { 0 };
+static int8_t call_matches[MATCHES_SIZE] = { 0 };
+static char std_header_format[YALL_HEADER_LEN] = { 0 };
+static char call_header_format[YALL_HEADER_LEN] = { 0 };
 
 /*
  * Modifiers order:
@@ -88,16 +89,32 @@ bool is_modifier(char c, int8_t *match)
 	return true;
 }
 
-void header_compile_format(char *format)
+void header_compile_format(enum header_type hdr_type, char *format)
 {
 	int header_size = 0;
 	int match_idx = 0;
 	bool seek_modifier = false;
-	char *header = header_format;
+	char *header = NULL;
+	int8_t *matches = NULL;
+
+	switch (hdr_type) {
+	case std_header:
+		matches = std_matches;
+		header = std_header_format;
+		break;
+	case call_header:
+		matches = call_matches;
+		header = call_header_format;
+		break;
+	default:
+		matches = std_matches;
+		header = std_header_format;
+		break;
+	}
 
 	memset(matches, 0, MATCHES_SIZE);
 
-	for ( ; *format && header_size < HEADER_SIZE-1; ++format, ++header_size) {
+	for ( ; *format && header_size < YALL_HEADER_LEN-1; ++format, ++header_size) {
 		if (*format == '%')
 			seek_modifier = true;
 
@@ -109,9 +126,8 @@ void header_compile_format(char *format)
 		}
 	}
 
-	header[header_size] = '\0';
+	*header = '\0';
 }
-
 
 static void set_date(char *date)
 {
@@ -150,9 +166,28 @@ void fill_header_content(struct header_content *hc, const char *subsystem, enum 
  *      If the function's name trimming fail, the function's name is not
  *      printed inside the header, but no error is shown. TODO : Fix it ?
  */
-uint8_t generate_header(char *buffer, struct header_content *hc)
+static size_t generate_header(enum header_type hdr_type, size_t len, char *buffer, struct header_content *hc)
 {
-	char *ordered_content[NBR_MODIFIERS] = {
+	char *header_format = NULL;
+	int8_t *matches = NULL;
+
+	switch (hdr_type) {
+	case std_header:
+		matches = std_matches;
+		header_format = std_header_format;
+		break;
+	case call_header:
+		matches = call_matches;
+		header_format = call_header_format;
+		break;
+	default:
+		matches = std_matches;
+		header_format = std_header_format;
+		break;
+	}
+
+	// TODO : the way the header is printed is ABSOLUTELY BARBARIC
+	const char *ordered_content[NBR_MODIFIERS] = {
 		"",
 		hc->subsystem,
 		hc->log_level,
@@ -160,9 +195,7 @@ uint8_t generate_header(char *buffer, struct header_content *hc)
 		hc->date_long
 	};
 
-	// TODO : ABSOLUTELY BARBARIC (but its works...)
-	// TODO : 1024 ? OUT OF NOWHERE.
-        int ret = snprintf(buffer, 1024, header_format,
+        size_t wrote = snprintf(buffer, len, header_format,
 		ordered_content[matches[0]],
 		ordered_content[matches[1]],
 		ordered_content[matches[2]],
@@ -175,5 +208,15 @@ uint8_t generate_header(char *buffer, struct header_content *hc)
 		ordered_content[matches[9]]
 	);
 
-        return ret >= 0 ? YALL_OK : YALL_STRING_WRITE_ERR;
+        return wrote;
+}
+
+size_t generate_std_header(char *buffer, size_t len, struct header_content *hc)
+{
+	generate_header(std_header, len, buffer, hc);
+}
+
+size_t generate_call_header(char *buffer, size_t len, struct header_content *hc)
+{
+	generate_header(call_header, len, buffer, hc);
 }

@@ -26,10 +26,18 @@
 #define _YALL_HEADER_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #include "yall/log_level.h"
 
+#define YALL_HEADER_LEN		64
 #define YALL_DATE_LONG_LEN	20
+
+// TODO : check using this enum outside the library
+enum header_type {
+	std_header,
+	call_header
+};
 
 struct header_content {
 	const char *subsystem;
@@ -38,8 +46,9 @@ struct header_content {
 	const char date_long[YALL_DATE_LONG_LEN];
 };
 
-void header_compile_format(char *format);
-uint8_t generate_header(char *buffer, struct header_content *hc);
+void header_compile_format(enum header_type hdr_type, char *format);
+size_t generate_std_header(char *buffer, size_t len, struct header_content *hc);
+size_t generate_call_header(char *buffer, size_t len, struct header_content *hc);
 void fill_header_content(struct header_content *hc, const char *subsystem, enum yall_log_level log_level, const char *function_name);
 
 #endif
