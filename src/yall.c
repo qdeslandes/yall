@@ -89,9 +89,13 @@ uint8_t yall_log(const char *subsystem,
         const char *format,
         ...)
 {
+	// TODO : prefix structs with "yall"
         uint8_t ret = YALL_OK;
-
-        char *msg = NULL;
+	char *buff = NULL;
+	va_list args, args_cpy;
+	size_t hdr_len = 0;
+	size_t buff_len = 0;
+	struct header_content hc = { 0 };
         struct yall_subsystem_params p = { 0 };
 
         if (! initialized) {
@@ -116,28 +120,41 @@ uint8_t yall_log(const char *subsystem,
                 goto end;
         }
 
-        // Create message
-        if (! (msg = malloc(YALL_MSG_LEN))) {
-                ret = YALL_NO_MEM;
-                goto end;
-        }
-
-	struct header_content hc = { 0 };
 	fill_header_content(&hc, subsystem, log_level, function);
 
-        va_list args;
-        va_start(args, format);
-        generate_message(msg,
-                format,
-                &hc,
-                args);
+	va_start(args, format);
+
+	/*
+	 * Make a copy of variadic arguments to compute the length of the future
+	 * log message.
+	 * "+2" is used for '\n' and '\0' at the end of the log message.
+	 */
+	va_copy(args_cpy, args);
+	hdr_len = generate_std_hdr(NULL, 0, &hc);
+	buff_len = hdr_len + generate_std_msg(NULL, 0, format, args_cpy) + 2;
+	va_end(args_cpy);
+
+	// Allocate the log message buffer
+	buff = malloc(buff_len);
+
+	/*
+	 * Header generation, hdr_len does not take in account the '\0', so
+	 * if we remove the "+1", the header will be cut 1 character too soon.
+	 */
+	generate_std_hdr(buff, hdr_len + 1, &hc);
+
+	/*
+	 * Message generation : we give a pointer to the next free character of
+	 * the log buffer, the remaining buff length and the arguments.
+	 */
+	generate_std_msg(&buff[hdr_len], buff_len - hdr_len, format, args);
         va_end(args);
 
         // Write message
-        ret = write_msg(p.output_type, log_level, p.output_file, msg);
+        ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(msg);
+        free(buff);
         return ret;
 }
 
@@ -148,7 +165,11 @@ uint8_t yall_call_log(const char *subsystem,
         const void *args)
 {
         uint8_t ret = YALL_OK;
-        char *message = NULL;
+	char *buff = NULL;
+	size_t hdr_len = 0;
+	size_t buff_len = 0;
+        struct yall_call_data d = { 0 };
+	struct header_content hc = { 0 };
         struct yall_subsystem_params p = { 0 };
 
         if (! initialized) {
@@ -168,24 +189,29 @@ uint8_t yall_call_log(const char *subsystem,
                 goto end;
         }
 
-        struct yall_call_data d = { 0 };
         init_call_data(&d);
+
+	/*
+	 * Detailled informations about the following calls can be found inside
+	 * the sources of yall_log() function.
+	 */
 
         formatter(&d, args);
 
-	struct header_content hc = { 0 };
 	fill_header_content(&hc, subsystem, log_level, function_name);
 
-        // All '+ 1' here are the \0 terminating character
-	message = malloc(MSG_HEADER_LEN + d.message_size + 1);
-        generate_header(message, &hc);
+	hdr_len = generate_call_hdr(NULL, 0, &hc);
+	buff_len = hdr_len + d.message_size + 1;
 
-        convert_data_to_message(&message[strlen(message)], d.message_size + 1, &d);
+	buff = malloc(buff_len);
 
-        ret = write_msg(p.output_type, log_level, p.output_file, message);
+	generate_call_hdr(buff, hdr_len + 1, &hc);
+	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
+
+        ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(message);
+        free(buff);
         return ret;
 }
 
