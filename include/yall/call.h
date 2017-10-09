@@ -26,6 +26,17 @@ typedef struct yall_call_data {
 void init_call_data(struct yall_call_data *d);
 
 /*
+ * add_line : add the given <content> to a new line of the data <d>.
+ *      <d> and <content> can't be NULL.
+ */
+void add_line(struct yall_call_data *d, char *content)
+
+/*
+ * remove_first_line : remove and return the first line of the given data <d>.
+ */
+struct yall_call_data_line *remove_first_line(struct yall_call_data *d);
+
+/*
  * call_data_to_buffer : fill the <buffer> of size <len> with the data of <d>.
  *      None of theses pointers can be NULL.
  */

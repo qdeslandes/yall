@@ -7,11 +7,16 @@
 
 #include "yall/config.h"
 
-/*
- * add_line : add the given <content> to a new line of the data <d>.
- *      <d> and <content> can't be NULL.
- */
-static void add_line(struct yall_call_data *d, char *content)
+void init_call_data(struct yall_call_data *d)
+{
+	d->message_size = 1;
+
+	d->header = malloc(DEFAULT_LINE_SIZE);
+	d->header[0] = '\n';
+	d->header[1] = 0;
+}
+
+void add_line(struct yall_call_data *d, char *content)
 {
         struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 
@@ -27,10 +32,7 @@ static void add_line(struct yall_call_data *d, char *content)
         l->next = NULL;
 }
 
-/*
- * remove_first_line : remove and return the first line of the given data <d>.
- */
-static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
+struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 {
         struct yall_call_data_line *l = d->lines;
 
@@ -40,15 +42,6 @@ static struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
         }
 
         return l;
-}
-
-void init_call_data(struct yall_call_data *d)
-{
-    d->message_size = 1;
-
-    d->header = malloc(DEFAULT_LINE_SIZE);
-    d->header[0] = '\n';
-    d->header[1] = 0;
 }
 
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
