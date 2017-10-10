@@ -32,7 +32,7 @@ int main(void)
 
 	yall_config_set_tab_width(2);
 
-	yall_config_set_header_template("%s - %d : \n\t");
+	yall_config_set_std_header_template("%s - %d : \n\t");
 
         YALL_CALL_DEBUG("test", formatter, "Data report for today :");
         yall_set_subsystem("longsubsystem", NULL, yall_debug, yall_console_output, NULL);
@@ -42,14 +42,14 @@ int main(void)
         /*
          * Subsystem status
          */
-	yall_config_set_header_template("[%d] :: %-14.14s ::: %d ::: %9   \n\t");
+	yall_config_set_std_header_template("[%d] :: %-14.14s ::: %d ::: %9   \n\t");
         YALL_DEBUG("test", "This is a test log message");
         YALL_WARNING("longsubsystem", "This is a test log message");
         YALL_ERR("test", "This is a test log message");
         YALL_ERR("azertyazertyazert", "test");
         YALL_WARNING("absent", "This subsystem does not exists");
         YALL_WARNING("status", "Activated");
-	yall_config_set_header_template("");
+	yall_config_set_std_header_template("");
         yall_disable_subsystem("status");
         YALL_ERR("status", "This should not appear");
         yall_enable_subsystem("status");
