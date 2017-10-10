@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -63,7 +63,9 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 {
 	for (; s; s = s->next) {
 		// Write subsystem's parameters
-		if (s->childs || strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
+		if (s->childs || strncmp(s->name, name,
+			SUBSYS_NAME_LEN-1) == 0) {
+
 			if (params && s->log_level != yall_inherited_level)
 				params->log_level = s->log_level;
 
@@ -81,7 +83,8 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 		if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
 			return s;
 
-		struct yall_subsystem *sc = _get_subsystem(name, s->childs, params);
+		struct yall_subsystem *sc = _get_subsystem(name, s->childs,
+			params);
 
 		if (sc)
 			return sc;
@@ -159,14 +162,10 @@ struct yall_subsystem *get_subsystem(const char *name,
 }
 
 struct yall_subsystem *create_subsystem(const char *name,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
+	enum yall_log_level log_level, enum yall_output_type output_type,
 	const char *output_file)
 {
-	struct yall_subsystem *s = NULL;
-
-	if (! (s = malloc(sizeof(struct yall_subsystem))))
-		goto err;
+	struct yall_subsystem *s = malloc(sizeof(struct yall_subsystem));
 
 	// Set each optional pointer to NULL, to avoid surprises
 	s->output_file = NULL;
@@ -181,8 +180,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 	s->output_type = output_type;
 
 	if (output_file) {
-		if (! (s->output_file = malloc(strlen(output_file) + 1)))
-			goto err_free;
+		s->output_file = malloc(strlen(output_file) + 1);
 
 		strncpy(s->output_file, output_file, strlen(output_file)+1);
 	}
@@ -200,18 +198,13 @@ struct yall_subsystem *create_subsystem(const char *name,
 	_YALL_DBG_INFO("Subsystem %s created.", s->name);
 
 	return s;
-
-err_free:
-	free(s);
-err:
-	_YALL_DBG_ERR("Could not create subsystem %s.", name);
-	return NULL;
 }
 
 void add_subsystem(const char *parent_name, struct yall_subsystem *s)
 {
 	struct yall_subsystem *previous = NULL;
-	struct yall_subsystem *parent = parent_name ? get_subsystem(parent_name, NULL) : NULL;
+	struct yall_subsystem *parent = parent_name ?
+		get_subsystem(parent_name, NULL) : NULL;
 
 	// Assign parent to <s>, no problem if parent is NULL
 	s->parent = parent;
@@ -231,7 +224,8 @@ void add_subsystem(const char *parent_name, struct yall_subsystem *s)
 	// of a subsystems list.
 	previous = parent ? parent->childs : subsystems;
 
-	for ( ; previous->next; previous = previous->next) ;
+	for ( ; previous->next; previous = previous->next)
+		;
 
 	previous->next = s;
 	s->previous = previous;
@@ -258,8 +252,8 @@ void update_subsystem(struct yall_subsystem *s,
 	s->previous = NULL;
 	s->next = NULL;
 
-	if (output_file && (s->output_file = malloc(strlen(output_file) + 1)))
-		strncpy(s->output_file, output_file, strlen(output_file)+1);
+	if (output_file)
+		s->output_file = strdup(output_file);
 }
 
 struct yall_subsystem *remove_subsystem(const char *name)

@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -37,10 +37,12 @@
 #include "yall/debug.h"
 
 #include "version.h"
-#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) "." STRINGIFY(YALL_PATCH)
+#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) \
+	"." STRINGIFY(YALL_PATCH)
 
 static uint32_t version = (YALL_MAJOR << 16) | (YALL_MINOR << 8) | YALL_PATCH;
-static const char *version_string = "yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
+static const char *version_string =
+	"yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
 
 uint32_t yall_get_version(void)
 {
@@ -66,7 +68,8 @@ uint8_t yall_init(void)
 
 	++initialized;
 
-	if ((ret = writer_init()))
+	ret = writer_init();
+	if (ret)
 		goto err;
 
 	config_setup();
@@ -261,7 +264,7 @@ uint8_t yall_close(void)
 		goto end;
 	}
 
-	if (1 == initialized) {
+	if (initialized == 1) {
 		_YALL_DBG_INFO("Close library");
 		yall_disable_debug();
 		writer_close();
@@ -277,5 +280,6 @@ end:
 
 void yall_close_all(void)
 {
-	for ( ; yall_close() != YALL_NOT_INIT ; ) ;
+	for ( ; yall_close() != YALL_NOT_INIT ; )
+		;
 }

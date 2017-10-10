@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -54,13 +54,9 @@ uint8_t writer_init(void)
 		ret = YALL_SEM_INIT_ERR;
 	}
 #elif _WIN32
-	if ((file_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
-		_YALL_DBG_ERR("Could not lock mutex.");
-		ret = YALL_SEM_INIT_ERR;
-		goto end;
-	}
-
-	if ((console_sem = CreateMutex(NULL, FALSE, NULL)) == NULL) {
+	file_sem = CreateMutex(NULL, FALSE, NULL)
+	console_sem = CreateMutex(NULL, FALSE, NULL);
+	if (! file_sem || ! console_sem) {
 		_YALL_DBG_ERR("Could not lock mutex.");
 		ret = YALL_SEM_INIT_ERR;
 		goto end;

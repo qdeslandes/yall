@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -64,9 +64,9 @@ static char call_header_format[YALL_HEADER_LEN] = { 0 };
 
 /*
  * is_modifier : returns true is the given character is a yall modifier, false
- * 	otherwise. <match> is a pointer to an element of the matches array, it
- * 	is used to order the modifier set in the header, and replace them
- * 	properly during the header generation.
+ *	otherwise. <match> is a pointer to an element of the matches array, it
+ *	is used to order the modifier set in the header, and replace them
+ *	properly during the header generation.
  */
 static inline bool is_modifier(char c, int8_t *match)
 {
@@ -85,7 +85,6 @@ static inline bool is_modifier(char c, int8_t *match)
 		break;
 	default:
 		return false;
-		break;
 	}
 
 	return true;
@@ -93,7 +92,7 @@ static inline bool is_modifier(char c, int8_t *match)
 
 /*
  * set_date : fill the <date> string pointer with the current date time,
- * 	formatted in a generic way.
+ *	formatted in a generic way.
  */
 static void set_date(char *date)
 {
@@ -117,8 +116,8 @@ static void set_date(char *date)
 
 /*
  * set_matches_and_header : from an <header_type>, it match the proper <header>
- * 	and <matches> array. This avoid redundant code to manage std_header and
- * 	call_header.
+ *	and <matches> array. This avoid redundant code to manage std_header and
+ *	call_header.
  */
 static void set_matches_and_header(enum header_type hdr_type,
 	const char **header, const int8_t **matches)
@@ -158,12 +157,14 @@ void header_compile_format(enum header_type hdr_type, char *format)
 		if (*format == '%')
 			seek_modifier = true;
 
-		if (allow_modifier && is_modifier(*format, &matches[match_idx])) {
+		if (allow_modifier && is_modifier(*format,
+			&matches[match_idx])) {
 			++match_idx;
 			*hdr++ = 's';
 
-			if (MATCHES_SIZE <= match_idx) {
-				_YALL_DBG_ERR("The header modifiers array is full.");
+			if (match_idx > MATCHES_SIZE) {
+				_YALL_DBG_ERR(
+					"The header modifiers array is full.");
 				allow_modifier = false;
 			}
 		} else {
@@ -186,12 +187,12 @@ void fill_header_content(struct header_content *hc, const char *subsystem,
 
 /*
  * generate_hdr : main function handling the header generation, the header
- * 	format used depend of <hdr_type>. <buffer> will store the generated
- * 	header, it won't write more than <len> (including the nul terminating
- * 	character). <hc> can't be NULL.
- * 	This function can be used as snprintf and friends, as if <len> is equals
- * 	to 0, the number of characters that SHOULD HAVE been wrote will be
- * 	returned.
+ *	format used depend of <hdr_type>. <buffer> will store the generated
+ *	header, it won't write more than <len> (including the nul terminating
+ *	character). <hc> can't be NULL.
+ *	This function can be used as snprintf and friends, as if <len> is equals
+ *	to 0, the number of characters that SHOULD HAVE been wrote will be
+ *	returned.
  */
 static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 	struct header_content *hc)
