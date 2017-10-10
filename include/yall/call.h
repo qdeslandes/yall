@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -64,7 +64,8 @@ struct yall_call_data_line *remove_first_line(struct yall_call_data *d);
  * call_data_to_buffer : fill the <buffer> of size <len> with the data of <d>.
  *      None of theses pointers can be NULL.
  */
-void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d);
+void convert_data_to_message(char *buffer, size_t len,
+	struct yall_call_data *d);
 
 /*
  * yall_call_set_header : called by the user's formatter function, it allow to

@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -57,26 +57,22 @@
 
 #ifndef __cplusplus
 #	define _YALL_LOG(subsystem, log_level, ...) \
-		do { \
-			yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__); \
-		} while (0)
+		yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__)
 
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-	do { \
-		yall_call_log(subsystem, log_level, FUNCTION, function, args); \
-	} while (0)
+		yall_call_log(subsystem, log_level, FUNCTION, function, args)
 #else
 #	define _YALL_LOG(subsystem, log_level, msg) \
 		do { \
 			std::ostringstream oss; \
 			oss << msg; \
-			yall_log(subsystem, log_level, FUNCTION, oss.str().c_str()); \
+			yall_log(subsystem, log_level, FUNCTION, \
+				oss.str().c_str()); \
 		} while (0)
 
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-		do { \
-			Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, function, args); \
-		} while (0)
+		Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
+			function, args)
 #endif
 
 #define YALL_EMERG(subsystem, ...)      \

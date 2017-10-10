@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -33,19 +33,19 @@
 
 /*
  * generate_message : create the log message. It fills <buffer> we given data
- *      and specific format. No pointer argument can be NULL, but <args> can be
- *      empty.
- * 	Returns the number of characters wrote. It works the same way as
- * 	snprintf and friends as if <len> equals 0, it returns the number of
- * 	characters than would have been wrote.
+ *	and specific format. No pointer argument can be NULL, but <args> can be
+ *	empty.
+ *	Returns the number of characters wrote. It works the same way as
+ *	snprintf and friends as if <len> equals 0, it returns the number of
+ *	characters than would have been wrote.
  */
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args);
 
 /*
  * generate_call_msg : create the log message from the call data. The call_data
- * 	are freed after use.
- * 	<buffer> and <d> can't be NULL.
+ *	are freed after use.
+ *	<buffer> and <d> can't be NULL.
  */
 void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d);
 

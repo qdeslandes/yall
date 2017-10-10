@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -46,19 +46,24 @@
 	void *_tests_malloc(size_t size);
 	int _tests_fprintf(FILE *stream, const char *format, ...);
 	int _tests_snprintf(char *str, size_t size, const char *format, ...);
-	int _tests_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+	int _tests_vsnprintf(char *str, size_t size, const char *format,
+		va_list ap);
 	size_t _tests_strlen(const char *s);
 
 #       ifdef __linux__
 #	       define sem_init    _tests_sem_init
 #	       define sem_wait    _tests_sem_wait
-		int _tests_sem_init(sem_t *sem, int pshared, unsigned int value);
+		int _tests_sem_init(sem_t *sem, int pshared,
+			unsigned int value);
 		int _tests_sem_wait(sem_t *sem);
 #       elif _WIN32
 #	       define CreateMutex _tests_CreateMutex
 #	       define WaitForSingleObject _tests_WaitForSingleObject
-		HANDLE _tests_CreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName);
-		DWORD _tests_WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
+		HANDLE _tests_CreateMutex(
+			LPSECURITY_ATTRIBUTES lpMutexAttributes,
+			BOOL bInitialOwner, LPCTSTR lpName);
+		DWORD _tests_WaitForSingleObject(HANDLE hHandle,
+			DWORD dwMilliseconds);
 #       endif
 #endif
 
@@ -88,22 +93,48 @@ _YALL_PUBLIC bool yall_is_debug(void);
 #       include <stdio.h>
 #       include "yall/log.h"
 
-#       define _YALL_DBG_EMERG(...)    \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_emerg, ##__VA_ARGS__)
-#       define _YALL_DBG_ALERT(...)    \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_alert, ##__VA_ARGS__)
-#       define _YALL_DBG_CRIT(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_crit, ##__VA_ARGS__)
-#       define _YALL_DBG_ERR(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_err, ##__VA_ARGS__)
-#       define _YALL_DBG_WARNING(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_warning, ##__VA_ARGS__)
-#       define _YALL_DBG_NOTICE(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_notice, ##__VA_ARGS__)
-#       define _YALL_DBG_INFO(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_info, ##__VA_ARGS__)
-#       define _YALL_DBG_DEBUG(...) \
-		if (yall_is_debug()) _YALL_LOG("yall", yall_debug, ##__VA_ARGS__)
+#       define _YALL_DBG_EMERG(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_ALERT(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_CRIT(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_ERR(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_err, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_WARNING(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_warning, \
+					##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_NOTICE(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_INFO(...) do { \
+			if (yall_is_debug()) { \
+				_YALL_LOG("yall", yall_info, ##__VA_ARGS__); \
+			} \
+		} while (0)
+#       define _YALL_DBG_DEBUG(...) do { \
+			if (yall_is_debug()) \
+				_YALL_LOG("yall", yall_debug, \
+					##__VA_ARGS__); { \
+			} \
+		} while (0)
 #else
 
 #       define _YALL_DBG_EMERG(...)
