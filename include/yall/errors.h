@@ -25,15 +25,15 @@
 #ifndef _YALL_ERRORS_H
 #define _YALL_ERRORS_H
 
-#define YALL_OK                 0x00
+#define YALL_OK		 0x00
 
 #define YALL_ALREADY_INIT       0x10
-#define YALL_NOT_INIT           0x11
+#define YALL_NOT_INIT	   0x11
 #define YALL_SEM_INIT_ERR       0x12
-#define YALL_NO_MEM             0x13
+#define YALL_NO_MEM	     0x13
 #define YALL_LOG_LEVEL_TOO_LOW  0x14
 
-#define YALL_NO_NAME            0x20
+#define YALL_NO_NAME	    0x20
 
 #define YALL_FILE_LOCK_ERR      0x30
 #define YALL_FILE_OPEN_ERR      0x31

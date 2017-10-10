@@ -30,7 +30,7 @@
 #elif _WIN32
 #       define _YALL_PUBLIC     __declspec(dllexport)
 #       if (_MSC_VER < 1900)
-#               define snprintf _snprintf
+#	       define snprintf _snprintf
 #       endif
 #endif
 

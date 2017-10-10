@@ -83,10 +83,10 @@ _YALL_PUBLIC uint8_t yall_is_init(void);
  *      Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        const char *format,
-        ...);
+	enum yall_log_level log_level,
+	const char *function,
+	const char *format,
+	...);
 
 /*
  * yall_call_log : another logging function which call the given <function>
@@ -98,10 +98,10 @@ _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
  *      <function> can't be NULL.
  */
 _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function_name,
-        void (*formatter)(yall_call_data *d, const void *args),
-        const void *args);
+	enum yall_log_level log_level,
+	const char *function_name,
+	void (*formatter)(yall_call_data *d, const void *args),
+	const void *args);
 
 /*
  * yall_set_subsystem : this is the main subsystems function. This function
@@ -114,10 +114,10 @@ _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
  *      <name> parameter must be a non NULL, NULL terminated string.
  */
 _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
-        const char *parent,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file);
+	const char *parent,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file);
 
 /*
  * yall_close : close all the yall library set up. The function fail only

@@ -44,9 +44,9 @@ uint8_t writer_init(void);
  *      is equals to yall_file_output or yall_both_output.
  */
 uint8_t write_msg(enum yall_output_type output_type,
-        enum yall_log_level log_level,
-        const char *output_file,
-        const char *msg);
+	enum yall_log_level log_level,
+	const char *output_file,
+	const char *msg);
 
 /*
  * writer_destroy : destroy all the writers semaphores.

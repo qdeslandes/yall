@@ -44,40 +44,40 @@ extern HANDLE file_sem;
 
 uint8_t write_log_file(const char *file, const char *msg)
 {
-        uint32_t sem_ret = 0;
-        uint8_t ret = YALL_OK;
+	uint32_t sem_ret = 0;
+	uint8_t ret = YALL_OK;
 
 #ifdef __linux__
-        sem_ret = sem_wait(&file_sem);
+	sem_ret = sem_wait(&file_sem);
 #elif _WIN32
-        sem_ret = WaitForSingleObject(file_sem, INFINITE);
+	sem_ret = WaitForSingleObject(file_sem, INFINITE);
 #endif
 
-        if (sem_ret != 0) {
-                ret = YALL_FILE_LOCK_ERR;
-                goto end;
-        }
+	if (sem_ret != 0) {
+		ret = YALL_FILE_LOCK_ERR;
+		goto end;
+	}
 
-        FILE *f = fopen(file, "a");
+	FILE *f = fopen(file, "a");
 
-        if (f) {
-                fprintf(f, "%s", msg);
-                fclose(f);
-        } else {
-                ret = YALL_FILE_OPEN_ERR;
-        }
+	if (f) {
+		fprintf(f, "%s", msg);
+		fclose(f);
+	} else {
+		ret = YALL_FILE_OPEN_ERR;
+	}
 
 #ifdef __linux__
-        sem_post(&file_sem);
+	sem_post(&file_sem);
 #elif _WIN32
-        ReleaseMutex(file_sem);
+	ReleaseMutex(file_sem);
 #endif
 
 end:
-        return ret;
+	return ret;
 }
 
 void delete_old_log_file(const char *filepath)
 {
-        remove(filepath);
+	remove(filepath);
 }

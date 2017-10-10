@@ -33,14 +33,14 @@
 #define DEFAULT_LINE_SIZE       1024
 
 struct yall_call_data_line {
-        char *content;
-        struct yall_call_data_line *next;
+	char *content;
+	struct yall_call_data_line *next;
 };
 
 typedef struct yall_call_data {
-        uint16_t message_size;
-        char *header;
-        struct yall_call_data_line *lines;
+	uint16_t message_size;
+	char *header;
+	struct yall_call_data_line *lines;
 } yall_call_data;
 
 /*
@@ -73,9 +73,9 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
  *      Both <d> and <format> parameters can't be NULL.
  */
 _YALL_PUBLIC void yall_call_set_header(
-        yall_call_data *d,
-        const char *format,
-        ...);
+	yall_call_data *d,
+	const char *format,
+	...);
 
 /*
  * yall_call_add_line : called by the user's formatter function, it allow to
@@ -84,8 +84,8 @@ _YALL_PUBLIC void yall_call_set_header(
  *      be NULL.
  */
 _YALL_PUBLIC void yall_call_add_line(
-        yall_call_data *d,
-        uint8_t indent,
-        const char *format, ...);
+	yall_call_data *d,
+	uint8_t indent,
+	const char *format, ...);
 
 #endif

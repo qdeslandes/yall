@@ -44,81 +44,81 @@ static const char *version_string = "yall, Quentin <Naccyde> Deslandes, version 
 
 uint32_t yall_get_version(void)
 {
-        return version;
+	return version;
 }
 
 const char *yall_get_version_string(void)
 {
-        return version_string;
+	return version_string;
 }
 
 static uint16_t initialized = 0;
 
 uint8_t yall_init(void)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (initialized) {
-                ++initialized;
-                ret = YALL_ALREADY_INIT;
-                goto end;
-        }
+	if (initialized) {
+		++initialized;
+		ret = YALL_ALREADY_INIT;
+		goto end;
+	}
 
-        ++initialized;
+	++initialized;
 
-        if ((ret = writer_init()))
-                goto err;
+	if ((ret = writer_init()))
+		goto err;
 
 	config_setup();
 
 end:
-        return ret;
+	return ret;
 err:
-        --initialized;
-        return ret;
+	--initialized;
+	return ret;
 }
 
 uint8_t yall_is_init(void)
 {
-        return initialized;
+	return initialized;
 }
 
 uint8_t yall_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        const char *format,
-        ...)
+	enum yall_log_level log_level,
+	const char *function,
+	const char *format,
+	...)
 {
 	// TODO : prefix structs with "yall"
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 	char *buff = NULL;
 	va_list args, args_cpy;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
 	struct header_content hc = { 0 };
-        struct yall_subsystem_params p = { 0 };
+	struct yall_subsystem_params p = { 0 };
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        /*
-         * Find the subsystem's parameters. Useless to get the subsystem, or
-         * to know if it is found. If the subsystem is not found, we use the
-         * default parameters.
-         */
-        get_subsystem(subsystem, &p);
+	/*
+	 * Find the subsystem's parameters. Useless to get the subsystem, or
+	 * to know if it is found. If the subsystem is not found, we use the
+	 * default parameters.
+	 */
+	get_subsystem(subsystem, &p);
 
-        if (p.status == yall_subsys_disable) {
-                ret = YALL_SUBSYS_DISABLED;
-                goto end;
-        }
+	if (p.status == yall_subsys_disable) {
+		ret = YALL_SUBSYS_DISABLED;
+		goto end;
+	}
 
-        if (log_level < p.log_level) {
-                ret = YALL_LOG_LEVEL_TOO_LOW;
-                goto end;
-        }
+	if (log_level < p.log_level) {
+		ret = YALL_LOG_LEVEL_TOO_LOW;
+		goto end;
+	}
 
 	fill_header_content(&hc, subsystem, log_level, function);
 
@@ -148,55 +148,55 @@ uint8_t yall_log(const char *subsystem,
 	 * the log buffer, the remaining buff length and the arguments.
 	 */
 	generate_std_msg(&buff[hdr_len], buff_len - hdr_len, format, args);
-        va_end(args);
+	va_end(args);
 
-        // Write message
-        ret = write_msg(p.output_type, log_level, p.output_file, buff);
+	// Write message
+	ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(buff);
-        return ret;
+	free(buff);
+	return ret;
 }
 
 uint8_t yall_call_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function_name,
-        void (*formatter)(yall_call_data *d, const void *args),
-        const void *args)
+	enum yall_log_level log_level,
+	const char *function_name,
+	void (*formatter)(yall_call_data *d, const void *args),
+	const void *args)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 	char *buff = NULL;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
-        struct yall_call_data d = { 0 };
+	struct yall_call_data d = { 0 };
 	struct header_content hc = { 0 };
-        struct yall_subsystem_params p = { 0 };
+	struct yall_subsystem_params p = { 0 };
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        get_subsystem(subsystem, &p);
+	get_subsystem(subsystem, &p);
 
-        if (p.status == yall_subsys_disable) {
-                ret = YALL_SUBSYS_DISABLED;
-                goto end;
-        }
+	if (p.status == yall_subsys_disable) {
+		ret = YALL_SUBSYS_DISABLED;
+		goto end;
+	}
 
-        if (log_level < p.log_level) {
-                ret = YALL_LOG_LEVEL_TOO_LOW;
-                goto end;
-        }
+	if (log_level < p.log_level) {
+		ret = YALL_LOG_LEVEL_TOO_LOW;
+		goto end;
+	}
 
-        init_call_data(&d);
+	init_call_data(&d);
 
 	/*
 	 * Detailled informations about the following calls can be found inside
 	 * the sources of yall_log() function.
 	 */
 
-        formatter(&d, args);
+	formatter(&d, args);
 
 	fill_header_content(&hc, subsystem, log_level, function_name);
 
@@ -208,74 +208,74 @@ uint8_t yall_call_log(const char *subsystem,
 	generate_call_hdr(buff, hdr_len + 1, &hc);
 	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
 
-        ret = write_msg(p.output_type, log_level, p.output_file, buff);
+	ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(buff);
-        return ret;
+	free(buff);
+	return ret;
 }
 
 uint8_t yall_set_subsystem(const char *name,
-        const char *parent,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file)
+	const char *parent,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        if (! name) {
-                ret = YALL_NO_NAME;
-                goto end;
-        }
+	if (! name) {
+		ret = YALL_NO_NAME;
+		goto end;
+	}
 
-        struct yall_subsystem *s = remove_subsystem(name);
+	struct yall_subsystem *s = remove_subsystem(name);
 
-        if (! s) {
-                s = create_subsystem(name, log_level, output_type, output_file);
+	if (! s) {
+		s = create_subsystem(name, log_level, output_type, output_file);
 
-                if (! s) {
-                        ret = YALL_CANT_CREATE_SUBSYS;
-                        goto end;
-                }
-        } else {
-                update_subsystem(s, log_level, output_type, output_file);
-        }
+		if (! s) {
+			ret = YALL_CANT_CREATE_SUBSYS;
+			goto end;
+		}
+	} else {
+		update_subsystem(s, log_level, output_type, output_file);
+	}
 
-        add_subsystem(parent, s);
+	add_subsystem(parent, s);
 
 end:
-        return ret;
+	return ret;
 }
 
 uint8_t yall_close(void)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        if (1 == initialized) {
-                _YALL_DBG_INFO("Close library");
-                yall_disable_debug();
-                writer_close();
-                free_subsystems();
-                initialized = 0;
-        } else {
-                --initialized;
-        }
+	if (1 == initialized) {
+		_YALL_DBG_INFO("Close library");
+		yall_disable_debug();
+		writer_close();
+		free_subsystems();
+		initialized = 0;
+	} else {
+		--initialized;
+	}
 
 end:
-        return ret;
+	return ret;
 }
 
 void yall_close_all(void)
 {
-        for ( ; yall_close() != YALL_NOT_INIT ; ) ;
+	for ( ; yall_close() != YALL_NOT_INIT ; ) ;
 }

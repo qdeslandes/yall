@@ -98,12 +98,12 @@ static inline bool is_modifier(char c, int8_t *match)
 static void set_date(char *date)
 {
 	struct tm tm;
-        time_t t = time(NULL);
+	time_t t = time(NULL);
 
-        #ifdef __linux__
-        localtime_r(&t, &tm);
-        #else
-        localtime_s(&tm, &t);
+	#ifdef __linux__
+	localtime_r(&t, &tm);
+	#else
+	localtime_s(&tm, &t);
 	#endif
 
 	snprintf(date, YALL_DATE_LONG_LEN, "%04d-%02d-%02d %02d:%02d:%02d",
@@ -211,14 +211,14 @@ static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 	};
 
 	// TODO : the way the header is printed is ABSOLUTELY BARBARIC
-        wrote = snprintf(buffer, len, hdr, ordered_content[matches[0]],
+	wrote = snprintf(buffer, len, hdr, ordered_content[matches[0]],
 		ordered_content[matches[1]], ordered_content[matches[2]],
 		ordered_content[matches[3]], ordered_content[matches[4]],
 		ordered_content[matches[5]], ordered_content[matches[6]],
 		ordered_content[matches[7]], ordered_content[matches[8]],
 		ordered_content[matches[9]]);
 
-        return wrote;
+	return wrote;
 }
 
 size_t generate_std_hdr(char *buffer, size_t len, struct header_content *hc)
