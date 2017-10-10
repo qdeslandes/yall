@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -44,13 +44,17 @@ void init_call_data(struct yall_call_data *d)
 
 void add_line(struct yall_call_data *d, char *content)
 {
-	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
+	struct yall_call_data_line *l = NULL;
+
+	l = malloc(sizeof(struct yall_call_data_line));
 
 	if (d->lines == NULL) {
 		d->lines = l;
 	} else {
 		struct yall_call_data_line *tmp = d->lines;
-		for ( ; tmp->next; tmp = tmp->next) ;
+
+		for ( ; tmp->next; tmp = tmp->next)
+			;
 		tmp->next = l;
 	}
 
@@ -72,12 +76,14 @@ struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 
 void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 {
+	struct yall_call_data_line *l = NULL;
+
 	snprintf(buffer, len, "%s", d->header);
 	free(d->header);
 
-	struct yall_call_data_line *l = NULL;
 	while ((l = remove_first_line(d))) {
 		size_t curr_len = strlen(buffer);
+
 		snprintf(&buffer[curr_len], len - curr_len, l->content);
 
 		free(l->content);
@@ -87,14 +93,15 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
 {
+	va_list args;
+	// Create the proper format with \n
+	char *_format = malloc(strlen(format) + 2);
+
 	if (d->header)
 		d->message_size -= strlen(d->header);
 
-	// Create the proper format with \n
-	char *_format = malloc(strlen(format) + 2);
 	snprintf(_format, strlen(format) + 2, "%s%c", format, '\n');
 
-	va_list args;
 	va_start(args, format);
 
 	vsnprintf(d->header, DEFAULT_LINE_SIZE, _format, args);
@@ -105,23 +112,23 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 	free(_format);
 }
 
-void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format, ...)
+void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
+	...)
 {
-	++indent; // To, defaultly, set all line at 1 tab
-
-	char *line_content = malloc(DEFAULT_LINE_SIZE);
-
+	va_list args;
 	uint8_t i = 0;
 	uint8_t tab_width = yall_config_get_tab_width();
+	char *line_content = malloc(DEFAULT_LINE_SIZE);
+
+	++indent; // To, defaultly, set all line at 1 tab
+
 	for ( ; i < tab_width * indent; ++i)
 		line_content[i] = ' ';
 
 	// Create the message line
-	va_list args;
 	va_start(args, format);
-
-	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE - tab_width * indent, format, args);
-
+	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE - tab_width * indent,
+		format, args);
 	va_end(args);
 
 	// Manage \n
