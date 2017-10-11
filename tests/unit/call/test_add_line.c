@@ -22,28 +22,26 @@ Test(call, test_add_line0)
 
 Test(call, test_add_line1)
 {
-        int line = 0;
         struct yall_call_data d = { 0 };
 
-        add_line(&d, "%d", line);
+        add_line(&d, "0");
         cr_assert_str_eq(d.lines->content, "1");
         cr_assert_eq(d.lines->next, NULL);
         
-        add_line(&d, "%d", 542);
+        add_line(&d, "572");
         cr_assert_str_eq(d.lines->next->content, "542");
         cr_assert_eq(d.lines->next->next, NULL);
 }
 
 Test(call, test_add_line2)
 {
-        char *line = "hello";
         struct yall_call_data d = { 0 };
 
-        add_line(&d, "%s", line);
+        add_line(&d, "hello");
         cr_assert_str_eq(d.lines->content, "hello");
         cr_assert_eq(d.lines->next, NULL);
 
-        add_line(&d, "%s", "world");
+        add_line(&d, "world");
         cr_assert_str_eq(d.lines->next->content, "world");
         cr_assert_eq(d.lines->next->next, NULL);
 }

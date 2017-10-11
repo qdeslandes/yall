@@ -5,21 +5,86 @@
 #
 # CMake configuration for unit testing
 #
+option(PROJECT-UNIT-MODULE_CALL "Enable unit test on call.c sources" ON)
+option(PROJECT-UNIT-MODULE_CONFIG "Enable unit test on config.c sources" ON)
+option(PROJECT-UNIT-MODULE_CONSOLE "Enable unit test on console.c sources" ON)
+option(PROJECT-UNIT-MODULE_DEBUG "Enable unit test on debug.c sources" ON)
+option(PROJECT-UNIT-MODULE_FILE "Enable unit test on file.c sources" ON)
+option(PROJECT-UNIT-MODULE_HEADER "Enable unit test on header.c sources" ON)
+option(PROJECT-UNIT-MODULE_LOG_LEVEL "Enable unit test on log_level.c sources" ON)
+option(PROJECT-UNIT-MODULE_MESSAGE "Enable unit test on message.c sources" ON)
+option(PROJECT-UNIT-MODULE_SUBSYSTEM "Enable unit test on subsystem.c sources" ON)
+option(PROJECT-UNIT-MODULE_WRITER "Enable unit test on writer.c sources" ON)
+option(PROJECT-UNIT-MODULE_YALL "Enable unit test on yall.c sources" ON)
 
-file(GLOB_RECURSE PROJECT_UNIT_SRCS ./*.c)
+file(GLOB_RECURSE PROJECT_UNIT_SRCS helpers/*.c)
 file(GLOB_RECURSE PROJECT_SRCS ${CMAKE_SOURCE_DIR}/src/*.c)
 
+if (PROJECT-UNIT-MODULE_CALL)
+        file(GLOB_RECURSE _SRCS call/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_CONFIG)
+        file(GLOB_RECURSE _SRCS config/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_CONSOLE)
+        file(GLOB_RECURSE _SRCS console/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_DEBUG)
+        file(GLOB_RECURSE _SRCS debug/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_FILE)
+        file(GLOB_RECURSE _SRCS file/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_HEADER)
+        file(GLOB_RECURSE _SRCS header/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_LOG_LEVEL)
+        file(GLOB_RECURSE _SRCS log_level/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_MESSAGE)
+        file(GLOB_RECURSE _SRCS message/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_SUBSYSTEM)
+        file(GLOB_RECURSE _SRCS subsystem/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_WRITER)
+        file(GLOB_RECURSE _SRCS writer/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
+if (PROJECT-UNIT-MODULE_YALL)
+        file(GLOB_RECURSE _SRCS yall/*.c)
+        set(PROJECT_UNIT_SRCS ${PROJECT_UNIT_SRCS} ${_SRCS})
+endif ()
+
 set(PROJECT_UNIT_OUTPUT_NAME ${PROJECT_NAME}_unit-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
-set(PROJECT_SRCS_COMPILE_FLAGS "-DYALL_UNIT")
+set(PROJECT_SRCS_COMPILE_FLAGS "-DYALL_UNIT -Dstatic=\"\" -Dinline=\"\"")
 
-set_source_files_properties(${PROJECT_SRCS} PROPERTIES COMPILE_DEFINITIONS static=)
-
-IF (UNIX)# Build flags
+IF (UNIX)
+        # Build flags
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
         set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
 
-        if (PROJECT_COVERAGE)
+        if (PROJECT-MISC_COVERAGE)
                 # This is used to enable coverage analyse only on yall sources
                 set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
         endif ()
@@ -71,7 +136,7 @@ add_custom_target(unit
   COMMENT "Run builded unit tests"
 )
 
-if (PROJECT_COVERAGE)
+if (PROJECT-MISC_COVERAGE)
         add_custom_target(coverage_prepare
                 COMMAND mkdir -p coverage
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
