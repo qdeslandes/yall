@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "yall/errors.h"
 #include "yall/debug.h"
@@ -68,7 +69,7 @@ static char call_header_format[YALL_HEADER_LEN] = { 0 };
  *	is used to order the modifier set in the header, and replace them
  *	properly during the header generation.
  */
-static inline bool is_modifier(char c, int8_t *match)
+static inline bool is_modifier(char c, enum yall_matches *match)
 {
 	switch (c) {
 	case 's':
@@ -120,7 +121,7 @@ static void set_date(char *date)
  *	call_header.
  */
 static void set_matches_and_header(enum header_type hdr_type,
-	const char **header, const int8_t **matches)
+	char **header, enum yall_matches **matches)
 {
 	switch (hdr_type) {
 	case std_header:
@@ -145,7 +146,7 @@ void header_compile_format(enum header_type hdr_type, char *format)
 	int hdr_len = 0;
 	int match_idx = 0;
 	char *hdr = NULL;
-	int8_t *matches = NULL;
+	enum yall_matches *matches = NULL;
 	bool seek_modifier = false;
 	bool allow_modifier = true;
 
@@ -199,7 +200,7 @@ static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 {
 	size_t wrote = 0;
 	char *hdr = NULL;
-	int8_t *matches = NULL;
+	enum yall_matches *matches = NULL;
 
 	set_matches_and_header(hdr_type, &hdr, &matches);
 

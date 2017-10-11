@@ -52,8 +52,8 @@ _YALL_PUBLIC const char *yall_config_get_std_header_template(void);
 
 _YALL_PUBLIC void yall_config_set_call_header_template(
 	const char *call_header_template);
-_YALL_PUBLIC void yall_config_reset_call__header_template(void);
-_YALL_PUBLIC const char *yall_config_call__std_header_template(void);
+_YALL_PUBLIC void yall_config_reset_call_header_template(void);
+_YALL_PUBLIC const char *yall_config_call_std_header_template(void);
 
 _YALL_PUBLIC void yall_config_set_tab_width(uint8_t tab_width);
 _YALL_PUBLIC void yall_config_reset_tab_width(void);

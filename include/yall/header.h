@@ -43,7 +43,7 @@ struct header_content {
 	const char *subsystem;
 	const char *log_level;
 	const char *function_name;
-	const char date_long[YALL_DATE_LONG_LEN];
+	char date_long[YALL_DATE_LONG_LEN];
 };
 
 /*
