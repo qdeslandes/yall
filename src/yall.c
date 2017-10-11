@@ -269,6 +269,7 @@ uint8_t yall_close(void)
 		yall_disable_debug();
 		writer_close();
 		free_subsystems();
+		config_clean();
 		initialized = 0;
 	} else {
 		--initialized;

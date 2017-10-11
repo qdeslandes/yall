@@ -39,6 +39,14 @@ enum header_type {
 	call_header
 };
 
+enum yall_matches {
+	empty,
+	subsystem,
+	log_level,
+	function,
+	date
+};
+
 struct header_content {
 	const char *subsystem;
 	const char *log_level;

@@ -50,14 +50,6 @@
 #define MATCHES_SIZE	10
 #define NBR_MODIFIERS	5	// The first index returns an empty string
 
-enum yall_matches {
-	empty,
-	subsystem,
-	log_level,
-	function,
-	date
-};
-
 static enum yall_matches std_matches[MATCHES_SIZE] = { 0 };
 static enum yall_matches call_matches[MATCHES_SIZE] = { 0 };
 static char std_header_format[YALL_HEADER_LEN] = { 0 };
@@ -142,6 +134,7 @@ static void set_matches_and_header(enum header_type hdr_type,
 void header_compile_format(enum header_type hdr_type, char *format)
 {
 	// TODO : avoid using "int", use more clear type : uint16_t, ...
+	// TODO : handle successive "%"
 
 	int hdr_len = 0;
 	int match_idx = 0;
@@ -158,7 +151,7 @@ void header_compile_format(enum header_type hdr_type, char *format)
 		if (*format == '%')
 			seek_modifier = true;
 
-		if (allow_modifier && is_modifier(*format,
+		if (seek_modifier && allow_modifier && is_modifier(*format,
 			&matches[match_idx])) {
 			++match_idx;
 			*hdr++ = 's';
@@ -168,6 +161,8 @@ void header_compile_format(enum header_type hdr_type, char *format)
 					"The header modifiers array is full.");
 				allow_modifier = false;
 			}
+
+			seek_modifier = false;
 		} else {
 			*hdr++ = *format;
 		}

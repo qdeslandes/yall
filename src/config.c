@@ -32,12 +32,6 @@
 
 // TODO : set C++ wrapper for these functions
 
-struct yall_config {
-	char *std_header_template;
-	char *call_header_template;
-	uint8_t tab_width;
-};
-
 static const struct yall_config default_config = {
 	.std_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
 	.call_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
@@ -55,6 +49,17 @@ void config_setup(void)
 	yall_config_reset_std_header_template();
 	yall_config_reset_call_header_template();
 	yall_config_reset_tab_width();
+}
+
+void config_clean(void)
+{
+	free(current_config.std_header_template);
+	current_config.std_header_template = NULL;
+
+	free(current_config.call_header_template);
+	current_config.call_header_template = NULL;
+
+	current_config.tab_width = 0;
 }
 
 void yall_config_set_std_header_template(const char *std_header_template)

@@ -40,10 +40,21 @@
  * All these parameters can be set, reset or get'ed.
  */
 
+struct yall_config {
+	char *std_header_template;
+	char *call_header_template;
+	uint8_t tab_width;
+};
+
 /*
  * config_setup : reset the parameters to the default values.
  */
 void config_setup(void);
+
+/*
+ * config_clean : clean the allocate memory on the current configuration.
+ */
+void config_clean(void);
 
 _YALL_PUBLIC void yall_config_set_std_header_template(
 	const char *std_header_template);
@@ -53,7 +64,7 @@ _YALL_PUBLIC const char *yall_config_get_std_header_template(void);
 _YALL_PUBLIC void yall_config_set_call_header_template(
 	const char *call_header_template);
 _YALL_PUBLIC void yall_config_reset_call_header_template(void);
-_YALL_PUBLIC const char *yall_config_call_std_header_template(void);
+_YALL_PUBLIC const char *yall_config_get_call_header_template(void);
 
 _YALL_PUBLIC void yall_config_set_tab_width(uint8_t tab_width);
 _YALL_PUBLIC void yall_config_reset_tab_width(void);
