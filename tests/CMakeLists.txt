@@ -2,7 +2,7 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-if (PROJECT-TESTS_CPP_TESTS_REAL_TESTS)
+if (PROJECT-TESTS_REAL_TESTS)
 	add_subdirectory(real)
 endif ()
 
