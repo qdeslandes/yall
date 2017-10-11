@@ -54,7 +54,7 @@ uint8_t writer_init(void)
 		ret = YALL_SEM_INIT_ERR;
 	}
 #elif _WIN32
-	file_sem = CreateMutex(NULL, FALSE, NULL)
+	file_sem = CreateMutex(NULL, FALSE, NULL);
 	console_sem = CreateMutex(NULL, FALSE, NULL);
 	if (! file_sem || ! console_sem) {
 		_YALL_DBG_ERR("Could not lock mutex.");
