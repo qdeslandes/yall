@@ -12,17 +12,17 @@ set(PROJECT_OUTPUT_NAME "${PROJECT_NAME}")
 
 IF (UNIX)
         # Compile flags
-        set(_CMAKE_C_FLAGS "${_CMAKE_C_FLAGS} -pedantic -fPIC")
-        set(_CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} -g -O0")
-        set(_CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} -O3")
+        set(CMAKE_C_FLAGS "${_CMAKE_C_FLAGS} -pedantic -fPIC")
+        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} -g -O0")
+        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} -O3")
 
         # Linked libraries
         set(PROJECT_LINK_LIBRARIES)
 ELSEIF (WIN32)
         # Compile flags
-        set(_CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
-        set(_CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} /DEBUG")
-        set(_CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} /MP")
+        set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
+        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} /DEBUG")
+        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} /MP")
 
         # Linked libraries
         set(PROJECT_LINK_LIBRARIES)
@@ -33,34 +33,29 @@ if (PROJECT_CI_DEPLOY)
         set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
 endif ()
 
+# CMake logging
+message("> Add execuable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
+message(">     Compile flags       :")
+message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
+message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
+message(">     Linked libraries    : ${PROJECT_LINK_LIBRARIES}")
+
+# this is the "object library" target: compiles the sources only once
+add_library(yall OBJECT ${PROJECT_SRCS})
+
 #
 # Shared library build
 #
 IF (PROJECT_YALL_SHARED)
-        IF (UNIX)
-                set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS_DEBUG}")
-                set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS_RELEASE}")
-        ELSEIF (WIN32)
-                set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS_DEBUG} /Z7")
-                set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS_RELEASE}")
-        ENDIF ()
+        add_library(yall_shared SHARED $<TARGET_OBJECTS:yall>)
 
-
-        # CMake logging
-        message("> Add execuable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
-        message(">     Compile flags       :")
-        message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
-        message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
-        message(">     Linked libraries    : ${PROJECT_LINK_LIBRARIES}")
-
-        add_library(${PROJECT_NAME}_shared SHARED ${PROJECT_SRCS})
-        target_link_libraries(${PROJECT_NAME}_shared ${PROJECT_LINK_LIBRARIES})
-        set_target_properties(${PROJECT_NAME}_shared PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
-        set_target_properties(${PROJECT_NAME}_shared PROPERTIES
+        target_link_libraries(yall_shared ${PROJECT_LINK_LIBRARIES})
+        set_target_properties(yall_shared PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
+        set_target_properties(yall_shared PROPERTIES
                 VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
                 SONAME "${PROJECT_VERSION_MAJOR}")
 
-	install(TARGETS ${PROJECT_NAME}_shared
+	install(TARGETS yall_shared
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -70,26 +65,15 @@ ENDIF ()
 # Static library build
 #
 IF (PROJECT_YALL_STATIC)
-        IF (UNIX)
-                set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS_DEBUG}")
-                set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS_RELEASE}")
-        ELSEIF (WIN32)
-                set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS_DEBUG} /Z7")
-                set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS_RELEASE}")
-        ENDIF ()
+        add_library(yall_static STATIC $<TARGET_OBJECTS:yall>)
 
-        # CMake logging
-        message("> Add execuable ${PROJECT_NAME}_static : ${PROJECT_OUTPUT_NAME}")
-        message(">     Compile flags       :")
-        message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
-        message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
-        message(">     Linked libraries    : ${PROJECT_LINK_LIBRARIES}")
+        target_link_libraries(yall_static ${PROJECT_LINK_LIBRARIES})
+        set_target_properties(yall_static PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
+        set_target_properties(yall_static PROPERTIES
+                VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+                SONAME "${PROJECT_VERSION_MAJOR}")
 
-        add_library(${PROJECT_NAME}_static STATIC ${PROJECT_SRCS})
-        target_link_libraries(${PROJECT_NAME}_static ${PROJECT_LINK_LIBRARIES})
-        set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
-
-	install(TARGETS ${PROJECT_NAME}_static
+	install(TARGETS yall_static
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 		RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
