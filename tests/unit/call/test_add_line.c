@@ -25,11 +25,11 @@ Test(call, test_add_line1)
         struct yall_call_data d = { 0 };
 
         add_line(&d, "0");
-        cr_assert_str_eq(d.lines->content, "1");
+        cr_assert_str_eq(d.lines->content, "0");
         cr_assert_eq(d.lines->next, NULL);
         
         add_line(&d, "572");
-        cr_assert_str_eq(d.lines->next->content, "542");
+        cr_assert_str_eq(d.lines->next->content, "572");
         cr_assert_eq(d.lines->next->next, NULL);
 }
 

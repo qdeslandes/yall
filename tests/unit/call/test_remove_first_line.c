@@ -1,7 +1,5 @@
 #include "test_call.h"
 
-struct yall_call_data_line *remove_first_line(struct yall_call_data *d);
-
 /*
  * Empty lines set
  */
@@ -15,7 +13,7 @@ Test(call, test_remove_first_line0)
 /*
  * Non-empty lines set
  */
-Test(call, test_remove_first_liner1)
+Test(call, test_remove_first_line1)
 {
         struct yall_call_data d = { 3, "", NULL };
 
