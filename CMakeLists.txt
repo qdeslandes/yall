@@ -22,8 +22,8 @@ option(PROJECT_YALL_STATIC "Enable static version" ON)
 option(PROJECT-MISC_CI_DEPLOY "Special target for continuous integration deployment" OFF)
 option(PROJECT-MISC_COVERAGE "Enable unit test coverage report" OFF)
 option(PROJECT-TESTS_UNIT_TESTS "Enable unit tests build" ON)
-option(PROJECT-TESTS_REAL_TESTS "Enable real test build" ON)
-option(PROJECT-TESTS_CPP_TESTS "Enable CPP test build" ON)
+option(PROJECT-TESTS_C_TESTS "Enable C test build" ON)
+option(PROJECT-TESTS_CPP_TESTS "Enable C++ test build" ON)
 
 # CMake internal configuration
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)

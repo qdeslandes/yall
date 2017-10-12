@@ -277,9 +277,9 @@ struct yall_subsystem *remove_subsystem(const char *name)
 			subsystems = s->next;
 
 		/*
-		 * Some pointer are set to NULL here, we can not skip this step as
-		 * these pointers will be used to detect is some following subsystems
-		 * must be freed.
+		 * Some pointer are set to NULL here, we can not skip this step
+		 * as these pointers will be used to detect is some following
+		 * subsystems must be freed.
 		 */
 		s->next = NULL;
 		s->previous = NULL;
