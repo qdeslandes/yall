@@ -37,7 +37,6 @@ extern "C" {
 #include "yall/utils.h"
 #include "yall/debug.h"
 #include "yall/config.h"
-#include "yall/message.h"
 #include "yall/log_level.h"
 #include "yall/output_types.h"
 
