@@ -38,7 +38,7 @@ int main(void)
         yall_set_subsystem("io", "yall_cpp_test", yall_debug, yall_console_output, NULL);
         yall_set_subsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, NULL);
 
-        YALL_DEBUG("yall_cpp_test", "%s, %s", yall_get_version_string(), yall_get_version());
+        YALL_DEBUG("yall_cpp_test", "%s, %d", yall_get_version_string(), yall_get_version());
         YALL_DEBUG("io", "IO subsystem ready.");
         YALL_CALL_ERR("memory", memoryInfos, NULL);
 

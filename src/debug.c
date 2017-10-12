@@ -48,7 +48,7 @@ void yall_enable_debug(void)
 
 	debug = true;
 
-	_YALL_DBG_DEBUG("Debug mode activated");
+	_YALL_DBG_DEBUG("Debug mode activated.");
 #endif
 }
 
@@ -58,7 +58,7 @@ void yall_disable_debug(void)
 	if (! yall_is_init())
 		return;
 
-	_YALL_DBG_DEBUG("Debug mode disactivated");
+	_YALL_DBG_DEBUG("Debug mode disactivated.");
 
 	debug = false;
 	_free_subsystems(remove_subsystem("yall"));

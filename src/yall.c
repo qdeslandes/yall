@@ -265,7 +265,7 @@ uint8_t yall_close(void)
 	}
 
 	if (initialized == 1) {
-		_YALL_DBG_INFO("Close library");
+		_YALL_DBG_INFO("Close library.");
 		yall_disable_debug();
 		writer_close();
 		free_subsystems();
