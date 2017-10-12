@@ -1,6 +1,25 @@
 #include <iostream>
 #include <yall/Yall.hpp>
 
+class Device {
+public:
+	Device()
+	{
+		Yall::setSubsystem("device", "yall_cpp_test", yall_debug, yall_console_output, "");
+		YALL_DEBUG("device", "Creating the device.");
+	}
+
+	~Device()
+	{
+
+	}
+
+	void status()
+	{
+		YALL_INFO("device", "Current device status : operational.");
+	}
+};
+
 void memoryInfos(YallData &d, const void *args)
 {
         (void)(args);
@@ -25,10 +44,12 @@ int main(void)
 {
         #ifdef DEBUG
         Yall::enableDebug();
-        #endif
+	#endif
+	
+	Device d = Device();
         
         Yall::config().setTabWidth(4);
-        Yall::config().setStdHeaderFormat("[%d] :: %-9l : %s : \n\t");
+        Yall::config().setStdHeaderFormat("[%d] :: %-9l : %f : \n\t");
         Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
         
         Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
@@ -46,6 +67,8 @@ int main(void)
         Yall::disableSubsystem("scheduler");
         YALL_DEBUG("scheduler", "Starting process 52233.");
         Yall::enableSubsystem("scheduler");
+
+	d.status();
 
 #ifdef _WIN32
         getchar();

@@ -29,9 +29,9 @@ int main(void)
         #ifdef DEBUG
         yall_enable_debug();
         #endif
-        
+
         yall_config_set_tab_width(4);
-        yall_config_set_std_header_template("[%d] :: %-9l : %s : \n\t");
+        yall_config_set_std_header_template("[%d] :: %-9l : %f : \n\t");
         yall_config_set_call_header_template("[%d] :: %-9l : %s : ");
         
         yall_set_subsystem("yall_cpp_test", NULL, yall_debug, yall_console_output, NULL);
