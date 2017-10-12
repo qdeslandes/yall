@@ -85,9 +85,72 @@ private:
 	std::vector<std::stringstream *> _lines;
 };
 
+class YallConfig {
+public:
+	YallConfig()
+	{
+
+	}
+
+	~YallConfig()
+	{
+
+	}
+
+	/* Std header format */
+	void setStdHeaderFormat(std::string format)
+	{
+		yall_config_set_std_header_template(format.c_str());
+	}
+
+	std::string getStdHeaderFormat()
+	{
+		return std::string(yall_config_get_std_header_template());
+	}
+
+	void resetStdHeaderFormat()
+	{
+		yall_config_reset_std_header_template();
+	}
+
+	/* Call header format */
+	void setCallHeaderFormat(std::string format)
+	{
+		yall_config_set_call_header_template(format.c_str());
+	}
+
+	std::string getCallHeaderFormat()
+	{
+		return std::string(yall_config_get_call_header_template());
+	}
+
+	void resetCallHeaderFormat()
+	{
+		yall_config_reset_call_header_template();
+	}
+
+	/* Tab width */
+	void setTabWidth(int width)
+	{
+		yall_config_set_tab_width(width);
+	}
+
+	int getTabWidth()
+	{
+		return yall_config_get_tab_width();
+	}
+
+	void resetTabWidth()
+	{
+		yall_config_reset_tab_width();
+	}
+};
+
 class Yall
 {
 private:
+	YallConfig _config;
+
 	Yall()
 	{
 		yall_init();
@@ -110,7 +173,7 @@ private:
 
 	std::string _getVersionStr()
 	{
-		return yall_get_version_string();
+		return std::string(yall_get_version_string());
 	}
 
 	void _setSubsystem(const std::string name, const std::string parent,
@@ -146,7 +209,7 @@ private:
 
 	void _disableSubsystem(std::string subsystem_name)
 	{
-		yall_enable_subsystem(subsystem_name.c_str());
+		yall_disable_subsystem(subsystem_name.c_str());
 	}
 
 	void _callLog(std::string subsystem,
@@ -166,7 +229,7 @@ public:
 
 	static uint32_t getVersion()
 	{
-		return getInstance().getVersion();
+		return getInstance()._getVersion();
 	}
 
 
@@ -205,6 +268,11 @@ public:
 	static void disableSubsystem(std::string subsystem_name)
 	{
 		getInstance()._disableSubsystem(subsystem_name);
+	}
+
+	static YallConfig &config()
+	{
+		return getInstance()._config;
 	}
 
 	static void __callLog(std::string subsystem,

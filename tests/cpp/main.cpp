@@ -1,17 +1,23 @@
-#include <stdio.h>
+#include <iostream>
 #include <yall/Yall.hpp>
 
-void formatter(YallData &d, const void *args)
+void memoryInfos(YallData &d, const void *args)
 {
-        int lines = 3;
+        d.newLine(0) << "======= Backtrace: =========";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x70bfb)[0x7ff9cd0bfbfb]";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x76fc6)[0x7ff9cd0c5fc6]";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x7780e)[0x7ff9cd0c680e]";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x35940)[0x7ff9cd084940]";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x3599a)[0x7ff9cd08499a]";
+        d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf8)[0x7ff9cd06f2e8]";
 
-        d.header << (char *)args;
-        d.newLine(0) << "Total lines : " << lines;
-        d.newLine(0) << "Languages :";
-        d.newLine(1) << "C  : 0";
-        d.newLine(1) << "Go : 0";
-        d.newLine(1) << "C++0 : 3 and " << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        d.newLine(1) << "C++1 : 3 and " << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        d.newLine(0) << "======== Memory map: ========";
+        d.newLine(1) << "55d5e5d8c000-55d5e5dbe000 rw-p 00000000 00:00 0                          [heap]";
+        d.newLine(1) << "7ff9c8000000-7ff9c8021000 rw-p 00000000 00:00 0 ";
+        d.newLine(1) << "7ff9c8021000-7ff9cc000000 ---p 00000000 00:00 0 ";
+        d.newLine(1) << "7ff9cd04f000-7ff9cd1e2000 r-xp 00000000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
+        d.newLine(1) << "7ff9cd1e2000-7ff9cd3e2000 ---p 00193000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
+        
  }
 
 int main(void)
@@ -19,31 +25,26 @@ int main(void)
         #ifdef DEBUG
         Yall::enableDebug();
         #endif
+        
+        Yall::config().setTabWidth(4);
+        Yall::config().setStdHeaderFormat("[%d] :: %-9l : %s : \n\t");
+        Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
+        
+        Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
 
-        Yall::setSubsystem("test", "", yall_debug, yall_console_output, "");
-        YALL_DEBUG("test", yall_get_version_string() << " " << yall_get_version());
+        YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+        YALL_DEBUG("io", "IO subsystem ready.");
+        YALL_CALL_ERR("memory", memoryInfos, nullptr);
 
-        YALL_ERR("test", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
 
-	YALL_CALL_DEBUG("test", formatter, "Data report for today :");
-	yall_config_set_tab_width(2);
-        YALL_CALL_DEBUG("test", formatter, "Data report for today :");
-        Yall::setSubsystem("longsubsystem", "", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("azertyazertyazerty", "", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("status", "", yall_debug, yall_console_output, "");
+        YALL_ALERT("scheduler" , "Using process 7034.");
 
-        YALL_DEBUG("test", "This is a test log message");
-        YALL_WARNING("longsubsystem", "This is a test log message");
-        YALL_ERR("test", "This is a test log message");
-        YALL_ERR("azertyazertyazert", "test");
-        YALL_WARNING("absent", "This subsystem does not exists");
-        YALL_WARNING("status", "Activated");
-        yall_disable_subsystem("status");
-        YALL_ERR("status", "This should not appear");
-        yall_enable_subsystem("status");
-        YALL_ERR("status", "This should appear");
-
-        YALL_DEBUG("test", "lol");
+        Yall::disableSubsystem("scheduler");
+        YALL_DEBUG("scheduler", "Starting process 52233.");
+        Yall::enableSubsystem("scheduler");
 
 #ifdef _WIN32
         getchar();
