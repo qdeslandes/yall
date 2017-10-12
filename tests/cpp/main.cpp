@@ -3,6 +3,8 @@
 
 void memoryInfos(YallData &d, const void *args)
 {
+        (void)(args);
+
         d.newLine(0) << "======= Backtrace: =========";
         d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x70bfb)[0x7ff9cd0bfbfb]";
         d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x76fc6)[0x7ff9cd0c5fc6]";
@@ -17,7 +19,6 @@ void memoryInfos(YallData &d, const void *args)
         d.newLine(1) << "7ff9c8021000-7ff9cc000000 ---p 00000000 00:00 0 ";
         d.newLine(1) << "7ff9cd04f000-7ff9cd1e2000 r-xp 00000000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
         d.newLine(1) << "7ff9cd1e2000-7ff9cd3e2000 ---p 00193000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
-        
  }
 
 int main(void)
