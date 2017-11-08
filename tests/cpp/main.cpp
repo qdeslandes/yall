@@ -49,7 +49,7 @@ int main(void)
 	Device d = Device();
         
         Yall::config().setTabWidth(4);
-        Yall::config().setStdHeaderFormat("[%d] :: %-9l : %f : \n\t");
+        Yall::config().setStdHeaderFormat("[%d] :: %L : %f : \n\t");
         Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
         
         Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
