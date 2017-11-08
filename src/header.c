@@ -30,7 +30,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "yall/errors.h"
+#include "yall/error.h"
 #include "yall/debug.h"
 
 /*

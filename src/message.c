@@ -31,7 +31,7 @@
 #include <stddef.h>
 
 #include "yall/utils.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 #include "yall/subsystem.h"
 #include "yall/debug.h"
 #include "yall/header.h"

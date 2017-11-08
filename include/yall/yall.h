@@ -34,6 +34,7 @@ extern "C" {
 
 #include "yall/log.h"
 #include "yall/call.h"
+#include "yall/error.h"
 #include "yall/utils.h"
 #include "yall/debug.h"
 #include "yall/config.h"
@@ -69,7 +70,7 @@ _YALL_PUBLIC const char *yall_get_version_string(void);
  *      the <initialized> flag each time called.
  *      Returns a yall error code.
  */
-_YALL_PUBLIC uint8_t yall_init(void);
+_YALL_PUBLIC yall_error yall_init(void);
 
 /*
  * yall_is_init : return the number of initializations required.
@@ -81,7 +82,7 @@ _YALL_PUBLIC uint8_t yall_is_init(void);
  *      on the medium. <subsystem>, <function> and <msg> can't be NULL.
  *      Returns a yall error code.
  */
-_YALL_PUBLIC uint8_t yall_log(const char *subsystem,
+_YALL_PUBLIC yall_error yall_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function,
 	const char *format,
@@ -95,8 +96,9 @@ _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
  *      The buffer will then be displayed.
  *      The buffer length is defined by YALL_CALL_BUFF_LEN. <subsystem> and
  *      <function> can't be NULL.
+ *      Returns a yall error code.
  */
-_YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
+_YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
 	void (*formatter)(yall_call_data *d, const void *args),
@@ -111,8 +113,9 @@ _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
  *      proper parameters and inserted in the subsystems tree at the proper
  *      place.
  *      <name> parameter must be a non NULL, NULL terminated string.
+ *      Returns a yall error code.
  */
-_YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
+_YALL_PUBLIC yall_error yall_set_subsystem(const char *name,
 	const char *parent,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
@@ -125,7 +128,7 @@ _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
  *      decremented, the library is cleaned.
  *      Returns a yall error code.
  */
-_YALL_PUBLIC uint8_t yall_close(void);
+_YALL_PUBLIC yall_error yall_close(void);
 
 /*
  * yall_close_all : close the yall library for each time it has been

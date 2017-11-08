@@ -8,7 +8,7 @@
 
 #include "h_utils.h"
 #include "yall/yall.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 #include "yall/console.h"
 
 struct param_set_color {

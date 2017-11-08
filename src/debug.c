@@ -44,6 +44,11 @@ void yall_enable_debug(void)
 	 * but it will not find it, ...
 	 */
 
+	/*
+	 * TODO : what if the subsystem already exists ? Then the parameters
+	 * will be overrided by the following instruction. It could be
+	 * interesting to check availability of such subsystem.
+	 */
 	yall_set_subsystem("yall", NULL, yall_debug, yall_console_output, NULL);
 
 	debug = true;

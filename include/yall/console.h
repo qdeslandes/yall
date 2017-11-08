@@ -27,6 +27,7 @@
 
 #include <stdint.h>
 
+#include "yall/error.h"
 #include "yall/log_level.h"
 
 /*
@@ -34,7 +35,8 @@
  *      be NULL. The color of the message depend of the log level and the color
  *      associated to this log level inside the source file. Also, <log_level>
  *      must be different from yall_inherited_level.
+ * 	Returns a yall_error.
  */
-uint8_t write_log_console(enum yall_log_level log_level, const char *msg);
+yall_error write_log_console(enum yall_log_level log_level, const char *msg);
 
 #endif

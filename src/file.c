@@ -33,7 +33,6 @@
 #endif
 
 #include "yall/utils.h"
-#include "yall/errors.h"
 #include "yall/debug.h"
 
 #ifdef __linux__
@@ -42,10 +41,10 @@ extern sem_t file_sem;
 extern HANDLE file_sem;
 #endif
 
-uint8_t write_log_file(const char *file, const char *msg)
+yall_error write_log_file(const char *file, const char *msg)
 {
 	uint32_t sem_ret = 0;
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 #ifdef __linux__
 	sem_ret = sem_wait(&file_sem);

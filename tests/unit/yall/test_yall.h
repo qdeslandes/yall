@@ -10,7 +10,7 @@
 #include "h_utils.h"
 
 #include "yall/yall.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 #include "yall/subsystem.h"
 
 struct yall_subsystem *_get_subsystem(const char *name,

@@ -31,7 +31,6 @@
 #endif
 
 #include "yall/utils.h"
-#include "yall/errors.h"
 #include "yall/console.h"
 #include "yall/file.h"
 #include "yall/debug.h"
@@ -44,9 +43,9 @@ HANDLE file_sem = NULL;
 HANDLE console_sem = NULL;
 #endif
 
-uint8_t writer_init(void)
+yall_error writer_init(void)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 #ifdef __linux__
 	if (sem_init(&file_sem, 0, 1) || sem_init(&console_sem, 0, 1)) {
@@ -67,12 +66,12 @@ end:
 	return ret;
 }
 
-uint8_t write_msg(enum yall_output_type output_type,
+yall_error write_msg(enum yall_output_type output_type,
 	enum yall_log_level log_level,
 	const char *output_file,
 	const char *msg)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 	if (yall_console_output & output_type)
 		ret = write_log_console(log_level, msg);
