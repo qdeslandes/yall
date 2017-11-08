@@ -162,7 +162,7 @@ void header_compile_format(enum header_type hdr_type, char *format)
 			++match_idx;
 			*hdr++ = 's';
 
-			if (match_idx > MATCHES_SIZE) {
+			if (match_idx >= MATCHES_SIZE) {
 				_YALL_DBG_ERR(
 					"The header modifiers array is full.");
 				allow_modifier = false;
