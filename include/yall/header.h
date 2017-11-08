@@ -32,6 +32,7 @@
 
 #define YALL_HEADER_LEN		64
 #define YALL_DATE_LONG_LEN	20
+#define YALL_LINE_STR_LEN	8
 
 // TODO : check using this enum outside the library
 enum header_type {
@@ -44,6 +45,8 @@ enum yall_matches {
 	subsystem,
 	log_level,
 	function,
+	filename,
+	line,
 	date
 };
 
@@ -51,6 +54,8 @@ struct header_content {
 	const char *subsystem;
 	const char *log_level;
 	const char *function_name;
+	const char *filename;
+	char line[YALL_LINE_STR_LEN];
 	char date_long[YALL_DATE_LONG_LEN];
 };
 
@@ -67,7 +72,8 @@ void header_compile_format(enum header_type hdr_type, char *format);
  *	<hc> can't be NULL.
  */
 void fill_header_content(struct header_content *hc, const char *subsystem,
-	enum yall_log_level log_level, const char *function_name);
+	enum yall_log_level log_level, const char *function_name,
+	const char *filename, int32_t line);
 
 /*
  * generate_std_hdr : generate the standard header inside <buffer> with a

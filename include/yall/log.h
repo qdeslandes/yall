@@ -57,21 +57,21 @@
 
 #ifndef __cplusplus
 #	define _YALL_LOG(subsystem, log_level, ...) \
-		yall_log(subsystem, log_level, FUNCTION, ##__VA_ARGS__)
+		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, ##__VA_ARGS__)
 
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-		yall_call_log(subsystem, log_level, FUNCTION, function, args)
+		yall_call_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, function, args)
 #else
 #	define _YALL_LOG(subsystem, log_level, msg) \
 		do { \
 			std::ostringstream oss; \
 			oss << msg; \
-			yall_log(subsystem, log_level, FUNCTION, \
+			yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
 				oss.str().c_str()); \
 		} while (0)
 
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-		Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
+		Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
 			function, args)
 #endif
 
