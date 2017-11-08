@@ -2,7 +2,7 @@
 
 #define YALL_ERROR(code, msg) { code, msg }
 
-struct yall_errordesc {
+static struct yall_errordesc {
 	yall_error code;
 	const char *message;
 } errordesc[] = {
