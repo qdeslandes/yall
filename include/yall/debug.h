@@ -72,6 +72,11 @@
 #include "yall/yall.h"
 #include "yall/utils.h"
 
+// MSVC 12.0
+#if (_MSC_VER == 1800)
+#	define inline __inline
+#endif
+
 /*
  * yall_enable_debug : enable the debug mode on the library. This
  *      function must be called AFTER yall_init().
