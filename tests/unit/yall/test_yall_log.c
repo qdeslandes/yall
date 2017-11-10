@@ -47,19 +47,9 @@ Theory((char *s, enum yall_log_level ll, char *f, char *format), yall, test_yall
 }
 
 /*
- * Failing message string allocation
- */
-Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
-{
-        disable_malloc();
-        cr_assert_eq(yall_log("3", yall_emerg, "", ""), YALL_NO_MEM);
-        enable_malloc();
-}
-
-/*
  * Variadic parameters list
  */
-Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
         cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_OK);
         cr_assert_eq(yall_log("3", yall_emerg, "", "%X %d", 4, 3), YALL_OK);
@@ -68,7 +58,7 @@ Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clea
 /*
  * Writing message error
  */
-Test(yall, test_yall_log5, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
         disable_fprintf();
         cr_assert_eq(yall_log("0", yall_emerg, "", ""), YALL_CONSOLE_WRITE_ERR);
@@ -78,7 +68,7 @@ Test(yall, test_yall_log5, .init=tests_yall_log_setup, .fini=tests_yall_log_clea
 /*
  * Disabled subsystem
  */
-Test(yall, test_yall_log6, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log5, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
         _subsystems[0]->status = yall_subsys_disable;
 

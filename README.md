@@ -68,15 +68,28 @@ The function call mechanism has been improved to allow more flexibility and cust
 
 The yall library contain a flag which store the number of times it has been initialized. Each library initializing the library with `yall_init()` will increment this counter. This allow us to keep track of the number of library using the library at runtime. This way, if a library close yall through `yall_close()`, the other parts of the application can still use it. Once the counter fall to 0, the library is freed. The endpoint of the application can call `yall_close_all()` which will close the library regardless of the number of instances.
 
+### Configuration
+
+Some configuration functions are available, they can be called before the initialization :
+* `yall_config_set_std_header_template` : define the header placed in front of the log messages
+* `yall_config_set_call_header_template` : define the header placed in front of the call log messages
+* `yall_config_set_tab_width` : define the width (in characters) of the indentation of the call log messages
+
+All these functions allow for `reset` and `get` instead of `set`, to reset their value or get it.
+
 ### About multithreading
 
-Subsystems creation and manipulation is not thread safe. Subsystems should not be manipulated in different thread, but calling for log writing can be done from anywhere. Support for multithread subsystems creation will be done in a not so long future.
+Only the log writing functions are thread safe : `YALL_xxx` macros can be called from any thread. The formatter function can also be called from any thread (the library does not handle their atomicity).
 
 On Linux, changing a subsystem status is atomic, it can be done from concurrent threads.
 
-### C++
+### C++
 
 The `include` folder of the library contains `Yall.hpp` which defines a classe to handle Yall in a C++ way. It can be used the same way as the library, except it handle some features throughs C++ facilities, see `tests/cpp/main.cpp` for more informations.
+
+### General informations
+
+Header format is customizable, its length is hardcoded to 64 bytes, this means the format itself can't be longer than 63 characters. The resulting generated format placed in front of the log message can be longer.
 
 ### Debugging
 

@@ -16,14 +16,14 @@ set(PROJECT_VERSION_MINOR 2)
 set(PROJECT_VERSION_PATCH 0)
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 
-# Options for CI and desktop build
-option(PROJECT_CI_DEPLOY "Special target for continuous integration deployment" OFF)
-option(PROJECT_COVERAGE "Enable unit test coverage report" OFF)
+option(PROJECT_YALL "Build Yall" ON)
 option(PROJECT_YALL_SHARED "Enable shared version" ON)
 option(PROJECT_YALL_STATIC "Enable static version" ON)
-option(PROJECT_UNIT_TESTS "Enable unit tests build" ON)
-option(PROJECT_REAL_TESTS "Enable real test build" ON)
-option(PROJECT_CPP_TESTS "Enable CPP test build" ON)
+option(PROJECT-MISC_CI_DEPLOY "Special target for continuous integration deployment" OFF)
+option(PROJECT-MISC_COVERAGE "Enable unit test coverage report" OFF)
+option(PROJECT-TESTS_UNIT_TESTS "Enable unit tests build" ON)
+option(PROJECT-TESTS_C_TESTS "Enable C test build" ON)
+option(PROJECT-TESTS_CPP_TESTS "Enable C++ test build" ON)
 
 # CMake internal configuration
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
@@ -36,19 +36,20 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # Build and platform specific configuration
 include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
 
-if (CMAKE_BUILD_TYPE MATCHES Debug)
-    add_definitions(-DDEBUG)
-endif (CMAKE_BUILD_TYPE MATCHES Debug)
 
 if (UNIX)
 	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
 	set(_CMAKE_C_FLAGS "-Wall -Wextra -std=gnu11 -fvisibility=hidden")
-        set(_CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11 -fvisibility=hidden")
+    set(_CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11 -fvisibility=hidden")
 
 	if (CMAKE_COMPILER_IS_GNUCC)
 		set(COMPILER "gcc-${CMAKE_C_COMPILER_VERSION}")
 	else ()
 		set(COMPILER "gcc_unknow")
+	endif ()
+	
+	if (CMAKE_BUILD_TYPE MATCHES Debug)
+		add_definitions(-DDEBUG)
 	endif ()
 elseif (WIN32)
 	if (MSVC_VERSION EQUAL 1900)
@@ -60,10 +61,16 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
+	
+	set(_CMAKE_C_FLAGS_DEBUG "/DDEBUG")
+	set(_CMAKE_CXX_FLAGS_DEBUG "/DDEBUG")
 endif ()
 
 # Project internal configuration
 set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
-add_subdirectory(src)
+if (PROJECT_YALL)
+	add_subdirectory(src)
+endif ()
+
 add_subdirectory(tests)

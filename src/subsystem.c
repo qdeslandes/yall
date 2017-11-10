@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -34,10 +34,10 @@
 static struct yall_subsystem *subsystems = NULL;
 
 static struct yall_subsystem_params default_params = {
-        yall_warning,
-        yall_subsys_enable,
-        yall_file_output,
-        "yall_default.log"
+	yall_warning,
+	yall_subsys_enable,
+	yall_file_output,
+	"yall_default.log"
 };
 
 /*
@@ -50,44 +50,47 @@ static struct yall_subsystem_params default_params = {
  *      parameter it inherit if one of its brother has wrote them. To cover
  *      this possibility, we write the parameters in one of theses to
  *      conditions :
- *              * If the subsystem has childs. So, if we crawl the childs, the
- *              given parameters will be the parent's parameter. Wathever the
- *              depth of the parent could be.
- *              * If the current subsystem is the research subsystem.
+ *	      * If the subsystem has childs. So, if we crawl the childs, the
+ *	      given parameters will be the parent's parameter. Wathever the
+ *	      depth of the parent could be.
+ *	      * If the current subsystem is the research subsystem.
  *      This means that a subsystem could not hide it's parent values unless it
  *      is the researched subsystem.
  */
 static struct yall_subsystem *_get_subsystem(const char *name,
-        struct yall_subsystem *s,
-        struct yall_subsystem_params *params)
+	struct yall_subsystem *s,
+	struct yall_subsystem_params *params)
 {
-        for (; s; s = s->next) {
-                // Write subsystem's parameters
-                if (s->childs || strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
-                        if (params && s->log_level != yall_inherited_level)
-                                params->log_level = s->log_level;
+	for (; s; s = s->next) {
+		// Write subsystem's parameters
+		if (s->childs || strncmp(s->name, name,
+			SUBSYS_NAME_LEN-1) == 0) {
 
-                        if (params && s->status != yall_inherited_status)
-                                params->status = s->status;
+			if (params && s->log_level != yall_inherited_level)
+				params->log_level = s->log_level;
 
-                        if (params && s->output_type != yall_inherited_output)
-                                params->output_type = s->output_type;
+			if (params && s->status != yall_inherited_status)
+				params->status = s->status;
 
-                        if (params && s->output_file)
-                                params->output_file = s->output_file;
-                }
+			if (params && s->output_type != yall_inherited_output)
+				params->output_type = s->output_type;
 
-                // Is it the researched subsystem ?
-                if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
-                        return s;
+			if (params && s->output_file)
+				params->output_file = s->output_file;
+		}
 
-                struct yall_subsystem *sc = _get_subsystem(name, s->childs, params);
+		// Is it the researched subsystem ?
+		if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
+			return s;
 
-                if (sc)
-                        return sc;
-        }
+		struct yall_subsystem *sc = _get_subsystem(name, s->childs,
+			params);
 
-        return NULL;
+		if (sc)
+			return sc;
+	}
+
+	return NULL;
 }
 
 /*
@@ -96,8 +99,8 @@ static struct yall_subsystem *_get_subsystem(const char *name,
  */
 static void _free_subsystem(struct yall_subsystem *s)
 {
-        free(s->output_file);
-        free(s);
+	free(s->output_file);
+	free(s);
 }
 
 /*
@@ -107,10 +110,10 @@ static void _free_subsystem(struct yall_subsystem *s)
  */
 static void set_default_params(struct yall_subsystem_params *params)
 {
-        params->log_level = default_params.log_level;
-        params->status = default_params.status;
-        params->output_type = default_params.output_type;
-        params->output_file = default_params.output_file;
+	params->log_level = default_params.log_level;
+	params->status = default_params.status;
+	params->output_type = default_params.output_type;
+	params->output_file = default_params.output_file;
 }
 
 /*
@@ -118,36 +121,36 @@ static void set_default_params(struct yall_subsystem_params *params)
  *      can't be NULL. Assignation is atomic.
  */
 static void set_subsys_status(
-        const char *subsys_name,
-        enum yall_subsys_status status)
+	const char *subsys_name,
+	enum yall_subsys_status status)
 {
-        struct yall_subsystem *s = get_subsystem(subsys_name, NULL);
+	struct yall_subsystem *s = get_subsystem(subsys_name, NULL);
 
-        if (s)
-                s->status = status;
+	if (s)
+		s->status = status;
 }
 
 void yall_disable_subsystem(const char *subsys_name)
 {
-        _YALL_DBG_INFO("Disable subsystem %s.", subsys_name);
-        set_subsys_status(subsys_name, yall_subsys_disable);
+	_YALL_DBG_INFO("Disable subsystem %s.", subsys_name);
+	set_subsys_status(subsys_name, yall_subsys_disable);
 }
 
 void yall_enable_subsystem(const char *subsys_name)
 {
-        _YALL_DBG_INFO("Enable subsystem %s.", subsys_name);
-        set_subsys_status(subsys_name, yall_subsys_enable);
+	_YALL_DBG_INFO("Enable subsystem %s.", subsys_name);
+	set_subsys_status(subsys_name, yall_subsys_enable);
 }
 
 struct yall_subsystem *get_subsystem(const char *name,
-        struct yall_subsystem_params *params)
+	struct yall_subsystem_params *params)
 {
-        if (params)
-                set_default_params(params);
+	if (params)
+		set_default_params(params);
 
-        struct yall_subsystem *s = _get_subsystem(name, subsystems, params);
+	struct yall_subsystem *s = _get_subsystem(name, subsystems, params);
 
-        if (! s) {
+	if (! s) {
 		/*
 		 * Braces are set here as _YALL_DBG_WARNING could expand to
 		 * nothing.
@@ -155,158 +158,158 @@ struct yall_subsystem *get_subsystem(const char *name,
 		_YALL_DBG_WARNING("Could not find subsystem %s.", name);
 	}
 
-        return s;
+	return s;
 }
 
 struct yall_subsystem *create_subsystem(const char *name,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file)
+	enum yall_log_level log_level, enum yall_output_type output_type,
+	const char *output_file)
 {
-        struct yall_subsystem *s = NULL;
+	struct yall_subsystem *s = malloc(sizeof(struct yall_subsystem));
 
-        if (! (s = malloc(sizeof(struct yall_subsystem))))
-                goto err;
+	// Set each optional pointer to NULL, to avoid surprises
+	s->output_file = NULL;
+	s->parent = NULL;
+	s->childs = NULL;
+	s->previous = NULL;
+	s->next = NULL;
 
-        // Set each optional pointer to NULL, to avoid surprises
-        s->output_file = NULL;
-        s->parent = NULL;
-        s->childs = NULL;
-        s->previous = NULL;
-        s->next = NULL;
+	strncpy(s->name, name, SUBSYS_NAME_LEN-1);
+	s->name[SUBSYS_NAME_LEN-1] = 0;
+	s->log_level = log_level;
+	s->output_type = output_type;
 
-        strncpy(s->name, name, SUBSYS_NAME_LEN-1);
-        s->name[SUBSYS_NAME_LEN-1] = 0;
-        s->log_level = log_level;
-        s->output_type = output_type;
+	if (output_file) {
+		s->output_file = malloc(strlen(output_file) + 1);
 
-        if (output_file) {
-                if (! (s->output_file = malloc(strlen(output_file) + 1)))
-                        goto err_free;
+		strncpy(s->output_file, output_file, strlen(output_file)+1);
+	}
 
-                strncpy(s->output_file, output_file, strlen(output_file)+1);
-        }
+	/*
+	 * By default, the old log file will be delete each time the subsystem
+	 * is created. This can't be changed currently, but will be when the
+	 * library will load parameters from a configuration file.
+	 */
+	s->delete_old_log_file = true;
+	delete_old_log_file(s->output_file);
 
-        /*
-         * By default, the old log file will be delete each time the subsystem
-         * is created. This can't be changed currently, but will be when the
-         * library will load parameters from a configuration file.
-         */
-        s->delete_old_log_file = true;
-        delete_old_log_file(s->output_file);
+	s->status = yall_subsys_enable;
 
-        s->status = yall_subsys_enable;
+	_YALL_DBG_INFO("Subsystem %s created.", s->name);
 
-        _YALL_DBG_INFO("Subsystem %s created.", s->name);
-
-        return s;
-
-err_free:
-        free(s);
-err:
-        _YALL_DBG_ERR("Could not create subsystem %s.", name);
-        return NULL;
+	return s;
 }
 
 void add_subsystem(const char *parent_name, struct yall_subsystem *s)
 {
-        struct yall_subsystem *previous = NULL;
-        struct yall_subsystem *parent = parent_name ? get_subsystem(parent_name, NULL) : NULL;
+	struct yall_subsystem *previous = NULL;
+	struct yall_subsystem *parent = parent_name ?
+		get_subsystem(parent_name, NULL) : NULL;
 
-        // Assign parent to <s>, no problem if parent is NULL
-        s->parent = parent;
+	// Assign parent to <s>, no problem if parent is NULL
+	s->parent = parent;
 
-        // If the subsystem is a list head or sublist head
-        if (! subsystems) {
-                subsystems = s;
-                return;
-        }
+	// If the subsystem is a list head or sublist head
+	if (! subsystems) {
+		subsystems = s;
+		return;
+	}
 
-        if (parent && ! parent->childs) {
-                parent->childs = s;
-                return;
-        }
+	if (parent && ! parent->childs) {
+		parent->childs = s;
+		return;
+	}
 
-        // Coming to this point means the subsystem must be added at the end
-        // of a subsystems list.
-        previous = parent ? parent->childs : subsystems;
+	// Coming to this point means the subsystem must be added at the end
+	// of a subsystems list.
+	previous = parent ? parent->childs : subsystems;
 
-        for ( ; previous->next; previous = previous->next) ;
+	for ( ; previous->next; previous = previous->next)
+		;
 
-        previous->next = s;
-        s->previous = previous;
+	previous->next = s;
+	s->previous = previous;
 }
 
 void update_subsystem(struct yall_subsystem *s,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file)
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file)
 {
-        /*
-         * Always free output_file of the subsystem. It will be replaced in
-         * every case.
-         * The subsystem's status does not change.
-         */
-        free(s->output_file);
-        s->output_file = NULL;
+	/*
+	 * Always free output_file of the subsystem. It will be replaced in
+	 * every case.
+	 * The subsystem's status does not change.
+	 */
+	free(s->output_file);
+	s->output_file = NULL;
 
-        s->log_level = log_level;
-        s->output_type = output_type;
+	s->log_level = log_level;
+	s->output_type = output_type;
 
-        s->parent = NULL;
-        s->childs = NULL;
-        s->previous = NULL;
-        s->next = NULL;
+	s->parent = NULL;
+	s->childs = NULL;
+	s->previous = NULL;
+	s->next = NULL;
 
-        if (output_file && (s->output_file = malloc(strlen(output_file) + 1)))
-                strncpy(s->output_file, output_file, strlen(output_file)+1);
+	if (output_file)
+		s->output_file = strdup(output_file);
 }
 
 struct yall_subsystem *remove_subsystem(const char *name)
 {
-        struct yall_subsystem *s = get_subsystem(name, NULL);
+	struct yall_subsystem *s = get_subsystem(name, NULL);
 
-        if (s) {
-                // Link the previous to the next
-                if (s->previous)
-                        s->previous->next = s->next;
+	if (s) {
+		// Link the previous to the next
+		if (s->previous)
+			s->previous->next = s->next;
 
-                // Link the next to the previous
-                if (s->next)
-                        s->next->previous = s->previous;
+		// Link the next to the previous
+		if (s->next)
+			s->next->previous = s->previous;
 
-                // If 1st child, link the parent to the second child
-                if (s->parent && s->parent->childs == s)
-                        s->parent->childs = s->next;
+		// If 1st child, link the parent to the second child
+		if (s->parent && s->parent->childs == s)
+			s->parent->childs = s->next;
 
-                if (subsystems == s)
-                        subsystems = s->next;
+		if (subsystems == s)
+			subsystems = s->next;
 
-                _YALL_DBG_INFO("Subsystem %d removed.", name);
-        }
+		/*
+		 * Some pointer are set to NULL here, we can not skip this step
+		 * as these pointers will be used to detect is some following
+		 * subsystems must be freed.
+		 */
+		s->next = NULL;
+		s->previous = NULL;
+		s->parent = NULL;
 
-        return s;
+		_YALL_DBG_INFO("Subsystem %d removed.", name);
+	}
+
+	return s;
 }
 
 void _free_subsystems(struct yall_subsystem *s)
 {
-        _YALL_DBG_INFO("Cleaning subsystems.");
+	_YALL_DBG_INFO("Cleaning subsystems.");
 
-        while (s) {
-                struct yall_subsystem *tmp = s->next;
+	while (s) {
+		struct yall_subsystem *tmp = s->next;
 
-                if (s->parent)
-                        s->parent->childs = NULL;
+		if (s->parent)
+			s->parent->childs = NULL;
 
-                if (s->childs)
-                        _free_subsystems(s->childs);
+		if (s->childs)
+			_free_subsystems(s->childs);
 
-                _free_subsystem(s);
-                s = tmp;
-        }
+		_free_subsystem(s);
+		s = tmp;
+	}
 }
 
 void free_subsystems(void)
 {
-        _free_subsystems(subsystems);
+	_free_subsystems(subsystems);
 }

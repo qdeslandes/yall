@@ -1,13 +1,15 @@
 #include "test_message.h"
 
+#include <stdarg.h>
+
 static void tests_message_setup(void)
 {
-
+	yall_init();
 }
 
 static void tests_message_clean(void)
 {
-
+	yall_close_all();
 }
 
 TestSuite(message, .init=tests_message_setup, .fini=tests_message_clean);
@@ -17,16 +19,16 @@ TestSuite(message, .init=tests_message_setup, .fini=tests_message_clean);
  * we create a wrapper variadic function which create a va_list from its
  * arguments.
  */
-uint8_t wrapper(char *buffer,
-        const char *format,
-        const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        ...)
+size_t std_wrapper(char *log_buffer, size_t len, const char *message_format, ...)
 {
+	size_t _len = 0;
         va_list args;
-        va_start(args, function);
+        va_start(args, message_format);
 
-        return generate_message(buffer, format, subsystem, log_level, function, args);
+	_len = generate_std_msg(log_buffer, len, message_format, args);
+
+	va_end(args);
+
+	return _len;
 }
 

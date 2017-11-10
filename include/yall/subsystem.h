@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -35,33 +35,33 @@
 #include "yall/utils.h"
 #include "yall/file.h"
 #include "yall/status.h"
-#include "yall/log_levels.h"
+#include "yall/log_level.h"
 #include "yall/output_types.h"
 
-#define SUBSYS_NAME_LEN         16
+#define SUBSYS_NAME_LEN	 16
 
 struct yall_subsystem {
-        char name[SUBSYS_NAME_LEN];
-        enum yall_log_level log_level;
+	char name[SUBSYS_NAME_LEN];
+	enum yall_log_level log_level;
 #ifdef __linux__
-        _Atomic enum yall_subsys_status status;
+	_Atomic enum yall_subsys_status status;
 #elif _WIN32
-        enum yall_subsys_status status;
+	enum yall_subsys_status status;
 #endif
-        enum yall_output_type output_type;
-        char *output_file;
-        bool delete_old_log_file;
-        struct yall_subsystem *parent;
-        struct yall_subsystem *childs;
-        struct yall_subsystem *previous;
-        struct yall_subsystem *next;
+	enum yall_output_type output_type;
+	char *output_file;
+	bool delete_old_log_file;
+	struct yall_subsystem *parent;
+	struct yall_subsystem *childs;
+	struct yall_subsystem *previous;
+	struct yall_subsystem *next;
 };
 
 struct yall_subsystem_params {
-        enum yall_log_level log_level;
-        enum yall_subsys_status status;
-        enum yall_output_type output_type;
-        const char *output_file;
+	enum yall_log_level log_level;
+	enum yall_subsys_status status;
+	enum yall_output_type output_type;
+	const char *output_file;
 };
 
 /*
@@ -85,16 +85,16 @@ _YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
  *      are missing in the subsystem's.
  */
 struct yall_subsystem *get_subsystem(const char *name,
-        struct yall_subsystem_params *params);
+	struct yall_subsystem_params *params);
 
 /*
  * create_subsystem : returns a newly create subsystem. <name> must not be NULL
  *      and must be a NULL terminated string. On error, NULL is returned.
  */
 struct yall_subsystem *create_subsystem(const char *name,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file);
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file);
 
 /*
  * add_subsystem : add the given subsystem to the subsystem's tree. Handle
@@ -109,13 +109,13 @@ void add_subsystem(const char *parent, struct yall_subsystem *s);
  * update_subsystem : update a given subsystem. <s> can't be NULL.
  */
 void update_subsystem(struct yall_subsystem *s,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file);
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file);
 
 /*
  * remove_subsystem : remove a subsystem from the subsystem tree. If this
- *  subsystem had childs, its childs will always be linked to it <name> can
+ *  subsystem had childs, its childs will always be linked to it, <name> can
  *      not be NULL. If the subsystem is found, returns it, otherwise returns
  *      NULL and must be a NULL terminated string.
  */

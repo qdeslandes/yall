@@ -2,6 +2,10 @@ Current version (1.2.0) changelog
 	[FEATURES]
 		* Add debug mode
 		* Create a C++ class to use Yall
+		* Allow header format modification
+		* Allow call header format modification
+		* Remove the message length limit (unlimited log message length)
+		* Allow changing the indent width inside for formatter
 	[FIX]
 		* Fix YALL_CALL_LOG buffer overrun
 		* Use localtime_r instead of localtime

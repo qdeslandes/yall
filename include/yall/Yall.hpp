@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -61,7 +61,7 @@ public:
 		std::stringstream *ss = new std::stringstream();
 		_lines.push_back(ss);
 
-		*ss << std::string(indent, '\t');
+		*ss << std::string(indent * yall_config_get_tab_width(), ' ');
 
 		return *ss;
 	}
@@ -71,9 +71,9 @@ public:
 		yall_call_set_header(_data, header.str().c_str());
 
 		for (std::stringstream *s : _lines) {
-            std::string ss = s->str();
+            		std::string ss = s->str();
 			yall_call_add_line(_data, 0, ss.c_str());
-        }
+       		}
 
 		for (std::stringstream *s : _lines)
 			delete s;
@@ -85,9 +85,72 @@ private:
 	std::vector<std::stringstream *> _lines;
 };
 
+class YallConfig {
+public:
+	YallConfig()
+	{
+
+	}
+
+	~YallConfig()
+	{
+
+	}
+
+	/* Std header format */
+	void setStdHeaderFormat(std::string format)
+	{
+		yall_config_set_std_header_template(format.c_str());
+	}
+
+	std::string getStdHeaderFormat()
+	{
+		return std::string(yall_config_get_std_header_template());
+	}
+
+	void resetStdHeaderFormat()
+	{
+		yall_config_reset_std_header_template();
+	}
+
+	/* Call header format */
+	void setCallHeaderFormat(std::string format)
+	{
+		yall_config_set_call_header_template(format.c_str());
+	}
+
+	std::string getCallHeaderFormat()
+	{
+		return std::string(yall_config_get_call_header_template());
+	}
+
+	void resetCallHeaderFormat()
+	{
+		yall_config_reset_call_header_template();
+	}
+
+	/* Tab width */
+	void setTabWidth(int width)
+	{
+		yall_config_set_tab_width(width);
+	}
+
+	int getTabWidth()
+	{
+		return yall_config_get_tab_width();
+	}
+
+	void resetTabWidth()
+	{
+		yall_config_reset_tab_width();
+	}
+};
+
 class Yall
 {
 private:
+	YallConfig _config;
+
 	Yall()
 	{
 		yall_init();
@@ -110,7 +173,7 @@ private:
 
 	std::string _getVersionStr()
 	{
-		return yall_get_version_string();
+		return std::string(yall_get_version_string());
 	}
 
 	void _setSubsystem(const std::string name, const std::string parent,
@@ -146,7 +209,7 @@ private:
 
 	void _disableSubsystem(std::string subsystem_name)
 	{
-		yall_enable_subsystem(subsystem_name.c_str());
+		yall_disable_subsystem(subsystem_name.c_str());
 	}
 
 	void _callLog(std::string subsystem,
@@ -166,7 +229,7 @@ public:
 
 	static uint32_t getVersion()
 	{
-		return getInstance().getVersion();
+		return getInstance()._getVersion();
 	}
 
 
@@ -207,6 +270,11 @@ public:
 		getInstance()._disableSubsystem(subsystem_name);
 	}
 
+	static YallConfig &config()
+	{
+		return getInstance()._config;
+	}
+
 	static void __callLog(std::string subsystem,
 		enum yall_log_level log_level,
 		std::string function_name,
@@ -225,7 +293,7 @@ public:
 
 		data.__process();
 	}
-	
+
 	static Yall &getInstance()
 	{
 		static Yall instance;

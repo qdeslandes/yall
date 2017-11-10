@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,35 +28,25 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#include "yall/log_levels.h"
-
-#define YALL_MSG_LEN            512
-#define MSG_HEADER_LEN          77
-#define FUNC_NAME_LEN           17
-
-/*
- * generate_header : function in charge to generate the message header. A char
- *      array is passed to be filled by the parameters and the date. Once done,
- *      the status is returned. All pointer can't be NULL and the value
- *      <log_level> can't be equal to yall_inherited_level.
- *      If the function's name trimming fail, the function's name is not
- *      printed inside the header, but no error is shown. TODO : Fix it ?
- */
-uint8_t generate_header(char *buffer,
-        const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function);
+#include "yall/header.h"
+#include "yall/call.h"
 
 /*
  * generate_message : create the log message. It fills <buffer> we given data
- *      and specific format. No pointer argument can be NULL, but <args> can be
- *      empty.
+ *	and specific format. No pointer argument can be NULL, but <args> can be
+ *	empty.
+ *	Returns the number of characters wrote. It works the same way as
+ *	snprintf and friends as if <len> equals 0, it returns the number of
+ *	characters than would have been wrote.
  */
-uint8_t generate_message(char *buffer,
-        const char *format,
-        const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        va_list args);
+size_t generate_std_msg(char *log_buffer, size_t len,
+	const char *message_format, va_list args);
+
+/*
+ * generate_call_msg : create the log message from the call data. The call_data
+ *	are freed after use.
+ *	<buffer> and <d> can't be NULL.
+ */
+void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d);
 
 #endif

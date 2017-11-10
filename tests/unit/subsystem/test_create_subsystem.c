@@ -27,13 +27,3 @@ Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), su
         cr_assert_eq(s->output_type, ot);
         cr_assert_str_eq(s->output_file, of);
 }
-
-/*
- * 1st malloc failing
- */
-Test(subsystem, test_create_subsystem1)
-{
-        disable_malloc();
-        cr_assert(! create_subsystem("o", yall_debug, yall_console_output, NULL));
-        enable_malloc();
-}

@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -37,213 +37,250 @@
 #include "yall/debug.h"
 
 #include "version.h"
-#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) "." STRINGIFY(YALL_PATCH)
+#define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) \
+	"." STRINGIFY(YALL_PATCH)
 
 static uint32_t version = (YALL_MAJOR << 16) | (YALL_MINOR << 8) | YALL_PATCH;
-static const char *version_string = "yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
+static const char *version_string =
+	"yall, Quentin <Naccyde> Deslandes, version " YALL_VERSION_STR;
 
 uint32_t yall_get_version(void)
 {
-        return version;
+	return version;
 }
 
 const char *yall_get_version_string(void)
 {
-        return version_string;
+	return version_string;
 }
 
 static uint16_t initialized = 0;
 
 uint8_t yall_init(void)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (initialized) {
-                ++initialized;
-                ret = YALL_ALREADY_INIT;
-                goto end;
-        }
+	if (initialized) {
+		++initialized;
+		ret = YALL_ALREADY_INIT;
+		goto end;
+	}
 
-        ++initialized;
+	++initialized;
 
-        if ((ret = writer_init()))
-                goto err;
+	ret = writer_init();
+	if (ret)
+		goto err;
+
+	config_setup();
 
 end:
-        return ret;
+	return ret;
 err:
-        --initialized;
-        return ret;
+	--initialized;
+	return ret;
 }
 
 uint8_t yall_is_init(void)
 {
-        return initialized;
+	return initialized;
 }
 
 uint8_t yall_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        const char *format,
-        ...)
+	enum yall_log_level log_level,
+	const char *function,
+	const char *format,
+	...)
 {
-        uint8_t ret = YALL_OK;
+	// TODO : prefix structs with "yall"
+	uint8_t ret = YALL_OK;
+	char *buff = NULL;
+	va_list args, args_cpy;
+	size_t hdr_len = 0;
+	size_t buff_len = 0;
+	struct header_content hc = { 0 };
+	struct yall_subsystem_params p = { 0 };
 
-        char *msg = NULL;
-        struct yall_subsystem_params p = { 0 };
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	/*
+	 * Find the subsystem's parameters. Useless to get the subsystem, or
+	 * to know if it is found. If the subsystem is not found, we use the
+	 * default parameters.
+	 */
+	get_subsystem(subsystem, &p);
 
-        /*
-         * Find the subsystem's parameters. Useless to get the subsystem, or
-         * to know if it is found. If the subsystem is not found, we use the
-         * default parameters.
-         */
-        get_subsystem(subsystem, &p);
+	if (p.status == yall_subsys_disable) {
+		ret = YALL_SUBSYS_DISABLED;
+		goto end;
+	}
 
-        if (p.status == yall_subsys_disable) {
-                ret = YALL_SUBSYS_DISABLED;
-                goto end;
-        }
+	if (log_level < p.log_level) {
+		ret = YALL_LOG_LEVEL_TOO_LOW;
+		goto end;
+	}
 
-        if (log_level < p.log_level) {
-                ret = YALL_LOG_LEVEL_TOO_LOW;
-                goto end;
-        }
+	fill_header_content(&hc, subsystem, log_level, function);
 
-        // Create message
-        if (! (msg = malloc(YALL_MSG_LEN))) {
-                ret = YALL_NO_MEM;
-                goto end;
-        }
+	va_start(args, format);
 
-        va_list args;
-        va_start(args, format);
-        generate_message(msg,
-                format,
-                subsystem,
-                log_level,
-                function,
-                args);
-        va_end(args);
+	/*
+	 * Make a copy of variadic arguments to compute the length of the future
+	 * log message.
+	 * "+2" is used for '\n' and '\0' at the end of the log message.
+	 */
+	va_copy(args_cpy, args);
+	hdr_len = generate_std_hdr(NULL, 0, &hc);
+	buff_len = hdr_len + generate_std_msg(NULL, 0, format, args_cpy) + 2;
+	va_end(args_cpy);
 
-        // Write message
-        ret = write_msg(p.output_type, log_level, p.output_file, msg);
+	// Allocate the log message buffer
+	buff = malloc(buff_len);
+
+	/*
+	 * Header generation, hdr_len does not take in account the '\0', so
+	 * if we remove the "+1", the header will be cut 1 character too soon.
+	 */
+	generate_std_hdr(buff, hdr_len + 1, &hc);
+
+	/*
+	 * Message generation : we give a pointer to the next free character of
+	 * the log buffer, the remaining buff length and the arguments.
+	 */
+	generate_std_msg(&buff[hdr_len], buff_len - hdr_len, format, args);
+	va_end(args);
+
+	// Write message
+	ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(msg);
-        return ret;
+	free(buff);
+	return ret;
 }
 
 uint8_t yall_call_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function_name,
-        void (*formatter)(yall_call_data *d, const void *args),
-        const void *args)
+	enum yall_log_level log_level,
+	const char *function_name,
+	void (*formatter)(yall_call_data *d, const void *args),
+	const void *args)
 {
-        uint8_t ret = YALL_OK;
-        char *message = NULL;
-        struct yall_subsystem_params p = { 0 };
+	uint8_t ret = YALL_OK;
+	char *buff = NULL;
+	size_t hdr_len = 0;
+	size_t buff_len = 0;
+	struct yall_call_data d = { 0 };
+	struct header_content hc = { 0 };
+	struct yall_subsystem_params p = { 0 };
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        get_subsystem(subsystem, &p);
+	get_subsystem(subsystem, &p);
 
-        if (p.status == yall_subsys_disable) {
-                ret = YALL_SUBSYS_DISABLED;
-                goto end;
-        }
+	if (p.status == yall_subsys_disable) {
+		ret = YALL_SUBSYS_DISABLED;
+		goto end;
+	}
 
-        if (log_level < p.log_level) {
-                ret = YALL_LOG_LEVEL_TOO_LOW;
-                goto end;
-        }
+	if (log_level < p.log_level) {
+		ret = YALL_LOG_LEVEL_TOO_LOW;
+		goto end;
+	}
 
-        struct yall_call_data d = { 0 };
-        init_call_data(&d);
+	init_call_data(&d);
 
-        formatter(&d, args);
+	/*
+	 * Detailled informations about the following calls can be found inside
+	 * the sources of yall_log() function.
+	 */
 
-        // All '+ 1' here are the \0 terminating character
-        message = malloc(MSG_HEADER_LEN + d.message_size + 1);
-        generate_header(message, subsystem, log_level, function_name);
+	formatter(&d, args);
 
-        convert_data_to_message(&message[strlen(message)], d.message_size + 1, &d);
+	fill_header_content(&hc, subsystem, log_level, function_name);
 
-        ret = write_msg(p.output_type, log_level, p.output_file, message);
+	hdr_len = generate_call_hdr(NULL, 0, &hc);
+	buff_len = hdr_len + d.message_size + 1;
+
+	buff = malloc(buff_len);
+
+	generate_call_hdr(buff, hdr_len + 1, &hc);
+	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
+
+	ret = write_msg(p.output_type, log_level, p.output_file, buff);
 
 end:
-        free(message);
-        return ret;
+	free(buff);
+	return ret;
 }
 
 uint8_t yall_set_subsystem(const char *name,
-        const char *parent,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file)
+	const char *parent,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        if (! name) {
-                ret = YALL_NO_NAME;
-                goto end;
-        }
+	if (! name) {
+		ret = YALL_NO_NAME;
+		goto end;
+	}
 
-        struct yall_subsystem *s = remove_subsystem(name);
+	struct yall_subsystem *s = remove_subsystem(name);
 
-        if (! s) {
-                s = create_subsystem(name, log_level, output_type, output_file);
+	if (! s) {
+		s = create_subsystem(name, log_level, output_type, output_file);
 
-                if (! s) {
-                        ret = YALL_CANT_CREATE_SUBSYS;
-                        goto end;
-                }
-        } else {
-                update_subsystem(s, log_level, output_type, output_file);
-        }
+		if (! s) {
+			ret = YALL_CANT_CREATE_SUBSYS;
+			goto end;
+		}
+	} else {
+		update_subsystem(s, log_level, output_type, output_file);
+	}
 
-        add_subsystem(parent, s);
+	add_subsystem(parent, s);
 
 end:
-        return ret;
+	return ret;
 }
 
 uint8_t yall_close(void)
 {
-        uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_OK;
 
-        if (! initialized) {
-                ret = YALL_NOT_INIT;
-                goto end;
-        }
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
 
-        if (1 == initialized) {
-                _YALL_DBG_INFO("Close library");
-                yall_disable_debug();
-                writer_close();
-                free_subsystems();
-                initialized = 0;
-        } else {
-                --initialized;
-        }
+	if (initialized == 1) {
+		_YALL_DBG_INFO("Close library.");
+		yall_disable_debug();
+		writer_close();
+		free_subsystems();
+		config_clean();
+		initialized = 0;
+	} else {
+		--initialized;
+	}
 
 end:
-        return ret;
+	return ret;
 }
 
 void yall_close_all(void)
 {
-        for ( ; yall_close() != YALL_NOT_INIT ; ) ;
+	for ( ; yall_close() != YALL_NOT_INIT ; )
+		;
 }

@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -26,15 +26,17 @@
 #define _YALL_LOG_LEVELS_H
 
 enum yall_log_level {
-        yall_debug,
-        yall_info,
-        yall_notice,
-        yall_warning,
-        yall_err,
-        yall_crit,
-        yall_alert,
-        yall_emerg,
-        yall_inherited_level
+	yall_debug,
+	yall_info,
+	yall_notice,
+	yall_warning,
+	yall_err,
+	yall_crit,
+	yall_alert,
+	yall_emerg,
+	yall_inherited_level
 };
+
+const char *get_log_level_name(enum yall_log_level log_level);
 
 #endif

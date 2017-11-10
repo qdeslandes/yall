@@ -39,7 +39,7 @@ environment:
 
 before_build:
     - cd c:\yall
-    - cmake -G"%generator%" -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off
+    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off
 
 build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
@@ -51,7 +51,7 @@ test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 after_test:
-    - cmake -G"%generator%" -DPROJECT_CI_DEPLOY=on -DPROJECT_COVERAGE=off
+    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off
     - cmake --build . --config Debug --target ALL_BUILD
     - cmake --build . --config Debug --target install
     - cmake --build . --config Release --target ALL_BUILD

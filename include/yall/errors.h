@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,27 +25,27 @@
 #ifndef _YALL_ERRORS_H
 #define _YALL_ERRORS_H
 
-#define YALL_OK                 0x00
+#define YALL_OK			0x00
 
-#define YALL_ALREADY_INIT       0x10
-#define YALL_NOT_INIT           0x11
-#define YALL_SEM_INIT_ERR       0x12
-#define YALL_NO_MEM             0x13
-#define YALL_LOG_LEVEL_TOO_LOW  0x14
+#define YALL_ALREADY_INIT	0x10
+#define YALL_NOT_INIT		0x11
+#define YALL_SEM_INIT_ERR	0x12
+#define YALL_NO_MEM		0x13
+#define YALL_LOG_LEVEL_TOO_LOW	0x14
 
-#define YALL_NO_NAME            0x20
+#define YALL_NO_NAME		0x20
 
-#define YALL_FILE_LOCK_ERR      0x30
-#define YALL_FILE_OPEN_ERR      0x31
+#define YALL_FILE_LOCK_ERR	0x30
+#define YALL_FILE_OPEN_ERR	0x31
 
-#define YALL_CONSOLE_LOCK_ERR   0x40
-#define YALL_CONSOLE_WRITE_ERR  0x41
+#define YALL_CONSOLE_LOCK_ERR	0x40
+#define YALL_CONSOLE_WRITE_ERR	0x41
 
-#define YALL_STRING_WRITE_ERR   0x50
+#define YALL_STRING_WRITE_ERR	0x50
 
-#define YALL_SUBSYS_NOT_EXISTS  0x60
-#define YALL_SUBSYS_DISABLED    0x61
+#define YALL_SUBSYS_NOT_EXISTS	0x60
+#define YALL_SUBSYS_DISABLED	0x61
 
-#define YALL_CANT_CREATE_SUBSYS 0x70
+#define YALL_CANT_CREATE_SUBSYS	0x70
 
 #endif

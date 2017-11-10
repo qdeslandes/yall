@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -36,8 +36,8 @@ extern "C" {
 #include "yall/call.h"
 #include "yall/utils.h"
 #include "yall/debug.h"
-#include "yall/message.h"
-#include "yall/log_levels.h"
+#include "yall/config.h"
+#include "yall/log_level.h"
 #include "yall/output_types.h"
 
 #define YALL_CALL_BUFF_LEN      1024
@@ -82,10 +82,10 @@ _YALL_PUBLIC uint8_t yall_is_init(void);
  *      Returns a yall error code.
  */
 _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function,
-        const char *format,
-        ...);
+	enum yall_log_level log_level,
+	const char *function,
+	const char *format,
+	...);
 
 /*
  * yall_call_log : another logging function which call the given <function>
@@ -97,10 +97,10 @@ _YALL_PUBLIC uint8_t yall_log(const char *subsystem,
  *      <function> can't be NULL.
  */
 _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
-        enum yall_log_level log_level,
-        const char *function_name,
-        void (*formatter)(yall_call_data *d, const void *args),
-        const void *args);
+	enum yall_log_level log_level,
+	const char *function_name,
+	void (*formatter)(yall_call_data *d, const void *args),
+	const void *args);
 
 /*
  * yall_set_subsystem : this is the main subsystems function. This function
@@ -113,10 +113,10 @@ _YALL_PUBLIC uint8_t yall_call_log(const char *subsystem,
  *      <name> parameter must be a non NULL, NULL terminated string.
  */
 _YALL_PUBLIC uint8_t yall_set_subsystem(const char *name,
-        const char *parent,
-        enum yall_log_level log_level,
-        enum yall_output_type output_type,
-        const char *output_file);
+	const char *parent,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file);
 
 /*
  * yall_close : close all the yall library set up. The function fail only

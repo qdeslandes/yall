@@ -33,13 +33,3 @@ Test(yall, test_yall_set_subsystem3, .init=tests_yall_log_setup, .fini=tests_yal
 {
         cr_assert_eq(yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL), YALL_OK);
 }
-
-/*
- * create_subsystem() fail
- */
-Test(yall, test_yall_set_subsystem4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
-{
-        disable_malloc();
-        cr_assert_eq(yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL), YALL_CANT_CREATE_SUBSYS);
-        enable_malloc();
-}
