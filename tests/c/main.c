@@ -26,9 +26,7 @@ int main(void)
 {
         yall_init();
 
-        #ifdef DEBUG
         yall_enable_debug();
-        #endif
 
         yall_config_set_tab_width(4);
         yall_config_set_std_header_template("[%d] :: %-9l : %f : \n\t");
