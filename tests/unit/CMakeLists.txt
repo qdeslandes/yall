@@ -87,8 +87,8 @@ set(PROJECT_SRCS_COMPILE_FLAGS "-DYALL_UNIT -Dstatic=\"\" -Dinline=\"\"")
 IF (UNIX)
         # Build flags
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
-        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG} -g -O0")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} -O3")
 
         if (PROJECT-MISC_COVERAGE)
                 # This is used to enable coverage analyse only on yall sources
@@ -104,8 +104,8 @@ IF (UNIX)
 ELSEIF (WIN32)
         # Compile flags
         set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} /DEBUG /Z7")
-        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} /MP")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG} /Z7")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} /MP")
 
         # Linked libraries
         set(PROJECT_UNIT_LIBRARIES

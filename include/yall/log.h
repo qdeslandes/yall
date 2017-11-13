@@ -49,6 +49,7 @@
  *	      YALL_DEBUG(sub, "This is " << "my log " << "msg");
  */
 
+// MSVC 12.0
 #if (_MSC_VER == 1800)
 #	define __func__ __FUNCTION__
 #endif

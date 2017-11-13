@@ -13,16 +13,16 @@ set(PROJECT_OUTPUT_NAME "${PROJECT_NAME}")
 IF (UNIX)
         # Compile flags
         set(CMAKE_C_FLAGS "${_CMAKE_C_FLAGS} -pedantic -fPIC")
-        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} -g -O0")
-        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} -O3")
+        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG} -g -O0")
+        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} -O3")
 
         # Linked libraries
         set(PROJECT_LINK_LIBRARIES)
 ELSEIF (WIN32)
         # Compile flags
         set(CMAKE_C_FLAGS "/wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall /W4 -D_CRT_SECURE_NO_WARNINGS")
-        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} /DEBUG")
-        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} /MP")
+        set(CMAKE_C_FLAGS_DEBUG "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG}")
+        set(CMAKE_C_FLAGS_RELEASE "${_CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} /MP")
 
         # Linked libraries
         set(PROJECT_LINK_LIBRARIES)
