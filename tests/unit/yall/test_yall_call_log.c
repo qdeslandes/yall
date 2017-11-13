@@ -24,7 +24,7 @@ TheoryDataPoints(yall, test_yall_call_log1) = {
 
 Theory((char *s, enum yall_log_level ll, char *f), yall, test_yall_call_log1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        uint8_t waiting_for = YALL_OK;
+        uint8_t waiting_for = YALL_SUCCESS;
         uint8_t ret = yall_call_log(s, ll, f, tests_call_log_function, NULL);
         struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "yall_default.log" };
         _get_subsystem(s, subsystems, &p);
@@ -42,9 +42,9 @@ Test(yall, test_yall_call_log2, .init=tests_yall_log_setup, .fini=tests_yall_log
 {
         char buff[40] = { 0 };
 
-        cr_assert_eq(yall_call_log("01", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
-        cr_assert_eq(yall_call_log("1", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
-        cr_assert_eq(yall_call_log("200", yall_emerg, "", tests_call_log_function, buff), YALL_OK);
+        cr_assert_eq(yall_call_log("01", yall_emerg, "", tests_call_log_function, buff), YALL_SUCCESS);
+        cr_assert_eq(yall_call_log("1", yall_emerg, "", tests_call_log_function, buff), YALL_SUCCESS);
+        cr_assert_eq(yall_call_log("200", yall_emerg, "", tests_call_log_function, buff), YALL_SUCCESS);
 }
 
 /*

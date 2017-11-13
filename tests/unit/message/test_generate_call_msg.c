@@ -11,7 +11,7 @@ Test(message, test_generate_call_message0)
 
 	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 	l->content = strdup("2");
-    l->next = NULL;
+	l->next = NULL;
 
 	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
 	m->content = strdup("1");
@@ -39,7 +39,7 @@ Test(message, test_generate_call_message1)
 
 	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 	l->content = strdup("2");
-    l->next = NULL;
+	l->next = NULL;
 
 	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
 	m->content = strdup("1");
@@ -67,7 +67,7 @@ Test(message, test_generate_call_message2)
 
 	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 	l->content = strdup("2");
-    l->next = NULL;
+	l->next = NULL;
 
 	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
 	m->content = strdup("1");
@@ -81,7 +81,7 @@ Test(message, test_generate_call_message2)
 
 	generate_call_msg(buffer, 32, &d);
 
-    cr_assert_str_eq(buffer, "012");
+	cr_assert_str_eq(buffer, "012");
 }
 
 /*
@@ -95,7 +95,7 @@ Test(message, test_generate_call_message3)
 
 	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
 	l->content = strdup("bar");
-    l->next = NULL;
+	l->next = NULL;
 
 	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
 	m->content = strdup("foobar");

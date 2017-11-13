@@ -7,7 +7,7 @@ extern uint16_t initialized;
  */
 Test(yall, test_yall_init0)
 {
-        cr_assert_eq(yall_init(), YALL_OK);
+        cr_assert_eq(yall_init(), YALL_SUCCESS);
         cr_assert_eq(initialized, 1);
         cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
         cr_assert_eq(initialized, 2);
@@ -40,7 +40,7 @@ Test(yall, test_yall_init1)
         enable_CreateMutex();
 #endif
 
-        cr_assert_eq(yall_init(), YALL_OK);
+        cr_assert_eq(yall_init(), YALL_SUCCESS);
         cr_assert_eq(initialized, 1);
         cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
         cr_assert_eq(initialized, 2);

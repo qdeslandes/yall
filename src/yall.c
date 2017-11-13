@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "yall/utils.h"
-#include "yall/errors.h"
 #include "yall/writer.h"
 #include "yall/message.h"
 #include "yall/subsystem.h"
@@ -56,9 +55,9 @@ const char *yall_get_version_string(void)
 
 static uint16_t initialized = 0;
 
-uint8_t yall_init(void)
+yall_error yall_init(void)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 	if (initialized) {
 		++initialized;
@@ -86,14 +85,14 @@ uint8_t yall_is_init(void)
 	return initialized;
 }
 
-uint8_t yall_log(const char *subsystem,
+yall_error yall_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function,
 	const char *format,
 	...)
 {
 	// TODO : prefix structs with "yall"
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
 	va_list args, args_cpy;
 	size_t hdr_len = 0;
@@ -161,13 +160,13 @@ end:
 	return ret;
 }
 
-uint8_t yall_call_log(const char *subsystem,
+yall_error yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
 	void (*formatter)(yall_call_data *d, const void *args),
 	const void *args)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
@@ -218,13 +217,13 @@ end:
 	return ret;
 }
 
-uint8_t yall_set_subsystem(const char *name,
+yall_error yall_set_subsystem(const char *name,
 	const char *parent,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
 	const char *output_file)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
@@ -255,9 +254,9 @@ end:
 	return ret;
 }
 
-uint8_t yall_close(void)
+yall_error yall_close(void)
 {
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;

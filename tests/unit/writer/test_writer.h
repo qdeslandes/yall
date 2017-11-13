@@ -6,6 +6,6 @@
 
 #include "h_utils.h"
 #include "yall/writer.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 
 #endif
