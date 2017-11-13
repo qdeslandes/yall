@@ -7,13 +7,15 @@ static struct yall_errordesc {
 	const char *message;
 } errordesc[] = {
 	YALL_ERROR(YALL_SUCCESS, "Success."),
-	YALL_ERROR(YALL_UNKNOW_ERROR, "Unknow error happened. Please contact the developpers."),
+	YALL_ERROR(YALL_UNKNOW_ERROR,
+		"Unknow error happened. Please contact the developpers."),
 
 	YALL_ERROR(YALL_ALREADY_INIT, "Library already initialized."),
 	YALL_ERROR(YALL_NOT_INIT, "Library not initialized."),
 	YALL_ERROR(YALL_SEM_INIT_ERR, "Error during semaphore initialization."),
 	YALL_ERROR(YALL_NO_MEM, "No memory available."),
-	YALL_ERROR(YALL_LOG_LEVEL_TOO_LOW, "Message not processed, log level set too low."),
+	YALL_ERROR(YALL_LOG_LEVEL_TOO_LOW,
+		"Message not processed, log level set too low."),
 
 	YALL_ERROR(YALL_NO_NAME, "No subsystem name."),
 

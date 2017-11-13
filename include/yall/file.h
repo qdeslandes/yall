@@ -34,7 +34,7 @@
  *      the function must lock a semaphore to avoid concurrent access
  *      on the file. If the lock fails, the message is not written.
  *      <file> and <msg> must not be NULL.
- * 	Returns a yall_error.
+ *	Returns a yall_error.
  */
 yall_error write_log_file(const char *file, const char *msg);
 

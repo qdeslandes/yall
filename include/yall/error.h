@@ -29,11 +29,11 @@
 
 // Typedef'd as it should be used by end user.
 typedef enum {
-	YALL_SUCCESS 		= 0x00,
+	YALL_SUCCESS		= 0x00,
 	YALL_UNKNOW_ERROR	= 0x01,
 
 	// TODO : specify error categories
-	YALL_ALREADY_INIT 	= 0x02,
+	YALL_ALREADY_INIT	= 0x02,
 	YALL_NOT_INIT		= 0x03,
 	YALL_SEM_INIT_ERR	= 0x04,
 	YALL_NO_MEM		= 0x05,

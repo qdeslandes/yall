@@ -35,7 +35,7 @@
  *      be NULL. The color of the message depend of the log level and the color
  *      associated to this log level inside the source file. Also, <log_level>
  *      must be different from yall_inherited_level.
- * 	Returns a yall_error.
+ *	Returns a yall_error.
  */
 yall_error write_log_console(enum yall_log_level log_level, const char *msg);
 
