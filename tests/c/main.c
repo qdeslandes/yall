@@ -34,12 +34,13 @@ int main(void)
         yall_config_set_std_header_template("[%d] :: %-9l : %f : \n\t");
         yall_config_set_call_header_template("[%d] :: %-9l : %s : ");
         
-        yall_set_subsystem("yall_cpp_test", NULL, yall_debug, yall_console_output, NULL);
-        yall_set_subsystem("io", "yall_cpp_test", yall_debug, yall_console_output, NULL);
-        yall_set_subsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("yall_c_test", NULL, yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("io", "yall_c_test", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("memory", "yall_c_test", yall_debug, yall_console_output, NULL);
 
-        YALL_DEBUG("yall_cpp_test", "%s, %d", yall_get_version_string(), yall_get_version());
-        YALL_DEBUG("io", "IO subsystem ready.");
+        YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+	YALL_DEBUG("io", "IO subsystem ready.");
+	YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
         YALL_CALL_ERR("memory", memoryInfos, NULL);
 
         yall_set_subsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, NULL);

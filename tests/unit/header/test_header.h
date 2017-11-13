@@ -7,7 +7,7 @@
 
 #include "h_utils.h"
 #include "yall/header.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 
 void test_generate_hdr_setup(void);
 void test_generate_hdr_clean(void);

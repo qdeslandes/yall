@@ -34,7 +34,6 @@
 #endif
 
 #include "yall/utils.h"
-#include "yall/errors.h"
 #include "yall/debug.h"
 
 #ifdef __linux__
@@ -86,11 +85,11 @@ static void reset_color(void)
 }
 #endif
 
-uint8_t write_log_console(enum yall_log_level log_level,
+yall_error write_log_console(enum yall_log_level log_level,
 	const char *msg)
 {
 	uint32_t sem_ret = 0;
-	uint8_t ret = YALL_OK;
+	yall_error ret = YALL_SUCCESS;
 
 #ifdef __linux__
 	sem_ret = sem_wait(&console_sem);

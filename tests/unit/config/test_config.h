@@ -6,7 +6,7 @@
 
 #include "h_utils.h"
 #include "yall/config.h"
-#include "yall/errors.h"
+#include "yall/error.h"
 
 void test_config_config_setup(void);
 void test_config_config_clean(void);

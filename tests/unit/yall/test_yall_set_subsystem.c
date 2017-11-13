@@ -23,7 +23,7 @@ Test(yall, test_yall_set_subsystem1, .init=tests_yall_log_setup, .fini=tests_yal
  */
 Test(yall, test_yall_set_subsystem2, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        cr_assert_eq(yall_set_subsystem("0", NULL, yall_debug, yall_console_output, NULL), YALL_OK);
+        cr_assert_eq(yall_set_subsystem("0", NULL, yall_debug, yall_console_output, NULL), YALL_SUCCESS);
 }
 
 /*
@@ -31,5 +31,5 @@ Test(yall, test_yall_set_subsystem2, .init=tests_yall_log_setup, .fini=tests_yal
  */
 Test(yall, test_yall_set_subsystem3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        cr_assert_eq(yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL), YALL_OK);
+        cr_assert_eq(yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL), YALL_SUCCESS);
 }

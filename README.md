@@ -99,6 +99,8 @@ This subsystem parameters can be changed outside the library with `yall_set_subs
 
 Obviously, this means the `yall` subsystem is reserved for the library use, otherwise the debug mode will use a user defined subsystem.
 
+Some of the library functions returns a `yall_error` type, which is an error code for the library. A nul terminated string corresponding to this code can be retrieved through `yall_strerror(code)`.
+
 ### Example
 
 ```

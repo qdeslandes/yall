@@ -22,30 +22,45 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_ERRORS_H
-#define _YALL_ERRORS_H
+#ifndef _YALL_ERROR_H
+#define _YALL_ERROR_H
 
-#define YALL_OK			0x00
+#include "yall/utils.h"
 
-#define YALL_ALREADY_INIT	0x10
-#define YALL_NOT_INIT		0x11
-#define YALL_SEM_INIT_ERR	0x12
-#define YALL_NO_MEM		0x13
-#define YALL_LOG_LEVEL_TOO_LOW	0x14
+// Typedef'd as it should be used by end user.
+typedef enum {
+	YALL_SUCCESS		= 0x00,
+	YALL_UNKNOW_ERROR	= 0x01,
 
-#define YALL_NO_NAME		0x20
+	// TODO : specify error categories
+	YALL_ALREADY_INIT	= 0x02,
+	YALL_NOT_INIT		= 0x03,
+	YALL_SEM_INIT_ERR	= 0x04,
+	YALL_NO_MEM		= 0x05,
+	YALL_LOG_LEVEL_TOO_LOW	= 0x06,
 
-#define YALL_FILE_LOCK_ERR	0x30
-#define YALL_FILE_OPEN_ERR	0x31
+	YALL_NO_NAME		= 0x07,
 
-#define YALL_CONSOLE_LOCK_ERR	0x40
-#define YALL_CONSOLE_WRITE_ERR	0x41
+	YALL_FILE_LOCK_ERR	= 0x08,
+	YALL_FILE_OPEN_ERR	= 0x09,
 
-#define YALL_STRING_WRITE_ERR	0x50
+	YALL_CONSOLE_LOCK_ERR	= 0x0A,
+	YALL_CONSOLE_WRITE_ERR	= 0x0B,
 
-#define YALL_SUBSYS_NOT_EXISTS	0x60
-#define YALL_SUBSYS_DISABLED	0x61
+	YALL_STRING_WRITE_ERR	= 0x0C,
 
-#define YALL_CANT_CREATE_SUBSYS	0x70
+	YALL_SUBSYS_NOT_EXISTS	= 0x0D,
+	YALL_SUBSYS_DISABLED	= 0x0E,
+
+	YALL_CANT_CREATE_SUBSYS	= 0x0F,
+
+	/*
+	 * This is used to check if the given code is defined. It is ugly, but
+	 * it's the best I can currently find.
+	 */
+	yall_err_end		= 0x10
+} yall_error;
+
+_YALL_PUBLIC const char *yall_strerror(yall_error err);
 
 #endif

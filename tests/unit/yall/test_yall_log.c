@@ -19,8 +19,8 @@ Test(yall, test_yall_log0)
 Test(yall, test_yall_log1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
 {
         cr_assert_eq(yall_log("", yall_debug, "", ""), YALL_LOG_LEVEL_TOO_LOW);
-        cr_assert_eq(yall_log("nope", yall_warning, "", ""), YALL_OK);
-        cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", ""), YALL_OK);
+        cr_assert_eq(yall_log("nope", yall_warning, "", ""), YALL_SUCCESS);
+        cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", ""), YALL_SUCCESS);
 }
 
 /*
@@ -35,7 +35,7 @@ TheoryDataPoints(yall, test_yall_log2) = {
 
 Theory((char *s, enum yall_log_level ll, char *f, char *format), yall, test_yall_log2, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        uint8_t waiting_for = YALL_OK;
+        uint8_t waiting_for = YALL_SUCCESS;
         uint8_t ret = yall_log(s, ll, f, format);
         struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "yall_default.log" };
         _get_subsystem(s, subsystems, &p);
@@ -51,8 +51,8 @@ Theory((char *s, enum yall_log_level ll, char *f, char *format), yall, test_yall
  */
 Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_OK);
-        cr_assert_eq(yall_log("3", yall_emerg, "", "%X %d", 4, 3), YALL_OK);
+        cr_assert_eq(yall_log("0", yall_emerg, "", "%s %d", "hello", 3), YALL_SUCCESS);
+        cr_assert_eq(yall_log("3", yall_emerg, "", "%X %d", 4, 3), YALL_SUCCESS);
 }
 
 /*

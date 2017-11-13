@@ -14,7 +14,7 @@ ParameterizedTest(
         .init=test_write_log_console_setup,
         .fini=test_write_log_console_clean)
 {
-        cr_assert_eq(write_log_console(p->ll, ""), YALL_OK);
+        cr_assert_eq(write_log_console(p->ll, ""), YALL_SUCCESS);
 
 #ifdef __linux__
         /*
@@ -44,7 +44,7 @@ ParameterizedTest(
         .init=test_write_log_console_setup,
         .fini=test_write_log_console_clean)
 {
-        cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_OK);
+        cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_SUCCESS);
         fflush(stderr);
 
         char output[18] = { 0 };

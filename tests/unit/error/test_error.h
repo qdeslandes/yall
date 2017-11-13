@@ -1,5 +1,5 @@
-#ifndef _TESTS_DEBUG_H
-#define _TESTS_DEBUG_H
+#ifndef _TESTS_ERROR_H
+#define _TESTS_ERROR_H
 
 #include <stdbool.h>
 #include <criterion/criterion.h>
@@ -11,7 +11,5 @@
 
 #include "yall/yall.h"
 #include "yall/error.h"
-#include "yall/debug.h"
-#include "yall/subsystem.h"
 
 #endif
