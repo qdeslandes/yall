@@ -30,6 +30,7 @@
 #       include <Windows.h>
 #endif
 
+#include "yall/error.h"
 #include "yall/utils.h"
 #include "yall/console.h"
 #include "yall/file.h"
