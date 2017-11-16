@@ -53,7 +53,7 @@ IF (PROJECT_YALL_SHARED)
         set_target_properties(yall_shared PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
         set_target_properties(yall_shared PROPERTIES
                 VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                SONAME "${PROJECT_VERSION_MAJOR}")
+		SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 	install(TARGETS yall_shared
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
@@ -70,8 +70,7 @@ IF (PROJECT_YALL_STATIC)
         target_link_libraries(yall_static ${PROJECT_LINK_LIBRARIES})
         set_target_properties(yall_static PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
         set_target_properties(yall_static PROPERTIES
-                VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                SONAME "${PROJECT_VERSION_MAJOR}")
+                VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 	install(TARGETS yall_static
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
