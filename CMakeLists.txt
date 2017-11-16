@@ -69,6 +69,9 @@ endif ()
 # Project internal configuration
 set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
+install(FILES README.md DESTINATION share RENAME yall_README.md)
+install(FILES changelog DESTINATION share RENAME yall_changelog)
+
 if (PROJECT_YALL)
 	add_subdirectory(src)
 endif ()
