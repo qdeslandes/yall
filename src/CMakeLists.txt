@@ -34,7 +34,7 @@ if (PROJECT-MISC_CI_DEPLOY)
 endif ()
 
 # CMake logging
-message("> Add execuable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
+message("> Add executable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
 message(">     Compile flags       :")
 message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
 message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
