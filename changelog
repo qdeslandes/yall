@@ -9,6 +9,9 @@ Current version (1.2.0) changelog
 	[FIX]
 		* Fix YALL_CALL_LOG buffer overrun
 		* Use localtime_r instead of localtime
+		* Change unit test binary name (now 'yall_unit')
+		* Update soname (yall.so -> yall.so.major.minor -> yall.so.major.minor.patch)
+		* Install target now install 'README.md' and 'changelog' to 'share' folder prefixed with 'yall_'
 	[TEST]
 	[CI]
 
