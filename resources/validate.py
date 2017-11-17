@@ -51,7 +51,6 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 	return 0 == code
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
-	print(stdout, stderr)
 	error = code != 0
 	stats = {}
 
