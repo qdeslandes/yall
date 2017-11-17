@@ -59,6 +59,7 @@ script:
   - make
   - make unit
   - alias python3=python3.5
+  - python --version
   - make validate
 
 after_success:
