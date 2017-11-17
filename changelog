@@ -13,6 +13,9 @@ Current version (1.2.0) changelog
 		* Update soname (yall.so -> yall.so.major.minor -> yall.so.major.minor.patch)
 		* Install target now install 'README.md' and 'changelog' to 'share' folder prefixed with 'yall_'
 	[TEST]
+		* Add 'make checkstyle' target to run checkstyle on sources
+		* Add 'make validate' target which run script checking valgrind, unit, coverage, build, checkstyle...
+		* Allow to install on system, in custom folder or as CI_DEPLOY (which allow 'make dist')
 	[CI]
 
 Version 1.1.0 changelog

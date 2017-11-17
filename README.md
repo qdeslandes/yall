@@ -122,6 +122,28 @@ YALL_DEBUG("example_subsystem", "My message : %s", "error");
 
 A log coloration scheme for NotePad++ is available in the resources folder.
 
+### Contributing
+
+All contributions must fork `develop` to create a `feature/<myfeature>` branch, then do a PR on `develop`. Also, all work must be tested with `make validate` (see below).
+
+The CMake system used define several targets :
+
+* `checkstyle` : run `resources/checkstyle.sh` script, from the Linux kernel, it parses sources to check coding guidelines.
+* `coverage` : check the global unit tests sources covering.
+* `dist` : create an archive with the installed folder (require to run `make install` prior). Only available with `PROJECT-MISC_CI_DEPLOY=On`.
+* `install` : will install the library.
+* `resume_coverage` : works with Firefox on Fedora and Debian (not tested elsewhere). It opens an HTML report about tests coverage.
+* `unit` : run unit tests.
+* `validate` : run a Python script which check CMake generation, build, binaries with Valgrind, tests, coverage, coding style...
+* `yall` : generate yall library objects.
+* `yall_c` : generate C test project.
+* `yall_cpp` : generate CPP test project. 
+* `yall_static` : link yall library objects as a static library.
+* `yall_shared` : link yall library objects as a shared library.
+* `yall_unit` : generate unit tests.
+
+Some other target are available, their names start with `__`, which means there is no reason to start them manually.
+
 yall is an open-source project, feel free to contribute to the project and send a pull request. To get some personnal help or report a bug, you can contact `naccyde <at> naccyde <dot> eu` ;) .
 
 

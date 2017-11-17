@@ -143,7 +143,7 @@ add_custom_target(unit
 )
 
 if (PROJECT-MISC_COVERAGE)
-        add_custom_target(coverage_prepare
+        add_custom_target(__coverage_prepare
                 COMMAND mkdir -p coverage
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                 COMMENT "Prepare coverage target")
@@ -151,7 +151,7 @@ if (PROJECT-MISC_COVERAGE)
                 COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
                 COMMENT "Run coverage target")
-        add_dependencies(coverage coverage_prepare unit)
+        add_dependencies(coverage __coverage_prepare unit)
 
         add_custom_target(resume_coverage
                 COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html

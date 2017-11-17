@@ -28,11 +28,6 @@ ELSEIF (WIN32)
         set(PROJECT_LINK_LIBRARIES)
 ENDIF ()
 
-# Installation
-if (PROJECT-MISC_CI_DEPLOY)
-        set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-endif ()
-
 # CMake logging
 message("> Add executable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
 message(">     Compile flags       :")
@@ -82,8 +77,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_PREFIX
         PATTERN "version.h.in" EXCLUDE)
 
 # Make dist
-add_custom_target(dist COMMAND ${CMAKE_COMMAND} -E tar "cfvz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}.tgz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-add_custom_command(TARGET dist
-          POST_BUILD
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/LICENSE "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}"
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README.md "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+if (PROJECT-MISC_CI_DEPLOY)
+	add_custom_target(dist COMMAND ${CMAKE_COMMAND} -E tar "cfvz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}.tgz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+endif ()
