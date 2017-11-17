@@ -58,7 +58,7 @@ install:
 script:
   - make
   - make unit
-  - python3 -v
+  - alias python3=python3.5
   - make validate
 
 after_success:
