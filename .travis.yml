@@ -55,6 +55,7 @@ cache:
     - '$HOME/.sonar/cache'
 
 install:
+  - valgrind --version
   - cmake ${CMAKE_CONFIG} .
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 
