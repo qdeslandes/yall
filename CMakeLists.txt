@@ -20,7 +20,6 @@ option(PROJECT_YALL "Build Yall" ON)
 option(PROJECT_YALL_SHARED "Enable shared version" ON)
 option(PROJECT_YALL_STATIC "Enable static version" ON)
 option(PROJECT-MISC_CI_DEPLOY "Special target for continuous integration deployment" OFF)
-option(PROJECT-MISC_COVERAGE "Enable unit test coverage report" OFF)
 option(PROJECT-TESTS_UNIT_TESTS "Enable unit tests build" ON)
 option(PROJECT-TESTS_C_TESTS "Enable C test build" ON)
 option(PROJECT-TESTS_CPP_TESTS "Enable C++ test build" ON)
@@ -32,6 +31,12 @@ set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Release;" CACHE STRIN
 
 set(CMAKE_DEBUG_POSTFIX d)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+# Installation
+set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+if (PROJECT-MISC_CI_DEPLOY)
+	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+endif ()
 
 # Build and platform specific configuration
 include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
@@ -66,8 +71,18 @@ elseif (WIN32)
 	set(_CMAKE_CXX_FLAGS_DEBUG "/DDEBUG")
 endif ()
 
-# Project internal configuration
-set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+install(FILES README.md DESTINATION share RENAME yall_README.md)
+install(FILES changelog DESTINATION share RENAME yall_changelog)
+
+# Target used to validate the validity of the sources modifications
+add_custom_target(validate
+	COMMAND python3 ./resources/validate.py
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# Target used to check the style of the sources modifications
+add_custom_target(checkstyle
+	COMMAND sh ./resources/checkstyle.sh
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 if (PROJECT_YALL)
 	add_subdirectory(src)
