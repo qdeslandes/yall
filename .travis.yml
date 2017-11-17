@@ -37,8 +37,8 @@ addons:
       - sourceline: 'ppa:deadsnakes/ppa'
       - ubuntu-toolchain-r-test
     packages:
-      #- gcc-6
-      #- lcov
+      - gcc-6
+      - lcov
       - python3.5
   sonarqube:
     token:
@@ -51,17 +51,15 @@ cache:
   directories:
     - '$HOME/.sonar/cache'
 
-#install:
-#  - wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz && tar -xvf cmake-3.7.2-Linux-x86_64.tar.gz
-#  - cmake-3.7.2-Linux-x86_64/bin/cmake ${CMAKE_CONFIG} .
+install:
+  - wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz && tar -xvf cmake-3.7.2-Linux-x86_64.tar.gz
+  - cmake-3.7.2-Linux-x86_64/bin/cmake ${CMAKE_CONFIG} .
+  - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 
 script:
-#  - make
-#  - make unit
-  - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-  - which python3.5
-  - python3 --version
-#  - make validate
+  - make
+  - make unit
+  - make validate
 
 after_success:
   - if [[ "${BUILD_TYPE}" = "Release" && ("${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]]; then make coverage; fi
