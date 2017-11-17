@@ -51,6 +51,7 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 	return 0 == code
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
+	print(stdout, stderr)
 	error = code != 0
 	stats = {}
 
@@ -171,7 +172,7 @@ def main(argv):
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
 		['make -C ' + buildDir + ' -j 9', defaultAnalyzer],
 		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
-		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
+		['valgrind --leak-check=full --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
 		['make -C ' + buildDir + ' unit', defaultAnalyzer],
 		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
 	testSection("Debug", debugSection)
