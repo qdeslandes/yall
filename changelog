@@ -18,6 +18,7 @@ Current version (1.2.0) changelog
 		* Add 'make validate' target which run script checking valgrind, unit, coverage, build, checkstyle...
 		* Allow to install on system, in custom folder or as CI_DEPLOY (which allow 'make dist')
 	[CI]
+		* On Travis : run validate target
 
 Version 1.1.0 changelog
 	[FEATURES]

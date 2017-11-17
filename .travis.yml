@@ -57,6 +57,7 @@ install:
 script:
   - make
   - make unit
+  - make validate
 
 after_success:
   - if [[ "${BUILD_TYPE}" = "Release" && ("${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]]; then make coverage; fi
