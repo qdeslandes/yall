@@ -19,6 +19,7 @@ Current version (1.2.0) changelog
 		* Allow to install on system, in custom folder or as CI_DEPLOY (which allow 'make dist')
 	[CI]
 		* On Travis : run validate target
+		* Coverage is now always computed
 
 Version 1.1.0 changelog
 	[FEATURES]

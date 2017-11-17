@@ -88,12 +88,10 @@ IF (UNIX)
         # Build flags
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_DEBUG} -g -O0")
-        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} -O3")
-
-        if (PROJECT-MISC_COVERAGE)
-                # This is used to enable coverage analyse only on yall sources
-                set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
-        endif ()
+	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} ${_CMAKE_C_FLAGS_RELEASE} -O3")
+	
+        # This is used to enable coverage analyse only on yall sources
+        set(PROJECT_SRCS_COMPILE_FLAGS "-coverage ${PROJECT_SRCS_COMPILE_FLAGS}")
 
         # Linked libraries
         set(PROJECT_UNIT_LIBRARIES
@@ -142,20 +140,18 @@ add_custom_target(unit
   COMMENT "Run builded unit tests"
 )
 
-if (PROJECT-MISC_COVERAGE)
-        add_custom_target(__coverage_prepare
-                COMMAND mkdir -p coverage
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                COMMENT "Prepare coverage target")
-        add_custom_target(coverage
-                COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
-                COMMENT "Run coverage target")
-        add_dependencies(coverage __coverage_prepare unit)
+add_custom_target(__coverage_prepare
+	COMMAND mkdir -p coverage
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	COMMENT "Prepare coverage target")
+add_custom_target(coverage
+	COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+	COMMENT "Run coverage target")
+add_dependencies(coverage __coverage_prepare unit)
 
-        add_custom_target(resume_coverage
-                COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
-                COMMENT "Show coverage results in Firefox")
-        add_dependencies(resume_coverage coverage)
-endif ()
+add_custom_target(resume_coverage
+	COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+	COMMENT "Show coverage results in Firefox")
+add_dependencies(resume_coverage coverage)

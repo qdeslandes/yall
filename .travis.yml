@@ -6,7 +6,6 @@
 # CMake flags :
 #   * BUILD_TYPE : Debug or Release
 #   * PROJECT_CI_DEPLOY : enable install inside the build directory
-#   * PROJECT_COVERAGE : works only on Linux, using gcov
 #
 # Install gcc-6 and lcov for coverage report. A recent version of CMake is also
 # downloaded.
@@ -27,10 +26,10 @@ matrix:
   include:
     - os: linux
       compiler: gcc-6
-      env: BUILD_TYPE=Debug CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off"
+      env: BUILD_TYPE=Debug CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on"
     - os: linux
       compiler: gcc-6
-      env: BUILD_TYPE=Release CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=on"
+      env: BUILD_TYPE=Release CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on"
 
 addons:
   apt:
@@ -67,10 +66,10 @@ after_success:
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
   - make clean
-  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off .
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DPROJECT-MISC_CI_DEPLOY=on .
   - make
   - make install
-  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Release -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off .
+  - cmake-3.7.2-Linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Release -DPROJECT-MISC_CI_DEPLOY=on .
   - make
   - make install
   - make dist

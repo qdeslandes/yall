@@ -166,7 +166,7 @@ def main(argv):
 	print('=== Starting tests :')
 
 	# CMake, debug mode
-	cmakeOptions = "-DCMAKE_BUILD_TYPE=Debug -DPROJECT-MISC_COVERAGE=On"
+	cmakeOptions = "-DCMAKE_BUILD_TYPE=Debug"
 	debugSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
 		['make -C ' + buildDir + ' -j 9', defaultAnalyzer],
@@ -177,7 +177,7 @@ def main(argv):
 	testSection("Debug", debugSection)
 
 	# CMake, release mode
-	cmakeOptions = "-DCMAKE_BUILD_TYPE=Release -DPROJECT-MISC_COVERAGE=On"
+	cmakeOptions = "-DCMAKE_BUILD_TYPE=Release"
 	releaseSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
 		['make -C ' + buildDir + ' -j 9', defaultAnalyzer],

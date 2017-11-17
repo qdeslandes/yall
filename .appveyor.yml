@@ -9,7 +9,6 @@
 #
 # CMake flags :
 #   * PROJECT_CI_DEPLOY : enable install inside the build directory
-#   * PROJECT_COVERAGE : works only on Linux, using gcov
 #
 # Once a tag is pushed, the release build will be packed and push to GitHub.
 #
@@ -39,7 +38,7 @@ environment:
 
 before_build:
     - cd c:\yall
-    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off
+    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on
 
 build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
@@ -51,7 +50,7 @@ test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 after_test:
-    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on -DPROJECT-MISC_COVERAGE=off
+    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on
     - cmake --build . --config Debug --target ALL_BUILD
     - cmake --build . --config Debug --target install
     - cmake --build . --config Release --target ALL_BUILD
