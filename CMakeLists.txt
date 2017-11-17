@@ -72,6 +72,16 @@ set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MA
 install(FILES README.md DESTINATION share RENAME yall_README.md)
 install(FILES changelog DESTINATION share RENAME yall_changelog)
 
+# Target used to validate the validity of the sources modifications
+add_custom_target(validate
+	COMMAND python3 ./resources/validate.py
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# Target used to check the style of the sources modifications
+add_custom_target(checkstyle
+	COMMAND sh ./resources/checkstyle.sh
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 if (PROJECT_YALL)
 	add_subdirectory(src)
 endif ()
