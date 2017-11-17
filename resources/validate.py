@@ -43,7 +43,6 @@ def prepare(argv):
 	Analyzers
 """
 def defaultAnalyzer(cmd, code, stdout, stderr):
-	print(stdout, stderr)
 	testResults(0 == code, cmd)
 
 	if 0 != code:
