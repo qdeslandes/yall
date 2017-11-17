@@ -36,7 +36,7 @@ addons:
     packages:
       - gcc-6
       - lcov
-      - python3-pip
+      - python3.5
     sources:
       - ubuntu-toolchain-r-test
   sonarqube:
@@ -51,7 +51,6 @@ cache:
     - '$HOME/.sonar/cache'
 
 install:
-  - pip3 install --upgrade python
   - wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz && tar -xvf cmake-3.7.2-Linux-x86_64.tar.gz
   - cmake-3.7.2-Linux-x86_64/bin/cmake ${CMAKE_CONFIG} .
 
