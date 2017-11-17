@@ -58,6 +58,7 @@ install:
 script:
   - make
   - make unit
+  - python3 -v
   - make validate
 
 after_success:
