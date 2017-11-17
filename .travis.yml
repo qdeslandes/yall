@@ -62,7 +62,7 @@ install:
 script:
   - make
   - make unit
-  - make validate
+#  - make validate : currently disabled
 
 after_success:
   - if [[ "${BUILD_TYPE}" = "Release" && ("${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]]; then make coverage; fi
