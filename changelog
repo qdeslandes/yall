@@ -12,6 +12,7 @@ Current version (1.2.0) changelog
 		* Change unit test binary name (now 'yall_unit')
 		* Update soname (yall.so -> yall.so.major.minor -> yall.so.major.minor.patch)
 		* Install target now install 'README.md' and 'changelog' to 'share' folder prefixed with 'yall_'
+		* Delete old log file only when 's->output_file' is defined, avoid to call 'unlink()' with 'NULL'
 	[TEST]
 		* Add 'make checkstyle' target to run checkstyle on sources
 		* Add 'make validate' target which run script checking valgrind, unit, coverage, build, checkstyle...
