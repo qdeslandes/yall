@@ -18,8 +18,6 @@
 #
 
 language: c
-python:
-  - 3.6
 
 sudo: required
 dist: trusty
@@ -38,6 +36,7 @@ addons:
     packages:
       - gcc-6
       - lcov
+      - python3
     sources:
       - ubuntu-toolchain-r-test
   sonarqube:
