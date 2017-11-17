@@ -58,7 +58,7 @@ install:
 script:
   - make
   - make unit
-  - pip3 -p python3.5 virtualenv myenv
+  - pip3.5 -p python3.5 virtualenv myenv
   - make validate
 
 after_success:
