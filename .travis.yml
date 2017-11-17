@@ -36,6 +36,7 @@ addons:
     packages:
       - gcc-6
       - lcov
+      - python3-pip
     sources:
       - ubuntu-toolchain-r-test
   sonarqube:
