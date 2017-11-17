@@ -38,6 +38,7 @@ addons:
       - lcov
       - python3.5
     sources:
+      - deadsnakes-ppa
       - ubuntu-toolchain-r-test
   sonarqube:
     token:
