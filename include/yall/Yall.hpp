@@ -215,12 +215,14 @@ private:
 	void _callLog(std::string subsystem,
 		enum yall_log_level log_level,
 		std::string function_name,
+		std::string filename,
+		int32_t line,
 		void (*formatter)(YallData &d, const void *args),
 		const void *args)
 	{
 		struct YallCallParams p { formatter, args };
 
-		yall_call_log(subsystem.c_str(), log_level, function_name.c_str(), Yall::__yall_cpp_formatter, (const void *)&p);
+		yall_call_log(subsystem.c_str(), log_level, function_name.c_str(), filename.c_str(), line, Yall::__yall_cpp_formatter, (const void *)&p);
 	}
 
 public:
@@ -278,10 +280,12 @@ public:
 	static void __callLog(std::string subsystem,
 		enum yall_log_level log_level,
 		std::string function_name,
+		std::string filename,
+		int32_t line,
 		void (*formatter)(YallData &d, const void *args),
 		const void *args)
 	{
-		getInstance()._callLog(subsystem, log_level, function_name, formatter, args);
+		getInstance()._callLog(subsystem, log_level, function_name, filename, line, formatter, args);
 	}
 
 	static void __yall_cpp_formatter(struct yall_call_data *d, const void *args)

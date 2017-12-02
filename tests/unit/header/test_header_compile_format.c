@@ -55,6 +55,15 @@ Test(header, test_header_compile_format3)
 }
 
 /*
+ * Too many modifiers
+ */
+Test(header, test_header_compile_format4)
+{
+    header_compile_format(std_header, "%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d");
+    cr_assert_str_eq(std_header_format, "%s %s %s %s %s %s %s %s %s %s %d %d %d %d %d %d");
+}
+
+/*
  * Others
  */
 Test(header, test_header_compile_format5)
