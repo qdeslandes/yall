@@ -28,13 +28,8 @@ ELSEIF (WIN32)
         set(PROJECT_LINK_LIBRARIES)
 ENDIF ()
 
-# Installation
-if (PROJECT-MISC_CI_DEPLOY)
-        set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-endif ()
-
 # CMake logging
-message("> Add execuable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
+message("> Add executable ${PROJECT_NAME}_shared : ${PROJECT_OUTPUT_NAME}")
 message(">     Compile flags       :")
 message(">         Debug   : ${CMAKE_C_FLAGS_DEBUG}")
 message(">         Release : ${CMAKE_C_FLAGS_RELEASE}")
@@ -53,7 +48,7 @@ IF (PROJECT_YALL_SHARED)
         set_target_properties(yall_shared PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
         set_target_properties(yall_shared PROPERTIES
                 VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                SONAME "${PROJECT_VERSION_MAJOR}")
+		SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 	install(TARGETS yall_shared
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
@@ -70,8 +65,7 @@ IF (PROJECT_YALL_STATIC)
         target_link_libraries(yall_static ${PROJECT_LINK_LIBRARIES})
         set_target_properties(yall_static PROPERTIES OUTPUT_NAME ${PROJECT_OUTPUT_NAME})
         set_target_properties(yall_static PROPERTIES
-                VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-                SONAME "${PROJECT_VERSION_MAJOR}")
+                VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 	install(TARGETS yall_static
 		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
@@ -83,8 +77,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION ${CMAKE_INSTALL_PREFIX
         PATTERN "version.h.in" EXCLUDE)
 
 # Make dist
-add_custom_target(dist COMMAND ${CMAKE_COMMAND} -E tar "cfvz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}.tgz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-add_custom_command(TARGET dist
-          POST_BUILD
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/LICENSE "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}"
-          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README.md "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+if (PROJECT-MISC_CI_DEPLOY)
+	add_custom_target(dist COMMAND ${CMAKE_COMMAND} -E tar "cfvz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}.tgz" "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+endif ()

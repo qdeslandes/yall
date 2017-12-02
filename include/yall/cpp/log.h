@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_UTILS_H
-#define _YALL_UTILS_H
+#ifndef _YALL_CPP_LOG_H
+#define _YALL_CPP_LOG_H
 
-#ifdef __linux__
-#       define _YALL_PUBLIC     __attribute__((visibility("default")))
-#elif _WIN32
-#       define _YALL_PUBLIC     __declspec(dllexport)
-#	include "yall/msvc_defines.h"
-#endif
+#define _YALL_LOG(subsystem, log_level, msg) \
+	do { \
+		std::ostringstream oss; \
+		oss << msg; \
+		yall_log(subsystem, log_level, FUNCTION, \
+			oss.str().c_str()); \
+	} while (0)
 
-#define _STRINGIFY(x) #x
-#define STRINGIFY(x) _STRINGIFY(x)
-
+#define _YALL_CALL_LOG(subsystem, log_level, function, args) \
+	Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
+		function, args)
 #endif
