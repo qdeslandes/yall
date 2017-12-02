@@ -36,7 +36,7 @@ def prepare(argv):
 	# Remove it first
 	shutil.rmtree(buildDir, ignore_errors=True)
 	os.makedirs(buildDir)
-	
+
 	return workingDir, buildDir
 
 """
@@ -49,6 +49,34 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 		testError('Command failed.')
 
 	return 0 == code
+
+def gccAnalyzer(cmd, code, stdout, stderr):
+	lines = stderr.split('\n')
+
+	warnings = 0
+	errors = 0
+	notes = 0
+	for line in lines:
+		if 'note' in line:
+			notes += 1
+		elif 'warning' in line:
+			warnings += 1
+		elif 'error' in line:
+			errors += 1
+
+	testResults(not (notes or warnings or errors), cmd)
+
+	if notes:
+		testError(str(notes) + ' note(s)')
+	if warnings:
+		testError(str(warnings) + ' warning(s)')
+	if errors:
+		testError(str(errors) + ' error(s)')
+
+	if notes or warnings or errors:
+		testError('Run the test manually for more detailed output')
+
+	return not (notes or warnings or errors)
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
 	error = code != 0
@@ -80,7 +108,7 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 				stats['suppressed'] = val
 
 	statErrors = len(stats)
-	
+
 	testResults(not error and not statErrors, cmd)
 
 	if error:
@@ -101,7 +129,7 @@ def coverageAnalyzer(cmd, code, stdout, stderr):
 		if re.match('Lines executed:', line):
 			resultsLine = line
 			break
-			
+
 	coverage = float(re.split('[:% ]+', resultsLine)[2])
 
 	testResults(0 == code and not coverage < 95.0, cmd)
@@ -121,13 +149,15 @@ def styleAnalyzer(cmd, code, stdout, stderr):
 			warnings += 1
 		elif re.match('ERROR', line):
 			errors += 1
-	
-	testResults(warnings or errors, cmd)
 
+	testResults(not (warnings or errors), cmd)
+
+	if warnings:
+		testError(str(warnings) + ' warning(s)')
+	if errors:
+		testError(str(errors) + ' error(s)')
 	if warnings or errors:
-		testError('Warnings count : ' + str(warnings))
-		testError('Errors count : ' + str(errors))
-		testError('Run the test manually for more detailed output.')
+		testError('Run the test manually for more detailed output')
 
 	return not (warnings or errors)
 
@@ -169,7 +199,7 @@ def main(argv):
 	cmakeOptions = "-DCMAKE_BUILD_TYPE=Debug"
 	debugSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
-		['make -C ' + buildDir + ' -j 9', defaultAnalyzer],
+		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
 		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
 		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
 		['make -C ' + buildDir + ' unit', defaultAnalyzer],
@@ -180,7 +210,7 @@ def main(argv):
 	cmakeOptions = "-DCMAKE_BUILD_TYPE=Release"
 	releaseSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
-		['make -C ' + buildDir + ' -j 9', defaultAnalyzer],
+		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
 		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
 		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
 		['make -C ' + buildDir + ' unit', defaultAnalyzer],
