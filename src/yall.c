@@ -88,6 +88,8 @@ uint8_t yall_is_init(void)
 yall_error yall_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function,
+	const char *filename,
+	int32_t line,
 	const char *format,
 	...)
 {
@@ -122,7 +124,8 @@ yall_error yall_log(const char *subsystem,
 		goto end;
 	}
 
-	fill_header_content(&hc, subsystem, log_level, function);
+	fill_header_content(&hc, subsystem, log_level, function, filename,
+		line);
 
 	va_start(args, format);
 
@@ -163,6 +166,8 @@ end:
 yall_error yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
+	const char *filename,
+	int32_t line,
 	void (*formatter)(yall_call_data *d, const void *args),
 	const void *args)
 {
@@ -200,7 +205,8 @@ yall_error yall_call_log(const char *subsystem,
 
 	formatter(&d, args);
 
-	fill_header_content(&hc, subsystem, log_level, function_name);
+	fill_header_content(&hc, subsystem, log_level, function_name, filename,
+		line);
 
 	hdr_len = generate_call_hdr(NULL, 0, &hc);
 	buff_len = hdr_len + d.message_size + 1;

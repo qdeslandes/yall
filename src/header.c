@@ -48,7 +48,7 @@
  * compiled header format can't exceed YALL_HEADER_LEN.
  */
 #define MATCHES_SIZE	10
-#define NBR_MODIFIERS	5	// The first index returns an empty string
+#define NBR_MODIFIERS	7	// The first index returns an empty string
 
 static enum yall_matches std_matches[MATCHES_SIZE] = { 0 };
 static enum yall_matches call_matches[MATCHES_SIZE] = { 0 };
@@ -72,6 +72,12 @@ static inline bool is_modifier(char c, enum yall_matches *match)
 		break;
 	case 'f':
 		*match = function;
+		break;
+	case 'F':
+		*match = filename;
+		break;
+	case 'L':
+		*match = line;
 		break;
 	case 'd':
 		*match = date;
@@ -172,12 +178,15 @@ void header_compile_format(enum header_type hdr_type, char *format)
 }
 
 void fill_header_content(struct header_content *hc, const char *subsystem,
-	enum yall_log_level log_level, const char *function_name)
+	enum yall_log_level log_level, const char *function_name,
+	const char *filename, int32_t line)
 {
 	hc->subsystem = subsystem;
 	hc->log_level = get_log_level_name(log_level);
 	hc->function_name = function_name;
+	hc->filename = filename;
 
+	snprintf(hc->line, YALL_LINE_STR_LEN, "%d", line);
 	set_date(hc->date_long);
 }
 
@@ -204,6 +213,8 @@ static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 		hc->subsystem,
 		hc->log_level,
 		hc->function_name,
+		hc->filename,
+		hc->line,
 		hc->date_long
 	};
 

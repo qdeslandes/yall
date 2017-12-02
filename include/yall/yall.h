@@ -85,6 +85,8 @@ _YALL_PUBLIC uint8_t yall_is_init(void);
 _YALL_PUBLIC yall_error yall_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function,
+	const char *filename,
+	int32_t line,
 	const char *format,
 	...);
 
@@ -101,6 +103,8 @@ _YALL_PUBLIC yall_error yall_log(const char *subsystem,
 _YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function_name,
+	const char *filename,
+	int32_t line,
 	void (*formatter)(yall_call_data *d, const void *args),
 	const void *args);
 
