@@ -5,6 +5,7 @@
 import sys, subprocess, getopt, os, re, shutil
 
 isError = False
+customEnv = []
 
 COLOR_DEFAULT='\033[39m'
 COLOR_YELLOW='\033[33m'
@@ -174,7 +175,7 @@ def testSection(sectionName, tests):
 
 def test(cmd, analyzer=defaultAnalyzer):
 	returnValue = False
-	result = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	result = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
 
 	try:
 		returnValue = analyzer(cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
@@ -184,6 +185,11 @@ def test(cmd, analyzer=defaultAnalyzer):
 	return returnValue
 
 def main(argv):
+	global customEnv
+
+	customEnv = os.environ.copy()
+	customEnv["LC_ALL"] = "C"
+
 	print('=== Code validity checking for yall library.')
 	print('=== Copyright (C) 2017 Quentin "Naccyde" Deslandes.')
 	print('=== Redistribution and use of this file is allowed according to the terms of the MIT license.')
