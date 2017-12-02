@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_UTILS_H
-#define _YALL_UTILS_H
+/*
+ * As only defines are available here, there is not reason to add inclusion
+ * guards.
+ */
 
-#ifdef __linux__
-#       define _YALL_PUBLIC     __attribute__((visibility("default")))
-#elif _WIN32
-#       define _YALL_PUBLIC     __declspec(dllexport)
-#	include "yall/msvc_defines.h"
+// MSVC 12.0 _MSC_VER == 1800 (Visual Studio 2013)
+#if (_MSC_VER == 1800)
+#	define inline __inline
+#	define __func__ __FUNCTION__
 #endif
 
-#define _STRINGIFY(x) #x
-#define STRINGIFY(x) _STRINGIFY(x)
-
+// MSVC 14.0 _MSC_VER == 1900 (Visual Studio 2015)
+#if (0 < _MSC_VER && _MSC_VER < 1900)
+#	define snprintf _snprintf
 #endif

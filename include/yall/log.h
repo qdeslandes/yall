@@ -49,10 +49,7 @@
  *	      YALL_DEBUG(sub, "This is " << "my log " << "msg");
  */
 
-// MSVC 12.0
-#if (_MSC_VER == 1800)
-#	define __func__ __FUNCTION__
-#endif
+#include "yall/msvc_defines.h"
 
 #define FUNCTION __func__
 
@@ -63,17 +60,7 @@
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
 		yall_call_log(subsystem, log_level, FUNCTION, function, args)
 #else
-#	define _YALL_LOG(subsystem, log_level, msg) \
-		do { \
-			std::ostringstream oss; \
-			oss << msg; \
-			yall_log(subsystem, log_level, FUNCTION, \
-				oss.str().c_str()); \
-		} while (0)
-
-#	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-		Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
-			function, args)
+#include "yall/cpp/log.h"
 #endif
 
 #define YALL_EMERG(subsystem, ...)      \
