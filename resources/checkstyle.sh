@@ -19,6 +19,11 @@ do
         continue
     fi
 
+    # Avoid MSVC specific definitions
+    if [[ $file == *"msvc_defines.h" ]]; then
+        continue
+    fi
+
     ./resources/checkpatch.pl -q --ignore CONST_STRUCT,INITIALISED_STATIC,SPACING,GLOBAL_INITIALISERS,NEW_TYPEDEFS,USE_FUNC --no-tree \
          -f $file
 done
