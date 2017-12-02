@@ -55,10 +55,12 @@
 
 #ifndef __cplusplus
 #	define _YALL_LOG(subsystem, log_level, ...) \
-		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, ##__VA_ARGS__)
+		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
+			##__VA_ARGS__)
 
 #	define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-		yall_call_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, function, args)
+		yall_call_log(subsystem, log_level, FUNCTION, __FILE__, \
+			__LINE__, function, args)
 #else
 #include "yall/cpp/log.h"
 #endif
