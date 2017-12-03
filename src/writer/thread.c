@@ -28,7 +28,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <stdatomic.h>
 
 #include "yall/debug.h"
 #include "yall/error.h"
@@ -39,6 +38,7 @@
 #include "yall/writer/console.h"
 
 #ifdef __linux__
+#include <stdatomic.h>
 #include <unistd.h>
 #define yall_sleep(ms) usleep(ms * 1000)
 static atomic_bool thread_run = true;

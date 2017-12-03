@@ -26,9 +26,9 @@
 
 #include <stdlib.h>
 #include <malloc.h>
-#include <stdatomic.h>
 
 #ifdef __linux__
+#include <stdatomic.h>
 #define yall_aligned_alloc(alignment, size) aligned_alloc(alignment, size)
 #define yall_aligned_free(ptr) free(ptr)
 #elif _WIN32
@@ -75,7 +75,11 @@ void enqueue(void *data)
 	do {
 		orig_head = head;
 		new_node->next = orig_head;
+#ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&head, &orig_head, new_node));
+#else
+	} while (orig_head != InterlockedCompareExchangePointer(&head, new_node, orig_head));
+#endif
 }
 
 struct qnode *swap_queue(void)
@@ -87,7 +91,11 @@ struct qnode *swap_queue(void)
 
 	do {
 		orig_head = head;
+#ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&head, &orig_head, NULL));
+#else
+	} while (orig_head != InterlockedCompareExchangePointer(&head, NULL, orig_head));
+#endif
 
 	return orig_head;
 }

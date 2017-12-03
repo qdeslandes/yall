@@ -29,6 +29,7 @@
 #ifdef YALL_UNIT
 #       include <stdio.h>
 #       include <stdarg.h>
+#		include <pthread.h>
 
 #       ifdef __linux__
 #	      include <semaphore.h>
