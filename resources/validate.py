@@ -170,6 +170,7 @@ def testSection(sectionName, tests):
 	print("=== \tTesting ", COLOR_GREEN, sectionName, COLOR_DEFAULT, " :", sep='')
 
 	for cmd, analyzer in tests:
+		print('Test : ' + cmd)
 		if not test(cmd, analyzer):
 			isError = True
 
