@@ -68,7 +68,7 @@ void message_delete(struct message *msg);
 
 /*
  * message_delete_wrapper : used to suppress warnings as function deleting the
- * 	message is called by a function requiring it to be as void (*)(void *).
+ *	message is called by a function requiring it to be as void (*)(void *).
  */
 void message_delete_wrapper(void *msg);
 

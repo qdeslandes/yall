@@ -73,7 +73,8 @@ yall_error yall_init(void)
 
 	config_setup();
 
-	if ((ret = writer_init(WRITER_THREAD_FREQUENCY)))
+	ret = writer_init(WRITER_THREAD_FREQUENCY);
+	if (ret)
 		goto err;
 
 end:

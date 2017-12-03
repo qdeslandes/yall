@@ -79,7 +79,7 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 			 */
 			if (params && s->status != yall_inherited_status
 				&& params->status != yall_subsys_disable)
- 				params->status = s->status;
+				params->status = s->status;
 
 			if (params && s->output_type != yall_inherited_output)
 				params->output_type = s->output_type;

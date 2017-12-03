@@ -10,8 +10,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -50,12 +50,12 @@ static __declspec(align(64)) bool thread_run = true;
 
 /*
  * This should ensure atomicity of read / write on the variable. But, as
- * Chris Hanson mention here https://stackoverflow.com/questions/78277/how-to-guarantee-64-bit-writes-are-atomic,
- * there is many factors to check to be sure this will work. So, this is
- * not sufficient, but... This variable is not business critical.
- * Also, Intel assumes reading / writing a 64 bits aligned variable is
- * thread safe : https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf
- * See also : http://preshing.com/20130618/atomic-vs-non-atomic-operations/
+ * Chris Hanson mention here https://goo.gl/qc3g9E, there is many factors to
+ * check to be sure this will work. So, this is not sufficient, but... This
+ * variable is not business critical.
+ * Also, Intel assumes reading / writing a 64 bits aligned variable is thread
+ * safe : https://goo.gl/HW5oua.
+ * See also : https://goo.gl/4DzPyx.
  */
 
 static uint16_t thread_frequency;
@@ -93,6 +93,7 @@ static void write_queue_messages(struct qnode *msg_queue)
 	write_queue_messages(msg_queue->next);
 
 	struct message *m = msg_queue->data;
+
 	if (yall_console_output & m->output_type)
 		write_log_console(m->log_level, m->data);
 
@@ -115,7 +116,8 @@ static void *writer_thread(void *args)
 
 		write_queue_messages(msg_queue);
 
-		int wait_ms = (int)(loop_duration_ms - ((clock() - begin) / CLOCKS_PER_SEC) * 1000.0);
+		int wait_ms = (int)(loop_duration_ms -
+			((clock() - begin) / CLOCKS_PER_SEC) * 1000.0);
 		yall_sleep(wait_ms);
 	}
 
@@ -123,7 +125,8 @@ static void *writer_thread(void *args)
 	 * Not the cleanest way to do this, but this line allow to write the
 	 * remaining log message added to the queue between swap_queue() and
 	 * the beginning of the loop. This way, all the log message added
-	 * between swap_queue() and thread_run = false assignation are displayed.
+	 * between swap_queue() and thread_run = false assignation are
+	 * displayed.
 	 */
 	write_queue_messages(swap_queue());
 
