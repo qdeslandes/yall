@@ -19,7 +19,7 @@ Test(error, test_yall_strerror0)
 Test(error, test_yall_strerror1)
 {
 	cr_assert_str_eq(yall_strerror(yall_err_end), errordesc[YALL_UNKNOW_ERROR].message);
-	
+
 	cr_assert_str_eq(yall_strerror(yall_err_end+1), errordesc[YALL_UNKNOW_ERROR].message);
 }
 

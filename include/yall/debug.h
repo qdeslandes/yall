@@ -42,6 +42,7 @@
 #       define vsnprintf   _tests_vsnprintf
 #       define malloc      _tests_malloc
 #       define strlen      _tests_strlen
+#	define pthread_create _tests_pthread_create
 
 	void *_tests_malloc(size_t size);
 	int _tests_fprintf(FILE *stream, const char *format, ...);
@@ -49,6 +50,8 @@
 	int _tests_vsnprintf(char *str, size_t size, const char *format,
 		va_list ap);
 	size_t _tests_strlen(const char *s);
+	int _tests_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+		void *(*start_routine) (void *), void *arg);
 
 #       ifdef __linux__
 #	       define sem_init    _tests_sem_init

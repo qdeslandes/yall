@@ -57,33 +57,10 @@ ParameterizedTest(
 }
 
 /*
- * Failing sem_wait
- */
-Test(console,
-        test_write_log_console2,
-        .init=test_write_log_console_setup,
-        .fini=test_write_log_console_clean)
-{
-#ifdef __linux__
-        disable_sem_wait();
-#elif _WIN32
-        disable_WaitForSingleObject();
-#endif
-
-        cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_LOCK_ERR);
-
-#ifdef __linux__
-        enable_sem_wait();
-#elif _WIN32
-        enable_WaitForSingleObject();
-#endif
-}
-
-/*
  * Failing fprintf
  */
 Test(console,
-        test_write_log_console3,
+        test_write_log_console2,
         .init=test_write_log_console_setup,
         .fini=test_write_log_console_clean)
 {

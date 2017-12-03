@@ -50,19 +50,9 @@ Test(yall, test_yall_call_log2, .init=tests_yall_log_setup, .fini=tests_yall_log
 }
 
 /*
- * Failed in writing message
- */
-Test(yall, test_yall_call_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
-{
-        disable_fprintf();
-        cr_assert_eq(yall_call_log("01", yall_emerg, "", "test.c", 32, tests_call_log_function, NULL), YALL_CONSOLE_WRITE_ERR);
-        enable_fprintf();
-}
-
-/*
  * Disabled subsystem
  */
-Test(yall, test_yall_call_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_call_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
         _subsystems[0]->status = yall_subsys_disable;
 

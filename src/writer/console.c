@@ -80,14 +80,7 @@ static void reset_color(void)
 yall_error write_log_console(enum yall_log_level log_level,
 	const char *msg)
 {
-	uint32_t sem_ret = 0;
 	yall_error ret = YALL_SUCCESS;
-
-	if (sem_ret != 0) {
-		fprintf(stderr, "DEBUG_YALL - Could not lock console_sem\n");
-		ret = YALL_CONSOLE_LOCK_ERR;
-		goto end;
-	}
 
 	set_color(log_level);
 
@@ -96,6 +89,5 @@ yall_error write_log_console(enum yall_log_level log_level,
 
 	reset_color();
 
-end:
 	return ret;
 }

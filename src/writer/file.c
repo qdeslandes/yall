@@ -35,13 +35,7 @@
 
 yall_error write_log_file(const char *file, const char *msg)
 {
-	uint32_t sem_ret = 0;
 	yall_error ret = YALL_SUCCESS;
-
-	if (sem_ret != 0) {
-		ret = YALL_FILE_LOCK_ERR;
-		goto end;
-	}
 
 	FILE *f = fopen(file, "a");
 
@@ -52,7 +46,6 @@ yall_error write_log_file(const char *file, const char *msg)
 		ret = YALL_FILE_OPEN_ERR;
 	}
 
-end:
 	return ret;
 }
 

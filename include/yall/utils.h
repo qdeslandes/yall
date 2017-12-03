@@ -35,4 +35,6 @@
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
 
+#define UNUSED(expr) do { (void)(expr); } while (0)
+
 #endif

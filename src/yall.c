@@ -99,13 +99,12 @@ yall_error yall_log(const char *subsystem,
 	// TODO : prefix structs with "yall"
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
+	struct message *m = NULL;
 	va_list args, args_cpy;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
 	struct header_content hc = { 0 };
 	struct yall_subsystem_params p = { 0 };
-	char *msg = NULL;
-	struct message *m = NULL;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
@@ -128,6 +127,9 @@ yall_error yall_log(const char *subsystem,
 		ret = YALL_LOG_LEVEL_TOO_LOW;
 		goto end;
 	}
+
+	fill_header_content(&hc, subsystem, log_level, function, filename,
+		line);
 
 	va_start(args, format);
 

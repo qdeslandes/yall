@@ -76,6 +76,8 @@ void *_tests_malloc(size_t size)
 
 TESTS_REDEFINE(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
 TESTS_REDEFINE(strlen, -2, (const char *str), str);
+TESTS_REDEFINE(pthread_create, -1, (pthread_t *thread, const pthread_attr_t *attr,
+        void *(*start_routine) (void *), void *arg), thread, attr, start_routine, arg);
 
 #ifdef __linux__
 TESTS_REDEFINE(sem_wait, -1, (sem_t *sem), sem);

@@ -67,6 +67,12 @@ struct message *message_new(char *data,
 void message_delete(struct message *msg);
 
 /*
+ * message_delete_wrapper : used to suppress warnings as function deleting the
+ * 	message is called by a function requiring it to be as void (*)(void *).
+ */
+void message_delete_wrapper(void *msg);
+
+/*
  * generate_message : create the log message. It fills <buffer> we given data
  *	and specific format. No pointer argument can be NULL, but <args> can be
  *	empty.

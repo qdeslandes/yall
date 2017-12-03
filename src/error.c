@@ -26,10 +26,13 @@ static struct yall_errordesc {
 	YALL_ERROR(YALL_CONSOLE_WRITE_ERR, "Could not write on console."),
 
 	YALL_ERROR(YALL_STRING_WRITE_ERR, "Could not write in string."),
-	YALL_ERROR(YALL_SUBSYS_NOT_EXISTS, "Given subsystem does not exists."),
 
+	YALL_ERROR(YALL_SUBSYS_NOT_EXISTS, "Given subsystem does not exists."),
 	YALL_ERROR(YALL_SUBSYS_DISABLED, "Subsystem disabled."),
-	YALL_ERROR(YALL_CANT_CREATE_SUBSYS, "Could not create subsystem.")
+
+	YALL_ERROR(YALL_CANT_CREATE_SUBSYS, "Could not create subsystem."),
+
+	YALL_ERROR(YALL_CANT_CREATE_THREAD, "Writing thread can't be created.")
 };
 
 const char *yall_strerror(yall_error err)

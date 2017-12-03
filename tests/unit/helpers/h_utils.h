@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 #include "yall/yall.h"
 #include "yall/message.h"
@@ -36,8 +37,8 @@
         }
 
 #define TESTS_REDEFINE_PROTO_LIGHT(function) \
-    int  function ## _fail; \
-        void disable_ ## function(); \
+	int  function ## _fail; \
+	void disable_ ## function(); \
         void enable_ ## function();
 
 #define TESTS_REDEFINE_PROTO(function, proto) \
@@ -53,6 +54,8 @@ TESTS_REDEFINE_PROTO(snprintf, (char *str, size_t size, const char *format, ...)
 TESTS_REDEFINE_PROTO(fprintf, (FILE *stream, const char *format, ...));
 TESTS_REDEFINE_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
 TESTS_REDEFINE_PROTO(strlen, (const char *s));
+TESTS_REDEFINE_PROTO(pthread_create, (pthread_t *thread, const pthread_attr_t *attr,
+        void *(*start_routine) (void *), void *arg))
 
 TESTS_REDEFINE_PROTO_LIGHT(malloc);
 void *_tests_malloc(size_t size);

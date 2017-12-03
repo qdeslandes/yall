@@ -36,17 +36,6 @@
 #include "yall/debug.h"
 #include "yall/header.h"
 
-static char *log_levels_names[8] = {
-		"DEBUG",
-		"INFO",
-		"NOTICE",
-		"WARNING",
-		"ERROR",
-		"CRITICAL",
-		"ALERT",
-		"EMERGENCY"
-	};
-
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
@@ -66,6 +55,11 @@ void message_delete(struct message *msg)
 {
 	free(msg->data);
 	free(msg);
+}
+
+void message_delete_wrapper(void *msg)
+{
+	message_delete((struct message *) msg);
 }
 
 size_t generate_std_msg(char *log_buffer, size_t len,

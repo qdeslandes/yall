@@ -57,12 +57,13 @@ def gccAnalyzer(cmd, code, stdout, stderr):
 	warnings = 0
 	errors = 0
 	notes = 0
+
 	for line in lines:
-		if 'note' in line:
+		if ': note:' in line:
 			notes += 1
-		elif 'warning' in line:
+		elif ': warning:' in line:
 			warnings += 1
-		elif 'error' in line:
+		elif ': error:' in line:
 			errors += 1
 
 	testResults(not (notes or warnings or errors), cmd)
@@ -256,7 +257,7 @@ def main(argv):
 		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
 		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
 		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
-		['make -C ' + buildDir + ' unit', defaultAnalyzer],
+		['make -C ' + buildDir + ' unit', unitAnalyzer],
 		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
 	testSection('Release', releaseSection)
 

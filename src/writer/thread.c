@@ -30,6 +30,7 @@
 #include <time.h>
 #include <stdatomic.h>
 
+#include "yall/debug.h"
 #include "yall/error.h"
 #include "yall/queue.h"
 #include "yall/output_types.h"
@@ -38,6 +39,7 @@
 #include "yall/writer/console.h"
 
 #ifdef __linux__
+#include <unistd.h>
 #define yall_sleep(ms) usleep(ms * 1000)
 static atomic_bool thread_run = true;
 #elif _WIN32
@@ -97,11 +99,13 @@ static void write_queue_messages(struct qnode *msg_queue)
 	if (yall_file_output & m->output_type)
 		write_log_file(m->output_file, m->data);
 
-	qnode_delete(msg_queue, message_delete);
+	qnode_delete(msg_queue, message_delete_wrapper);
 }
 
 static void *writer_thread(void *args)
 {
+	UNUSED(args);
+
 	double loop_duration_ms = (1.0 / thread_frequency) * 1000.0;
 
 	while (thread_run) {

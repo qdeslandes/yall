@@ -9,7 +9,8 @@ Test(yall, test_yall_is_initl0)
 {
         cr_assert_eq(yall_is_init(), initialized);
 
-        initialized = 2;
+        yall_init();
+	yall_init();
         cr_assert_eq(yall_is_init(), initialized);
 
         yall_init();

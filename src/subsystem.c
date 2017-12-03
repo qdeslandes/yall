@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "yall/utils.h"
+#include "yall/writer/file.h"
 #include "yall/error.h"
 #include "yall/debug.h"
 
