@@ -26,31 +26,14 @@
 
 #include <stdio.h>
 
-<<<<<<< HEAD:src/file.c
-#ifdef __linux__
-#       include <semaphore.h>
-#elif _WIN32
-#       include <Windows.h>
-=======
 #ifdef _WIN32
 #include <Windows.h>
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/file.c
 #endif
 
 #include "yall/utils.h"
 #include "yall/debug.h"
 
-<<<<<<< HEAD:src/file.c
-#ifdef __linux__
-extern sem_t file_sem;
-#elif _WIN32
-extern HANDLE file_sem;
-#endif
-
 yall_error write_log_file(const char *file, const char *msg)
-=======
-uint8_t write_log_file(const char *file, const char *msg)
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/file.c
 {
 	uint32_t sem_ret = 0;
 	yall_error ret = YALL_SUCCESS;

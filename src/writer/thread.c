@@ -30,7 +30,7 @@
 #include <time.h>
 #include <stdatomic.h>
 
-#include "yall/errors.h"
+#include "yall/error.h"
 #include "yall/queue.h"
 #include "yall/output_types.h"
 #include "yall/message.h"
@@ -62,7 +62,7 @@ static void *writer_thread(void *args);
 
 uint8_t start_thread(uint16_t frequency)
 {
-	uint8_t ret = YALL_OK;
+	uint8_t ret = YALL_SUCCESS;
 
 	thread_frequency = frequency;
 

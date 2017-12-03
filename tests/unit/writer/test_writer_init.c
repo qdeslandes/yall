@@ -5,7 +5,7 @@
  */
 Test(writer, test_writer_init0)
 {
-	cr_assert_eq(writer_init(60), YALL_OK);
+	cr_assert_eq(writer_init(60), YALL_SUCCESS);
 }
 
 /*

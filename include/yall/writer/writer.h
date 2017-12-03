@@ -28,20 +28,21 @@
 #include <stdint.h>
 
 #include "yall/output_types.h"
-#include "yall/log_levels.h"
+#include "yall/log_level.h"
 #include "yall/message.h"
+#include "yall/error.h"
 
 /*
  * writer_init : start the writing thread. Return YALL_OK on success, error
  *	otherwise.
  */
-uint8_t writer_init(uint16_t frequency);
+yall_error writer_init(uint16_t frequency);
 
 /*
  * write : enqueue the given message to the lock-free queue. Returns a status
  *	code.
  */
-uint8_t write_msg(struct message *m);
+void write_msg(struct message *m);
 
 /*
  * writer_destroy : stop the writing thread.

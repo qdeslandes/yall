@@ -33,7 +33,6 @@
 #endif
 
 #include "yall/utils.h"
-#include "yall/file.h"
 #include "yall/status.h"
 #include "yall/log_level.h"
 #include "yall/output_types.h"

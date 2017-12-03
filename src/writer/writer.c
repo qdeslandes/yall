@@ -31,13 +31,12 @@
 #include "yall/error.h"
 #include "yall/writer/thread.h"
 #include "yall/utils.h"
-#include "yall/errors.h"
 #include "yall/writer/console.h"
 #include "yall/writer/file.h"
 #include "yall/debug.h"
 #include "yall/queue.h"
 
-uint8_t writer_init(uint16_t frequency)
+yall_error writer_init(uint16_t frequency)
 {
 	yall_error ret = YALL_SUCCESS;
 
@@ -46,13 +45,9 @@ uint8_t writer_init(uint16_t frequency)
 	return ret;
 }
 
-uint8_t write_msg(struct message *m)
+void write_msg(struct message *m)
 {
-	yall_error ret = YALL_SUCCESS;
-
 	enqueue(m);
-
-	return ret;
 }
 
 void writer_close(void)

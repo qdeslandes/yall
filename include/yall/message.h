@@ -30,7 +30,7 @@
 
 #include "yall/header.h"
 #include "yall/call.h"
-#include "yall/log_levels.h"
+#include "yall/log_level.h"
 #include "yall/output_types.h"
 
 #define YALL_MSG_LEN	512

@@ -27,15 +27,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
-<<<<<<< HEAD:src/console.c
-#ifdef __linux__
-#       include <semaphore.h>
-#elif _WIN32
-#       include <Windows.h>
-=======
 #ifdef _WIN32
 #include <Windows.h>
->>>>>>> 5da637c... Move all writer files to writer folder:src/writer/console.c
 #endif
 
 #include "yall/utils.h"
