@@ -32,12 +32,6 @@ set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Release;" CACHE STRIN
 set(CMAKE_DEBUG_POSTFIX d)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-# Installation
-set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-if (PROJECT-MISC_CI_DEPLOY)
-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-endif ()
-
 # Build and platform specific configuration
 include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
 
@@ -72,10 +66,18 @@ elseif (WIN32)
 
 	# Specific windows headers directory
 	include_directories("${CMAKE_SOURCE_DIR}/external/include/yall_win32")
+
+	install(FILES external/lib/win32/msvc12/pthreadVC2.dll DESTINATION bin)
 endif ()
 
 install(FILES README.md DESTINATION share RENAME yall_README.md)
 install(FILES changelog DESTINATION share RENAME yall_changelog)
+
+# Installation
+set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+if (PROJECT-MISC_CI_DEPLOY)
+	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+endif ()
 
 # Target used to validate the validity of the sources modifications
 add_custom_target(validate
