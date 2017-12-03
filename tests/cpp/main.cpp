@@ -1,5 +1,11 @@
 #include <iostream>
+#include <pthread.h>
+
 #include <yall/Yall.hpp>
+
+pthread_t threads[5];
+
+void memoryInfos(YallData &d, const void *args);
 
 class Device {
 public:
@@ -20,6 +26,119 @@ public:
 	}
 };
 
+void *thread0(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_CALL_ERR("memory", memoryInfos, nullptr);
+		YALL_ALERT("scheduler" , "Using process 7034.");
+	}
+
+	return NULL;
+}
+
+void *thread1(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_CALL_ERR("memory", memoryInfos, nullptr);
+		YALL_ALERT("scheduler" , "Using process 7034.");
+	}
+
+	return NULL;
+}
+
+void *thread2(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_CALL_ERR("memory", memoryInfos, nullptr);
+		YALL_ALERT("scheduler" , "Using process 7034.");
+	}
+
+	return NULL;
+}
+
+void *thread3(void * args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_CALL_ERR("memory", memoryInfos, nullptr);
+		YALL_ALERT("scheduler" , "Using process 7034.");
+	}
+
+	return NULL;
+}
+
+void *thread4(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_CALL_ERR("memory", memoryInfos, nullptr);
+		YALL_ALERT("scheduler" , "Using process 7034.");
+	}
+
+	return NULL;
+}
+
+int main(void)
+{
+        #ifdef DEBUG
+        Yall::enableDebug();
+	#endif
+
+	Device d = Device();
+
+        Yall::config().setTabWidth(4);
+        Yall::config().setStdHeaderFormat("[%d] :: %L : %f : \n\t");
+        Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
+
+        Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
+
+	pthread_create(&threads[0], NULL, thread0, NULL);
+	pthread_create(&threads[1], NULL, thread1, NULL);
+	pthread_create(&threads[2], NULL, thread2, NULL);
+	pthread_create(&threads[3], NULL, thread3, NULL);
+	pthread_create(&threads[4], NULL, thread4, NULL);
+
+        YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+        YALL_DEBUG("io", "IO subsystem ready.");
+        YALL_CALL_ERR("memory", memoryInfos, nullptr);
+        YALL_ALERT("scheduler" , "Using process 7034.");
+
+        Yall::disableSubsystem("scheduler");
+        YALL_DEBUG("scheduler", "Starting process 52233.");
+        Yall::enableSubsystem("scheduler");
+
+	d.status();
+
+#ifdef _WIN32
+        getchar();
+#endif
+	for (int i = 0; i < 5; ++i)
+		pthread_join(threads[i], NULL);
+
+        return 0;
+}
+
 void memoryInfos(YallData &d, const void *args)
 {
         (void)(args);
@@ -39,40 +158,3 @@ void memoryInfos(YallData &d, const void *args)
         d.newLine(1) << "7ff9cd04f000-7ff9cd1e2000 r-xp 00000000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
         d.newLine(1) << "7ff9cd1e2000-7ff9cd3e2000 ---p 00193000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so";
  }
-
-int main(void)
-{
-        #ifdef DEBUG
-        Yall::enableDebug();
-	#endif
-	
-	Device d = Device();
-        
-        Yall::config().setTabWidth(4);
-        Yall::config().setStdHeaderFormat("[%d] :: %L : %f : \n\t");
-        Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
-        
-        Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
-
-        YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
-        YALL_DEBUG("io", "IO subsystem ready.");
-        YALL_CALL_ERR("memory", memoryInfos, nullptr);
-
-        Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
-
-        YALL_ALERT("scheduler" , "Using process 7034.");
-
-        Yall::disableSubsystem("scheduler");
-        YALL_DEBUG("scheduler", "Starting process 52233.");
-        Yall::enableSubsystem("scheduler");
-
-	d.status();
-
-#ifdef _WIN32
-        getchar();
-#endif
-
-        return 0;
-}

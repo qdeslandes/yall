@@ -1,6 +1,130 @@
 #include <stdio.h>
+#include <pthread.h>
 
 #include <yall/yall.h>
+
+pthread_t threads[5];
+
+void memoryInfos(struct yall_call_data *d, const void *args);
+
+void *thread0(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+		YALL_CALL_ERR("memory", memoryInfos, NULL);
+	}
+
+	return NULL;
+}
+
+void *thread1(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+		YALL_CALL_ERR("memory", memoryInfos, NULL);
+	}
+
+	return NULL;
+}
+
+void *thread2(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+		YALL_CALL_ERR("memory", memoryInfos, NULL);
+	}
+
+	return NULL;
+}
+
+void *thread3(void * args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+		YALL_CALL_ERR("memory", memoryInfos, NULL);
+	}
+
+	return NULL;
+}
+
+void *thread4(void *args)
+{
+	UNUSED(args);
+
+	for (int i = 0; i < 15; ++i) {
+		YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+		YALL_DEBUG("io", "IO subsystem ready.");
+		YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+		YALL_CALL_ERR("memory", memoryInfos, NULL);
+	}
+
+	return NULL;
+}
+
+int main(void)
+{
+        yall_init();
+        yall_init();
+        yall_init();
+
+        #ifdef DEBUG
+        yall_enable_debug();
+        #endif
+
+        yall_config_set_tab_width(4);
+        yall_config_set_std_header_template("[%d] :: line %-4.4L :: %-9l : %f : \n\t");
+        yall_config_set_call_header_template("[%d] :: %-9l : %s : ");
+
+        yall_set_subsystem("yall_c_test", NULL, yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("io", "yall_c_test", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("memory", "yall_c_test", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, NULL);
+
+	pthread_create(&threads[0], NULL, thread0, NULL);
+	pthread_create(&threads[1], NULL, thread1, NULL);
+	pthread_create(&threads[2], NULL, thread2, NULL);
+	pthread_create(&threads[3], NULL, thread3, NULL);
+	pthread_create(&threads[4], NULL, thread4, NULL);
+
+        YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
+	YALL_DEBUG("io", "IO subsystem ready.");
+	YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
+        YALL_CALL_ERR("memory", memoryInfos, NULL);
+
+        YALL_ALERT("scheduler" , "Using process 7034.");
+
+        yall_disable_subsystem("scheduler");
+        YALL_DEBUG("scheduler", "Starting process 52233.");
+        yall_enable_subsystem("scheduler");
+
+#ifdef _WIN32
+        getchar();
+#endif
+
+	for (int i = 0; i < 5; ++i)
+		pthread_join(threads[i], NULL);
+
+	yall_close();
+        yall_close_all();
+
+        return 0;
+}
 
 void memoryInfos(struct yall_call_data *d, const void *args)
 {
@@ -20,42 +144,4 @@ void memoryInfos(struct yall_call_data *d, const void *args)
         yall_call_add_line(d, 1, "7ff9c8021000-7ff9cc000000 ---p 00000000 00:00 0 ");
         yall_call_add_line(d, 1, "7ff9cd04f000-7ff9cd1e2000 r-xp 00000000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so");
         yall_call_add_line(d, 1, "7ff9cd1e2000-7ff9cd3e2000 ---p 00193000 08:06 4195034                    /lib/x86_64-linux-gnu/libc-2.24.so");
-}
-
-int main(void)
-{
-        yall_init();
-
-        #ifdef DEBUG
-        yall_enable_debug();
-        #endif
-
-        yall_config_set_tab_width(4);
-        yall_config_set_std_header_template("[%d] :: line %-4.4L :: %-9l : %f : \n\t");
-        yall_config_set_call_header_template("[%d] :: %-9l : %s : ");
-        
-        yall_set_subsystem("yall_c_test", NULL, yall_debug, yall_console_output, NULL);
-        yall_set_subsystem("io", "yall_c_test", yall_debug, yall_console_output, NULL);
-        yall_set_subsystem("memory", "yall_c_test", yall_debug, yall_console_output, NULL);
-
-        YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
-	YALL_DEBUG("io", "IO subsystem ready.");
-	YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
-        YALL_CALL_ERR("memory", memoryInfos, NULL);
-
-        yall_set_subsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, NULL);
-
-        YALL_ALERT("scheduler" , "Using process 7034.");
-
-        yall_disable_subsystem("scheduler");
-        YALL_DEBUG("scheduler", "Starting process 52233.");
-        yall_enable_subsystem("scheduler");
-
-#ifdef _WIN32
-        getchar();
-#endif
-
-        yall_close_all();
-
-        return 0;
 }
