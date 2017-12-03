@@ -38,7 +38,7 @@ struct yall_call_data_line {
 };
 
 typedef struct yall_call_data {
-	uint16_t message_size;
+	size_t message_size;
 	char *header;
 	struct yall_call_data_line *lines;
 } yall_call_data;

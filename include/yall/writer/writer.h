@@ -22,19 +22,31 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_CPP_LOG_H
-#define _YALL_CPP_LOG_H
+#ifndef _WRITER_H
+#define _WRITER_H
 
-#define _YALL_LOG(subsystem, log_level, msg) \
-	do { \
-		std::ostringstream oss; \
-		oss << msg; \
-		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
-			oss.str().c_str()); \
-	} while (0)
+#include <stdint.h>
 
-#define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-	Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
-		__FILE__, __LINE__, function, args)
+#include "yall/output_types.h"
+#include "yall/log_level.h"
+#include "yall/message.h"
+#include "yall/error.h"
+
+/*
+ * writer_init : start the writing thread. Return YALL_OK on success, error
+ *	otherwise.
+ */
+yall_error writer_init(uint16_t frequency);
+
+/*
+ * write : enqueue the given message to the lock-free queue. Returns a status
+ *	code.
+ */
+void write_msg(struct message *m);
+
+/*
+ * writer_destroy : stop the writing thread.
+ */
+void writer_close(void);
 
 #endif

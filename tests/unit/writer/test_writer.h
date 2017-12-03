@@ -5,7 +5,7 @@
 #include <criterion/redirect.h>
 
 #include "h_utils.h"
-#include "yall/writer.h"
+#include "yall/writer/writer.h"
 #include "yall/error.h"
 
 #endif

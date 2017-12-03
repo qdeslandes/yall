@@ -22,25 +22,17 @@
  * SOFTWARE.
  */
 
-#include "yall/console.h"
+#include "yall/writer/console.h"
 
 #include <stdio.h>
 #include <stdint.h>
 
-#ifdef __linux__
-#       include <semaphore.h>
-#elif _WIN32
-#       include <Windows.h>
+#ifdef _WIN32
+#include <Windows.h>
 #endif
 
 #include "yall/utils.h"
 #include "yall/debug.h"
-
-#ifdef __linux__
-extern sem_t console_sem;
-#elif _WIN32
-extern HANDLE console_sem;
-#endif
 
 #ifdef __linux__
 static uint8_t colors[8] = { 97, 92, 92, 93, 91, 91, 91, 91 };
@@ -88,20 +80,7 @@ static void reset_color(void)
 yall_error write_log_console(enum yall_log_level log_level,
 	const char *msg)
 {
-	uint32_t sem_ret = 0;
 	yall_error ret = YALL_SUCCESS;
-
-#ifdef __linux__
-	sem_ret = sem_wait(&console_sem);
-#elif _WIN32
-	sem_ret = WaitForSingleObject(console_sem, INFINITE);
-#endif
-
-	if (sem_ret != 0) {
-		fprintf(stderr, "DEBUG_YALL - Could not lock console_sem\n");
-		ret = YALL_CONSOLE_LOCK_ERR;
-		goto end;
-	}
 
 	set_color(log_level);
 
@@ -110,12 +89,5 @@ yall_error write_log_console(enum yall_log_level log_level,
 
 	reset_color();
 
-#ifdef __linux__
-	sem_post(&console_sem);
-#elif _WIN32
-	ReleaseMutex(console_sem);
-#endif
-
-end:
 	return ret;
 }

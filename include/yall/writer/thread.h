@@ -22,19 +22,20 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_CPP_LOG_H
-#define _YALL_CPP_LOG_H
+#ifndef _YALL_THREAD_H
+#define _YALL_THREAD_H
 
-#define _YALL_LOG(subsystem, log_level, msg) \
-	do { \
-		std::ostringstream oss; \
-		oss << msg; \
-		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
-			oss.str().c_str()); \
-	} while (0)
+#include <stdint.h>
 
-#define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-	Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
-		__FILE__, __LINE__, function, args)
+/*
+ * start_thread : start the writer thread of the library. Returns a status code.
+ */
+uint8_t start_thread(uint16_t frequency);
+
+/*
+ * stop_thread : stop the writing thread of the library, this function can't
+ *	fail.
+ */
+void stop_thread(void);
 
 #endif

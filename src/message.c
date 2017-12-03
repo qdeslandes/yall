@@ -36,6 +36,32 @@
 #include "yall/debug.h"
 #include "yall/header.h"
 
+struct message *message_new(char *data,
+	enum yall_log_level log_level,
+	enum yall_output_type output_type,
+	const char *output_file)
+{
+	struct message *msg = malloc(sizeof(struct message));
+
+	msg->data = data;
+	msg->log_level = log_level;
+	msg->output_type = output_type;
+	msg->output_file = output_file;
+
+	return msg;
+}
+
+void message_delete(struct message *msg)
+{
+	free(msg->data);
+	free(msg);
+}
+
+void message_delete_wrapper(void *msg)
+{
+	message_delete((struct message *) msg);
+}
+
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args)
 {

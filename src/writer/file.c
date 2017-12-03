@@ -22,40 +22,20 @@
  * SOFTWARE.
  */
 
-#include "yall/file.h"
+#include "yall/writer/file.h"
 
 #include <stdio.h>
 
-#ifdef __linux__
-#       include <semaphore.h>
-#elif _WIN32
-#       include <Windows.h>
+#ifdef _WIN32
+#include <Windows.h>
 #endif
 
 #include "yall/utils.h"
 #include "yall/debug.h"
 
-#ifdef __linux__
-extern sem_t file_sem;
-#elif _WIN32
-extern HANDLE file_sem;
-#endif
-
 yall_error write_log_file(const char *file, const char *msg)
 {
-	uint32_t sem_ret = 0;
 	yall_error ret = YALL_SUCCESS;
-
-#ifdef __linux__
-	sem_ret = sem_wait(&file_sem);
-#elif _WIN32
-	sem_ret = WaitForSingleObject(file_sem, INFINITE);
-#endif
-
-	if (sem_ret != 0) {
-		ret = YALL_FILE_LOCK_ERR;
-		goto end;
-	}
 
 	FILE *f = fopen(file, "a");
 
@@ -66,13 +46,6 @@ yall_error write_log_file(const char *file, const char *msg)
 		ret = YALL_FILE_OPEN_ERR;
 	}
 
-#ifdef __linux__
-	sem_post(&file_sem);
-#elif _WIN32
-	ReleaseMutex(file_sem);
-#endif
-
-end:
 	return ret;
 }
 

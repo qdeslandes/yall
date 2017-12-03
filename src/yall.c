@@ -30,10 +30,14 @@
 #include <string.h>
 
 #include "yall/utils.h"
-#include "yall/writer.h"
+#include "yall/writer/writer.h"
 #include "yall/message.h"
 #include "yall/subsystem.h"
 #include "yall/debug.h"
+#include "yall/writer/writer.h"
+#include "yall/queue.h"
+
+#define WRITER_THREAD_FREQUENCY 60
 
 #include "version.h"
 #define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) "." STRINGIFY(YALL_MINOR) \
@@ -67,11 +71,11 @@ yall_error yall_init(void)
 
 	++initialized;
 
-	ret = writer_init();
+	config_setup();
+
+	ret = writer_init(WRITER_THREAD_FREQUENCY);
 	if (ret)
 		goto err;
-
-	config_setup();
 
 end:
 	return ret;
@@ -96,6 +100,7 @@ yall_error yall_log(const char *subsystem,
 	// TODO : prefix structs with "yall"
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
+	struct message *m = NULL;
 	va_list args, args_cpy;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
@@ -141,6 +146,7 @@ yall_error yall_log(const char *subsystem,
 
 	// Allocate the log message buffer
 	buff = malloc(buff_len);
+	m = message_new(buff, log_level, p.output_type, p.output_file);
 
 	/*
 	 * Header generation, hdr_len does not take in account the '\0', so
@@ -156,10 +162,9 @@ yall_error yall_log(const char *subsystem,
 	va_end(args);
 
 	// Write message
-	ret = write_msg(p.output_type, log_level, p.output_file, buff);
+	write_msg(m);
 
 end:
-	free(buff);
 	return ret;
 }
 
@@ -178,6 +183,7 @@ yall_error yall_call_log(const char *subsystem,
 	struct yall_call_data d = { 0 };
 	struct header_content hc = { 0 };
 	struct yall_subsystem_params p = { 0 };
+	struct message *m = NULL;
 
 	if (! initialized) {
 		ret = YALL_NOT_INIT;
@@ -212,14 +218,14 @@ yall_error yall_call_log(const char *subsystem,
 	buff_len = hdr_len + d.message_size + 1;
 
 	buff = malloc(buff_len);
+	m = message_new(buff, log_level, p.output_type, p.output_file);
 
 	generate_call_hdr(buff, hdr_len + 1, &hc);
 	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
 
-	ret = write_msg(p.output_type, log_level, p.output_file, buff);
+	write_msg(m);
 
 end:
-	free(buff);
 	return ret;
 }
 

@@ -47,7 +47,7 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 	testResults(0 == code, cmd)
 
 	if 0 != code:
-		testError('Command failed.')
+		testError('Run the test manually for more detailed output.')
 
 	return 0 == code
 
@@ -57,25 +57,26 @@ def gccAnalyzer(cmd, code, stdout, stderr):
 	warnings = 0
 	errors = 0
 	notes = 0
+
 	for line in lines:
-		if 'note' in line:
+		if ': note:' in line:
 			notes += 1
-		elif 'warning' in line:
+		elif ': warning:' in line:
 			warnings += 1
-		elif 'error' in line:
+		elif ': error:' in line:
 			errors += 1
 
 	testResults(not (notes or warnings or errors), cmd)
 
 	if notes:
-		testError(str(notes) + ' note(s)')
+		testError(str(notes) + ' note(s).')
 	if warnings:
-		testError(str(warnings) + ' warning(s)')
+		testError(str(warnings) + ' warning(s).')
 	if errors:
-		testError(str(errors) + ' error(s)')
+		testError(str(errors) + ' error(s).')
 
 	if notes or warnings or errors:
-		testError('Run the test manually for more detailed output')
+		testError('Run the test manually for more detailed output.')
 
 	return not (notes or warnings or errors)
 
@@ -121,8 +122,40 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 
 	return not error and not statErrors
 
+def unitAnalyzer(cmd, code, stdout, stderr):
+	fail = 0
+	crash = 0
+	synthesisLine = ''
+	for line in stderr.split('\n'):
+		if 'Synthesis:' in line:
+			synthesisLine = line
+
+	ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
+	if '' != synthesisLine:
+		for token in synthesisLine.split('|'):
+			l = token.split(':')
+			if 2 == len(l):
+				val = int(ansi_escape.sub('', l[1]))
+
+				if 'Failing' in l[0]:
+					fail = val
+				elif 'Crashing' in l[0]:
+					crash = val
+
+	testResults(0 == code and 0 == fail and 0 == crash, cmd)
+
+	if 0 != fail:
+		testError(str(fail) + ' failed.')
+	if 0 != crash:
+		testError(str(crash) + ' crashed.')
+	if 0 != code and 0 != fail and 0 != crash:
+		testError('Run the test manually for more detailed output.')
+
+	return 0 == code and 0 == fail and 0 == crash
+
 def coverageAnalyzer(cmd, code, stdout, stderr):
 	resultsLine = ''
+	coverage = 0.0
 
 	# Find the line 'Lines executed:' displayed line which contains the
 	# covering percentage.
@@ -131,12 +164,17 @@ def coverageAnalyzer(cmd, code, stdout, stderr):
 			resultsLine = line
 			break
 
-	coverage = float(re.split('[:% ]+', resultsLine)[2])
+	try:
+		coverage = float(re.split('[:% ]+', resultsLine)[2])
+	except:
+		coverage = 0.0
 
-	testResults(0 == code and not coverage < 95.0, cmd)
+	testResults(0 == code and coverage > 95.0, cmd)
 
 	if coverage < 95.0:
-		testError('Code coverage should be at least 95.0% (currently ', str(coverage), '%).')
+		testError('Code coverage should be at least 95.0% (currently ' + str(coverage) + '%).')
+	if 0 != code:
+		testError('Run the test manually for more detailed output.')
 
 	return 0 == code and not coverage < 95.0
 
@@ -206,9 +244,9 @@ def main(argv):
 	debugSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
 		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
-		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
 		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
-		['make -C ' + buildDir + ' unit', defaultAnalyzer],
+		['make -C ' + buildDir + ' unit', unitAnalyzer],
 		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
 	testSection("Debug", debugSection)
 
@@ -217,9 +255,9 @@ def main(argv):
 	releaseSection = [
 		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
 		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
-		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
-		['valgrind --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
-		['make -C ' + buildDir + ' unit', defaultAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
+		['make -C ' + buildDir + ' unit', unitAnalyzer],
 		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
 	testSection('Release', releaseSection)
 

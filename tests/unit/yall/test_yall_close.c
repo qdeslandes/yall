@@ -15,7 +15,9 @@ Test(yall, test_yall_close0)
  */
 Test(yall, test_yall_close1)
 {
-        initialized = 2;
+	yall_init();
+	yall_init();
+
         cr_assert_eq(yall_close(), YALL_SUCCESS);
         cr_assert_eq(initialized, 1);
         cr_assert_eq(yall_close(), YALL_SUCCESS);

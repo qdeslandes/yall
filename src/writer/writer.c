@@ -22,38 +22,35 @@
  * SOFTWARE.
  */
 
-#ifndef _WRITER_H
-#define _WRITER_H
+#include "yall/writer/writer.h"
 
-#include <stdint.h>
-
-#include "yall/output_types.h"
-#include "yall/log_level.h"
-#include "yall/error.h"
-
-/*
- * writer_init : initialize some stuff for the console and file writers.
- *      Currently initialize the semaphores. This should be called once.
- *      TODO : Manage to fail the initialization if the semaphore are already
- *      initialized.
- *	Returns a yall_error.
- */
-yall_error writer_init(void);
-
-/*
- * write : write the message to the output medium. Returns a YALL_ERROR on
- *      error. <msg> must not be NULL, but <output_file> can if <output_type>
- *      is equals to yall_file_output or yall_both_output.
- *	Returns a yall_error.
- */
-yall_error write_msg(enum yall_output_type output_type,
-	enum yall_log_level log_level,
-	const char *output_file,
-	const char *msg);
-
-/*
- * writer_destroy : destroy all the writers semaphores.
- */
-void writer_close(void);
-
+#ifdef _WIN32
+#include <Windows.h>
 #endif
+
+#include "yall/error.h"
+#include "yall/writer/thread.h"
+#include "yall/utils.h"
+#include "yall/writer/console.h"
+#include "yall/writer/file.h"
+#include "yall/debug.h"
+#include "yall/queue.h"
+
+yall_error writer_init(uint16_t frequency)
+{
+	yall_error ret = YALL_SUCCESS;
+
+	ret = start_thread(frequency);
+
+	return ret;
+}
+
+void write_msg(struct message *m)
+{
+	enqueue(m);
+}
+
+void writer_close(void)
+{
+	stop_thread();
+}

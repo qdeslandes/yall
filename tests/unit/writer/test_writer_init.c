@@ -5,7 +5,7 @@
  */
 Test(writer, test_writer_init0)
 {
-        cr_assert_eq(writer_init(), YALL_SUCCESS);
+	cr_assert_eq(writer_init(60), YALL_SUCCESS);
 }
 
 /*
@@ -13,17 +13,9 @@ Test(writer, test_writer_init0)
  */
 Test(writer, test_writer_init1)
 {
-#ifdef __linux__
-        disable_sem_init();
-#elif _WIN32
-        disable_CreateMutex();
-#endif
+        disable_pthread_create();
 
-        cr_assert_eq(writer_init(), YALL_SEM_INIT_ERR);
+	cr_assert_eq(writer_init(60), YALL_CANT_CREATE_THREAD);
 
-#ifdef __linux__
-        enable_sem_init();
-#elif _WIN32
-        enable_CreateMutex();
-#endif
+        enable_pthread_create();
 }

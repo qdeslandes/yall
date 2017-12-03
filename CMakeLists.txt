@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+﻿# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
@@ -32,12 +32,6 @@ set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Release;" CACHE STRIN
 set(CMAKE_DEBUG_POSTFIX d)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-# Installation
-set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-if (PROJECT-MISC_CI_DEPLOY)
-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
-endif ()
-
 # Build and platform specific configuration
 include_directories(AFTER "include" "external/include" "${PROJECT_BINARY_DIR}/generated_headers")
 
@@ -52,7 +46,7 @@ if (UNIX)
 	else ()
 		set(COMPILER "gcc_unknow")
 	endif ()
-	
+
 	if (CMAKE_BUILD_TYPE MATCHES Debug)
 		add_definitions(-DDEBUG)
 	endif ()
@@ -66,13 +60,24 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
-	
+
 	set(_CMAKE_C_FLAGS_DEBUG "/DDEBUG")
 	set(_CMAKE_CXX_FLAGS_DEBUG "/DDEBUG")
+
+	# Specific windows headers directory
+	include_directories("${CMAKE_SOURCE_DIR}/external/include/yall_win32")
+
+	install(FILES external/lib/win32/msvc12/pthreadVC2.dll DESTINATION bin)
 endif ()
 
 install(FILES README.md DESTINATION share RENAME yall_README.md)
 install(FILES changelog DESTINATION share RENAME yall_changelog)
+
+# Installation
+set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+if (PROJECT-MISC_CI_DEPLOY)
+	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
+endif ()
 
 # Target used to validate the validity of the sources modifications
 add_custom_target(validate
