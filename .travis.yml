@@ -26,9 +26,6 @@ matrix:
   include:
     - os: linux
       compiler: gcc-6
-      env: BUILD_TYPE=Debug CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on"
-    - os: linux
-      compiler: gcc-6
       env: BUILD_TYPE=Release CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on"
 
 addons:
