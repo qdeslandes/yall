@@ -6,7 +6,7 @@
 #include <criterion/redirect.h>
 #include <criterion/parameterized.h>
 
-#include "h_utils.h"
+#include "helpers/h_utils.h"
 #include "yall/yall.h"
 #include "yall/error.h"
 #include "yall/writer/console.h"

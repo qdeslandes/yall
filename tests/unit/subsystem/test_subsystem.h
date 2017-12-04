@@ -6,8 +6,8 @@
 #include <criterion/parameterized.h>
 #include <criterion/theories.h>
 
-#include "h_utils.h"
-#include "h_subsystem.h"
+#include "helpers/h_utils.h"
+#include "helpers/h_subsystem.h"
 #include "yall/yall.h"
 #include "yall/subsystem.h"
 

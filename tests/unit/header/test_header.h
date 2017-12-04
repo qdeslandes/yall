@@ -5,7 +5,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 
-#include "h_utils.h"
+#include "helpers/h_utils.h"
 #include "yall/header.h"
 #include "yall/error.h"
 
