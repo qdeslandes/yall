@@ -60,7 +60,7 @@ script:
   - make
   - make test
   - make checkstyle
-  - valgrind ./yall_cpp
+  - valgrind --leak-check=full --show-leak-kinds=all ./yall_cpp
 
 after_success:
   - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
