@@ -10,17 +10,19 @@ cmake_minimum_required(VERSION 3.6)
 
 project(yall)
 
+enable_testing()
+
 # Set version variables
 set(PROJECT_VERSION_MAJOR 1)
 set(PROJECT_VERSION_MINOR 2)
-set(PROJECT_VERSION_PATCH 0)
+set(PROJECT_VERSION_PATCH 0 CACHE STRING "Project version patch")
+
+if (PROJECT_VERSION_PATCH STREQUAL "")
+	set(PROJECT_VERSION_PATCH 0)
+endif ()
+
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 
-option(PROJECT-MISC_CI_DEPLOY "Special target for continuous integration deployment" OFF)
-option(PROJECT-TESTS_UNIT_TESTS "Enable unit tests build" ON)
-option(PROJECT-TESTS_C_TESTS "Enable C test build" ON)
-option(PROJECT-TESTS_CPP_TESTS "Enable C++ test build" ON)
-enable_testing()
 # CMake internal configuration
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Debug;" CACHE STRING "" FORCE)
@@ -35,6 +37,7 @@ if (UNIX)
 		set(COMPILER "gcc_unknow")
 	endif ()
 
+	link_directories("${CMAKE_SOURCE_DIR}/external/lib/linux")
 	if (CMAKE_BUILD_TYPE MATCHES Debug)
 		add_definitions(-DDEBUG)
 	endif ()
@@ -53,12 +56,6 @@ elseif (WIN32)
 	include_directories("${CMAKE_SOURCE_DIR}/external/include/yall_win32")
 
 	install(FILES external/lib/win32/msvc12/pthreadVC2.dll DESTINATION bin)
-endif ()
-
-
-set(PROJECT_INSTALL_DIR "${PROJECT_NAME}-${COMPILER}-x86_64-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-if (PROJECT-MISC_CI_DEPLOY)
-	set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${PROJECT_INSTALL_DIR}")
 endif ()
 
 
@@ -81,12 +78,19 @@ target_include_directories(yall
 target_include_directories(yall_shared PUBLIC include)
 target_include_directories(yall_static PUBLIC include)
 
+set_target_properties(yall_shared PROPERTIES
+	VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+	SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+
 if (UNIX)
 	target_compile_options(yall
 		PRIVATE
 			-Wall -Wextra -std=gnu11 -fvisibility=hidden -pedantic -fPIC
 			$<$<CONFIG:DEBUG>:-O0 -g>
 			$<$<CONFIG:RELEASE>:-O3>)
+
+	target_link_libraries(yall_shared PUBLIC pthread)
+	target_link_libraries(yall_static PUBLIC pthread)
 elseif (WIN32)
 	target_compile_options(yall
 		PRIVATE
@@ -98,8 +102,8 @@ elseif (WIN32)
 		PRIVATE
 			_CRT_SECURE_NO_WARNINGS)
 
-	target_link_libraries(yall_shared pthreadVC2)
-	target_link_libraries(yall_static pthreadVC2)
+	target_link_libraries(yall_shared PUBLIC pthreadVC2)
+	target_link_libraries(yall_static PUBLIC pthreadVC2)
 endif ()
 
 set_target_properties(yall_shared PROPERTIES OUTPUT_NAME yall)
@@ -110,36 +114,60 @@ set_target_properties(yall_static PROPERTIES OUTPUT_NAME yall)
 # Tests
 ###############
 
-if (PROJECT-TESTS_C_TESTS)
-	add_executable(yall_c tests/c/main.c)
-	target_link_libraries(yall_c yall_static)
+add_custom_target(validate
+	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+		--sourcesDir ${CMAKE_SOURCE_DIR}
+		--buildDir ${CMAKE_BINARY_DIR}
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
-	add_test(NAME c COMMAND yall_c)
-endif ()
+##### C #####
+add_executable(yall_c tests/c/main.c)
+target_link_libraries(yall_c yall_shared)
 
-if (PROJECT-TESTS_CPP_TESTS)
-	add_executable(yall_cpp tests/cpp/main.cpp)
-	target_link_libraries(yall_cpp yall_static)
+add_test(NAME yall_c
+	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+		--sourcesDir ${CMAKE_SOURCE_DIR}
+		--buildDir ${CMAKE_BINARY_DIR}
+		-c)
 
-	add_test(NAME cpp COMMAND yall_cpp)
-endif ()
+##### C++ #####
+add_executable(yall_cpp tests/cpp/main.cpp)
+target_link_libraries(yall_cpp yall_shared)
 
-# Unit testing can't be done on MSVC 12 because Criterion is not available
-if ((NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800) AND PROJECT-TESTS_UNIT_TESTS)
+add_test(NAME yall_cpp
+	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+		--sourcesDir ${CMAKE_SOURCE_DIR}
+		--buildDir ${CMAKE_BINARY_DIR}
+		-p)
+
+##### Unit #####
+if (NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800)
+
+	# Library objects
 	file(GLOB_RECURSE YALL_SRCS src/*.c include/*.h)
-	file(GLOB_RECURSE YALL_UNIT_SRCS tests/unit/*.c tests/unit/*.h)
+	add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 
-	add_executable(yall_unit ${YALL_SRCS} ${YALL_UNIT_SRCS})
+	target_include_directories(yall_unit_src_obj
+		PUBLIC include
+		PRIVATE ${CMAKE_BINARY_DIR}/generated_headers)
+
+	target_compile_options(yall_unit_src_obj
+		PRIVATE coverage)
+
+	target_compile_definitions(yall_unit_src_obj
+		PUBLIC YALL_UNIT static= inline=)
+
+	# Unit tests executable
+	file(GLOB_RECURSE YALL_UNIT_SRCS tests/unit/*.c tests/unit/*.h)
+	add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 
 	target_include_directories(yall_unit
 		PRIVATE
 			include
-			${CMAKE_BINARY_DIR}/generated_headers
 			tests/unit
 			external/include)
 
 	IF (UNIX)
-		#set_source_files_properties(${YALL_SRCS} PROPERTIES COMPILE_FLAGS "-coverage /DYALL_UNIT /Dstatic=\"\" /Dinline=\"\"")
 		target_compile_options(yall_unit
 			PRIVATE
 				-Wall -Wextra -std=gnu11 -pedantic
@@ -149,12 +177,10 @@ if ((NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800) AND PROJECT-TESTS_UNIT_TESTS)
 		target_link_libraries(yall_unit
 			PRIVATE
 				m
-				pthread
 				gcov
+				pthread
 				criterion)
 	ELSEIF (WIN32)
-		set_source_files_properties(${YALL_SRCS} PROPERTIES COMPILE_FLAGS "/DYALL_UNIT /Dstatic=\"\" /Dinline=\"\"")
-
 		target_compile_options(yall_unit
 			PRIVATE
 				/Wall /W4
@@ -167,9 +193,44 @@ if ((NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800) AND PROJECT-TESTS_UNIT_TESTS)
 				criterion)
 	ENDIF ()
 
-	set(ENV{CTEST_OUTPUT_ON_FAILURE} "On")
-	add_test(NAME unit COMMAND yall_unit --verbose WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
+	add_test(NAME yall_unit COMMAND yall_unit --verbose WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 endif ()
+
+##### Coverage #####
+add_custom_target(__coverage_prepare
+	COMMAND mkdir -p coverage
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	COMMENT "Prepare coverage target")
+
+add_custom_target(coverage
+	COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+	COMMENT "Run coverage target")
+
+add_custom_target(resume_coverage
+	COMMAND lcov --capture --directory ${CMAKE_CURRENT_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/coverage.info && genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage_info && firefox ${CMAKE_BINARY_DIR}/coverage_info/index.html
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+	COMMENT "Show coverage results in Firefox")
+
+add_dependencies(coverage __coverage_prepare)
+add_dependencies(resume_coverage coverage)
+
+add_test(NAME coverage
+	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+		--sourcesDir ${CMAKE_SOURCE_DIR}
+		--buildDir ${CMAKE_BINARY_DIR}
+		-o)
+
+##### Checkstyle #####
+add_custom_target(checkstyle
+	COMMAND sh ./resources/checkstyle.sh
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+add_test(NAME checkstyle
+	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+		--sourcesDir ${CMAKE_SOURCE_DIR}
+		--buildDir ${CMAKE_BINARY_DIR}
+		-s)
 
 
 ###############
