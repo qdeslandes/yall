@@ -20,17 +20,9 @@ clone_folder: C:\yall
 environment:
     matrix:
         - image: Visual Studio 2015
-          configuration: Debug
-          platform: x64
-          generator: "Visual Studio 14 2015 Win64"
-        - image: Visual Studio 2015
           configuration: Release
           platform: x64
           generator: "Visual Studio 14 2015 Win64"
-        - image: Visual Studio 2015
-          configuration: Debug
-          platform: x64
-          generator: "Visual Studio 12 2013 Win64"
         - image: Visual Studio 2015
           configuration: Release
           platform: x64
@@ -43,13 +35,10 @@ before_build:
 build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
 
-before_test:
-    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target yall_unit
-
 test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
-after_test:
+before_deploy:
     - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on
     - cmake --build . --config Debug --target ALL_BUILD
     - cmake --build . --config Debug --target install
