@@ -164,7 +164,7 @@ if (NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800)
 		PRIVATE ${CMAKE_BINARY_DIR}/generated_headers)
 
 	target_compile_options(yall_unit_src_obj
-		PRIVATE coverage)
+		PRIVATE -coverage)
 
 	target_compile_definitions(yall_unit_src_obj
 		PUBLIC YALL_UNIT static= inline=)
