@@ -14,15 +14,14 @@ done
 #    * USE_FUNC : __func__ is use on Windows, which leads to a false positive
 for file in $(find src include -regex '.*\.\(c\|h\)')
 do
-    # Avoid warning on C++ code
-    if [[ $file == *"cpp"* ]]; then
-        continue
-    fi
-
-    # Avoid MSVC specific definitions
-    if [[ $file == *"msvc_defines.h" ]]; then
-        continue
-    fi
+    case "$file" in
+        *cpp*)
+	    continue
+	    ;;
+        *msvc_defines.h)
+	    continue
+	    ;;
+    esac
 
     ./resources/checkpatch.pl -q --ignore CONST_STRUCT,INITIALISED_STATIC,SPACING,GLOBAL_INITIALISERS,NEW_TYPEDEFS,USE_FUNC --no-tree \
          -f $file
