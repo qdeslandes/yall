@@ -58,6 +58,7 @@ install:
 script:
   - make
   - make test
+  - make validate
 
 after_success:
   - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
