@@ -23,6 +23,8 @@ endif ()
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 
+message("Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
+
 # CMake internal configuration
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Debug;" CACHE STRING "" FORCE)

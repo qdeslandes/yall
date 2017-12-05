@@ -51,14 +51,16 @@ cache:
     - '$HOME/.sonar/cache'
 
 install:
-  - valgrind --version
-  - cmake -DCMAKE_BUILD_TYP=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER} .
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+  - valgrind --version
+  - python3 --version
+
+before_script:
+  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER} .
 
 script:
   - make
   - make test
-  - make validate
 
 after_success:
   - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
@@ -66,14 +68,10 @@ after_success:
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
-  - make clean
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DPROJECT-MISC_CI_DEPLOY=on .
-  - make
-  - make install
-  - cmake -DCMAKE_BUILD_TYPE=Release -DPROJECT-MISC_CI_DEPLOY=on .
-  - make
-  - make install
-  - make dist
+  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
+  - make package
+  - cmake -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
+  - make package
 
 deploy:
   provider: releases
@@ -83,4 +81,3 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    condition: $BUILD_TYPE = Release
