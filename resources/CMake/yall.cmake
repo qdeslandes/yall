@@ -41,6 +41,8 @@ elseif (WIN32)
 		PRIVATE
 			_CRT_SECURE_NO_WARNINGS)
 
+	target_include_directories(yall PRIVATE external/include/yall_win32)
+
 	target_link_libraries(yall_shared PUBLIC pthreadVC2)
 	target_link_libraries(yall_static PUBLIC pthreadVC2)
 endif ()

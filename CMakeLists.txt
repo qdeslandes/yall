@@ -43,6 +43,8 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "msvc_unknow")
 	endif ()
+
+	link_directories(${CMAKE_SOURCE_DIR}/external/lib/win32/${COMPILER})
 endif ()
 
 # Project

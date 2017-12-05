@@ -48,6 +48,9 @@ if (NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800)
 				$<$<CONFIG:DEBUG>:/DDEBUG /Z7>
 				$<$<CONFIG:RELEASE>:/MP>)
 
+		target_include_directories(yall_unit_src_obj PRIVATE external/include/yall_win32)
+		target_include_directories(yall_unit PRIVATE external/include/yall_win32)
+
 		target_link_libraries(yall_unit
 			PRIVATE
 				pthreadVC2
