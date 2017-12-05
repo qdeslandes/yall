@@ -38,6 +38,9 @@ void tests_yall_log_clean()
 
 void tests_call_log_function(struct yall_call_data *d, const void *args)
 {
+	UNUSED(d);
+	UNUSED(args);
+	
         /*
          * Writing function used in yall_call_log.
          */

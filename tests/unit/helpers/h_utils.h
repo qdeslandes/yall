@@ -39,11 +39,11 @@
 #define TESTS_REDEFINE_PROTO_LIGHT(function) \
 	int  function ## _fail; \
 	void disable_ ## function(); \
-        void enable_ ## function();
+        void enable_ ## function()
 
 #define TESTS_REDEFINE_PROTO(function, proto) \
         TESTS_REDEFINE_PROTO_LIGHT(function); \
-        int _tests_ ## function proto;
+        int _tests_ ## function proto
 
 void _tests_hide_stderr(void);
 void _tests_restore_stderr(void);
@@ -55,7 +55,7 @@ TESTS_REDEFINE_PROTO(fprintf, (FILE *stream, const char *format, ...));
 TESTS_REDEFINE_PROTO(vsnprintf, (char *str, size_t size, const char *format, va_list arg));
 TESTS_REDEFINE_PROTO(strlen, (const char *s));
 TESTS_REDEFINE_PROTO(pthread_create, (pthread_t *thread, const pthread_attr_t *attr,
-        void *(*start_routine) (void *), void *arg))
+        void *(*start_routine) (void *), void *arg));
 
 TESTS_REDEFINE_PROTO_LIGHT(malloc);
 void *_tests_malloc(size_t size);

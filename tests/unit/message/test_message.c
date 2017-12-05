@@ -26,7 +26,7 @@ size_t std_wrapper(char *log_buffer, size_t len, const char *message_format, ...
         va_start(args, message_format);
 
 	_len = generate_std_msg(log_buffer, len, message_format, args);
-
+	
 	va_end(args);
 
 	return _len;

@@ -22,6 +22,11 @@ language: c
 sudo: required
 dist: trusty
 
+# This will alow to build on master AND on pull requests
+branches:
+  only:
+    - master
+
 matrix:
   include:
     - os: linux
@@ -41,14 +46,10 @@ addons:
       - cmake
   sonarqube:
     token:
-      secure: "kDTCOlpGPj2/rudRHjsoIurDlZYmqVHwPx5WnxexeGPmufUdR+SDstPTWevrjVEb/nnWb6GRropaS+iQ7gj7f6hOkg3cmCQqy33hA41V4XFn7agsCt/SIrlhk6j/IWHmLlMM2UKgna/JrLq0oB5fF4wPMzYtxcluDifQFAfd64HIWKy6AKf1PueaCa8xKebBBIyhfsZx8Kt8C68Or0sI9CiEnG+9hSnPPdxPXEM5u1AHQXdf+6I1IwW6bSp01GkoLI/+tVYrY3jibPudXYDVpln8GIyprZoAOmVdvnNUvH3tvUTxtaaC3K29z29705vcsmYxf15jVQgXF6+Kqd0FjBhGUpOmXYrVL6zSNgwDSFM/M2SNsmGMKAMk9WE+yxtoWpFz0nsRVWT+s0PvIiv3Gv9Tyewrcw53FeHNKU8n1qHEtyTvPj0P6f058dIKA8ZRx8ZSFvDrRUdHWGyxbnZlLkRT5EHuqFgiNus2nnNLZIRNOhAEiHU+vOT4NAYNxMGAT2s3kC2sqwukLgLajdawPvpDOczVI+XlXKbZ4s+wT7joBgiy53YrAjZU9UAzSZNJ/hLOeUED24CNCgxxq1KjnY6XibpyJ5OZiF1eH+MS6SQZE9FWDJAl4HAAdu7n/5ojpruSCzmZiaH8D9rZZT6TRlNuIpQGcJx9cp8jCpK9knM="
+      secure: '$SONAR_API_KEY'
     branches:
       - master
-      - develop
 
-branches:
-  only:
-    - master
 cache:
   directories:
     - '$HOME/.sonar/cache'
@@ -66,8 +67,8 @@ script:
   - make test
 
 after_success:
-  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
-  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
+  - if [ "${TRAVIS_BRANCH}" = "master" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
+  - if [ "${TRAVIS_BRANCH}" = "master" ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:

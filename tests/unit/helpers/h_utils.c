@@ -41,7 +41,7 @@ void _tests_mutex_close(void)
 {
 }
 
-TESTS_REDEFINE_LIGHT(snprintf);
+TESTS_REDEFINE_LIGHT(snprintf)
 int _tests_snprintf(char *str, size_t size, const char *format, ...)
 {
         if (snprintf_fail)
@@ -53,7 +53,7 @@ int _tests_snprintf(char *str, size_t size, const char *format, ...)
         return vsnprintf(str, size, format, args);
 }
 
-TESTS_REDEFINE_LIGHT(fprintf);
+TESTS_REDEFINE_LIGHT(fprintf)
 int _tests_fprintf(FILE *stream, const char *format, ...)
 {
         if (fprintf_fail)
@@ -65,7 +65,7 @@ int _tests_fprintf(FILE *stream, const char *format, ...)
         return vfprintf(stream, format, args);
 }
 
-TESTS_REDEFINE_LIGHT(malloc);
+TESTS_REDEFINE_LIGHT(malloc)
 void *_tests_malloc(size_t size)
 {
         if (malloc_fail)
@@ -74,16 +74,16 @@ void *_tests_malloc(size_t size)
         return malloc(size);
 }
 
-TESTS_REDEFINE(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args);
-TESTS_REDEFINE(strlen, -2, (const char *str), str);
+TESTS_REDEFINE(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args)
+TESTS_REDEFINE(strlen, -2, (const char *str), str)
 TESTS_REDEFINE(pthread_create, -1, (pthread_t *thread, const pthread_attr_t *attr,
-        void *(*start_routine) (void *), void *arg), thread, attr, start_routine, arg);
+        void *(*start_routine) (void *), void *arg), thread, attr, start_routine, arg)
 
 #ifdef __linux__
-TESTS_REDEFINE(sem_wait, -1, (sem_t *sem), sem);
-TESTS_REDEFINE(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value);
+TESTS_REDEFINE(sem_wait, -1, (sem_t *sem), sem)
+TESTS_REDEFINE(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value)
 #elif _WIN32
-TESTS_REDEFINE_LIGHT(CreateMutex);
+TESTS_REDEFINE_LIGHT(CreateMutex)
 HANDLE _tests_CreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName)
 {
         if (CreateMutex_fail)
@@ -92,7 +92,7 @@ HANDLE _tests_CreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitial
         return CreateMutex(lpMutexAttributes, bInitialOwner, lpName);
 }
 
-TESTS_REDEFINE_LIGHT(WaitForSingleObject);
+TESTS_REDEFINE_LIGHT(WaitForSingleObject)
 DWORD _tests_WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds)
 {
         if (WaitForSingleObject_fail)
