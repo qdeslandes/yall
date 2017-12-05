@@ -58,26 +58,36 @@ install:
 before_script:
   - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER} .
 
-script:
-  - make
-  - make test
 
-after_success:
-  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
-  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
+jobs:
+  include:
+    - stage: build
+      script: make
+    - stage: test
+      script: make test
+    - stage: deploy
+      script: make package
+      deploy:
+        provider: releases
+        api_key: '$GITHUB_API_KEY'
+        file_glob: true
+        file: yall*.tgz
+        skip_cleanup: true
+        on:
+          tags: true
+
+#script:
+#  - make
+#  - make test
+
+#after_success:
+#  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
+#  - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
-before_deploy:
-  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
-  - make package
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
-  - make package
+#before_deploy:
+#  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
+#  - make package
+#  - cmake -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
+#  - make package
 
-deploy:
-  provider: releases
-  api_key: '$GITHUB_API_KEY'
-  file_glob: true
-  file: yall*.tgz
-  skip_cleanup: true
-  on:
-    tags: true
