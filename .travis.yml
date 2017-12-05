@@ -52,7 +52,7 @@ cache:
 
 install:
   - valgrind --version
-  - cmake -DCMAKE_BUILD_TYP=Release .
+  - cmake -DCMAKE_BUILD_TYP=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER} .
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 
 script:

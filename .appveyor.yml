@@ -30,7 +30,7 @@ environment:
 
 before_build:
     - cd c:\yall
-    - cmake -G"%generator%" -DPROJECT-MISC_CI_DEPLOY=on
+    - cmake -G"%generator%" -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=$(APPVEYOR_BUILD_NUMBER)
 
 build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
