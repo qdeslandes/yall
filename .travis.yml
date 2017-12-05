@@ -19,7 +19,7 @@
 
 language: c
 
-sudo: required
+sudo: false
 dist: trusty
 
 # This will alow to build on master AND on pull requests
