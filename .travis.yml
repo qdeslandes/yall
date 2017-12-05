@@ -26,7 +26,6 @@ matrix:
   include:
     - os: linux
       compiler: gcc-6
-      env: BUILD_TYPE=Release CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DPROJECT-MISC_CI_DEPLOY=on"
 
 addons:
   apt:
@@ -53,7 +52,7 @@ cache:
 
 install:
   - valgrind --version
-  - cmake ${CMAKE_CONFIG} .
+  - cmake -DCMAKE_BUILD_TYP=Debug .
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 
 script:
