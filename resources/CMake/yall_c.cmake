@@ -3,21 +3,22 @@
 # For details see the LICENSE file distributed with yall.
 
 add_executable(yall_c tests/c/main.c)
+
 target_link_libraries(yall_c yall_shared)
 
-if (UNIX)
 target_compile_options(yall_c
 	PRIVATE
-		-Wall -Wextra -std=gnu11 -fvisibility=hidden -pedantic -fPIC
-		$<$<CONFIG:DEBUG>:-O0 -g>
-		$<$<CONFIG:RELEASE>:-O3>)
-elseif (WIN32)
-target_compile_options(yall_c
-	PRIVATE
-		/Wall
-		$<$<CONFIG:DEBUG>:/DDEBUG>
-		$<$<CONFIG:RELEASE>:/W4>)
-endif ()
+		$<IF:$<C_COMPILER_ID:GNU>,
+			-Wall -Wextra -Werror -std=gnu11 -pedantic
+			$<$<CONFIG:DEBUG>:-O0 -g>
+			$<$<CONFIG:RELEASE>:-O3>
+		,>
+		$<IF:$<C_COMPILER_ID:MSVC>,
+			/Wall
+			$<$<CONFIG:DEBUG>:/O0>
+			$<$<CONFIG:RELEASE>:/W4 /O2>
+		,>
+	)
 
 add_test(NAME yall_c
 	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py

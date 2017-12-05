@@ -3,6 +3,7 @@
 # For details see the LICENSE file distributed with yall.
 
 function(binaryInfos binaryName)
+	# TODO : solve the case when property is set to 'NOTFOUND'
 
 	get_target_property(OUTPUT_NAME ${binaryName} OUTPUT_NAME)
 	get_target_property(COMPILE_OPTIONS ${binaryName} COMPILE_OPTIONS)
