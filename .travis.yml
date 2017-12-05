@@ -52,13 +52,12 @@ cache:
 
 install:
   - valgrind --version
-  - cmake -DCMAKE_BUILD_TYP=Debug .
+  - cmake -DCMAKE_BUILD_TYP=Release .
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 
 script:
   - make
   - make test
-  - valgrind --gen-suppressions=all --leak-check=full --show-leak-kinds=all ./yall_cpp
 
 after_success:
   - if [ "${TRAVIS_BRANCH}" = "master" || ${TRAVIS_BRANCH} = "develop") ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
