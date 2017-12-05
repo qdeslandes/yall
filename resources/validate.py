@@ -89,6 +89,8 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 	error = code != 0
 	stats = {}
 
+	# Do not count suppressed error, as it comes from suppression files
+
 	for line in stderr.split('\n'):
 		if re.match('total heap usage:', line):
 			tokens = line.split(' ')
@@ -109,10 +111,6 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 			val = int(list(filter(None, line.split(' ')))[3].replace(',', ''))
 			if val:
 				stats['still reachable'] = val
-		elif '==         suppressed:' in line:
-			val = int(list(filter(None, line.split(' ')))[2].replace(',', ''))
-			if val:
-				stats['suppressed'] = val
 
 	statErrors = len(stats)
 
