@@ -205,7 +205,11 @@ if (NOT WIN32 OR NOT MSVC_VERSION EQUAL 1800)
 				criterion)
 	ENDIF ()
 
-	add_test(NAME yall_unit COMMAND yall_unit --verbose WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
+	add_test(NAME yall_unit
+		COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
+			--sourcesDir ${CMAKE_SOURCE_DIR}
+			--buildDir ${CMAKE_BINARY_DIR}
+			-u)
 endif ()
 
 ##### Coverage #####

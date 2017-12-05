@@ -1,9 +1,3 @@
-# Convert 8 spaces to tabs
-for file in $(find src include -regex '.*\.\(c\|h\)')
-do
-    perl -p -i -e 's/        /\t/g' $file
-done
-
 # Run checkpatch script for coding guidelines
 # Disabled options are :
 #    * CONST_STRUCT : as no structure *MUST* be used as const
