@@ -9,7 +9,7 @@ extern size_t generate_call_hdr(char *buffer, size_t len, struct header_content 
 
 Test(header, test_generate_call_hdr0, .init=test_generate_hdr_setup, .fini=test_generate_hdr_clean)
 {
-	struct header_content hc = { "subsystem", "NOTICE", "function" };
+	struct header_content hc = { "subsystem", "NOTICE", "function", "main.c", { 0 }, { 0 }  };
 
 	generate_call_hdr(NULL, 0, &hc);
 }

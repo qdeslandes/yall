@@ -23,8 +23,8 @@ ParameterizedTest(
 
         fflush(stderr);
 
-        char output[10] = { 0 };
-        sprintf(output, "\033[%dm\033[0m", p->code);
+        char output[32] = { 0 };
+        snprintf(output, 32, "\033[%dm\033[0m", p->code);
 
         cr_assert_stderr_eq_str(output);
 #endif
@@ -47,11 +47,11 @@ ParameterizedTest(
         cr_assert_eq(write_log_console(p->ll, "sentence"), YALL_SUCCESS);
         fflush(stderr);
 
-        char output[18] = { 0 };
+        char output[32] = { 0 };
 #ifdef __linux__
-        sprintf(output, "\033[%dmsentence\033[0m", p->code);
+        snprintf(output, 32, "\033[%dmsentence\033[0m", p->code);
 #elif _WIN32
-        sprintf(output, "sentence");
+        snprintf(output, 32, "sentence");
 #endif
         cr_assert_stderr_eq_str(output);
 }

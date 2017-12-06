@@ -2,7 +2,7 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-import sys, subprocess, getopt, os, re, shutil
+import sys, subprocess, getopt, os, re, shutil, argparse
 
 isError = False
 customEnv = []
@@ -12,31 +12,36 @@ COLOR_YELLOW='\033[33m'
 COLOR_GREEN='\033[32m'
 COLOR_RED='\033[31m'
 
+class TestType:
+	VALGRIND = 1
+	UNIT = 2
+	COVERAGE = 3
+	STYLE = 4
+
 """
 	Message formatting
 """
 def testResults(status, cmd):
 	color = COLOR_GREEN if status else COLOR_RED
 	symbol = '+' if status else '-'
-	print("=== \t\t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
+	print("=== \t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
 
 def testError(msg):
-	print('=== \t\t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
+	print('=== \t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
 
 """
 	Setup
 """
-def prepare(argv):
-	if len(argv) and argv[0] == '-w':
-		workingDir = argv[1]
-	else:
-		workingDir = os.getcwd()
+def prepare(build):
+	workingDir = os.getcwd()
+	buildDir = workingDir
 
-	buildDir = workingDir + "/build/validate"
+	if build:
+		buildDir = workingDir + "/validate"
 
-	# Remove it first
-	shutil.rmtree(buildDir, ignore_errors=True)
-	os.makedirs(buildDir)
+		# Remove it first
+		shutil.rmtree(buildDir, ignore_errors=True)
+		os.makedirs(buildDir)
 
 	return workingDir, buildDir
 
@@ -84,6 +89,8 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 	error = code != 0
 	stats = {}
 
+	# Do not count suppressed error, as it comes from suppression files
+
 	for line in stderr.split('\n'):
 		if re.match('total heap usage:', line):
 			tokens = line.split(' ')
@@ -104,10 +111,6 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 			val = int(list(filter(None, line.split(' ')))[3].replace(',', ''))
 			if val:
 				stats['still reachable'] = val
-		elif '==         suppressed:' in line:
-			val = int(list(filter(None, line.split(' ')))[2].replace(',', ''))
-			if val:
-				stats['suppressed'] = val
 
 	statErrors = len(stats)
 
@@ -189,26 +192,24 @@ def styleAnalyzer(cmd, code, stdout, stderr):
 		elif re.match('ERROR', line):
 			errors += 1
 
-	testResults(not (warnings or errors), cmd)
+	testResults(not (0 != code or warnings or errors), cmd)
 
 	if warnings:
 		testError(str(warnings) + ' warning(s)')
 	if errors:
 		testError(str(errors) + ' error(s)')
-	if warnings or errors:
+	if 0 != code or warnings or errors:
 		testError('Run the test manually for more detailed output')
 
-	return not (warnings or errors)
+	return not (0 != code or warnings or errors)
 
 """
 	Tests management
 """
-def testSection(sectionName, tests):
+def runTests(tests):
 	global isError
-	print("=== \tTesting ", COLOR_GREEN, sectionName, COLOR_DEFAULT, " :", sep='')
-
-	for cmd, analyzer in tests:
-		if not test(cmd, analyzer):
+	for shouldTest, cmd, analyzer in tests:
+		if shouldTest and not test(cmd, analyzer):
 			isError = True
 
 def test(cmd, analyzer=defaultAnalyzer):
@@ -228,43 +229,47 @@ def main(argv):
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
 
+	parser = argparse.ArgumentParser(description='Validate yall library sources')
+	parser.add_argument('--sourcesDir', required=True, help='Sources directory')
+	parser.add_argument('--buildDir', required=True, help='Build directory')
+	parser.add_argument('-b', '--build', action='store_true', help='Build the project')
+	parser.add_argument('-c', '--cValgrind', action='store_true', help='Process Valgrind check on C application')
+	parser.add_argument('-p', '--cppValgrind', action='store_true', help='Process Valgrind check on C++ application')
+	parser.add_argument('-u', '--unit', action='store_true', help='Process unit tests check')
+	parser.add_argument('-o', '--coverage', action='store_true', help='Process code coverage check')
+	parser.add_argument('-s', '--style', action='store_true', help='Process style check')
+
+	args = parser.parse_args()
+
+	# If no test argument, enable all
+	if not args.build and not args.cValgrind and not args.cppValgrind and not args.unit and not args.coverage and not args.style:
+		args.build = True
+		args.cValgrind = True
+		args.cppValgrind = True
+		args.unit = True
+		args.coverage = True
+		args.style = True
+
 	print('=== Code validity checking for yall library.')
 	print('=== Copyright (C) 2017 Quentin "Naccyde" Deslandes.')
 	print('=== Redistribution and use of this file is allowed according to the terms of the MIT license.')
 
-	workingDir, buildDir = prepare(argv)
-
 	print('===')
-	print('=== Working dir set to', workingDir)
+	print('=== Working dir set to', args.buildDir)
 	print('===')
 	print('=== Starting tests :')
 
-	# CMake, debug mode
-	cmakeOptions = "-DCMAKE_BUILD_TYPE=Debug"
-	debugSection = [
-		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
-		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
-		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
-		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
-		['make -C ' + buildDir + ' unit', unitAnalyzer],
-		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
-	testSection("Debug", debugSection)
+	tests = [
+		[args.build, 'cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
+		[args.build, 'make -C ' + args.buildDir + ' clean', defaultAnalyzer],
+		[args.build, 'make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
+		[args.cValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_c.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
+		[args.cppValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
+		[args.unit, args.buildDir + '/yall_unit', unitAnalyzer],
+		[args.coverage, 'make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
+		[args.style, 'make -C ' + args.buildDir + ' checkstyle', styleAnalyzer]]
 
-	# CMake, release mode
-	cmakeOptions = "-DCMAKE_BUILD_TYPE=Release"
-	releaseSection = [
-		['cmake -B' + buildDir + ' -H' + workingDir + ' ' + cmakeOptions, defaultAnalyzer],
-		['make -C ' + buildDir + ' -j 9', gccAnalyzer],
-		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/c/yall_c', valgrindAnalyzer],
-		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + buildDir + '/tests/cpp/yall_cpp', valgrindAnalyzer],
-		['make -C ' + buildDir + ' unit', unitAnalyzer],
-		['make -C ' + buildDir + ' coverage', coverageAnalyzer]]
-	testSection('Release', releaseSection)
-
-	# Run checkstyle
-	styleSection = [
-		['make -C ' + buildDir + ' checkstyle', styleAnalyzer]]
-	testSection('Style', styleSection)
+	runTests(tests)
 
 	# Results
 	print('=== ')

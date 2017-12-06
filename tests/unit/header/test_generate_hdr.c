@@ -10,7 +10,7 @@ Test(header, test_generate_hdr0, .init=test_generate_hdr_setup, .fini=test_gener
 	size_t len = 0;
 	yall_config_set_std_header_template("%s");
 	yall_config_set_call_header_template("%f");
-	struct header_content hc = { "subsystem", "NOTICE", "function" };
+	struct header_content hc = { "subsystem", "NOTICE", "function", "main.c", { 0 }, { 0 }  };
 
 	len = generate_hdr(std_header, NULL, 0, &hc);
 	cr_assert_eq(len, strlen(hc.subsystem));
@@ -35,7 +35,7 @@ Test(header, test_generate_hdr1, .init=test_generate_hdr_setup, .fini=test_gener
 	char header[64] = { 0 };
 	yall_config_set_std_header_template("%s");
 	yall_config_set_call_header_template("%f");
-	struct header_content hc = { "subsystem", "NOTICE", "function" };
+	struct header_content hc = { "subsystem", "NOTICE", "function", "main.c", { 0 }, { 0 }  };
 
 	len = generate_hdr(std_header, header, 64, &hc);
 	cr_assert_eq(len, strlen(hc.subsystem));
