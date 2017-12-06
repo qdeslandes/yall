@@ -9,7 +9,7 @@ if (UNIX)
 	set(_PVT_OPT_RELEASE -O3)
 
 	# Link libraries
-	set(_PVT_LINKLIB yall_shared)
+	set(_PVT_LINKLIB yall_shared pthread)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /Wall)
