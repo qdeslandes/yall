@@ -116,6 +116,6 @@ if (UNIX)
 			-u)
 elseif (WIN32)
 	add_test(NAME yall_unit
-		COMMAND yall_unit
+		COMMAND $<TARGET_FILE:yall_unit>
 		WORKINGDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 endif ()
