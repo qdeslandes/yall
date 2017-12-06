@@ -10,76 +10,100 @@ endif ()
 	Yall sources objects
 ]]#
 file(GLOB_RECURSE YALL_SRCS src/*.c include/*.h)
+
+if (UNIX)
+	# Compile options
+	set(_PVT_OPT -Wall -Wextra -std=gnu11 -coverage)
+	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_RELEASE -O3)
+
+	# Compile definitions
+	set(_PVT_DEF YALL_UNIT static= inline=)
+
+	# Include directories
+	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers)
+
+	# Link libraries
+	set(_PVT_LINKLIB m gcov pthread criterion)
+elseif (WIN32)
+	# Compile options
+	set(_PVT_OPT /Wall)
+	set(_PVT_OPT_DEBUG /O0)
+	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
+
+	# Compile definitions
+	set(_PVT_DEF YALL_UNIT static= inline=)
+
+	# Include directories
+	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers external/include/yall_win32)
+
+	# Link libraries
+	set(_PVT_LINKLIB criterion pthreadVC2)
+endif ()
+
 add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 
 target_compile_options(yall_unit_src_obj
 	PRIVATE
-		$<IF:$<C_COMPILER_ID:GNU>,-coverage,>)
+		${_PVT_OPT}
+		$<$<CONFIG:DEBUG>:${_PVT_OPT_DEBUG}>
+		$<$<CONFIG:RELEASE>:${_PVT_OPT_RELEASE}>)
 
 target_compile_definitions(yall_unit_src_obj
 	PUBLIC
-		YALL_UNIT static= inline=)
-		
+		${_PVT_DEF})
+
 target_include_directories(yall_unit_src_obj
-	PUBLIC
-		include
 	PRIVATE
-		${CMAKE_BINARY_DIR}/generated_headers
-		$<IF:$<C_COMPILER_ID:MSVC>,external/include/yall_win32,>)
-
-target_compile_options(yall_unit_src_obj
-	PRIVATE
-		$<IF:$<C_COMPILER_ID:GNU>,
-			-Wall -Wextra -Werror -std=gnu11 -pedantic
-			$<$<CONFIG:DEBUG>:-O0 -g>
-			$<$<CONFIG:RELEASE>:-O3>
-		,>
-		$<IF:$<C_COMPILER_ID:MSVC>,
-			/Wall
-			$<$<CONFIG:DEBUG>:/O0>
-			$<$<CONFIG:RELEASE>:/W4 /O2>
-		,>
-	)
-
-binaryInfos(yall_unit_src_obj)
+		${_PVT_INCDIR})
 
 #[[
 	Yall unit tests
 ]]#
 file(GLOB_RECURSE YALL_UNIT_SRCS tests/unit/*.c tests/unit/*.h)
-add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 
-target_include_directories(yall_unit
-	PRIVATE
-		include
-		tests/unit
-		external/include
-		$<IF:$<C_COMPILER_ID:MSVC>,external/include/yall_win32,>)
+if (UNIX)
+	# Compile options
+	set(_PVT_OPT -Wall -Wextra -std=gnu11)
+	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_RELEASE -O3)
+
+	# Include directories
+	set(_PVT_INCDIR include tests/unit external/include)
+
+	# Link libraries
+	set(_PVT_LINKLIB m gcov pthread criterion)
+elseif (WIN32)
+	# Compile options
+	set(_PVT_OPT /Wall)
+	set(_PVT_OPT_DEBUG /O0)
+	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
+
+	# Include directories
+	set(_PVT_INCDIR include tests/unit external/include external/include/yall_win32)
+
+	# Link libraries
+	set(_PVT_LINKLIB criterion pthreadVC2)
+endif ()
+
+add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 
 target_compile_options(yall_unit
 	PRIVATE
-		$<IF:$<C_COMPILER_ID:GNU>,
-			-Wall -Wextra -Werror -std=gnu11 -pedantic
-			$<$<CONFIG:DEBUG>:-O0 -g>
-			$<$<CONFIG:RELEASE>:-O3>
-		,>
-		$<IF:$<C_COMPILER_ID:MSVC>,
-			/Wall
-			$<$<CONFIG:DEBUG>:/O0>
-			$<$<CONFIG:RELEASE>:/W4 /O2 /MP>
-		,>
-	)
+		${_PVT_OPT}
+		$<$<CONFIG:DEBUG>:${_PVT_OPT_DEBUG}>
+		$<$<CONFIG:RELEASE>:${_PVT_OPT_RELEASE}>)
+
+target_include_directories(yall_unit
+	PRIVATE
+		${_PVT_INCDIR})
 
 target_link_libraries(yall_unit
 	PRIVATE
-		$<IF:$<C_COMPILER_ID:GNU>,m gcov pthread criterion,>
-		$<IF:$<C_COMPILER_ID:MSVC>,pthreadVC2 criterion,>
-	)
+		${_PVT_LINKLIB})
 
 add_test(NAME yall_unit
 	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
 		--sourcesDir ${CMAKE_SOURCE_DIR}
 		--buildDir ${CMAKE_BINARY_DIR}
 		-u)
-
-binaryInfos(yall_unit)
