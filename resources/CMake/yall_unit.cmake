@@ -2,7 +2,7 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-if (WIN32 AND NOT MSVC_VERSION EQUAL 1800)
+if (WIN32 AND NOT MSVC_VERSION EQUAL 1900)
 	return ()
 endif ()
 
@@ -57,6 +57,9 @@ target_include_directories(yall_unit_src_obj
 	PRIVATE
 		${_PVT_INCDIR})
 
+set_property(TARGET yall_unit_src_obj PROPERTY C_STANDARD 11)
+set_property(TARGET yall_unit_src_obj PROPERTY C_STANDARD_REQUIRED ON)
+
 #[[
 	Yall unit tests
 ]]#
@@ -101,6 +104,9 @@ target_include_directories(yall_unit
 target_link_libraries(yall_unit
 	PRIVATE
 		${_PVT_LINKLIB})
+
+set_property(TARGET yall_unit PROPERTY C_STANDARD 11)
+set_property(TARGET yall_unit PROPERTY C_STANDARD_REQUIRED ON)
 
 add_test(NAME yall_unit
 	COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py

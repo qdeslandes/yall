@@ -51,15 +51,12 @@ target_include_directories(yall
 if (UNIX)
 	# Include directories
 	set(_PUB_INCDIR include)
-
-	# Link libraries
-	set(_PVT_LINKLIB criterion pthread)
 elseif (WIN32)
 	# Include directories
 	set(_PUB_INCDIR include)
 
 	# Link libraries
-	set(_PVT_LINKLIB criterion pthreadVC2)
+	set(_PVT_LINKLIB pthreadVC2)
 endif ()
 
 add_library(yall_shared SHARED $<TARGET_OBJECTS:yall>)
@@ -82,15 +79,12 @@ set_target_properties(yall_shared PROPERTIES
 if (UNIX)
 	# Include directories
 	set(_PUB_INCDIR include)
-
-	# Link libraries
-	set(_PVT_LINKLIB criterion pthread)
 elseif (WIN32)
 	# Include directories
 	set(_PUB_INCDIR include)
 
 	# Link libraries
-	set(_PVT_LINKLIB criterion pthreadVC2)
+	set(_PVT_LINKLIB pthreadVC2)
 endif ()
 
 add_library(yall_static STATIC $<TARGET_OBJECTS:yall>)

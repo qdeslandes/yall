@@ -8,7 +8,6 @@ project(yall)
 
 include(resources/CMake/utils.cmake)
 
-
 #[[
 	Project version
 #]]

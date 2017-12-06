@@ -16,6 +16,9 @@ elseif (WIN32)
 	set(_PVT_OPT_DEBUG /O0)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
+	# Include directories
+	set(_PVT_INCDIR external/include/yall_win32)
+
 	# Link libraries
 	set(_PVT_LINKLIB yall_shared)
 endif ()
@@ -27,6 +30,9 @@ target_compile_options(yall_cpp
 		${_PVT_OPT}
 		$<$<CONFIG:DEBUG>:${_PVT_OPT_DEBUG}>
 		$<$<CONFIG:RELEASE>:${_PVT_OPT_RELEASE}>)
+
+target_include_directories(yall_cpp
+	PRIVATE ${_PVT_INCDIR})
 
 target_link_libraries(yall_cpp ${_PVT_LINKLIB})
 
