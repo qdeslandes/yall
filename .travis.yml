@@ -68,6 +68,8 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - resources/version.sh
+  - if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then TRAVIS_TAG=$(resources/version.sh); fi
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
@@ -83,4 +85,4 @@ deploy:
   file: yall*.zip
   skip_cleanup: true
   on:
-    branch: master
+    tag: true
