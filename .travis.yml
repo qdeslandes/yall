@@ -64,7 +64,7 @@ before_script:
 
 script:
   - make
-  - make test
+  - make validate
   - bash <(curl -s https://codecov.io/bash)
 
 after_success:

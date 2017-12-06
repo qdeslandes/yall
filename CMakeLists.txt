@@ -71,6 +71,7 @@ include(resources/CMake/yall.cmake)
 #]]
 enable_testing()
 
+include(resources/CMake/validate.cmake)
 include(resources/CMake/yall_c.cmake)
 include(resources/CMake/yall_cpp.cmake)
 include(resources/CMake/yall_unit.cmake)
