@@ -145,7 +145,8 @@ The CMake system used define several targets :
 * `yall_unit` : generate unit tests.
 * `checkstyle` : run `resources/checkstyle.sh` script, from the Linux kernel sources, it parses sources to check coding guidelines.
 * `resume_coverage` : works with Firefox on Fedora and Debian (not tested elsewhere). It opens an HTML report about tests coverage.
-* `validate` : run a Python script which check CMake generation, build, binaries with Valgrind, tests, coverage, coding style...
+* `validate` : run a Python script which check binaries with Valgrind, tests, coverage, coding style...
+* `validate_full` : same as `validate` but perform a CMake generation and compilation.
 * `test` : CMake target, run tests : unit tests, checkstyle, tests coverage and `yall_c` and `yall_cpp` through Valgrind.
 * `install` : CMake target, install the project to `${CMAKE_INSTALL_PREFIX}`.
 * `package` : CMake target, create zip archive from the installed binaries.

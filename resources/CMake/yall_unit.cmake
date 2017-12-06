@@ -108,16 +108,6 @@ target_link_libraries(yall_unit
 set_property(TARGET yall_unit PROPERTY C_STANDARD 11)
 set_property(TARGET yall_unit PROPERTY C_STANDARD_REQUIRED ON)
 
-add_custom_target(unit COMMAND yall_unit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
-
-if (UNIX)
-	add_test(NAME yall_unit
-		COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
-			--sourcesDir ${CMAKE_SOURCE_DIR}
-			--buildDir ${CMAKE_BINARY_DIR}
-			-u)
-elseif (WIN32)
-	add_test(NAME yall_unit
-		COMMAND $<TARGET_FILE:yall_unit>
-		WORKINGDIR ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
+if (MSVC_VERSION EQUAL 1900)
+	add_custom_target(unit COMMAND yall_unit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 endif ()

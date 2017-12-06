@@ -35,11 +35,3 @@ target_include_directories(yall_cpp
 	PRIVATE ${_PVT_INCDIR})
 
 target_link_libraries(yall_cpp ${_PVT_LINKLIB})
-
-if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-	add_test(NAME yall_cpp
-		COMMAND python3 ${CMAKE_SOURCE_DIR}/resources/validate.py
-			--sourcesDir ${CMAKE_SOURCE_DIR}
-			--buildDir ${CMAKE_BINARY_DIR}
-			-p)
-endif ()
