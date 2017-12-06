@@ -39,7 +39,7 @@ build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
 
 test_script:
-    - cmd: cmake --build . --target unit
+    - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 before_deploy:
     - cmake -G"%generator%" -DYALL_VERSION_PATCH=%APPVEYOR_BUILD_NUMBER%
