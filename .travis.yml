@@ -55,7 +55,7 @@ cache:
     - '$HOME/.sonar/cache'
 
 install:
-  - pip install --user cpp-coveralls
+  - pip install --user cpp-coveralls python3-gdbm
   - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
   - valgrind --version
   - python3 --version
