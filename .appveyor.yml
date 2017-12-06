@@ -17,6 +17,9 @@ version: '{branch}-{build}'
 
 clone_folder: C:\yall
 
+branches:
+  only:
+    - master
 environment:
     matrix:
         - image: Visual Studio 2015
