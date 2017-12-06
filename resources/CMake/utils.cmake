@@ -5,7 +5,7 @@
 macro(targetInfos targetName)
 	message("==== Target : ${targetName}")
 
-	if (NOT "${_PUB_OPT}${_PUB_OPT_DEB}${_PUB_OPT_REL}${_PVT_OPT}${_PVT_OPT_DEB}${_PVT_OPT_REL}${_IFA_OPT}${_IFA_OPT_DEB}${_IFA_OPT_REL}" STREQUAL "")
+	if (TARGET_EXT_INFOS AND NOT "${_PUB_OPT}${_PUB_OPT_DEB}${_PUB_OPT_REL}${_PVT_OPT}${_PVT_OPT_DEB}${_PVT_OPT_REL}${_IFA_OPT}${_IFA_OPT_DEB}${_IFA_OPT_REL}" STREQUAL "")
 		message("====\tCompile options :")
 
 		if (NOT "${_PUB_OPT}${_PUB_OPT_DEB}${_PUB_OPT_REL}" STREQUAL "")
@@ -51,7 +51,7 @@ macro(targetInfos targetName)
 		endif ()
 	endif ()
 
-	if (NOT "${_PUB_DEF}${_PUB_DEF_DEB}${_PUB_DEF_REL}${_PVT_DEF}${_PVT_DEF_DEB}${_PVT_DEF_REL}${_IFA_DEF}${_IFA_DEF_DEB}${_IFA_DEF_REL}" STREQUAL "")
+	if (TARGET_EXT_INFOS AND NOT "${_PUB_DEF}${_PUB_DEF_DEB}${_PUB_DEF_REL}${_PVT_DEF}${_PVT_DEF_DEB}${_PVT_DEF_REL}${_IFA_DEF}${_IFA_DEF_DEB}${_IFA_DEF_REL}" STREQUAL "")
 		message("====\tCompile definitions :")
 
 		if (NOT "${_PUB_DEF}${_PUB_DEF_DEB}${_PUB_DEF_REL}" STREQUAL "")
@@ -97,7 +97,7 @@ macro(targetInfos targetName)
 		endif ()
 	endif ()
 
-	if (NOT "${_PUB_INCDIR}${_PVT_INCDIR}${IFA_INCDIR}" STREQUAL "")
+	if (TARGET_EXT_INFOS AND NOT "${_PUB_INCDIR}${_PVT_INCDIR}${IFA_INCDIR}" STREQUAL "")
 		message("====\tInclude directories :")
 
 		if (NOT "${_PUB_INCDIR}" STREQUAL "")
@@ -113,7 +113,7 @@ macro(targetInfos targetName)
 		endif ()
 	endif ()
 
-	if (NOT "${_PUB_LINKLIB}${_PVT_LINKLIB}${IFA_LINKLIB}" STREQUAL "")
+	if (TARGET_EXT_INFOS AND NOT "${_PUB_LINKLIB}${_PVT_LINKLIB}${IFA_LINKLIB}" STREQUAL "")
 		message("====\tLink libraries :")
 
 		if (NOT "${_PUB_LINKLIB}" STREQUAL "")
@@ -128,4 +128,6 @@ macro(targetInfos targetName)
 			message("====\t\tINTERFACE : ${_IFA_LINKLIB}")
 		endif ()
 	endif ()
+
+	message("====")
 endmacro()

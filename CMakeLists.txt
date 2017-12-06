@@ -8,6 +8,8 @@ project(yall)
 
 include(resources/CMake/utils.cmake)
 
+option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
+
 #[[
 	Project version
 #]]
@@ -23,7 +25,7 @@ endif ()
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 
-message("Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
+message("==== Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 
 #[[

@@ -93,3 +93,7 @@ target_include_directories(yall_static
 	PUBLIC ${_PUB_INCDIR})
 
 set_target_properties(yall_static PROPERTIES OUTPUT_NAME yall)
+
+targetInfos(yall)
+targetInfos(yall_shared)
+targetInfos(yall_static)

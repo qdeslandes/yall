@@ -35,3 +35,5 @@ target_include_directories(yall_c
 	PRIVATE ${_PVT_INCDIR})
 
 target_link_libraries(yall_c ${_PVT_LINKLIB})
+
+targetInfos(yall_c)

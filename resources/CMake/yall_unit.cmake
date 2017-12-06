@@ -111,3 +111,6 @@ set_property(TARGET yall_unit PROPERTY C_STANDARD_REQUIRED ON)
 if (MSVC_VERSION EQUAL 1900)
 	add_custom_target(unit COMMAND yall_unit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
 endif ()
+
+targetInfos(yall_unit_src_obj)
+targetInfos(yall_unit)
