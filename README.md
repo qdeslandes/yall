@@ -29,6 +29,12 @@ YALL is a subsystems based logging library. It allow to handle multiple ways to 
 
 <!-- /TOC -->
 
+## Requirements
+
+To build yall properly you need :
+
+* Coveralls : `pip install --user cpp-coveralls`
+
 ## Log levels
 
 Log levels are based on BSD Syslog Protocol (`RFC 3164`), they are stored as a `yall_log_level` type in an enumeration. The higher the value, the higher the criticality :
