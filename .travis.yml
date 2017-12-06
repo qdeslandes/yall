@@ -83,7 +83,7 @@ deploy:
   provider: releases
   api_key: '$GITHUB_API_KEY'
   file_glob: true
-  file: yall*.tgz
+  file: yall*.zip
   skip_cleanup: true
   on:
     tags: true

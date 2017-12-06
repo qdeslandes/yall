@@ -47,7 +47,7 @@ before_deploy:
     - cmake --build . --config Debug --target package
 
 artifacts:
-    - path: 'yall-*.tgz'
+    - path: 'yall-*.zip'
       name: yall_pack
 
 deploy:
