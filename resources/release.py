@@ -1,4 +1,4 @@
-import sys, subprocess, getopt, os, re, shutil, argparse
+import sys, subprocess, getopt, os, re, shutil, argparse, shlex
 
 COLOR_DEFAULT='\033[39m'
 COLOR_YELLOW='\033[33m'
@@ -15,7 +15,7 @@ def info(msg):
 def runProcess(cmd):
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
-	process = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
+	process = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
 
 	return process.returncode, process.stdout.decode('UTF-8'), process.stderr.decode('UTF-8')
 
@@ -94,13 +94,13 @@ def merge(mergeBranch, tag):
 		die('Could not merge ' + mergeBranch + ' to master')
 	info(mergeBranch + ' merged to master')
 
-	status, stdout, stderr = runProcess('git tag -a ' + tag + '-m "Create tag ' + tag + '"')
-	print(status, stdout, stderr)
+	status, stdout, stderr = runProcess('git tag -a ' + tag + ' -m "Create tag ' + tag + '"')
+
 	if status:
 		die('Could not tag')
 	info('Tagged')
 
-	#status, stdout, stderr = runProcess('git push --follow-tags origin master')
+	status, stdout, stderr = runProcess('git push --follow-tags origin master')
 
 	if status:
 		die('Could not push')

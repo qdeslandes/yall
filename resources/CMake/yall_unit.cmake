@@ -27,7 +27,7 @@ if (UNIX)
 	set(_PVT_LINKLIB m gcov pthread criterion)
 elseif (WIN32)
 	# Compile options
-	set(_PVT_OPT /Wall)
+	set(_PVT_OPT /wd4820 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
 	set(_PVT_OPT_DEBUG /O0)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
@@ -78,7 +78,7 @@ if (UNIX)
 	set(_PVT_LINKLIB m gcov pthread criterion)
 elseif (WIN32)
 	# Compile options
-	set(_PVT_OPT /Wall)
+	set(_PVT_OPT /wd4820 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
 	set(_PVT_OPT_DEBUG /O0)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
