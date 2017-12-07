@@ -94,6 +94,13 @@ def merge(mergeBranch, tag):
 		die('Could not merge ' + mergeBranch + ' to master')
 	info(mergeBranch + ' merged to master')
 
+	status, stdout, stderr = runProcess('git commit -a -m"' + sys.argv[2] + '"')
+
+	if status:
+		die('Could not commit')
+	info('Committed !')
+
+
 	status, stdout, stderr = runProcess('git tag -a ' + tag + ' -m "Create tag ' + tag + '"')
 
 	if status:
@@ -105,6 +112,9 @@ def merge(mergeBranch, tag):
 	if status:
 		die('Could not push')
 	info('Pushed !')
+
+if len(sys.argv) != 3:
+	print("Usage : python3 resources/release.py <version> <merge request name>")
 
 ensureModif()
 
