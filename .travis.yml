@@ -60,7 +60,7 @@ install:
   - python3 --version
 
 before_script:
-  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER} .
+  - cmake -DCMAKE_BUILD_TYPE=Release .
 
 script:
   - make
