@@ -94,7 +94,7 @@ def merge(mergeBranch, tag):
 		die('Could not merge ' + mergeBranch + ' to master')
 	info(mergeBranch + ' merged to master')
 
-	print('git tag -a ' + tag + '-m "Create tag ' + tag + '"')
+	print('git tag -a ' + tag + ' -m "Create tag ' + tag + '"')
 	status, stdout, stderr = runProcess('git tag -a ' + tag + '-m "Create tag ' + tag + '"')
 	print(status, stdout, stderr)
 	if status:
