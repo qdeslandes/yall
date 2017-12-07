@@ -44,18 +44,17 @@ build_script:
 test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
-before_deploy:
-    - cmake --build . --config Release --target package
-    - cmake --build . --config Debug --target package
-
+after_test:
+    - cmd: cmake --build . --config Release --target package
+    - cmd: cmake --build . --config Debug --target package
+    
 artifacts:
     - path: 'yall-*.zip'
-      name: yall_pack
-
+      name: yall_zip
 deploy:
     release: $(APPVEYOR_REPO_TAG_NAME)
     provider: GitHub
-    artifact: yall_pack
+    artifact: yall_zip
     auth_token:
         secure: ZWCkNHmbrBurrU0WLBESAeFdNkhuUsae1TApe8LR/cakzx5Puw/akJZBC3uaISnw
     draft: false
