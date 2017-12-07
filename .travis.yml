@@ -73,6 +73,7 @@ after_success:
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
+  - echo $(git describe --tags `git rev-list --tags --max-count=1`)
   - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
   - make package
   - cmake -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
