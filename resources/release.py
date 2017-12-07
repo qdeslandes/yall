@@ -66,11 +66,15 @@ def updateBranch():
 	info('Branches updated.')
 
 def ensureModif():
-	status, stdout, stderr = runProcess('Everything up-to-date')
+	status, stdout, stderr = runProcess('git push')
 
-	if status:
-		die('Could not checkout to master')
-		
+	for line in stdout.split('\n'):
+		if line == 'nothing to commit, working tree clean':
+			return
+
+	die('Ensure working tree is clean.')
+	
+
 		
 def merge(mergeBranch, tag):
 	status, stdout, stderr = runProcess('git checkout master')
