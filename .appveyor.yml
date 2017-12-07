@@ -31,6 +31,7 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 before_build:
+    - ps: echo "$env:APPVEYOR_REPO_BRANCH"
     - cd C:\yall
     - cmake -G"%generator%"
     - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { $env:APPVEYOR_REPO_TAG = $true }
