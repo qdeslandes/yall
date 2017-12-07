@@ -16,7 +16,7 @@ def runProcess(cmd):
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
 	process = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
-	print(cmd, cmd.split(' '))
+	print(shlex.split(cmd))
 	return process.returncode, process.stdout.decode('UTF-8'), process.stderr.decode('UTF-8')
 
 def getMergeBranch():
@@ -94,9 +94,8 @@ def merge(mergeBranch, tag):
 		die('Could not merge ' + mergeBranch + ' to master')
 	info(mergeBranch + ' merged to master')
 
-	print('git tag -a ' + tag + ' -m "Create tag ' + tag + '"')
-	status, stdout, stderr = runProcess('git tag -a ' + tag + ' -m "Create\ tag\ ' + tag + '"')
-	print(status, stdout, stderr)
+	status, stdout, stderr = runProcess('git tag -a ' + tag + ' -m "Create tag ' + tag + '"')
+
 	if status:
 		die('Could not tag')
 	info('Tagged')
