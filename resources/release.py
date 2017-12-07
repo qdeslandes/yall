@@ -83,8 +83,7 @@ def ensureModif():
 		
 def merge(mergeBranch, tag):
 	status, stdout, stderr = runProcess('git checkout master')
-	print(status, stdout, stderr)
-
+	
 	if status:
 		die('Could not checkout to master')
 	info('Checked out to master')
@@ -95,9 +94,9 @@ def merge(mergeBranch, tag):
 		die('Could not merge ' + mergeBranch + ' to master')
 	info(mergeBranch + ' merged to master')
 
+	print('git tag -a ' + tag + '-m "Create tag ' + tag + '"')
 	status, stdout, stderr = runProcess('git tag -a ' + tag + '-m "Create tag ' + tag + '"')
 	print(status, stdout, stderr)
-
 	if status:
 		die('Could not tag')
 	info('Tagged')
