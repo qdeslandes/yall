@@ -24,11 +24,9 @@ branches:
 environment:
     matrix:
         - image: Visual Studio 2015
-          configuration: Release
           platform: x64
           generator: "Visual Studio 14 2015 Win64"
         - image: Visual Studio 2015
-          configuration: Release
           platform: x64
           generator: "Visual Studio 12 2013 Win64"
 
@@ -39,18 +37,19 @@ before_build:
     - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
 
 build_script:
-    - cmd: cmake --build . --config %configuration% --target ALL_BUILD
+    - cmd: cmake --build . --config Release --target ALL_BUILD
+
+after_build:
+    - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { cmake --build . --config Release --target package }
+    - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { cmake --build . --config Debug --target package }
 
 test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
-
-after_test:
-    - cmd: cmake --build . --config Release --target package
-    - cmd: cmake --build . --config Debug --target package
     
 artifacts:
     - path: 'yall-*.zip'
       name: yall_zip
+
 deploy:
     release: $(APPVEYOR_REPO_TAG_NAME)
     provider: GitHub
