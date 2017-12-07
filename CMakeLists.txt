@@ -15,15 +15,10 @@ option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 #]]
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 2)
-set(YALL_VERSION_PATCH 0 CACHE STRING "Project version patch")
-
-if (YALL_VERSION_PATCH STREQUAL "")
-	# Set defaultly to 0, if CMake parameter does not define it. This is used
-	# to allow CI to set a custom PATCH revision for continuous delivery.
-	set(YALL_VERSION_PATCH 0)
-endif ()
+set(YALL_VERSION_PATCH 2)
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
+configure_file("${PROJECT_SOURCE_DIR}/resources/yall.version.in" "${PROJECT_BINARY_DIR}/yall.version")
 
 message("==== Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
