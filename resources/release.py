@@ -1,4 +1,4 @@
-import sys, subprocess, getopt, os, re, shutil, argparse
+import sys, subprocess, getopt, os, re, shutil, argparse, shlex
 
 COLOR_DEFAULT='\033[39m'
 COLOR_YELLOW='\033[33m'
@@ -15,7 +15,7 @@ def info(msg):
 def runProcess(cmd):
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
-	process = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
+	process = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
 	print(cmd, cmd.split(' '))
 	return process.returncode, process.stdout.decode('UTF-8'), process.stderr.decode('UTF-8')
 
