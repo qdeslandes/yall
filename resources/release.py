@@ -13,7 +13,9 @@ def info(msg):
 	print("=== \t[", COLOR_GREEN, '+' , COLOR_DEFAULT, '] ', msg, sep='')
 
 def runProcess(cmd):
-	process = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	customEnv = os.environ.copy()
+	customEnv["LC_ALL"] = "C"
+	process = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
 
 	return process.returncode, process.stdout.decode('UTF-8'), process.stderr.decode('UTF-8')
 
