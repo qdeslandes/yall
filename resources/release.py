@@ -100,7 +100,7 @@ def merge(mergeBranch, tag):
 		die('Could not tag')
 	info('Tagged')
 
-	#status, stdout, stderr = runProcess('git push --follow-tags origin master')
+	status, stdout, stderr = runProcess('git push --follow-tags origin master')
 
 	if status:
 		die('Could not push')
