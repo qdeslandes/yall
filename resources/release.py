@@ -16,7 +16,7 @@ def runProcess(cmd):
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
 	process = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
-
+	print(cmd, cmd.split(' '))
 	return process.returncode, process.stdout.decode('UTF-8'), process.stderr.decode('UTF-8')
 
 def getMergeBranch():
