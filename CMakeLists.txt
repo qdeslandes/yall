@@ -18,7 +18,7 @@ set(YALL_VERSION_MINOR 2)
 set(YALL_VERSION_PATCH 1)
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
-configure_file("${PROJECT_SOURCE_DIR}/resources/version.sh.in" "${PROJECT_BINARY_DIR}/version.sh")
+configure_file("${PROJECT_SOURCE_DIR}/resources/yall.version.in" "${PROJECT_BINARY_DIR}/yall.version")
 
 message("==== Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
