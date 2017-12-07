@@ -68,9 +68,12 @@ def updateBranch():
 	info('Branches updated.')
 
 def ensureModif():
-	status, stdout, stderr = runProcess('git push')
-
+	status, stdout, stderr = runProcess('git status')
+	
 	for line in stdout.split('\n'):
+		if line == 'nothing to commit, working tree clean':
+			return
+	for line in stderr.split('\n'):
 		if line == 'nothing to commit, working tree clean':
 			return
 
