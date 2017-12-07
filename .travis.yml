@@ -83,4 +83,4 @@ deploy:
   file: yall*.zip
   skip_cleanup: true
   on:
-    branch: master
+    tag: true
