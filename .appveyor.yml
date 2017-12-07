@@ -40,6 +40,7 @@ build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
 
 after_build:
+    - ps: echo "$env:APPVEYOR_REPO_BRANCH"
     - ps: if ( $env:APPVEYOR_REPO_TAG -eq $true ) { cmake --build . --config Release --target package }
     - ps: if ( $env:APPVEYOR_REPO_TAG -eq $true ) { cmake --build . --config Debug --target package }
 
