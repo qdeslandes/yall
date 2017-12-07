@@ -33,7 +33,8 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 before_build:
-    - if "%APPVEYOR_REPO_BRANCH%" == "master" (set APPVEYOR_REPO_TAG=true & set /p APPVEYOR_REPO_TAG_NAME=<yall.version)
+    - cmd: if "%APPVEYOR_REPO_BRANCH%" == "master" (set APPVEYOR_REPO_TAG=true)
+    - cmd: if "%APPVEYOR_REPO_BRANCH%" == "master" (set /p APPVEYOR_REPO_TAG_NAME=<yall.version)
     - echo %APPVEYOR_REPO_TAG%
     - echo %APPVEYOR_REPO_TAG_NAME%
     - cd c:\yall
