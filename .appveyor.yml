@@ -35,10 +35,8 @@ environment:
 before_build:
     - cd C:\yall
     - cmake -G"%generator%"
-    - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { $env:APPVEYOR_REPO_TAG = true }
+    - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { $env:APPVEYOR_REPO_TAG = $true }
     - ps: if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) { $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
-    - ps: echo $env:APPVEYOR_REPO_TAG
-    - ps: echo $env:APPVEYOR_REPO_TAG_NAME
 
 build_script:
     - cmd: cmake --build . --config %configuration% --target ALL_BUILD
