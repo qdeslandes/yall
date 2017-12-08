@@ -17,7 +17,10 @@ version: '{branch}-{build}'
 
 clone_folder: C:\yall
 
+# Do not build when a tag is deployed
 skip_tags: true
+
+# Build only on master
 branches:
   only:
     - master
@@ -30,18 +33,24 @@ environment:
         - image: Visual Studio 2015
           platform: x64
           generator: "Visual Studio 12 2013 Win64"
+          DEPLOY: 0
+          TAG: 0
 
+# Run CMake generation and define if the current build should be released.
+# As build is done only on PR and on master, if this is not a PR, it should
+# be released.
 before_build:
-    - ps: $env:DEPLOY = 0
-    - ps: if (-not (Test-Path env:APPVEYOR_PULL_REQUEST_NUMBER)){ echo "NO PR"; $env.DEPLOY=1; $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version") }
-    - ps: echo "$env:APPVEYOR_PULL_REQUEST_NUMBER"
-    - ps: echo "$env:DEPLOY"
-    - ps: echo "$env:TAG"
-    - cd C:\yall
-    - cmake -G"%generator%"
+    - ps: cd C:\yall
+    - cmd: cmake -G"%generator%"
+    - ps: |
+        if (-not (Test-Path env:APPVEYOR_PULL_REQUEST_NUMBER))
+        {
+            $env:DEPLOY=1
+            $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version")
+        }
 
 build_script:
-    - cmd: cmake --build . --config Release --target ALL_BUILD
+    - ps: cmake --build . --config Release --target ALL_BUILD
 
 after_build:
     - ps: cmake --build . --config Release --target package

@@ -83,5 +83,7 @@ deploy:
   file_glob: true
   file: yall*.zip
   skip_cleanup: true
+  name: $TRAVIS_TAG
+  body: $TRAVIS_COMMIT_MESSAGE
   on:
     tag: true
