@@ -13,10 +13,11 @@
 # Once a tag is pushed, the release build will be packed and push to GitHub.
 #
 
-
 version: '{branch}-{build}'
 
 clone_folder: C:\yall
+
+skip_tags: true
 
 branches:
   only:
