@@ -67,7 +67,6 @@ script:
   - make validate
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
   - if [ "$TRAVIS_BRANCH" = "master" ]; then TRAVIS_TAG=`cat yall.version`; fi
   - if [ "$TRAVIS_BRANCH" = "master" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
   - if [ "$TRAVIS_BRANCH" = "master" ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
