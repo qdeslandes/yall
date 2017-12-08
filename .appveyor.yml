@@ -17,8 +17,6 @@ version: '{branch}-{build}'
 
 clone_folder: C:\yall
 
-skip_tags: true
-
 branches:
   only:
     - master
@@ -35,15 +33,13 @@ environment:
 before_build:
     - cd C:\yall
     - cmake -G"%generator%"
-    - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG = $true }
-    - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
 
 build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
 
 after_build:
-    - ps: if ( $env:APPVEYOR_REPO_TAG -eq $true ) { cmake --build . --config Release --target package }
-    - ps: if ( $env:APPVEYOR_REPO_TAG -eq $true ) { cmake --build . --config Debug --target package }
+    - ps: cmake --build . --config Release --target package
+    - ps: cmake --build . --config Debug --target package
 
 test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
@@ -53,7 +49,6 @@ artifacts:
       name: yall_zip
 
 deploy:
-    release: $(APPVEYOR_REPO_TAG_NAME)
     provider: GitHub
     artifact: yall_zip
     auth_token:
