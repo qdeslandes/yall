@@ -3,9 +3,7 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 [![Version](https://img.shields.io/github/release/Naccyde/yall.svg?label=version&colorB=ff0000)](https://github.com/Naccyde/yall/releases/latest)
 
-|master > | [![!][1mb]][1ml] | [![!][2mb]][2ml] | [![!][3mb]][3ml] | [![!][4mb]][4ml] |
-|---|---|---|---|---|
-|develop >| [![!][1db]][1dl] | [![!][2db]][2dl] | [![!][3db]][3dl] | [![!][4db]][4dl] |
+[![!][1mb]][1ml] [![!][2mb]][2ml] [![!][3mb]][3ml] [![!][4mb]][4ml]
 
 YALL is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
 
@@ -179,12 +177,3 @@ The process to contribute to yall is the following :
 [3ml]: https://sonarcloud.io/dashboard?id=yall
 [4mb]: https://sonarcloud.io/api/badges/measure?key=yall&metric=coverage
 [4ml]: https://sonarcloud.io/dashboard?id=yall
-
-[1db]: https://img.shields.io/travis/Naccyde/yall/develop.svg?label=linux
-[1dl]: https://travis-ci.org/Naccyde/yall/branches
-[2db]: https://img.shields.io/appveyor/ci/Naccyde/yall/develop.svg?label=windows
-[2dl]: https://ci.appveyor.com/project/Naccyde/yall
-[3db]: https://sonarcloud.io/api/badges/gate?key=yall:develop
-[3dl]: https://sonarcloud.io/dashboard?id=yall:develop
-[4db]: https://sonarcloud.io/api/badges/measure?key=yall:develop&metric=coverage
-[4dl]: https://sonarcloud.io/dashboard?id=yall:develop
