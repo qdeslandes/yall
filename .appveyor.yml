@@ -32,10 +32,11 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 before_build:
-    - if ( !$env:APPVEYOR_PULL_REQUEST_NUMBER ) { echo "NO PR"; $env.DEPLOY=1; $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version") }
-    - echo "$env:APPVEYOR_PULL_REQUEST_NUMBER"
-    - echo "$env.DEPLOY"
-    - echo "$env.TAG"
+    - ps: $env.DEPLOY = 0
+    - ps: if (-not (Test-Path env:APPVEYOR_PULL_REQUEST_NUMBER)){ echo "NO PR"; $env.DEPLOY=1; $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version") }
+    - ps: echo "$env:APPVEYOR_PULL_REQUEST_NUMBER"
+    - ps: echo "$env.DEPLOY"
+    - ps: echo "$env.TAG"
     - cd C:\yall
     - cmake -G"%generator%"
 
