@@ -32,7 +32,7 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 before_build:
-    - if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { echo "NO PR"; $env.DEPLOY=1; $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version") }
+    - if ( !$env:APPVEYOR_PULL_REQUEST_NUMBER ) { echo "NO PR"; $env.DEPLOY=1; $env:TAG = [IO.File]::ReadAllText("C:\yall\yall.version") }
     - echo "$env:APPVEYOR_PULL_REQUEST_NUMBER"
     - echo "$env.DEPLOY"
     - echo "$env.TAG"
