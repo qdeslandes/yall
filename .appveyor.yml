@@ -17,6 +17,7 @@ version: '{branch}-{build}'
 
 clone_folder: C:\yall
 
+skip_tags: true
 branches:
   only:
     - master
@@ -31,6 +32,7 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 before_build:
+    - if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { echo "NO PR"; $env.DEPLOY=1; $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
     - cd C:\yall
     - cmake -G"%generator%"
 
@@ -49,10 +51,11 @@ artifacts:
       name: yall_zip
 
 deploy:
+    tag: $(APPVEYOR_REPO_TAG_NAME)
     provider: GitHub
     artifact: yall_zip
     auth_token:
         secure: ZWCkNHmbrBurrU0WLBESAeFdNkhuUsae1TApe8LR/cakzx5Puw/akJZBC3uaISnw
     draft: false
     on:
-        branch: master
+        DEPLOY: 1
