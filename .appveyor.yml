@@ -38,7 +38,7 @@ build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
 
 after_build:
-    - ps: cmake --build . --config Release --target packag
+    - ps: cmake --build . --config Release --target package
     - ps: cmake --build . --config Debug --target package
 
 test_script:
