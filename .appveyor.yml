@@ -41,7 +41,7 @@ environment:
 # be released.
 before_build:
     - ps: cd C:\yall
-    - ps: cmake -G"$env:generator"
+    - cmd: cmake -G"%generator%"
     - ps: |
         if (-not (Test-Path env:APPVEYOR_PULL_REQUEST_NUMBER))
         {
