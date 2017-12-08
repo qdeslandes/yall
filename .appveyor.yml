@@ -38,6 +38,7 @@ before_build:
 
 build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
+    - cmd: cmake --build . --config Release --target package
 
 after_build:
     - ps: echo "$env:APPVEYOR_REPO_BRANCH"
