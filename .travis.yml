@@ -69,7 +69,7 @@ script:
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" ]; then TRAVIS_TAG=`cat yall.version`; fi
   - if [ "$TRAVIS_BRANCH" = "master" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then sonar-scanner -Dproject.settings=.sonar-project.properties; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then sonar-scanner -Dproject.settings=.sonar-project.properties -Dsonar.projectVersion=$TRAVIS_TAG; fi
 
 # On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
 before_deploy:
