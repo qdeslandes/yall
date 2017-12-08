@@ -32,13 +32,13 @@ environment:
 
 before_build:
     - cd C:\yall
+    - cmd: echo "$env:APPVEYOR_PULL_REQUEST_NUMBER"
     - cmake -G"%generator%"
     - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG = $true }
     - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
 
 build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
-    - cmd: cmake --build . --config Release --target package
 
 after_build:
     - ps: echo "$env:APPVEYOR_REPO_BRANCH"
