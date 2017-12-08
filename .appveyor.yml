@@ -17,7 +17,7 @@ version: '{branch}-{build}'
 
 clone_folder: C:\yall
 
-skip_tags: true
+skip_non_tags: true
 
 branches:
   only:
@@ -35,8 +35,6 @@ environment:
 before_build:
     - cd C:\yall
     - cmake -G"%generator%"
-    - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG = $true }
-    - ps: if ( $env:APPVEYOR_PULL_REQUEST_NUMBER -eq '' ) { $env:APPVEYOR_REPO_TAG_NAME = [IO.File]::ReadAllText("C:\yall\yall.version") }
 
 build_script:
     - cmd: cmake --build . --config Release --target ALL_BUILD
@@ -53,7 +51,6 @@ artifacts:
       name: yall_zip
 
 deploy:
-    release: $(APPVEYOR_REPO_TAG_NAME)
     provider: GitHub
     artifact: yall_zip
     auth_token:
