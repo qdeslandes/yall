@@ -30,18 +30,16 @@ environment:
         - image: Visual Studio 2015
           platform: x64
           generator: "Visual Studio 14 2015 Win64"
-          DEPLOY: 0
-          TAG: 0
         - image: Visual Studio 2015
           platform: x64
           generator: "Visual Studio 12 2013 Win64"
-          DEPLOY: 0
-          TAG: 0
 
 # Run CMake generation and define if the current build should be released.
 # As build is done only on PR and on master, if this is not a PR, it should
 # be released.
 before_build:
+    - ps: $env:DEPLOY=0
+    - ps: $env:TAG=0
     - ps: cd C:\yall
     - ps: cmake -G"%generator%"
     - ps: |
