@@ -22,7 +22,6 @@ language: c
 sudo: false
 dist: trusty
 
-# This will alow to build on master AND on pull requests
 branches:
   only:
     - master
