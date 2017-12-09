@@ -113,9 +113,9 @@ void free_subsystems(void);
 
 /*
  * yall_show_subsystems_tree : display the subsystems tree. Supports up to 32
- * 	nested subsystems.
- * 	/!\ This function can only be called when debug mode is activated.
- * 	/!\ This function is not thread safe.
+ *	nested subsystems.
+ *	/!\ This function can only be called when debug mode is activated.
+ *	/!\ This function is not thread safe.
  */
 _YALL_PUBLIC void yall_show_subsystems_tree(void);
 

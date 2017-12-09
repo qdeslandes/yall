@@ -343,13 +343,13 @@ void free_subsystems(void)
 
 /*
  * get_next_subsystem : subsystems are sets in a tree way. Given a subsystem
- * 	(<s> here), it returns the next subsystem. Calling this function with
- * 	the previously returned subsystem will allow to browse the subsystems
- * 	tree. Once get_next_subsystem() returns NULL, all the subsystems
- * 	have been returned.
- * 	<craw_childs> is used on recursive calls to ensure, from a given
- * 	subsystem, the function won't go back into its childs list.
- * 	<d> allow the caller to know
+ *	(<s> here), it returns the next subsystem. Calling this function with
+ *	the previously returned subsystem will allow to browse the subsystems
+ *	tree. Once get_next_subsystem() returns NULL, all the subsystems
+ *	have been returned.
+ *	<craw_childs> is used on recursive calls to ensure, from a given
+ *	subsystem, the function won't go back into its childs list.
+ *	<d> allow the caller to know
  */
 static struct yall_subsystem *get_next_subsystem(struct yall_subsystem *s,
 	bool crawl_childs, int8_t *d)
@@ -375,7 +375,11 @@ enum {
 	EMPTY
 };
 
-static const char *connectors[4] = { "│   ", "├── ", "└── ", "    " };
+static const char *connectors[4] = {
+	"│   ",
+	"├── ",
+	"└── ",
+	"    "};
 
 static void show_subsystems_tree_call(struct yall_call_data *d,
 	const void *args)
@@ -416,7 +420,8 @@ static void show_subsystems_tree_call(struct yall_call_data *d,
 		else
 			op[curr_indent] = connectors[LIGHT_UP_RIGHT];
 
-		strncpy(&buff[strlen(buff)], op[curr_indent], strlen(op[curr_indent])+1);
+		strncpy(&buff[strlen(buff)], op[curr_indent],
+			strlen(op[curr_indent])+1);
 
 		strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
 
