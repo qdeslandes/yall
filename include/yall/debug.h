@@ -72,7 +72,9 @@
 #endif
 
 #include <stdbool.h>
+#include <stdio.h>
 
+#include "yall/log.h"
 #include "yall/yall.h"
 #include "yall/utils.h"
 #include "yall/msvc_defines.h"
@@ -93,64 +95,100 @@ _YALL_PUBLIC void yall_disable_debug(void);
  */
 _YALL_PUBLIC bool yall_is_debug(void);
 
-#ifdef DEBUG
+#define _YALL_DBG_EMERG(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
+		} \
+	} while (0)
 
-#       include <stdio.h>
-#       include "yall/log.h"
+#define _YALL_DBG_ALERT(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
+		} \
+	} while (0)
 
-#       define _YALL_DBG_EMERG(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_ALERT(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_CRIT(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_ERR(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_err, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_WARNING(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_warning, \
-					##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_NOTICE(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_INFO(...) do { \
-			if (yall_is_debug()) { \
-				_YALL_LOG("yall", yall_info, ##__VA_ARGS__); \
-			} \
-		} while (0)
-#       define _YALL_DBG_DEBUG(...) do { \
-			if (yall_is_debug()) \
-				_YALL_LOG("yall", yall_debug, \
-					##__VA_ARGS__); { \
-			} \
-		} while (0)
-#else
+#define _YALL_DBG_CRIT(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
+		} \
+	} while (0)
 
-#       define _YALL_DBG_EMERG(...)
-#       define _YALL_DBG_ALERT(...)
-#       define _YALL_DBG_CRIT(...)
-#       define _YALL_DBG_ERR(...)
-#       define _YALL_DBG_WARNING(...)
-#       define _YALL_DBG_NOTICE(...)
-#       define _YALL_DBG_INFO(...)
-#       define _YALL_DBG_DEBUG(...)
+#define _YALL_DBG_ERR(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_err, ##__VA_ARGS__); \
+		} \
+	} while (0)
 
-#endif
+#define _YALL_DBG_WARNING(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_warning, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_DBG_NOTICE(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_DBG_INFO(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_LOG("yall", yall_info, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_DBG_DEBUG(...) do { \
+		if (yall_is_debug()) \
+			_YALL_LOG("yall", yall_debug, ##__VA_ARGS__); { \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_EMERG(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_ALERT(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_CRIT(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_ERR(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_err, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_WARNING(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_warning, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_NOTICE(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_INFO(...) do { \
+		if (yall_is_debug()) { \
+			_YALL_CALL_LOG("yall", yall_info, ##__VA_ARGS__); \
+		} \
+	} while (0)
+
+#define _YALL_CALL_DBG_DEBUG(...) do { \
+		if (yall_is_debug()) \
+			_YALL_CALL_LOG("yall", yall_debug, ##__VA_ARGS__); { \
+		} \
+	} while (0)
 
 #endif

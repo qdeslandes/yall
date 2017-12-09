@@ -30,7 +30,6 @@ static bool debug = false;
 
 void yall_enable_debug(void)
 {
-#ifdef DEBUG
 	if (! yall_is_init())
 		return;
 
@@ -54,12 +53,10 @@ void yall_enable_debug(void)
 	debug = true;
 
 	_YALL_DBG_DEBUG("Debug mode activated.");
-#endif
 }
 
 void yall_disable_debug(void)
 {
-#ifdef DEBUG
 	if (! yall_is_init())
 		return;
 
@@ -67,7 +64,6 @@ void yall_disable_debug(void)
 
 	debug = false;
 	_free_subsystems(remove_subsystem("yall"));
-#endif
 }
 
 bool yall_is_debug(void)
