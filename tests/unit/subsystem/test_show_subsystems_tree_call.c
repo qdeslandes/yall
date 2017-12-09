@@ -21,7 +21,12 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=tests_yall_init_lib, .fin
 	show_subsystems_tree_call(&d, NULL);
 
 	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+
+#ifdef __linux__
 	cr_assert_str_eq(d.lines->content, "└── yall\n");
+#else
+	cr_assert_str_eq(d.lines->content, "|-- yall\n");
+#endif
 }
 
 /*
@@ -41,8 +46,14 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=tests_yall_init_lib, .fin
 	show_subsystems_tree_call(&d, NULL);
 
 	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+
+#ifdef __linux__
 	cr_assert_str_eq(d.lines->content, "├── 0\n");
 	cr_assert_str_eq(d.lines->next->next->next->content, "│   └── 02\n");
+#else
+	cr_assert_str_eq(d.lines->content, "|-- 0\n");
+	cr_assert_str_eq(d.lines->next->next->next->content, "|   |-- 02\n");
+#endif
 }
 
 /*
