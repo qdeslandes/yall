@@ -83,9 +83,7 @@ int main(void)
         yall_init();
         yall_init();
 
-        #ifdef DEBUG
         yall_enable_debug();
-        #endif
 
         yall_config_set_tab_width(4);
         yall_config_set_std_header_template("[%d] :: line %-4.4L :: %-9l : %f : \n\t");
@@ -94,7 +92,15 @@ int main(void)
         yall_set_subsystem("yall_c_test", NULL, yall_debug, yall_console_output, NULL);
         yall_set_subsystem("io", "yall_c_test", yall_debug, yall_console_output, NULL);
         yall_set_subsystem("memory", "yall_c_test", yall_debug, yall_console_output, NULL);
-        yall_set_subsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("manager", "memory", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("DDR3", "memory", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("DDR4", "memory", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("CPU", "yall_c_test", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("ALU", "CPU", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("Executor", "CPU", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("scheduler", "yall_c_tests", yall_debug, yall_console_output, NULL);
+
+	yall_show_subsystems_tree();
 
 	pthread_create(&threads[0], NULL, thread0, NULL);
 	pthread_create(&threads[1], NULL, thread1, NULL);
@@ -122,6 +128,7 @@ int main(void)
 
 	yall_close();
         yall_close_all();
+
 
         return 0;
 }
