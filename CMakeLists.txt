@@ -14,8 +14,8 @@ option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 	Project version
 #]]
 set(YALL_VERSION_MAJOR 1)
-set(YALL_VERSION_MINOR 2)
-set(YALL_VERSION_PATCH 1)
+set(YALL_VERSION_MINOR 3)
+set(YALL_VERSION_PATCH 0)
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 configure_file("${PROJECT_SOURCE_DIR}/resources/yall.version.in" "${PROJECT_BINARY_DIR}/yall.version")
@@ -26,6 +26,11 @@ message("==== Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.
 #[[
 	CMake internal configuration
 #]]
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED On)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED On)
+
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Debug;" CACHE STRING "" FORCE)
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Release;" CACHE STRING "" FORCE)

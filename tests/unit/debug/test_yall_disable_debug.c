@@ -26,11 +26,7 @@ Test(debug, test_yall_disable_debug1)
         yall_init();
         yall_enable_debug();
 
-        #ifdef DEBUG
         cr_assert_eq(debug, true);
-        #else
-        cr_assert_eq(debug, false);
-        #endif
 
         yall_close_all();
 

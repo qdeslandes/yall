@@ -4,7 +4,7 @@
 
 if (UNIX)
 	# Compile options
-	set(_PVT_OPT -Wall -Wextra -std=gnu++11)
+	set(_PVT_OPT -Wall -Wextra)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
 

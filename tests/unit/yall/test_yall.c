@@ -20,7 +20,7 @@ void tests_yall_init_lib(void)
 
 void tests_yall_close_lib(void)
 {
-        while (yall_close() != YALL_NOT_INIT) ;
+	yall_close_all();
 }
 
 void tests_yall_log_setup(void)

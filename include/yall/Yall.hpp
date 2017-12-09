@@ -202,6 +202,11 @@ private:
 		return yall_is_debug();
 	}
 
+	void _showSubsystemsTree()
+	{
+		yall_show_subsystems_tree();
+	}
+
 	void _enableSubsystem(std::string subsystem_name)
 	{
 		yall_enable_subsystem(subsystem_name.c_str());
@@ -260,6 +265,11 @@ public:
 	static bool isDebug()
 	{
 		return getInstance().isDebug();
+	}
+
+	static void showSubsystemsTree()
+	{
+		getInstance()._showSubsystemsTree();
 	}
 
 	static void enableSubsystem(std::string subsystem_name)
