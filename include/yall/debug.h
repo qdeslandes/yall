@@ -143,51 +143,51 @@ _YALL_PUBLIC bool yall_is_debug(void);
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_EMERG(...) do { \
+#define _YALL_CALL_DBG_EMERG(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_emerg, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_ALERT(...) do { \
+#define _YALL_CALL_DBG_ALERT(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_alert, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_CRIT(...) do { \
+#define _YALL_CALL_DBG_CRIT(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_crit, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_ERR(...) do { \
+#define _YALL_CALL_DBG_ERR(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_err, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_err, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_WARNING(...) do { \
+#define _YALL_CALL_DBG_WARNING(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_warning, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_warning, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_NOTICE(...) do { \
+#define _YALL_CALL_DBG_NOTICE(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_notice, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_INFO(...) do { \
+#define _YALL_CALL_DBG_INFO(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_info, ##__VA_ARGS__); \
+			_YALL_CALL_LOG("yall", yall_info, function, args); \
 		} \
 	} while (0)
 
-#define _YALL_CALL_DBG_DEBUG(...) do { \
+#define _YALL_CALL_DBG_DEBUG(function, args) do { \
 		if (yall_is_debug()) \
-			_YALL_CALL_LOG("yall", yall_debug, ##__VA_ARGS__); { \
+			_YALL_CALL_LOG("yall", yall_debug, function, args); { \
 		} \
 	} while (0)
 

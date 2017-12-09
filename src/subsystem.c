@@ -375,11 +375,19 @@ enum {
 	EMPTY
 };
 
+#ifdef __linux__
 static const char *connectors[4] = {
 	"│   ",
 	"├── ",
 	"└── ",
 	"    "};
+#else
+static const char *connectors[4] = {
+	"|   ",
+	"|-- ",
+	"|-- ",
+	"    " };
+#endif
 
 static void show_subsystems_tree_call(struct yall_call_data *d,
 	const void *args)
