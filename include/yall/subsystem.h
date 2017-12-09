@@ -28,33 +28,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifdef __linux__
-#include <stdatomic.h>
-#endif
-
 #include "yall/utils.h"
 #include "yall/status.h"
 #include "yall/log_level.h"
 #include "yall/output_types.h"
 
 #define SUBSYS_NAME_LEN	 16
-
-struct yall_subsystem {
-	char name[SUBSYS_NAME_LEN];
-	enum yall_log_level log_level;
-#ifdef __linux__
-	_Atomic enum yall_subsys_status status;
-#elif _WIN32
-	enum yall_subsys_status status;
-#endif
-	enum yall_output_type output_type;
-	char *output_file;
-	bool delete_old_log_file;
-	struct yall_subsystem *parent;
-	struct yall_subsystem *childs;
-	struct yall_subsystem *previous;
-	struct yall_subsystem *next;
-};
 
 struct yall_subsystem_params {
 	enum yall_log_level log_level;

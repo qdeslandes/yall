@@ -41,6 +41,23 @@ static struct yall_subsystem_params default_params = {
 	"yall_default.log"
 };
 
+struct yall_subsystem {
+	char name[SUBSYS_NAME_LEN];
+	enum yall_log_level log_level;
+#ifdef __linux__
+	_Atomic enum yall_subsys_status status;
+#elif _WIN32
+	enum yall_subsys_status status;
+#endif
+	enum yall_output_type output_type;
+	char *output_file;
+	bool delete_old_log_file;
+	struct yall_subsystem *parent;
+	struct yall_subsystem *childs;
+	struct yall_subsystem *previous;
+	struct yall_subsystem *next;
+};
+
 /*
  * _get_subsystem : returns the subsystem of the given name. Starting the
  *      research from a subsystem's list. The <params> parameter is used to
