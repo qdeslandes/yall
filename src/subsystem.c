@@ -340,3 +340,93 @@ void free_subsystems(void)
 {
 	_free_subsystems(subsystems);
 }
+
+/*
+ * get_next_subsystem : subsystems are sets in a tree way. Given a subsystem
+ * 	(<s> here), it returns the next subsystem. Calling this function with
+ * 	the previously returned subsystem will allow to browse the subsystems
+ * 	tree. Once get_next_subsystem() returns NULL, all the subsystems
+ * 	have been returned.
+ * 	<craw_childs> is used on recursive calls to ensure, from a given
+ * 	subsystem, the function won't go back into its childs list.
+ * 	<d> allow the caller to know
+ */
+static struct yall_subsystem *get_next_subsystem(struct yall_subsystem *s,
+	bool crawl_childs, int8_t *d)
+{
+	if (! s)
+		return NULL;
+
+	if (crawl_childs && s->childs)
+		return ++(*d), s->childs;
+
+	if (s->next)
+		return s->next;
+
+	*d = *d - 1;
+
+	return get_next_subsystem(s->parent, false, d);
+}
+
+enum {
+	VERTICAL,
+	VERTICAL_RIGHT,
+	LIGHT_UP_RIGHT,
+	EMPTY
+};
+
+static const char *connectors[4] = { "│   ", "├── ", "└── ", "    " };
+
+static void _show_subsystems_tree_call(struct yall_call_data *d,
+	const void *args)
+{
+	UNUSED(args);
+
+	uint8_t curr_indent = 0;
+	int8_t indent = 0;
+	const char *op[32] = { 0 };
+	size_t buff_size = 0;
+	char *buff = NULL;
+	struct yall_subsystem *s = subsystems;
+
+	yall_call_set_header(d, "Subsystems tree :");
+
+	while ((s = get_next_subsystem(s, true, &indent))) {
+		curr_indent += indent;
+		indent = 0;
+
+		// Connectors are at most 10 char wide, so use this len.
+		buff_size = 10 * (curr_indent + 1) + strlen(s->name) + 1;
+		buff = calloc(buff_size, 1);
+
+		for (uint8_t i = 0; i < curr_indent; ++i) {
+			if (op[i] == connectors[VERTICAL_RIGHT])
+				op[i] = connectors[VERTICAL];
+			else if (op[i] == connectors[LIGHT_UP_RIGHT])
+				op[i] = connectors[EMPTY];
+
+			strncpy(&buff[strlen(buff)], op[i], strlen(op[i])+1);
+		}
+
+		if (s->next)
+			op[curr_indent] = connectors[VERTICAL_RIGHT];
+		else
+			op[curr_indent] = connectors[LIGHT_UP_RIGHT];
+
+		strncpy(&buff[strlen(buff)], op[curr_indent], strlen(op[curr_indent])+1);
+
+		strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
+
+		yall_call_add_line(d, 0, buff);
+
+		free(buff);
+	}
+}
+
+void yall_show_subsystems_tree(void)
+{
+	if (! yall_is_debug())
+		return;
+
+	_YALL_CALL_DBG_INFO(_show_subsystems_tree_call, NULL);
+}
