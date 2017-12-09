@@ -377,7 +377,7 @@ enum {
 
 static const char *connectors[4] = { "│   ", "├── ", "└── ", "    " };
 
-static void _show_subsystems_tree_call(struct yall_call_data *d,
+static void show_subsystems_tree_call(struct yall_call_data *d,
 	const void *args)
 {
 	UNUSED(args);
@@ -391,7 +391,10 @@ static void _show_subsystems_tree_call(struct yall_call_data *d,
 
 	yall_call_set_header(d, "Subsystems tree :");
 
-	while ((s = get_next_subsystem(s, true, &indent))) {
+	if (! s)
+		return;
+
+	do {
 		curr_indent += indent;
 		indent = 0;
 
@@ -420,7 +423,7 @@ static void _show_subsystems_tree_call(struct yall_call_data *d,
 		yall_call_add_line(d, 0, buff);
 
 		free(buff);
-	}
+	} while ((s = get_next_subsystem(s, true, &indent)));
 }
 
 void yall_show_subsystems_tree(void)
@@ -428,5 +431,5 @@ void yall_show_subsystems_tree(void)
 	if (! yall_is_debug())
 		return;
 
-	_YALL_CALL_DBG_INFO(_show_subsystems_tree_call, NULL);
+	_YALL_CALL_DBG_INFO(show_subsystems_tree_call, NULL);
 }
