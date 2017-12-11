@@ -65,7 +65,6 @@ before_script:
 script:
   - make
   - make validate
-  - make package
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" ]; then TRAVIS_TAG=`cat yall.version`; fi
