@@ -31,7 +31,8 @@ YALL is a subsystems based logging library. It allow to handle multiple ways to 
 
 To build yall properly you need :
 
-* Coveralls : `pip install --user cpp-coveralls`
+* To package :
+  * `rpmbuild`
 
 ## Log levels
 
