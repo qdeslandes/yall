@@ -17,7 +17,7 @@ elseif (WIN32)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Include directories
-	set(_PVT_INCDIR external/include/yall_win32)
+	set(_PVT_INCDIR ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
 
 	# Link libraries
 	set(_PVT_LINKLIB yall)

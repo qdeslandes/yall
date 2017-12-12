@@ -35,7 +35,7 @@ elseif (WIN32)
 	set(_PVT_DEF YALL_UNIT static= inline=)
 
 	# Include directories
-	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers external/include/yall_win32)
+	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
 
 	# Link libraries
 	set(_PVT_LINKLIB criterion pthreadVC2)
@@ -83,7 +83,7 @@ elseif (WIN32)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Include directories
-	set(_PVT_INCDIR include tests/unit external/include external/include/yall_win32)
+	set(_PVT_INCDIR include tests/unit external/include ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
 
 	# Link libraries
 	set(_PVT_LINKLIB criterion pthreadVC2)
