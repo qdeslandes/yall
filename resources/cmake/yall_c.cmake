@@ -4,12 +4,12 @@
 
 if (UNIX)
 	# Compile options
-	set(_PVT_OPT -Wall -Wextra)
+	set(_PVT_OPT -Wall -Wextra -std=gnu11)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
 
 	# Link libraries
-	set(_PVT_LINKLIB yall_shared pthread)
+	set(_PVT_LINKLIB yall)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /Wall)
@@ -17,23 +17,23 @@ elseif (WIN32)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Include directories
-	set(_PVT_INCDIR external/include/yall_win32)
+	set(_PVT_INCDIR ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
 
 	# Link libraries
-	set(_PVT_LINKLIB yall_shared)
+	set(_PVT_LINKLIB yall)
 endif ()
 
-add_executable(yall_cpp tests/cpp/main.cpp)
+add_executable(yall_c tests/c/main.c)
 
-target_compile_options(yall_cpp
+target_compile_options(yall_c
 	PRIVATE
 		${_PVT_OPT}
 		$<$<CONFIG:DEBUG>:${_PVT_OPT_DEBUG}>
 		$<$<CONFIG:RELEASE>:${_PVT_OPT_RELEASE}>)
 
-target_include_directories(yall_cpp
+target_include_directories(yall_c
 	PRIVATE ${_PVT_INCDIR})
 
-target_link_libraries(yall_cpp ${_PVT_LINKLIB})
+target_link_libraries(yall_c ${_PVT_LINKLIB})
 
-targetInfos(yall_cpp)
+targetInfos(yall_c)

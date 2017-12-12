@@ -17,6 +17,6 @@ set(CPACK_PACKAGE_VERSION_PATCH ${YALL_VERSION_PATCH})
 set(CPACK_COMPILER ${COMPILER})
 set(CPACK_YALL_BUILD_TYPE ${CMAKE_BUILD_TYPE})
 
-set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/resources/cpack_config_file.cmake)
+set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/resources/cmake/cpack_config_file.cmake)
 
 include(CPack)
