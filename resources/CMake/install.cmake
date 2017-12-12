@@ -30,3 +30,16 @@ if (WIN32)
 		DESTINATION bin
 		CONFIGURATIONS Release)
 endif ()
+
+install(EXPORT yall_targets
+	FILE yall_targets.cmake
+	DESTINATION lib/cmake/yall
+	CONFIGURATIONS Debug)
+
+install(
+	FILES
+	resources/CMake/yall-config.cmake
+	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
+	DESTINATION lib/cmake/yall
+	CONFIGURATIONS Debug)
+
