@@ -15,7 +15,7 @@ option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 #]]
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 3)
-set(YALL_VERSION_PATCH 1)
+set(YALL_VERSION_PATCH 2)
 set(YALL_VERSION "${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
