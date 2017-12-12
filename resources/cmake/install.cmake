@@ -2,6 +2,19 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
+	VERSION ${YALL_VERSION}
+	COMPATIBILITY ExactVersion)
+
+configure_package_config_file(
+	"resources/cmake/yall-config.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config.cmake"
+	INSTALL_DESTINATION lib/cmake/yall
+	INSTALL_PREFIX /usr)
+
 install(
 	FILES README.md
 	DESTINATION share/yall
@@ -31,25 +44,14 @@ if (WIN32)
 		CONFIGURATIONS Release)
 endif ()
 
+install(
+	FILES
+		"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config.cmake"
+		"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
+	DESTINATION lib/cmake/yall
+	CONFIGURATIONS Debug)
+	
 install(EXPORT yall_targets
 	FILE yall_targets.cmake
 	DESTINATION lib/cmake/yall
 	CONFIGURATIONS Debug)
-
-install(
-	FILES
-	resources/CMake/yall-config.cmake
-	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
-	DESTINATION lib/cmake/yall
-	CONFIGURATIONS Debug)
-
-
-include(CMakePackageConfigHelpers)
-
-write_basic_package_version_file(
-	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
-	VERSION ${YALL_VERSION}
-	COMPATIBILITY SameMajorVersion)
-
-export(EXPORT yall_targets
-	FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/yall_targets.cmake")
