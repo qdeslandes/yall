@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.6)
 
 project(yall)
 
-include(resources/CMake/utils.cmake)
+include(resources/cmake/utils.cmake)
 
 option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 
@@ -66,7 +66,7 @@ endif ()
 #[[
 	Project
 #]]
-include(resources/CMake/yall.cmake)
+include(resources/cmake/yall.cmake)
 
 
 #[[
@@ -74,16 +74,16 @@ include(resources/CMake/yall.cmake)
 #]]
 enable_testing()
 
-include(resources/CMake/validate.cmake)
-include(resources/CMake/yall_c.cmake)
-include(resources/CMake/yall_cpp.cmake)
-include(resources/CMake/yall_unit.cmake)
-include(resources/CMake/coverage.cmake)
-include(resources/CMake/checkstyle.cmake)
+include(resources/cmake/validate.cmake)
+include(resources/cmake/yall_c.cmake)
+include(resources/cmake/yall_cpp.cmake)
+include(resources/cmake/yall_unit.cmake)
+include(resources/cmake/coverage.cmake)
+include(resources/cmake/checkstyle.cmake)
 
 
 #[[
 	Deployment
 #]]
-include(resources/CMake/install.cmake)
-include(resources/CMake/package.cmake)
+include(resources/cmake/install.cmake)
+include(resources/cmake/package.cmake)
