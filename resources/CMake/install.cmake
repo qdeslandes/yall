@@ -43,3 +43,13 @@ install(
 	DESTINATION lib/cmake/yall
 	CONFIGURATIONS Debug)
 
+
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
+	VERSION ${YALL_VERSION}
+	COMPATIBILITY SameMajorVersion)
+
+export(EXPORT yall_targets
+	FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/yall_targets.cmake")

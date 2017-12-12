@@ -85,6 +85,5 @@ include(resources/CMake/checkstyle.cmake)
 #[[
 	Deployment
 #]]
-include(resources/CMake/export.cmake)
 include(resources/CMake/install.cmake)
 include(resources/CMake/package.cmake)
