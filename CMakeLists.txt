@@ -16,6 +16,7 @@ option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 3)
 set(YALL_VERSION_PATCH 1)
+set(YALL_VERSION "${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
 configure_file("${PROJECT_SOURCE_DIR}/resources/yall.version.in" "${PROJECT_BINARY_DIR}/yall.version")
@@ -84,5 +85,6 @@ include(resources/CMake/checkstyle.cmake)
 #[[
 	Deployment
 #]]
+include(resources/CMake/export.cmake)
 include(resources/CMake/install.cmake)
 include(resources/CMake/package.cmake)
