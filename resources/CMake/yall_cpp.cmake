@@ -9,7 +9,7 @@ if (UNIX)
 	set(_PVT_OPT_RELEASE -O3)
 
 	# Link libraries
-	set(_PVT_LINKLIB yall_shared pthread)
+	set(_PVT_LINKLIB yall pthread)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /Wall)
@@ -20,7 +20,7 @@ elseif (WIN32)
 	set(_PVT_INCDIR external/include/yall_win32)
 
 	# Link libraries
-	set(_PVT_LINKLIB yall_shared)
+	set(_PVT_LINKLIB yall)
 endif ()
 
 add_executable(yall_cpp tests/cpp/main.cpp)
