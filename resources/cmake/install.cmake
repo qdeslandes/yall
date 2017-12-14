@@ -39,19 +39,21 @@ install(
 
 if (WIN32)
 	install(
-		FILES external/lib/win32/msvc12/pthreadVC2.dll
+		FILES external/bin/pthreadVC2.dll
 		DESTINATION bin
 		CONFIGURATIONS Release)
 endif ()
 
 install(
 	FILES
-		"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config.cmake"
-		"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config-version.cmake"
+		"${CMAKE_BINARY_DIR}/cmake/yall-config.cmake"
+		"${CMAKE_BINARY_DIR}/cmake/yall-config-version.cmake"
+		"${CMAKE_SOURCE_DIR}/resources/cmake/module/Findpthread.cmake"
 	DESTINATION lib/cmake/yall
 	CONFIGURATIONS Debug)
 	
 install(EXPORT yall_targets
 	FILE yall_targets.cmake
 	DESTINATION lib/cmake/yall
+	NAMESPACE yall::
 	CONFIGURATIONS Debug)

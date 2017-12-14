@@ -6,6 +6,11 @@ if (WIN32 AND NOT MSVC_VERSION EQUAL 1900)
 	return ()
 endif ()
 
+if (WIN32)
+	set(criterion_HINTS "${criterion_HINTS}" "${CMAKE_SOURCE_DIR}/external")
+endif ()
+find_package(criterion REQUIRED)
+
 #[[
 	Yall sources objects
 ]]#
@@ -16,29 +21,11 @@ if (UNIX)
 	set(_PVT_OPT -Wall -Wextra -std=gnu11 -coverage)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
-
-	# Compile definitions
-	set(_PVT_DEF YALL_UNIT static= inline=)
-
-	# Include directories
-	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers)
-
-	# Link libraries
-	set(_PVT_LINKLIB m gcov pthread criterion)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /wd4820 /wd4255 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
 	set(_PVT_OPT_DEBUG /O0)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-
-	# Compile definitions
-	set(_PVT_DEF YALL_UNIT static= inline=)
-
-	# Include directories
-	set(_PVT_INCDIR include tests/unit ${CMAKE_BINARY_DIR}/generated_headers ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
-
-	# Link libraries
-	set(_PVT_LINKLIB criterion pthreadVC2)
 endif ()
 
 add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
@@ -51,14 +38,13 @@ target_compile_options(yall_unit_src_obj
 
 target_compile_definitions(yall_unit_src_obj
 	PUBLIC
-		${_PVT_DEF})
+		YALL_UNIT static= inline=)
 
 target_include_directories(yall_unit_src_obj
 	PRIVATE
-		${_PVT_INCDIR})
-
-set_property(TARGET yall_unit_src_obj PROPERTY C_STANDARD 11)
-set_property(TARGET yall_unit_src_obj PROPERTY C_STANDARD_REQUIRED ON)
+		include
+		${pthread_INCLUDE_DIR}
+		${CMAKE_BINARY_DIR}/generated_headers)
 
 #[[
 	Yall unit tests
@@ -70,23 +56,11 @@ if (UNIX)
 	set(_PVT_OPT -Wall -Wextra -std=gnu11)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
-
-	# Include directories
-	set(_PVT_INCDIR include tests/unit external/include)
-
-	# Link libraries
-	set(_PVT_LINKLIB m gcov pthread criterion)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /wd4820 /wd4255 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
 	set(_PVT_OPT_DEBUG /O0)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-
-	# Include directories
-	set(_PVT_INCDIR include tests/unit external/include ${CMAKE_SOURCE_DIR}/external/include/yall_win32)
-
-	# Link libraries
-	set(_PVT_LINKLIB criterion pthreadVC2)
 endif ()
 
 add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
@@ -99,17 +73,20 @@ target_compile_options(yall_unit
 
 target_include_directories(yall_unit
 	PRIVATE
-		${_PVT_INCDIR})
+		include
+		${pthread_INCLUDE_DIR}
+		${CMAKE_BINARY_DIR}/generated_headers
+		tests/unit)
 
 target_link_libraries(yall_unit
 	PRIVATE
-		${_PVT_LINKLIB})
-
-set_property(TARGET yall_unit PROPERTY C_STANDARD 11)
-set_property(TARGET yall_unit PROPERTY C_STANDARD_REQUIRED ON)
+		pthread::pthread
+		criterion::criterion
+		$<IF:$<C_COMPILER_ID:GNU>,m,>
+		$<IF:$<C_COMPILER_ID:GNU>,gcov,>)
 
 if (MSVC_VERSION EQUAL 1900)
-	add_custom_target(unit COMMAND yall_unit WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/lib/win32/msvc14)
+	add_custom_target(unit COMMAND yall_unit --ascii WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/bin)
 endif ()
 
 targetInfos(yall_unit_src_obj)
