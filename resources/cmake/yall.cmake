@@ -10,9 +10,6 @@ if (UNIX)
 	set(_PVT_OPT -Wall -Wextra -std=gnu11 -fvisibility=hidden -fPIC)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
-
-	# Link libraries
-	set(_PUB_LINKLIB pthread)
 elseif (WIN32)
 	# Compile options
 	set(_PVT_OPT /wd4820 /wd4255 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
@@ -21,9 +18,6 @@ elseif (WIN32)
 
 	# Compile definitions
 	set(_PVT_DEF _CRT_SECURE_NO_WARNINGS)
-
-	# Linked libraries
-	set(_PUB_LINKLIB pthreadVC2)
 endif ()
 
 file(GLOB_RECURSE YALL_SRCS src/*.c include/*.h)
@@ -50,6 +44,6 @@ target_include_directories(yall
 
 target_link_libraries(yall
 	PUBLIC
-		${_PUB_LINKLIB})
+		pthread::pthread)
 
 targetInfos(yall)

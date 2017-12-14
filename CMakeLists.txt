@@ -8,7 +8,18 @@ project(yall)
 
 include(resources/cmake/utils.cmake)
 
+option(pthread_HINTS "Hint to find pthread directory" "")
+option(criterion_HINTS "Hint to find criterion directory" "")
 option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
+
+if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "")
+	set(CMAKE_BUILD_TYPE "Release")
+endif ()
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmake/module")
+
+find_package(pthread REQUIRED)
+find_package(criterion REQUIRED)
 
 #[[
 	Project version
