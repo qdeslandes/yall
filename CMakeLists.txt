@@ -18,6 +18,9 @@ endif ()
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmake/module")
 
+if (WIN32)
+	set(pthread_HINTS "${pthread_HINTS}" "${CMAKE_SOURCE_DIR}/external")
+endif ()
 find_package(pthread REQUIRED)
 
 #[[
@@ -68,8 +71,6 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "windows_unknow")
 	endif ()
-
-	link_directories(${CMAKE_SOURCE_DIR}/external/lib/win32/${COMPILER})
 endif ()
 
 

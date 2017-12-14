@@ -39,8 +39,7 @@ target_include_directories(yall
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
 		$<INSTALL_INTERFACE:include>
 	PRIVATE
-		${CMAKE_BINARY_DIR}/generated_headers
-		$<IF:$<C_COMPILER_ID:MSVC>,${CMAKE_SOURCE_DIR}/external/include/yall_win32,>)
+		${CMAKE_BINARY_DIR}/generated_headers)
 
 target_link_libraries(yall
 	PUBLIC

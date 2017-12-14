@@ -39,7 +39,7 @@ install(
 
 if (WIN32)
 	install(
-		FILES external/lib/win32/msvc12/pthreadVC2.dll
+		FILES external/bin/pthreadVC2.dll
 		DESTINATION bin
 		CONFIGURATIONS Release)
 endif ()
