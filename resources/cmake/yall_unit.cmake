@@ -38,7 +38,7 @@ target_compile_options(yall_unit_src_obj
 
 target_compile_definitions(yall_unit_src_obj
 	PUBLIC
-		static= inline=)
+		YALL_UNIT static= inline=)
 
 target_include_directories(yall_unit_src_obj
 	PRIVATE
