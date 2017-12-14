@@ -37,6 +37,8 @@ script:
 
 after_success:
   - docker cp yall:/build/packages ./
+  - docker cp yall:/build/yall.version ./
+  - export TRAVIS_TAG=`cat yall.version`
 
 deploy:
   provider: releases
