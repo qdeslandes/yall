@@ -43,7 +43,7 @@
  * Queue head is not set volatile as it would reduce code speed and not ensure
  * atomicity of operations.
  */
-static struct qnode *head = NULL;
+static struct qnode *head = NULL
 
 struct qnode *qnode_new(void *data)
 {

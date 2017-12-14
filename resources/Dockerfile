@@ -53,5 +53,5 @@ CMD \
 			-Dsonar.analysis.mode=preview \
 			-Dsonar.github.oauth=$GITHUB_KEY \
 			-Dsonar.github.repository=Naccyde/yall \
-			-Dsonar.github.pullRequest=$GITHUB_PR -X; \
+			-Dsonar.github.pullRequest=$GITHUB_PR; \
 	fi
