@@ -1,8 +1,19 @@
-# Common generators
-if (CPACK_BUILD_CONFIG MATCHES Release)
-	set(_CONFIG "")
-elseif (CPACK_BUILD_CONFIG MATCHES Debug)
-	set(_CONFIG "dev-")
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
+if (UNIX)
+	if (CPACK_YALL_BUILD_TYPE MATCHES Release)
+		set(_CONFIG "")
+	elseif (CPACK_YALL_BUILD_TYPE MATCHES Debug)
+		set(_CONFIG "dev-")
+	endif ()
+elseif (WIN32)
+	if (CPACK_BUILD_CONFIG MATCHES Release)
+		set(_CONFIG "")
+	elseif (CPACK_BUILD_CONFIG MATCHES Debug)
+		set(_CONFIG "dev-")
+	endif ()
 endif ()
 
 set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${_CONFIG}${CPACK_COMPILER}-x86_64-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
