@@ -263,7 +263,7 @@ def main(argv):
 		[args.build, 'cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
 		[args.build, 'make -C ' + args.buildDir + ' clean', defaultAnalyzer],
 		[args.build, 'make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
-		[args.cValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_c.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
+		[args.cValgrind, 'valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
 		[args.cppValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
 		[args.unit, args.buildDir + '/yall_unit', unitAnalyzer],
 		[args.coverage, 'make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
