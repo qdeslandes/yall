@@ -1,3 +1,7 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
 FROM debian:stretch
 
 RUN apt-get update
@@ -45,9 +49,9 @@ CMD \
 			-Dsonar.projectBaseDir=/yall \
 			-Dsonar.cfamily.gcov.reportsPath=/build/coverage \
 			-Dsonar.projectVersion=`cat /build/yall.version` \
-			-Dsonar.login=$SONAR_KEY; \
+			-Dsonar.login=$SONAR_KEY \
 			-Dsonar.analysis.mode=preview \
-			-Dsonar.github.oauth=zefdsgehgzzezeffce53 \
+			-Dsonar.github.oauth=$GITHUB_KEY \
 			-Dsonar.github.repository=Naccyde/yall \
-			-Dsonar.github.pullRequest=120 -X; \
+			-Dsonar.github.pullRequest=$GITHUB_PR -X; \
 	fi
