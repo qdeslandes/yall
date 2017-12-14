@@ -74,9 +74,10 @@ _YALL_PUBLIC const char *yall_get_version_string(void);
 _YALL_PUBLIC yall_error yall_init(void);
 
 /*
- * yall_is_init : return the number of initializations required.
+ * yall_is_init : returns the number initialization done without closing the
+ * 	library.
  */
-_YALL_PUBLIC uint8_t yall_is_init(void);
+_YALL_PUBLIC uint16_t yall_is_init(void);
 
 /*
  * yall_log : major logging function, used to forge the message and write it

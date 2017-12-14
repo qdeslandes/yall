@@ -35,9 +35,9 @@ Test(header, test_header_compile_format2)
     header_compile_format(std_header, "%04l %05f :: %s :: -> ");
     cr_assert_str_eq(std_header_format, "%04s %05s :: %s :: -> ");
 
-    cr_assert_eq(std_matches[0], log_level);
-    cr_assert_eq(std_matches[1], function);
-    cr_assert_eq(std_matches[2], subsystem);
+    cr_assert_eq(std_matches[0], match_log_level);
+    cr_assert_eq(std_matches[1], match_function);
+    cr_assert_eq(std_matches[2], match_subsystem);
     for (int i = 3; i < 10; ++i)
         cr_assert_eq(std_matches[i], 0);
 }
@@ -51,7 +51,7 @@ Test(header, test_header_compile_format3)
     cr_assert_str_eq(std_header_format, "aaaaaaaaaa" "bbbbbbbbbb" "cccccccccc" "dddddddddd" "eeeeeeeeee" "ffffffffff" "ggg");
 
     for (int i = 0; i < 10; ++i)
-        cr_assert_eq(std_matches[i], 0);
+        cr_assert_eq(std_matches[i], match_empty);
 }
 
 /*
@@ -62,8 +62,8 @@ Test(header, test_header_compile_format5)
     header_compile_format(std_header, "a%04-faaaa" "bbbbbbbbbb" "cccccccccc" "%pdddddddd" "eeeeeeeeee" "ffffffff%0" "gggggggggg");
     cr_assert_str_eq(std_header_format, "a%04-saaaa" "bbbbbbbbbb" "cccccccccc" "%psddddddd" "eeeeeeeeee" "ffffffff%0" "ggg");
 
-    cr_assert_eq(std_matches[0], function);
-    cr_assert_eq(std_matches[1], date);
+    cr_assert_eq(std_matches[0], match_function);
+    cr_assert_eq(std_matches[1], match_date);
     for (int i = 2; i < 10; ++i)
         cr_assert_eq(std_matches[i], 0);
 }

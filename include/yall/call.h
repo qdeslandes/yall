@@ -30,7 +30,7 @@
 
 #include "yall/utils.h"
 
-#define DEFAULT_LINE_SIZE       1024
+#define DEFAULT_LINE_SIZE       1024U
 
 struct yall_call_data_line {
 	char *content;

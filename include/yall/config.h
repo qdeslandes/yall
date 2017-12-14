@@ -41,8 +41,8 @@
  */
 
 struct yall_config {
-	char *std_header_template;
-	char *call_header_template;
+	const char *std_header_template;
+	const char *call_header_template;
 	uint8_t tab_width;
 };
 
