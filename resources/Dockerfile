@@ -33,7 +33,7 @@ CMD \
 	/build-wrapper-3.10/linux-x86-64/build-wrapper-linux-x86-64 --out-dir bw_output make -j 9 clean all && \
 	make validate && \
 	make package && \
-	if [ "$DEPLOY" = true ]; then \
+	if [ "$DEPLOY" = "true" ]; then \
 		cmake -DCMAKE_BUILD_TYPE=Debug /yall && make -j 9 package && \
 		/sonar-scanner-3.0.3.778-linux/bin/sonar-scanner \
 			-Dsonar.cfamily.build-wrapper-output=/build/bw_output \
