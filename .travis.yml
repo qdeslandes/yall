@@ -30,7 +30,17 @@ before_install:
   - docker pull naccyde/yall:latest
 
 script:
-  - docker run -it -e "DEPLOY=false" -v `pwd`:/yall --name yall naccyde/yall:latest
+  - docker run \
+    -e "DEPLOY=$TRAVIS_PULL_REQUEST" \
+    -e "SONAR_KEY=$SONARCLOUD_API_KEY" \
+    -e "GITHUB_KEY=$GITHUB_PR_API_KEY" \
+    -e "GITHUB_PR=$TRAVIS_PULL_REQUEST" \
+    -v `pwd`:/yall \
+    --name yall \
+    naccyde/yall:latest
+
+after_success:
+  - docker cp yall:/build/packages ./
 
 deploy:
   provider: releases
