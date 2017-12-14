@@ -17,67 +17,20 @@
 # tagged.
 #
 
-language: c
+sudo: required
 
-sudo: false
-dist: trusty
+services:
+  - docker
 
 branches:
   only:
     - master
 
-matrix:
-  include:
-    - os: linux
-      compiler: gcc-6
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - sourceline: 'ppa:deadsnakes/ppa'
-      - sourceline: 'ppa:adrozdoff/cmake'
-    packages:
-      - gcc-6
-      - lcov
-      - python3.5
-      - valgrind
-      - rpm
-  sonarqube:
-    token:
-      secure: "kDTCOlpGPj2/rudRHjsoIurDlZYmqVHwPx5WnxexeGPmufUdR+SDstPTWevrjVEb/nnWb6GRropaS+iQ7gj7f6hOkg3cmCQqy33hA41V4XFn7agsCt/SIrlhk6j/IWHmLlMM2UKgna/JrLq0oB5fF4wPMzYtxcluDifQFAfd64HIWKy6AKf1PueaCa8xKebBBIyhfsZx8Kt8C68Or0sI9CiEnG+9hSnPPdxPXEM5u1AHQXdf+6I1IwW6bSp01GkoLI/+tVYrY3jibPudXYDVpln8GIyprZoAOmVdvnNUvH3tvUTxtaaC3K29z29705vcsmYxf15jVQgXF6+Kqd0FjBhGUpOmXYrVL6zSNgwDSFM/M2SNsmGMKAMk9WE+yxtoWpFz0nsRVWT+s0PvIiv3Gv9Tyewrcw53FeHNKU8n1qHEtyTvPj0P6f058dIKA8ZRx8ZSFvDrRUdHWGyxbnZlLkRT5EHuqFgiNus2nnNLZIRNOhAEiHU+vOT4NAYNxMGAT2s3kC2sqwukLgLajdawPvpDOczVI+XlXKbZ4s+wT7joBgiy53YrAjZU9UAzSZNJ/hLOeUED24CNCgxxq1KjnY6XibpyJ5OZiF1eH+MS6SQZE9FWDJAl4HAAdu7n/5ojpruSCzmZiaH8D9rZZT6TRlNuIpQGcJx9cp8jCpK9knM="
-    branches:
-      - master
-
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
-
-install:
-  - wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.tar.gz && tar xf cmake-3.9.6-Linux-x86_64.tar.gz && cd cmake-3.9.6-Linux-x86_64 && sudo cp -rv bin /usr/ && sudo cp -r doc /usr/share/ && sudo cp -r man /usr/share/ && sudo cp -r share /usr/ && cd -
-  - ls /usr/bin | grep cmake
-  - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-  - valgrind --version
-  - python3 --version
-
-before_script:
-  - /usr/bin/cmake cmake -DCMAKE_BUILD_TYPE=Release .
+before_install:
+  - docker pull naccyde/yall:latest
 
 script:
-  - make
-  - make validate
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then TRAVIS_TAG=`cat yall.version`; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then sonar-scanner -Dproject.settings=.sonar-project.properties -Dsonar.projectVersion=$TRAVIS_TAG; fi
-
-# On release builds, in case of tag (only on master), the binaries will be deployed. To do this, we clean all that have been build, build Debug, install it and do the same for Release.
-before_deploy:
-  - cmake -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
-  - make package
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_PATCH=${TRAVIS_BUILD_NUMBER}
-  - make package
+  - docker run -it -e "DEPLOY=false" -v `pwd`:/yall --name yall naccyde/yall:latest
 
 deploy:
   provider: releases
