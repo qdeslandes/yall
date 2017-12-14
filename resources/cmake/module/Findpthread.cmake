@@ -19,7 +19,7 @@ elseif (WIN32)
         PATH_SUFFIXES include)
 
     find_library(pthread_LIBRARY
-        NAMES pthread
+        NAMES pthreadVC2
         PATHS ${pthread_HINTS} C:/
         PATH_SUFFIXES lib)
 endif ()

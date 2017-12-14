@@ -6,6 +6,8 @@ if (WIN32 AND NOT MSVC_VERSION EQUAL 1900)
 	return ()
 endif ()
 
+find_package(criterion REQUIRED)
+
 #[[
 	Yall sources objects
 ]]#
