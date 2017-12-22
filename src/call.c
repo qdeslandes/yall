@@ -129,8 +129,8 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	// Create the message line
 	va_start(args, format);
-	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE - tab_width * indent,
-		format, args);
+	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE -
+		(uint32_t)(tab_width * indent), format, args);
 	va_end(args);
 
 	// Manage \n

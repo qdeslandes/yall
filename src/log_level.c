@@ -24,7 +24,7 @@
 
 #include "yall/log_level.h"
 
-static char *log_level_str[8] = {
+static const char *log_level_str[8] = {
 		"DEBUG",
 		"INFO",
 		"NOTICE",

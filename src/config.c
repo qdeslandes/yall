@@ -53,10 +53,10 @@ void config_setup(void)
 
 void config_clean(void)
 {
-	free(current_config.std_header_template);
+	free((void *)current_config.std_header_template);
 	current_config.std_header_template = NULL;
 
-	free(current_config.call_header_template);
+	free((void *)current_config.call_header_template);
 	current_config.call_header_template = NULL;
 
 	current_config.tab_width = 0;

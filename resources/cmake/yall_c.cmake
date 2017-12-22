@@ -2,6 +2,8 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
+add_executable(yall_c tests/c/main.c)
+
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra -std=gnu11)
@@ -12,15 +14,21 @@ if (UNIX)
 	set(_PVT_LINKLIB yall)
 elseif (WIN32)
 	# Compile options
-	set(_PVT_OPT /Wall)
-	set(_PVT_OPT_DEBUG /O0)
+
+	#[[
+		* 4115 : named type defininition in parenthesis
+		* 4820 : padding
+	#]]
+
+	set(_PVT_OPT /wd4115 /wd4820 /Wall)
+	set(_PVT_OPT_DEBUG /Od)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Link libraries
 	set(_PVT_LINKLIB yall)
+	
+	set_property(TARGET yall_c PROPERTY FOLDER "tests")
 endif ()
-
-add_executable(yall_c tests/c/main.c)
 
 target_compile_options(yall_c
 	PRIVATE

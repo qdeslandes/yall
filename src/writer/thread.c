@@ -107,7 +107,7 @@ static void *writer_thread(void *args)
 {
 	UNUSED(args);
 
-	double loop_duration_ms = (1.0 / thread_frequency) * 1000.0;
+	int loop_duration_ms = (int)((1.0 / thread_frequency) * 1000.0);
 
 	while (thread_run) {
 		clock_t begin = clock();
@@ -116,8 +116,8 @@ static void *writer_thread(void *args)
 
 		write_queue_messages(msg_queue);
 
-		int wait_ms = (int)(loop_duration_ms -
-			((clock() - begin) / CLOCKS_PER_SEC) * 1000.0);
+		uint32_t wait_ms = (uint32_t)(loop_duration_ms -
+			((clock() - begin) / CLOCKS_PER_SEC) * 1000);
 		yall_sleep(wait_ms);
 	}
 

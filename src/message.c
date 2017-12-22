@@ -65,7 +65,7 @@ void message_delete_wrapper(void *msg)
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args)
 {
-	size_t ret = vsnprintf(log_buffer, len, message_format, args);
+	size_t ret = (size_t)vsnprintf(log_buffer, len, message_format, args);
 
 	if (log_buffer) {
 		log_buffer[len-2] = '\n';

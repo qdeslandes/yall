@@ -27,6 +27,11 @@
  * guards.
  */
 
+// Used to suppress GCC warning from -Wundef
+#ifdef __linux__
+#	define _MSC_VER 0
+#endif
+
 // MSVC 12.0 _MSC_VER == 1800 (Visual Studio 2013)
 #if (_MSC_VER == 1800)
 #	define inline __inline

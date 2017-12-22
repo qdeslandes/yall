@@ -363,7 +363,7 @@ static struct yall_subsystem *get_next_subsystem(struct yall_subsystem *s,
 	if (s->next)
 		return s->next;
 
-	*d = *d - 1;
+	--(*d);
 
 	return get_next_subsystem(s->parent, false, d);
 }
@@ -407,11 +407,11 @@ static void show_subsystems_tree_call(struct yall_call_data *d,
 		return;
 
 	do {
-		curr_indent += indent;
+		curr_indent = (uint8_t)(curr_indent + indent);
 		indent = 0;
 
 		// Connectors are at most 10 char wide, so use this len.
-		buff_size = 10 * (curr_indent + 1) + strlen(s->name) + 1;
+		buff_size = 10U * (curr_indent + 1U) + strlen(s->name) + 1U;
 		buff = calloc(buff_size, 1);
 
 		for (uint8_t i = 0; i < curr_indent; ++i) {

@@ -41,13 +41,13 @@ enum header_type {
 };
 
 enum yall_matches {
-	empty,
-	subsystem,
-	log_level,
-	function,
-	filename,
-	line,
-	date
+	match_empty,
+	match_subsystem,
+	match_log_level,
+	match_function,
+	match_filename,
+	match_line,
+	match_date
 };
 
 struct header_content {
@@ -64,7 +64,7 @@ struct header_content {
  *	store the modifiers order for proper log message header generation.
  *	<format> can't be NULL.
  */
-void header_compile_format(enum header_type hdr_type, char *format);
+void header_compile_format(enum header_type hdr_type, const char *format);
 
 /*
  * fill_header_content : from a header_content structure, fill the fields with
