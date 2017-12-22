@@ -18,8 +18,7 @@ if (UNIX)
 	set(_PVT_OPT -Wall -Wextra -Wconversion -ftrapv -Wfloat-equal -Wundef
 		-Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes
 		-Wwrite-strings -Waggregate-return -Wuninitialized
-		-Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict
-		-Wnull-dereference -Wdouble-promotion
+		-Wduplicated-cond -Wlogical-op -Wnull-dereference -Wdouble-promotion
 		-fvisibility=hidden -fPIC)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3 -Werror)

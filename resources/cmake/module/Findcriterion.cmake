@@ -46,6 +46,9 @@ if(criterion_FOUND)
     set_target_properties(criterion::criterion PROPERTIES
         IMPORTED_LOCATION "${criterion_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${criterion_INCLUDE_DIRS}")
+    
+    message(STATUS ">\t${criterion_LIBRARIES}")
+    message(STATUS ">\t${criterion_INCLUDE_DIRS}")
 else ()
     message(STATUS "> criterion not found")
 endif ()

@@ -46,6 +46,9 @@ if(pthread_FOUND)
     set_target_properties(pthread::pthread PROPERTIES
         IMPORTED_LOCATION "${pthread_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${pthread_INCLUDE_DIRS}")
+
+    message(STATUS ">\t${pthread_LIBRARIES}")
+    message(STATUS ">\t${pthread_INCLUDE_DIRS}")
 else ()
     message(STATUS "> pthread not found")
 endif ()
