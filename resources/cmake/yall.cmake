@@ -28,6 +28,9 @@ elseif (WIN32)
 
 	#[[
 		* 4204 : non-const initializer
+		* 4115 : named type defininition in parenthesis
+		* 4127 : constant conditional expression
+		* 4255 : no function prototype given
 		* 4668 : macro not defined, replaced by 0
 		* 4706 : assignment within conditional expression
 		* 4710 : function not inlined
@@ -36,7 +39,7 @@ elseif (WIN32)
 		* 4996 : "strdup" deprecated
 	#]]
 
-	set(_PVT_OPT /wd4204 /wd4668 /wd4706 /wd4710 /wd4774 /wd4820 /wd4996 /Wall)
+	set(_PVT_OPT /wd4204 /wd4115 /wd4127 /wd4255 /wd4668 /wd4706 /wd4710 /wd4774 /wd4820 /wd4996 /Wall)
 	set(_PVT_OPT_DEBUG /Od)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 

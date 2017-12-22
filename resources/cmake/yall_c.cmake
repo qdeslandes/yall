@@ -16,10 +16,11 @@ elseif (WIN32)
 	# Compile options
 
 	#[[
+		* 4115 : named type defininition in parenthesis
 		* 4820 : padding
 	#]]
 
-	set(_PVT_OPT /wd4820 /Wall)
+	set(_PVT_OPT /wd4115 /wd4820 /Wall)
 	set(_PVT_OPT_DEBUG /Od)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
