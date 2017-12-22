@@ -75,7 +75,7 @@ _YALL_PUBLIC yall_error yall_init(void);
 
 /*
  * yall_is_init : returns the number initialization done without closing the
- * 	library.
+ *	library.
  */
 _YALL_PUBLIC uint16_t yall_is_init(void);
 
