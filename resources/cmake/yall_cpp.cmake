@@ -2,6 +2,8 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
+add_executable(yall_cpp tests/cpp/main.cpp)
+
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra)
@@ -12,15 +14,25 @@ if (UNIX)
 	set(_PVT_LINKLIB yall)
 elseif (WIN32)
 	# Compile options
-	set(_PVT_OPT /Wall)
-	set(_PVT_OPT_DEBUG /O0)
+
+	#[[
+		* 4365 : conversion from int to uint64_t
+		* 4514 : unreferenced inline function removed
+		* 4625 : copy constructor implicitly deleted
+		* 4626 : assignment operator implicitly deleted
+		* 4710 : function not inlined
+		* 4820 : padding
+	#]]
+
+	set(_PVT_OPT /wd4365 /wd4514 /wd4625 /wd4626 /wd4710 /wd4820 /Wall)
+	set(_PVT_OPT_DEBUG /Od)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Link libraries
 	set(_PVT_LINKLIB yall)
+	
+	set_property(TARGET yall_cpp PROPERTY FOLDER "tests")
 endif ()
-
-add_executable(yall_cpp tests/cpp/main.cpp)
 
 target_compile_options(yall_cpp
 	PRIVATE

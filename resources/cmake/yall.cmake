@@ -5,6 +5,11 @@
 #[[
 	Yall objects compilation
 #]]
+
+file(GLOB_RECURSE YALL_SRCS src/*.c include/*.h)
+
+add_library(yall SHARED ${YALL_SRCS})
+
 if (UNIX)
 	# For more infos about the used flags :
 	#	* https://stackoverflow.com/questions/3375697/useful-gcc-flags-for-c
@@ -20,17 +25,26 @@ if (UNIX)
 	set(_PVT_OPT_RELEASE -O3 -Werror)
 elseif (WIN32)
 	# Compile options
-	set(_PVT_OPT /wd4820 /wd4255 /wd4127 /wd4210 /wd6031 /wd4706 /wd28252 /wd28253 /wd4172 /wd4100 /wd4204 /wd4221 /Wall)
-	set(_PVT_OPT_DEBUG /O0)
+
+	#[[
+		* 4204 : non-const initializer
+		* 4668 : macro not defined, replaced by 0
+		* 4706 : assignment within conditional expression
+		* 4710 : function not inlined
+		* 4774 : argument is not a string literal
+		* 4820 : padding
+		* 4996 : "strdup" deprecated
+	#]]
+
+	set(_PVT_OPT /wd4204 /wd4668 /wd4706 /wd4710 /wd4774 /wd4820 /wd4996 /Wall)
+	set(_PVT_OPT_DEBUG /Od)
 	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
 
 	# Compile definitions
 	set(_PVT_DEF _CRT_SECURE_NO_WARNINGS)
+
+	set_property(TARGET yall PROPERTY FOLDER "library")
 endif ()
-
-file(GLOB_RECURSE YALL_SRCS src/*.c include/*.h)
-
-add_library(yall SHARED ${YALL_SRCS})
 
 target_compile_options(yall
 	PRIVATE

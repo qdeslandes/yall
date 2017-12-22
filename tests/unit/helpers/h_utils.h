@@ -38,8 +38,8 @@
 
 #define TESTS_REDEFINE_PROTO_LIGHT(function) \
 	int  function ## _fail; \
-	void disable_ ## function(); \
-        void enable_ ## function()
+	void disable_ ## function ## (void); \
+        void enable_ ## function ## (void)
 
 #define TESTS_REDEFINE_PROTO(function, proto) \
         TESTS_REDEFINE_PROTO_LIGHT(function); \

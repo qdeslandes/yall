@@ -130,7 +130,7 @@ public:
 	}
 
 	/* Tab width */
-	void setTabWidth(int width)
+	void setTabWidth(uint8_t width)
 	{
 		yall_config_set_tab_width(width);
 	}

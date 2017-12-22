@@ -19,8 +19,10 @@ endif ()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmake/module")
 
 if (WIN32)
+	set_property(GLOBAL PROPERTY USE_FOLDERS On)
 	set(pthread_HINTS "${pthread_HINTS}" "${CMAKE_SOURCE_DIR}/external")
 endif ()
+
 find_package(pthread REQUIRED)
 
 #[[
