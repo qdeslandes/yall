@@ -36,7 +36,7 @@ To build yall properly you need :
 * To package :
   * `rpmbuild`
 * To generate documentation :
-  * `pip install --user sphinx sphinx-autobuild sphinx_rtd_theme`
+  * `pip install --user sphinx sphinx-autobuild sphinx_rtd_theme breathe`
 
 ## Log levels
 

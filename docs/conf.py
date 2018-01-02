@@ -32,7 +32,8 @@
 # ones.
 extensions = ['sphinx.ext.todo',
     'sphinx.ext.imgmath',
-    'sphinx.ext.githubpages']
+    'sphinx.ext.githubpages',
+    'breathe']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -166,5 +167,5 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
-
+breathe_projects = { "yall": "C:/Users/Quentin/Documents/GitHub/yall/build/doxygen/xml" }
+breathe_default_project = "yall"
