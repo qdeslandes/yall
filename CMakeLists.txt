@@ -8,14 +8,29 @@ project(yall)
 
 include(resources/cmake/utils.cmake)
 
+set(pthread_HINTS "" CACHE STRING "Hint to find pthread directory")
+set(criterion_HINTS "" CACHE STRING "Hint to find criterion directory")
 option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
+
+if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "")
+	set(CMAKE_BUILD_TYPE "Release")
+endif ()
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmake/module")
+
+if (WIN32)
+	set_property(GLOBAL PROPERTY USE_FOLDERS On)
+	set(pthread_HINTS "${pthread_HINTS}" "${CMAKE_SOURCE_DIR}/external")
+endif ()
+
+find_package(pthread REQUIRED)
 
 #[[
 	Project version
 #]]
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 3)
-set(YALL_VERSION_PATCH 2)
+set(YALL_VERSION_PATCH 5)
 set(YALL_VERSION "${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
@@ -58,8 +73,6 @@ elseif (WIN32)
 	else ()
 		set(COMPILER "windows_unknow")
 	endif ()
-
-	link_directories(${CMAKE_SOURCE_DIR}/external/lib/win32/${COMPILER})
 endif ()
 
 
@@ -78,8 +91,6 @@ include(resources/cmake/docs.cmake)
 #[[
 	Tests
 #]]
-enable_testing()
-
 include(resources/cmake/validate.cmake)
 include(resources/cmake/yall_c.cmake)
 include(resources/cmake/yall_cpp.cmake)

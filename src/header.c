@@ -65,22 +65,22 @@ static inline bool is_modifier(char c, enum yall_matches *match)
 {
 	switch (c) {
 	case 's':
-		*match = subsystem;
+		*match = match_subsystem;
 		break;
 	case 'l':
-		*match = log_level;
+		*match = match_log_level;
 		break;
 	case 'f':
-		*match = function;
+		*match = match_function;
 		break;
 	case 'F':
-		*match = filename;
+		*match = match_filename;
 		break;
 	case 'L':
-		*match = line;
+		*match = match_line;
 		break;
 	case 'd':
-		*match = date;
+		*match = match_date;
 		break;
 	default:
 		return false;
@@ -90,10 +90,10 @@ static inline bool is_modifier(char c, enum yall_matches *match)
 }
 
 /*
- * set_date : fill the <date> string pointer with the current date time,
+ * set_date : fill the <buff> string pointer with the current date time,
  *	formatted in a generic way.
  */
-static void set_date(char *date)
+static void set_date(char *buff)
 {
 	struct tm tm;
 	time_t t = time(NULL);
@@ -104,7 +104,7 @@ static void set_date(char *date)
 	localtime_s(&tm, &t);
 	#endif
 
-	snprintf(date, YALL_DATE_LONG_LEN, "%04d-%02d-%02d %02d:%02d:%02d",
+	snprintf(buff, YALL_DATE_LONG_LEN, "%04d-%02d-%02d %02d:%02d:%02d",
 		tm.tm_year + 1900,
 		tm.tm_mon + 1,
 		tm.tm_mday,
@@ -137,7 +137,7 @@ static void set_matches_and_header(enum header_type hdr_type,
 	}
 }
 
-void header_compile_format(enum header_type hdr_type, char *format)
+void header_compile_format(enum header_type hdr_type, const char *format)
 {
 	// TODO : avoid using "int", use more clear type : uint16_t, ...
 	// TODO : handle successive "%"
@@ -177,11 +177,11 @@ void header_compile_format(enum header_type hdr_type, char *format)
 	*hdr = '\0';
 }
 
-void fill_header_content(struct header_content *hc, const char *subsystem,
+void fill_header_content(struct header_content *hc, const char *subsystem_name,
 	enum yall_log_level log_level, const char *function_name,
 	const char *filename, int32_t line)
 {
-	hc->subsystem = subsystem;
+	hc->subsystem = subsystem_name;
 	hc->log_level = get_log_level_name(log_level);
 	hc->function_name = function_name;
 	hc->filename = filename;
@@ -218,8 +218,11 @@ static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 		hc->date_long
 	};
 
-	// TODO : the way the header is printed is ABSOLUTELY BARBARIC
-	wrote = snprintf(buffer, len, hdr, ordered_content[matches[0]],
+	/*
+	 * TODO : the way the header is printed is ABSOLUTELY BARBARIC
+	 * Also, we consider snprintf() will not return an error...
+	 */
+	wrote = (size_t)snprintf(buffer, len, hdr, ordered_content[matches[0]],
 		ordered_content[matches[1]], ordered_content[matches[2]],
 		ordered_content[matches[3]], ordered_content[matches[4]],
 		ordered_content[matches[5]], ordered_content[matches[6]],

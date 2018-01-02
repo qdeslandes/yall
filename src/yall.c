@@ -84,7 +84,7 @@ err:
 	return ret;
 }
 
-uint8_t yall_is_init(void)
+uint16_t yall_is_init(void)
 {
 	return initialized;
 }
