@@ -18,6 +18,7 @@ YALL library documentation
    logs
    cpp
    debugging
+   reference
 
 Indices and tables
 ==================
