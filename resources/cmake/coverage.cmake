@@ -16,7 +16,7 @@ add_custom_target(coverage
 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
 	COMMENT "Run coverage target")
 
-add_custom_target(resume_coverage
+add_custom_target(show_coverage
 	COMMAND
 		lcov --capture
 			--directory ${CMAKE_CURRENT_BINARY_DIR}

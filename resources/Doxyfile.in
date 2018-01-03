@@ -1,0 +1,12 @@
+PROJECT_NAME	= "@CMAKE_PROJECT_NAME@"
+PROJECT_NUMBER	= @YALL_VERSION_MAJOR@.@YALL_VERSION_MINOR@.@YALL_VERSION_PATCH@
+PROJECT_BRIEF	= "yall is a lightweight multiplatform C / C++ subsystems based logging library."
+STRIP_FROM_PATH	= @CMAKE_SOURCE_DIR@/src \
+			@CMAKE_SOURCE_DIR@/include \
+			@CMAKE_BINARY_DIR@/generated_headers
+INPUT		= @CMAKE_SOURCE_DIR@/src \
+			@CMAKE_SOURCE_DIR@/include \
+        		@CMAKE_BINARY_DIR@/generated_headers
+FILE_PATTERNS	= *.h \
+			*.c
+RECURSIVE	= YES

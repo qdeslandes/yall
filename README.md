@@ -35,6 +35,8 @@ To build yall properly you need :
 * `pthread` : available by default on Linux, check https://sourceforge.net/projects/pthreads4w/ for windows version. Set `pthread_HINTS` if the library is not installed in a system path on Linux.
 * To package :
   * `rpmbuild`
+* To generate documentation :
+  * `pip install --user sphinx sphinx-autobuild sphinx_rtd_theme breathe`
 
 ## Log levels
 

@@ -40,30 +40,59 @@
  * All these parameters can be set, reset or get'ed.
  */
 
-struct yall_config {
+struct yall_config { /// \struct yall_config
 	const char *std_header_template;
 	const char *call_header_template;
 	uint8_t tab_width;
 };
 
-/*
- * config_setup : reset the parameters to the default values.
+/**
+ * \brief Used to initialize the configuration system, it setup default values
+ * 	to the different yall parameters.
  */
 void config_setup(void);
 
-/*
- * config_clean : clean the allocate memory on the current configuration.
+/**
+ * \brief Clean the allocated memory by the current configuration.
  */
 void config_clean(void);
 
+/**
+ * \brief Setter for standard header template. The standard header is the text
+ * 	displayed before the standard log line.
+ * \param std_header_template Format of the header used. Can't be NULL.
+ */
 _YALL_PUBLIC void yall_config_set_std_header_template(
 	const char *std_header_template);
+
+/**
+ * \brief Reset the standard header template to the default value.
+ */
 _YALL_PUBLIC void yall_config_reset_std_header_template(void);
+
+/**
+ * \brief Returns the format of the standard header currently used.
+ * \return Current standard header format.
+ */
 _YALL_PUBLIC const char *yall_config_get_std_header_template(void);
 
+/**
+ * \brief Setter for call header template. The call header is the text
+ * 	displayed before the call log line.
+ * \param call_header_template Format of the header used. Can't be NULL.
+ */
 _YALL_PUBLIC void yall_config_set_call_header_template(
 	const char *call_header_template);
+	
+/**
+ * \brief Reset the call header template to the default value.
+ */
 _YALL_PUBLIC void yall_config_reset_call_header_template(void);
+
+/**
+ * \brief Returns the format of the call header currently used.
+ * \return Current call header format.
+ */
 _YALL_PUBLIC const char *yall_config_get_call_header_template(void);
 
 _YALL_PUBLIC void yall_config_set_tab_width(uint8_t tab_width);

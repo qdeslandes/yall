@@ -83,6 +83,12 @@ include(resources/cmake/yall.cmake)
 
 
 #[[
+	Docs
+#]]
+include(resources/cmake/docs.cmake)
+
+
+#[[
 	Tests
 #]]
 include(resources/cmake/validate.cmake)
