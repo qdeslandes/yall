@@ -12,10 +12,10 @@ add_custom_target(show_docs
 	COMMAND firefox ${CMAKE_BINARY_DIR}/docs/index.html
 	COMMENT "Show docs in Firefox")
 
-
 configure_file(resources/Doxyfile.in Doxyfile)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen)
 add_custom_target(doxygen_doc
 	COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen
 	COMMENT "Generating API documentation with Doxygen"
 	VERBATIM)
