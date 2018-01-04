@@ -3,6 +3,8 @@
 
 #include <yall/Yall.hpp>
 
+using namespace std;
+
 pthread_t threads[5];
 
 void memoryInfos(YallData &d, const void *args);
@@ -31,7 +33,7 @@ void *thread0(void *args)
 	UNUSED(args);
 
 	for (int i = 0; i < 15; ++i) {
-		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
 		YALL_DEBUG("io", "IO subsystem ready.");
 		YALL_CALL_ERR("memory", memoryInfos, nullptr);
 		YALL_ALERT("scheduler" , "Using process 7034.");
@@ -45,7 +47,7 @@ void *thread1(void *args)
 	UNUSED(args);
 
 	for (int i = 0; i < 15; ++i) {
-		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
 		YALL_DEBUG("io", "IO subsystem ready.");
 		YALL_CALL_ERR("memory", memoryInfos, nullptr);
 		YALL_ALERT("scheduler" , "Using process 7034.");
@@ -59,7 +61,7 @@ void *thread2(void *args)
 	UNUSED(args);
 
 	for (int i = 0; i < 15; ++i) {
-		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
 		YALL_DEBUG("io", "IO subsystem ready.");
 		YALL_CALL_ERR("memory", memoryInfos, nullptr);
 		YALL_ALERT("scheduler" , "Using process 7034.");
@@ -73,7 +75,7 @@ void *thread3(void * args)
 	UNUSED(args);
 
 	for (int i = 0; i < 15; ++i) {
-		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
 		YALL_DEBUG("io", "IO subsystem ready.");
 		YALL_CALL_ERR("memory", memoryInfos, nullptr);
 		YALL_ALERT("scheduler" , "Using process 7034.");
@@ -87,7 +89,7 @@ void *thread4(void *args)
 	UNUSED(args);
 
 	for (int i = 0; i < 15; ++i) {
-		YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+		YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
 		YALL_DEBUG("io", "IO subsystem ready.");
 		YALL_CALL_ERR("memory", memoryInfos, nullptr);
 		YALL_ALERT("scheduler" , "Using process 7034.");
@@ -98,20 +100,19 @@ void *thread4(void *args)
 
 int main(void)
 {
+	Yall::init();
         Yall::enableDebug();
 
 	Device d = Device();
 
         Yall::config().setTabWidth(4);
-        Yall::config().setStdHeaderFormat("[%d] :: %L : %f : \n\t");
-        Yall::config().setCallHeaderFormat("[%d] :: %-9l : %s : ");
+        Yall::config().setStdHeaderTemplate("[%d] :: %L : %f : \n\t");
+        Yall::config().setCallHeaderTemplate("[%d] :: %-9l : %s : ");
 
         Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
         Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
         Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
         Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
-
-	Yall::showSubsystemsTree();
 
 	pthread_create(&threads[0], NULL, thread0, NULL);
 	pthread_create(&threads[1], NULL, thread1, NULL);
@@ -119,9 +120,9 @@ int main(void)
 	pthread_create(&threads[3], NULL, thread3, NULL);
 	pthread_create(&threads[4], NULL, thread4, NULL);
 
-        YALL_DEBUG("yall_cpp_test", Yall::getVersionStr() << " " << Yall::getVersion());
+	YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
         YALL_DEBUG("io", "IO subsystem ready.");
-        YALL_CALL_ERR("memory", memoryInfos, nullptr);
+	YALL_CALL_ERR("memory", memoryInfos, nullptr);
         YALL_ALERT("scheduler" , "Using process 7034.");
 
         Yall::disableSubsystem("scheduler");
@@ -135,13 +136,17 @@ int main(void)
 #endif
 	for (int i = 0; i < 5; ++i)
 		pthread_join(threads[i], NULL);
+	
+	Yall::showSubsystemsTree();
+
+	Yall::closeAll();
 
         return 0;
 }
 
 void memoryInfos(YallData &d, const void *args)
 {
-        (void)(args);
+        UNUSED(args);
 
         d.newLine(0) << "======= Backtrace: =========";
         d.newLine(1) << "/lib/x86_64-linux-gnu/libc.so.6(+0x70bfb)[0x7ff9cd0bfbfb]";
