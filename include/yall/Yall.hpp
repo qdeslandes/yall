@@ -22,33 +22,49 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL
-#define _YALL
+#ifndef _YALL_HPP
+#define _YALL_HPP
 
 #include <cstdint>
 #include <sstream>
 #include <vector>
+#include <exception>
+#include <sstream>
 
 #include "yall/yall.h"
 
-/*
- * For more informations about how to use the logging system, please refere to the documentation
- * available at https://github.com/Naccyde/yall.
- */
-
 class YallData;
-void __yall_cpp_formatter(struct yall_call_data *d, void *args);
 
 struct YallCallParams {
 	void (*formatter)(YallData &d, const void *args);
 	const void *args;
 };
 
+class YallException : public std::exception
+{
+public:
+	YallException(yall_error err)
+	{
+		num = err;
+
+		std::ostringstream oss;
+		oss << yall_strerror(err);
+		msg = oss.str();
+	}
+
+	virtual const char *what() const throw()
+	{
+		return msg.c_str();
+	}
+
+private:
+	std::string msg;
+	int num;
+};
+
 class YallData
 {
 public:
-	// TODO : document this class inside README.md
-
 	std::stringstream header;
 
 	YallData(struct yall_call_data *d) : _data(d)
@@ -70,13 +86,15 @@ public:
 	{
 		yall_call_set_header(_data, header.str().c_str());
 
-		for (std::stringstream *s : _lines) {
-            		std::string ss = s->str();
-			yall_call_add_line(_data, 0, ss.c_str());
-       		}
+		for (std::stringstream *ss : _lines)
+		{
+			std::string s = ss->str();
+			yall_call_add_line(_data, 0, s.c_str());
+		}
 
-		for (std::stringstream *s : _lines)
-			delete s;
+		for (std::stringstream *ss : _lines)
+			delete ss;
+		
 		_lines.clear();
 	}
 
@@ -85,57 +103,45 @@ private:
 	std::vector<std::stringstream *> _lines;
 };
 
-class YallConfig {
+class YallConfig
+{
 public:
-	YallConfig()
+	void setStdHeaderTemplate(std::string stdHeaderTemplate)
 	{
-
+		yall_config_set_std_header_template(stdHeaderTemplate.c_str());
 	}
 
-	~YallConfig()
-	{
-
-	}
-
-	/* Std header format */
-	void setStdHeaderFormat(std::string format)
-	{
-		yall_config_set_std_header_template(format.c_str());
-	}
-
-	std::string getStdHeaderFormat()
+	std::string getStdHeaderTemplate()
 	{
 		return std::string(yall_config_get_std_header_template());
 	}
 
-	void resetStdHeaderFormat()
+	void resetStdHeaderTemplate()
 	{
 		yall_config_reset_std_header_template();
 	}
 
-	/* Call header format */
-	void setCallHeaderFormat(std::string format)
+	void setCallHeaderTemplate(std::string callHeaderTemplate)
 	{
-		yall_config_set_call_header_template(format.c_str());
+		yall_config_set_call_header_template(callHeaderTemplate.c_str());
 	}
 
-	std::string getCallHeaderFormat()
+	std::string getCallHeaderTemplate()
 	{
 		return std::string(yall_config_get_call_header_template());
 	}
 
-	void resetCallHeaderFormat()
+	void resetCallHeaderTemplate()
 	{
 		yall_config_reset_call_header_template();
 	}
 
-	/* Tab width */
-	void setTabWidth(uint8_t width)
+	void setTabWidth(uint8_t tabWidth)
 	{
-		yall_config_set_tab_width(width);
+		yall_config_set_tab_width(tabWidth);
 	}
 
-	int getTabWidth()
+	uint8_t getTabWidth()
 	{
 		return yall_config_get_tab_width();
 	}
@@ -148,171 +154,128 @@ public:
 
 class Yall
 {
-private:
-	YallConfig _config;
-
-	Yall()
-	{
-		yall_init();
-	}
-
-	~Yall()
-	{
-		/*
-		* yall_close_all() has no reason to be called in this class
-		* as if Yall class is always used, the library will always
-		* be closed.
-		*/
-		yall_close();
-	}
-
-	uint32_t _getVersion()
+public:
+	/*
+	 * Version infos
+	 */
+	static uint32_t getVersion()
 	{
 		return yall_get_version();
 	}
 
-	std::string _getVersionStr()
+	static std::string getVersionString()
 	{
 		return std::string(yall_get_version_string());
 	}
 
-	void _setSubsystem(const std::string name, const std::string parent,
-		enum yall_log_level log_level, enum yall_output_type output_type,
-		const std::string output_file)
+	/*
+	 * Library setup
+	 */
+	static void init()
 	{
-		const char *c_parent = parent.empty() ? NULL : parent.c_str();
-		const char *c_output = output_file.empty() ? NULL : output_file.c_str();
+		yall_error err = yall_init();
 
-		// TODO : throw an error if necessary
-		yall_set_subsystem(name.c_str(), c_parent, log_level, output_type, c_output);
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
-	void _enableDebug()
+	static uint16_t isInit(void)
 	{
-		yall_enable_debug();
+		return yall_is_init();
 	}
 
-	void _disableDebug()
+	static void _log(std::string subsystem, enum yall_log_level log_level, std::string function, std::string filename, int32_t line, std::string msg)
 	{
-		yall_disable_debug();
+		yall_log(subsystem.c_str(), log_level, function.c_str(), filename.c_str(), line, msg.c_str());
 	}
 
-	bool _isDebug()const
-	{
-		return yall_is_debug();
-	}
-
-	void _showSubsystemsTree()
-	{
-		yall_show_subsystems_tree();
-	}
-
-	void _enableSubsystem(std::string subsystem_name)
-	{
-		yall_enable_subsystem(subsystem_name.c_str());
-	}
-
-	void _disableSubsystem(std::string subsystem_name)
-	{
-		yall_disable_subsystem(subsystem_name.c_str());
-	}
-
-	void _callLog(std::string subsystem,
-		enum yall_log_level log_level,
-		std::string function_name,
-		std::string filename,
-		int32_t line,
-		void (*formatter)(YallData &d, const void *args),
-		const void *args)
+	static void _callLog(std::string subsystem, enum yall_log_level log_level, std::string function_name, std::string filename, int32_t line, void (*formatter)(YallData &d, const void *args), const void *args)
 	{
 		struct YallCallParams p { formatter, args };
 
 		yall_call_log(subsystem.c_str(), log_level, function_name.c_str(), filename.c_str(), line, Yall::__yall_cpp_formatter, (const void *)&p);
 	}
 
-public:
-	Yall(Yall const &y) = delete;
-	void operator=(Yall const &y) = delete;
-
-	static uint32_t getVersion()
+	static void setSubsystem(std::string name, std::string parent, enum yall_log_level log_level, enum yall_output_type output_type, std::string output_file)
 	{
-		return getInstance()._getVersion();
+		yall_error err = yall_set_subsystem(name.c_str(), parent.c_str(), log_level, output_type, output_file.c_str());
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
-
-	static std::string getVersionStr()
+	static void close()
 	{
-		return getInstance()._getVersionStr();
+		yall_close();
 	}
 
-	static void setSubsystem(const std::string name, const std::string parent,
-		enum yall_log_level log_level, enum yall_output_type output_type,
-		const std::string output_file)
+	static void closeAll()
 	{
-		getInstance()._setSubsystem(name, parent, log_level, output_type, output_file);
+		yall_close_all();
 	}
 
-	static void enableDebug()
+	/*
+	 * Manage subsystem
+	 */
+	static void disableSubsystem(std::string subsystem)
 	{
-		getInstance()._enableDebug();
+		yall_disable_subsystem(subsystem.c_str());
 	}
 
-	static void disableDebug()
+	static void enableSubsystem(std::string subsystem)
 	{
-		getInstance()._disableDebug();
-	}
-
-	static bool isDebug()
-	{
-		return getInstance().isDebug();
+		yall_enable_subsystem(subsystem.c_str());
 	}
 
 	static void showSubsystemsTree()
 	{
-		getInstance()._showSubsystemsTree();
+		yall_show_subsystems_tree();
 	}
 
-	static void enableSubsystem(std::string subsystem_name)
-	{
-		getInstance()._enableSubsystem(subsystem_name);
-	}
-
-	static void disableSubsystem(std::string subsystem_name)
-	{
-		getInstance()._disableSubsystem(subsystem_name);
-	}
-
+	/*
+	 * Configuration
+	 */
 	static YallConfig &config()
 	{
-		return getInstance()._config;
+		static YallConfig config;
+
+		return config;
 	}
 
-	static void __callLog(std::string subsystem,
-		enum yall_log_level log_level,
-		std::string function_name,
-		std::string filename,
-		int32_t line,
-		void (*formatter)(YallData &d, const void *args),
-		const void *args)
+	/*
+	 * Debug
+	 */
+	static void enableDebug()
 	{
-		getInstance()._callLog(subsystem, log_level, function_name, filename, line, formatter, args);
+		yall_enable_debug();
+	}
+
+	static void disableDebug()
+	{
+		yall_disable_debug();
+	}
+
+	static bool isDebug()
+	{
+		return yall_is_debug();
+	}
+
+	/*
+	 * Error management
+	 */
+	static std::string _strError(yall_error err)
+	{
+		return std::string(yall_strerror(err));
 	}
 
 	static void __yall_cpp_formatter(struct yall_call_data *d, const void *args)
 	{
-		YallData data{d};
+		YallData data { d };
 
 		const struct YallCallParams *p = static_cast<const struct YallCallParams *>(args);
 		p->formatter(data, p->args);
 
 		data.__process();
-	}
-
-	static Yall &getInstance()
-	{
-		static Yall instance;
-
-		return instance;
 	}
 };
 

@@ -1,6 +1,10 @@
+Version 1.3.6 : Refactor Yall class
+Version 1.3.5 : Fix GCC & MSVC build warnings
+Version 1.3.4 : Add namespace to CMake exported targets
+Version 1.3.3 : Create Dockerfile to build yall
 Version 1.3.2 : Create yall-config.cmake & yall-config-version.cmake, remove static build
-Version 1.3.1 : package .deb and .rpm archives
-Version 1.3.0 : add 'yall_show_subsystems_tree()'.
+Version 1.3.1 : Package .deb and .rpm archives
+Version 1.3.0 : Add 'yall_show_subsystems_tree()'
 
 Version 1.2.0 :
 	[FEATURES]
