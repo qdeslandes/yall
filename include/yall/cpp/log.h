@@ -29,12 +29,14 @@
 	do { \
 		std::ostringstream oss; \
 		oss << msg; \
-		yall_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
-			oss.str().c_str()); \
+		Yall::_log(subsystem, log_level, FUNCTION, __FILE__, __LINE__, \
+			oss.str()); \
 	} while (0)
 
 #define _YALL_CALL_LOG(subsystem, log_level, function, args) \
-	Yall::getInstance().__callLog(subsystem, log_level, FUNCTION, \
-		__FILE__, __LINE__, function, args)
+	do { \
+		Yall::_callLog(subsystem, log_level, FUNCTION, __FILE__, \
+			__LINE__, function, args); \
+	} while (0)
 
 #endif
