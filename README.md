@@ -112,7 +112,23 @@ On Linux, changing a subsystem status is atomic, it can be done from concurrent 
 
 ## C++
 
-The `include` folder of the library contains `Yall.hpp` which defines a classe to handle Yall in a C++ way. It can be used the same way as the library, except it handle some features throughs C++ facilities, see `tests/cpp/main.cpp` for more informations.
+The `include` folder of the library contains `Yall.hpp` which defines a class to handle Yall in a C++ way. It can be used the same way as the library, except it handle some features through C++ facilities with static method only.
+
+This class isn't a singleton, so `Yall::init()` must be called prior to anything else. Then, all the function of the library can be called normally through their static method. To change configuration, `Yall::config()` returns a `YallConfig` object.
+
+The major difference between C function and C++ class is the custom formatters parameters :
+
+```
+void my_cpp_formatter(YallData &d, void *args)
+{
+	d.newLine(1) << "My string";
+	d.newLine(2) << "My string and << myVar;
+}
+```
+
+The custom C++ formatters use a `YallData` reference and `YallData::newLine()` to get a reference to a new line, the width of the line indent can be passed as a parameter.
+
+See `tests/cpp/main.cpp` for more informations.
 
 ## General informations
 
