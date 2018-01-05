@@ -73,7 +73,7 @@ void yall_disable_debug(void)
 	_YALL_DBG_DEBUG("Debug mode disactivated.");
 
 	debug = false;
-	free(debug_subsystem);
+	free((char *)debug_subsystem);
 }
 
 bool yall_is_debug(void)
