@@ -53,7 +53,7 @@ install(
 	CONFIGURATIONS Debug)
 	
 install(EXPORT yall_targets
-	FILE yall_targets.cmake
 	DESTINATION lib/cmake/yall
-	NAMESPACE yall::
-	CONFIGURATIONS Debug)
+	NAMESPACE yall::)
+
+install(FILES $<TARGET_PDB_FILE:yall> DESTINATION bin OPTIONAL)
