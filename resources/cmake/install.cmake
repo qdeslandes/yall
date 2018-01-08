@@ -56,4 +56,6 @@ install(EXPORT yall_targets
 	DESTINATION lib/cmake/yall
 	NAMESPACE yall::)
 
-install(FILES $<TARGET_PDB_FILE:yall> DESTINATION bin OPTIONAL)
+if (WIN32)
+	install(FILES $<TARGET_PDB_FILE:yall> DESTINATION bin OPTIONAL)
+endif ()
