@@ -198,7 +198,7 @@ public:
 
 	static void setSubsystem(std::string name, std::string parent, enum yall_log_level log_level, enum yall_output_type output_type, std::string output_file)
 	{
-		yall_error err = yall_set_subsystem(name.c_str(), parent.c_str(), log_level, output_type, output_file.c_str());
+		yall_error err = yall_set_subsystem(name.c_str(), parent.empty() ? NULL : parent.c_str(), log_level, output_type, output_file.empty() ? NULL : output_file.c_str());
 
 		if (YALL_SUCCESS != err)
 			throw YallException(err);
@@ -245,14 +245,20 @@ public:
 	/*
 	 * Debug
 	 */
-	static void enableDebug()
+	static void enableDebug(std::string subsystemName)
 	{
-		yall_enable_debug();
+		yall_error err = yall_enable_debug(subsystemName.c_str());
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
 	static void disableDebug()
 	{
-		yall_disable_debug();
+		yall_error err = yall_disable_debug();
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
 	static bool isDebug()

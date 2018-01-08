@@ -83,7 +83,6 @@ int main(void)
         yall_init();
         yall_init();
 
-        yall_enable_debug();
 
         yall_config_set_tab_width(4);
         yall_config_set_std_header_template("[%d] :: line %-4.4L :: %-9l : %f : \n\t");
@@ -99,6 +98,8 @@ int main(void)
         yall_set_subsystem("ALU", "CPU", yall_debug, yall_console_output, NULL);
         yall_set_subsystem("Executor", "CPU", yall_debug, yall_console_output, NULL);
         yall_set_subsystem("scheduler", "yall_c_tests", yall_debug, yall_console_output, NULL);
+        yall_set_subsystem("debug", "yall_c_tests", yall_debug, yall_console_output, NULL);
+        yall_enable_debug("debug");
 
 	yall_show_subsystems_tree();
 

@@ -30,7 +30,7 @@ find_package(pthread REQUIRED)
 #]]
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 3)
-set(YALL_VERSION_PATCH 6)
+set(YALL_VERSION_PATCH 7)
 set(YALL_VERSION "${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")

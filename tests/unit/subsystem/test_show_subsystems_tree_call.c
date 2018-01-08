@@ -11,7 +11,8 @@ extern void show_subsystems_tree_call(struct yall_call_data *d, const void *args
  */
 Test(subsystem, test_show_subsystems_tree_call0, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
 {
-	yall_enable_debug();
+    yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
+	yall_enable_debug("debug_subsys");
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
 
@@ -23,9 +24,9 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=tests_yall_init_lib, .fin
 	cr_assert_str_eq(d.header, "Subsystems tree :\n");
 
 #ifdef __linux__
-	cr_assert_str_eq(d.lines->content, "└── yall\n");
+	cr_assert_str_eq(d.lines->content, "└── debug_subsys\n");
 #else
-	cr_assert_str_eq(d.lines->content, "|-- yall\n");
+	cr_assert_str_eq(d.lines->content, "|-- debug_subsys\n");
 #endif
 }
 
@@ -36,7 +37,8 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=tests_yall_init_lib, .fin
 {
 	create_subsystems();
 
-	yall_enable_debug();
+    yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
+	yall_enable_debug("debug_subsys");
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
 

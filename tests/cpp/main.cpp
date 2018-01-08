@@ -101,7 +101,6 @@ void *thread4(void *args)
 int main(void)
 {
 	Yall::init();
-        Yall::enableDebug();
 
 	Device d = Device();
 
@@ -113,6 +112,8 @@ int main(void)
         Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
         Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
         Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
+        Yall::setSubsystem("debug", "yall_test_cpp", yall_debug, yall_console_output, "");
+        Yall::enableDebug("debug");
 
 	pthread_create(&threads[0], NULL, thread0, NULL);
 	pthread_create(&threads[1], NULL, thread1, NULL);

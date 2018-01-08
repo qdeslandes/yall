@@ -24,14 +24,25 @@
 
 #include "yall/debug.h"
 
+#include <string.h>
+#include <stdlib.h>
+
 #include "yall/subsystem.h"
 
 static bool debug = false;
+static const char *debug_subsystem = NULL;
 
-void yall_enable_debug(void)
+yall_error yall_enable_debug(const char *subsystem)
 {
+	yall_error ret = YALL_SUCCESS;
+	struct yall_subsystem *s = NULL;
+
 	if (! yall_is_init())
-		return;
+		return YALL_NOT_INIT;
+
+	s = get_subsystem(subsystem, NULL);
+	if (! s)
+		return YALL_SUBSYS_NOT_EXISTS;
 
 	/*
 	 * The order of the following instructions is critical : first we
@@ -48,25 +59,38 @@ void yall_enable_debug(void)
 	 * will be overrided by the following instruction. It could be
 	 * interesting to check availability of such subsystem.
 	 */
-	yall_set_subsystem("yall", NULL, yall_debug, yall_console_output, NULL);
+
+	debug_subsystem = strdup(subsystem);
 
 	debug = true;
 
 	_YALL_DBG_DEBUG("Debug mode activated.");
+
+	return ret;
 }
 
-void yall_disable_debug(void)
+yall_error yall_disable_debug(void)
 {
+	yall_error ret = YALL_SUCCESS;
+
 	if (! yall_is_init())
-		return;
+		return YALL_NOT_INIT;
 
 	_YALL_DBG_DEBUG("Debug mode disactivated.");
 
 	debug = false;
-	_free_subsystems(remove_subsystem("yall"));
+	free((char *)debug_subsystem);
+	debug_subsystem = NULL;
+
+	return ret;
 }
 
 bool yall_is_debug(void)
 {
 	return debug;
+}
+
+const char *debug_subsystem_name(void)
+{
+	return debug_subsystem;
 }
