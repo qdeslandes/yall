@@ -34,6 +34,7 @@ To build yall properly you need :
 * `cmake`, `gcc`, `g++`
 * `valgrind`
 * `criterion` : https://github.com/Snaipe/Criterion, used for unit testing. Set `criterion_HINTS` if the library is not installed in a system path on Linux.
+* `doxygen`
 * `pthread` : available by default on Linux, check https://sourceforge.net/projects/pthreads4w/ for windows version. Set `pthread_HINTS` if the library is not installed in a system path on Linux.
 * To package :
   * `rpmbuild`
