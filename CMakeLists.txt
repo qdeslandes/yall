@@ -75,6 +75,7 @@ elseif (WIN32)
 	endif ()
 endif ()
 
+include(resources/cmake/doc.cmake)
 
 #[[
 	Project
