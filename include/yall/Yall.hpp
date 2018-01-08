@@ -247,12 +247,18 @@ public:
 	 */
 	static void enableDebug(std::string subsystemName)
 	{
-		yall_enable_debug(subsystemName.c_str());
+		yall_error err = yall_enable_debug(subsystemName.c_str());
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
 	static void disableDebug()
 	{
-		yall_disable_debug();
+		yall_error err = yall_disable_debug();
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
 	}
 
 	static bool isDebug()
