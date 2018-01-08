@@ -176,13 +176,8 @@ struct yall_subsystem *get_subsystem(const char *name,
 
 	struct yall_subsystem *s = _get_subsystem(name, subsystems, params);
 
-	if (! s) {
-		/*
-		 * Braces are set here as _YALL_DBG_WARNING could expand to
-		 * nothing.
-		 */
+	if (! s)
 		_YALL_DBG_WARNING("Could not find subsystem %s.", name);
-	}
 
 	return s;
 }

@@ -76,118 +76,142 @@
 
 #include "yall/log.h"
 #include "yall/yall.h"
+#include "yall/error.h"
 #include "yall/utils.h"
 #include "yall/msvc_defines.h"
 
 /*
  * yall_enable_debug : enable the debug mode on the library. This
- *      function must be called AFTER yall_init().
+ *      function must be called AFTER yall_init(). Also, the given
+ *	subsystem name is the name of the subsystem to use as the
+ *	debug one. It should not be modified during debug mode.
  */
-_YALL_PUBLIC void yall_enable_debug(void);
+_YALL_PUBLIC yall_error yall_enable_debug(const char *subsystem);
 
 /*
  * yall_disable_debug : disable the debug mode.
  */
-_YALL_PUBLIC void yall_disable_debug(void);
+_YALL_PUBLIC yall_error yall_disable_debug(void);
 
 /*
  * yall_is_debug : return the debug mode status.
  */
 _YALL_PUBLIC bool yall_is_debug(void);
 
+/*
+ * debug_subsystem_name : returns the name of the current debug subsystem.
+ */
+const char *debug_subsystem_name(void);
+
 #define _YALL_DBG_EMERG(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_emerg, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_emerg, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_ALERT(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_alert, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_alert, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_CRIT(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_crit, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_crit, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_ERR(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_err, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_err, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_WARNING(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_warning, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_warning, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_NOTICE(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_notice, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_notice, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_INFO(...) do { \
 		if (yall_is_debug()) { \
-			_YALL_LOG("yall", yall_info, ##__VA_ARGS__); \
+			_YALL_LOG(debug_subsystem_name(), yall_info, \
+				##__VA_ARGS__); \
 		} \
 	} while (0)
 
 #define _YALL_DBG_DEBUG(...) do { \
 		if (yall_is_debug()) \
-			_YALL_LOG("yall", yall_debug, ##__VA_ARGS__); { \
+			_YALL_LOG(debug_subsystem_name(), yall_debug, \
+				##__VA_ARGS__); { \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_EMERG(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_emerg, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_emerg, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_ALERT(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_alert, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_alert, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_CRIT(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_crit, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_crit, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_ERR(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_err, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_err, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_WARNING(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_warning, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_warning, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_NOTICE(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_notice, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_notice, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_INFO(function, args) do { \
 		if (yall_is_debug()) { \
-			_YALL_CALL_LOG("yall", yall_info, function, args); \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_info, \
+				function, args); \
 		} \
 	} while (0)
 
 #define _YALL_CALL_DBG_DEBUG(function, args) do { \
 		if (yall_is_debug()) \
-			_YALL_CALL_LOG("yall", yall_debug, function, args); { \
+			_YALL_CALL_LOG(debug_subsystem_name(), yall_debug, \
+				function, args); { \
 		} \
 	} while (0)
 
