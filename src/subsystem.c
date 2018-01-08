@@ -41,6 +41,35 @@ static struct yall_subsystem_params default_params = {
 	"yall_default.log"
 };
 
+/**
+ * \struct yall_subsystem
+ * \brief This structure contains all the parameters and configuration for a
+ *	given subsystem.
+ * \var yall_subsystem::name
+ *	\brief Name of the subsystem, can't be longer than SUBSYS_NAME_LEN
+ *	(including nul-terminating character).
+ * \var yall_subsystem::log_level
+ * 	\brief Minimum log level for this subsystem. All log messages with a
+ *	lower log level will be discarded.
+ * \var yall_subsystem::status
+ * 	\brief Status of the subsystem. Used as an atomic variable on linux.
+ *	See enum yall_subsys_status for more.
+ * \var yall_subsystem::output_type
+ *	\brief Defined output type for the subsystem. See enum yall_output_type
+ *	for more.
+ * \var yall_subsystem::output_file
+ *	\brief File in which log will be wrote is output type is
+ *	yall_file_ouput.
+ * \var yall_subsystem::parent
+ *	\brief Parent of the subsystem, can be NULL. If this value is set,
+ *	yall_inherited_xxxx can be set to some of the subsystem's parameters.
+ * \var yall_subsystem::childs
+ *	\brief List of the subsystem's childs, if any.
+ * \var yall_subsystem::previous
+ * 	\brief Previous subsystem in the list.
+ * \var yall_subsystem::next
+ *	\brief Next subsystem in the list.
+ */
 struct yall_subsystem {
 	char name[SUBSYS_NAME_LEN];
 	enum yall_log_level log_level;
@@ -58,22 +87,24 @@ struct yall_subsystem {
 	struct yall_subsystem *next;
 };
 
-/*
- * _get_subsystem : returns the subsystem of the given name. Starting the
- *      research from a subsystem's list. The <params> parameter is used to
- *      stored the parameters of the subsystem gathered through tree crawling.
- *      <name> should not be NULL, but <s> and <params> can be.
- *      Tricky part : when to set the subsystem's parameters ? A brother
- *      subsystem must not think the current parameters are the parent's
- *      parameter it inherit if one of its brother has wrote them. To cover
- *      this possibility, we write the parameters in one of theses to
- *      conditions :
- *	      * If the subsystem has childs. So, if we crawl the childs, the
- *	      given parameters will be the parent's parameter. Wathever the
- *	      depth of the parent could be.
- *	      * If the current subsystem is the research subsystem.
- *      This means that a subsystem could not hide it's parent values unless it
- *      is the researched subsystem.
+/**
+ * \brief Returns the subsystem of the given name. Starting the research from a
+ *	subsystem's list. The <params> parameter is used to store the parameters
+ *	of the subsystem gathered through tree crawling.
+ * \bug There is a possible flaw in this function :
+ *	- subsystem0
+ *	  |- subsystem1
+ *	  |  |- child0
+ *	  |- subsystem2
+ *	     |- child1
+ *	This way, if subsystem0 defines a property and subsystem1 redefine it,
+ *	then subsystem2 possibly can't inherit it from subsystem0. This should
+ *	be possible because both subsystems have childs.
+ * \param name Name of the subsystem to find inside the tree. Can't be NULL.
+ * \param s Subsystems list to search through.
+ * \param params Structure yall_subsystem_params used to store the searched
+ *	subsystem's parameters. Filled through tree crawling.
+ * \return Pointer to the requested subsystem or NULL if not found.
  */
 static struct yall_subsystem *_get_subsystem(const char *name,
 	struct yall_subsystem *s,
@@ -119,9 +150,9 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 	return NULL;
 }
 
-/*
- * _free_subsystem : free the given subsystem, its name and output file if any.
- *      <s> must not be NULL.
+/**
+ * \brief Free the given subsystem, and its output file if any.
+ * \param s Subsystem to be freed. Can't be NULL.
  */
 static void _free_subsystem(struct yall_subsystem *s)
 {
@@ -129,10 +160,11 @@ static void _free_subsystem(struct yall_subsystem *s)
 	free(s);
 }
 
-/*
- * set_default_params : fill the given yall_subsystem_params with the proper
- *      default values defined at the top of this source file inside
- *      default_params. <params> can't be NULL.
+/**
+ * \brief Fill the given structure yall_subsystem_params with the proper default
+ *	values.
+ * \param params Structure yall_subsystem_params to be filled with the default
+ *	parameters. Can't be NULL.
  */
 static void set_default_params(struct yall_subsystem_params *params)
 {
@@ -142,9 +174,10 @@ static void set_default_params(struct yall_subsystem_params *params)
 	params->output_file = default_params.output_file;
 }
 
-/*
- * set_subsys_status : change the status of a subsystem. The subsystem name
- *      can't be NULL. Assignation is atomic.
+/**
+ * \brief Change the status of the given subsystem.
+ * \param subsys_name Name of the subsystem to change the status. Can't be NULL.
+ * \param status New status of the subsystem.
  */
 static void set_subsys_status(
 	const char *subsys_name,
@@ -336,15 +369,18 @@ void free_subsystems(void)
 	_free_subsystems(subsystems);
 }
 
-/*
- * get_next_subsystem : subsystems are sets in a tree way. Given a subsystem
- *	(<s> here), it returns the next subsystem. Calling this function with
- *	the previously returned subsystem will allow to browse the subsystems
- *	tree. Once get_next_subsystem() returns NULL, all the subsystems
- *	have been returned.
- *	<craw_childs> is used on recursive calls to ensure, from a given
- *	subsystem, the function won't go back into its childs list.
- *	<d> allow the caller to know
+/**
+ * \brief Subsystems are sets in a tree way. Given a subsystem (<s> here), it
+ *	returns the next subsystem. Calling this function with the previously
+ *	returned subsystem will allow to browse the subsystems tree. Once
+ *	get_next_subsystem() returns NULL, all the subsystems have been
+ *	returned.
+ * \param s Subsystem from which we need to return the next one in the tree.
+ * \param crawl_childs Whether the function should go down the childs lists. It
+ *	is used on recursive calls to ensure, from a given subsystem, the
+ *	function won't go back into its childs list multiple times.
+ * \param d Depth of the subsystem from the base of the tree.
+ * \return The next subsystem or NULL if there is no next subsystem.
  */
 static struct yall_subsystem *get_next_subsystem(struct yall_subsystem *s,
 	bool crawl_childs, int8_t *d)
@@ -384,6 +420,12 @@ static const char *connectors[4] = {
 	"    " };
 #endif
 
+/**
+ * \brief Call function use with _YALL_DBG_CALL_xxx to disable the subsystems
+ *	tree.
+ * \param d Structure yall_call_data, used to fill output.
+ * \param args Unused here.
+ */
 static void show_subsystems_tree_call(struct yall_call_data *d,
 	const void *args)
 {
