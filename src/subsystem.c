@@ -59,64 +59,53 @@ struct yall_subsystem {
 };
 
 /*
- * _get_subsystem : returns the subsystem of the given name. Starting the
- *      research from a subsystem's list. The <params> parameter is used to
- *      stored the parameters of the subsystem gathered through tree crawling.
- *      <name> should not be NULL, but <s> and <params> can be.
- *      Tricky part : when to set the subsystem's parameters ? A brother
- *      subsystem must not think the current parameters are the parent's
- *      parameter it inherit if one of its brother has wrote them. To cover
- *      this possibility, we write the parameters in one of theses to
- *      conditions :
- *	      * If the subsystem has childs. So, if we crawl the childs, the
- *	      given parameters will be the parent's parameter. Wathever the
- *	      depth of the parent could be.
- *	      * If the current subsystem is the research subsystem.
- *      This means that a subsystem could not hide it's parent values unless it
- *      is the researched subsystem.
+ * _get_subsystem : returns the subsystem of the given name. This is a recursive
+ *	function so, first, we check if <s> is a valid subsystem pointer. Then,
+ *	if <s> is the request subsystem, we copy each of its parameters,
+ *	including inherited ones, else, we call this function with its childs,
+ *	then with its siblings (next pointer).
+ *	If its childs call returns a valid pointer, then we replace the
+ *	inherited values in the parameters we the parent's one.
  */
 static struct yall_subsystem *_get_subsystem(const char *name,
-	struct yall_subsystem *s,
-	struct yall_subsystem_params *params)
+	struct yall_subsystem *s, struct yall_subsystem_params *params)
 {
-	for (; s; s = s->next) {
-		// Write subsystem's parameters
-		if (s->childs || strncmp(s->name, name,
-			SUBSYS_NAME_LEN-1) == 0) {
+	struct yall_subsystem *req_subsys = NULL;
 
-			if (params && s->log_level != yall_inherited_level)
-				params->log_level = s->log_level;
+	if (! s)
+		return NULL;
 
-			/*
-			 * If a parent subsystem is disabled, do not override
-			 * the status with a child subsystem.
-			 * TODO : We could avoid parsing the tree if we return
-			 * once finding a disabled subsystem, but the caller
-			 * function must handle it.
-			 */
-			if (params && s->status != yall_inherited_status
-				&& params->status != yall_subsys_disable)
-				params->status = s->status;
+	if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
 
-			if (params && s->output_type != yall_inherited_output)
-				params->output_type = s->output_type;
-
-			if (params && s->output_file)
-				params->output_file = s->output_file;
+		if (params) {
+			params->log_level = s->log_level;
+			params->status = s->status;
+			params->output_type = s->output_type;
+			params->output_file = s->output_file;
 		}
 
-		// Is it the researched subsystem ?
-		if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
-			return s;
-
-		struct yall_subsystem *sc = _get_subsystem(name, s->childs,
-			params);
-
-		if (sc)
-			return sc;
+		return s;
 	}
 
-	return NULL;
+	req_subsys = _get_subsystem(name, s->childs, params);
+
+	if (req_subsys) {
+		if (params && params->log_level == yall_inherited_level)
+			params->log_level = s->log_level;
+
+		if (params && params->status == yall_inherited_status)
+			params->status = s->status;
+
+		if (params && params->output_type == yall_inherited_output)
+			params->output_type = s->output_type;
+
+		if(params && params->output_file == NULL)
+			params->output_file = s->output_file;
+
+		return req_subsys;
+	}
+
+	return _get_subsystem(name, s->next, params);
 }
 
 /*
