@@ -2,44 +2,52 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-PROJECT_NAME        = "yall"
-PROJECT_NUMBER      = @YALL_VERSION_MAJOR@.@YALL_VERSION_MINOR@.@YALL_VERSION_PATCH@
-PROJECT_BRIEF       = "C lightweight logging library"
+PROJECT_NAME		= "yall"
+PROJECT_NUMBER		= @YALL_VERSION_MAJOR@.@YALL_VERSION_MINOR@.@YALL_VERSION_PATCH@
+PROJECT_BRIEF		= "C lightweight logging library"
 
-OUTPUT_DIRECTORY    = @CMAKE_BINARY_DIR@/doc/doxygen
+OUTPUT_DIRECTORY	= @CMAKE_BINARY_DIR@/doc/doxygen
 
-STRIP_FROM_PATH     = @CMAKE_SOURCE_DIR@/src \
-                        @CMAKE_SOURCE_DIR@/include \
-                        @CMAKE_BINARY_DIR@/generated_headers
+STRIP_FROM_PATH		= @CMAKE_SOURCE_DIR@ \
+                        	@CMAKE_BINARY_DIR@/generated_headers
 
-STRIP_FROM_INC_PATH = @CMAKE_SOURCE_DIR@/include \
-                        @CMAKE_BINARY_DIR@/generated_headers
+STRIP_FROM_INC_PATH	= @CMAKE_SOURCE_DIR@\
+                        	@CMAKE_BINARY_DIR@/generated_headers
 
-TAB_SIZE            = 8
+TAB_SIZE		= 8
 
-OPTIMIZE_OUTPUT_FOR_C = YES
+OPTIMIZE_OUTPUT_FOR_C	= YES
 
 # Build configuration
-EXTRACT_ALL         = YES
-EXTRACT_STATIC      = YES
-HIDE_IN_BODY_DOCS   = YES   # Try both
-ENABLE_PREPROCESSING = NO
+EXTRACT_ALL		= YES
+EXTRACT_STATIC		= YES
+EXTRACT_PRIVATE		= NO
+EXTRACT_PACKAGE		= NO
+EXTRACT_LOCAL_CLASSES	= NO
+EXTRACT_LOCAL_METHODS	= NO
+EXTRACT_ANON_NSPACE	= NO
+
 HIDE_UNDOC_MEMBERS	= YES
+HIDE_UNDOC_CLASSES	= YES
+HIDE_FRIEND_COMPOUNDS	= YES
+HIDE_IN_BODY_DOCS	= YES
+
+ENABLE_PREPROCESSING	= NO
+CLANG_ASSISTED_PARSING  = YES
 
 # Input files
-INPUT               = @CMAKE_SOURCE_DIR@/src \
-                        @CMAKE_SOURCE_DIR@/include \
-                        @CMAKE_BINARY_DIR@/generated_headers
-
-RECURSIVE           = YES
+INPUT			= @CMAKE_SOURCE_DIR@/src \
+				@CMAKE_SOURCE_DIR@/include \
+				@CMAKE_BINARY_DIR@/generated_headers
+EXCLUDE_PATTERNS	= *.hpp
+RECURSIVE		= YES
 
 # Output
-GENERATE_LATEX      = NO
-GENERATE_XML        = YES
+GENERATE_LATEX		= NO
+GENERATE_XML		= YES
 
 # Dot tool
-CLASS_DIAGRAMS      = NO
+CLASS_DIAGRAMS		= NO
 
-DISABLE_INDEX = YES
-GENERATE_TREEVIEW = YES
-EXCLUDE_PATTERNS = *.hpp
+DISABLE_INDEX		= YES
+GENERATE_TREEVIEW	= YES
