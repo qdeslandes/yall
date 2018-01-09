@@ -30,12 +30,14 @@
 #include "yall/error.h"
 #include "yall/log_level.h"
 
-/*
- * write_log_console : write the log message on the console. The message can't
- *      be NULL. The color of the message depend of the log level and the color
- *      associated to this log level inside the source file. Also, <log_level>
- *      must be different from yall_inherited_level.
- *	Returns a yall_error.
+/**
+ * \brief Write the log message on the console. The message can't be NULL. The
+ *	color of the message depend of the log level and the color associated to
+ *	this log level inside the source file.
+ * \param log_level Log level to write the log message. This is used to define
+ *	the message color on console.
+ * \param msg Log message to write.
+ * \return Error code depending of the success or failure of the function.
  */
 yall_error write_log_console(enum yall_log_level log_level, const char *msg);
 
