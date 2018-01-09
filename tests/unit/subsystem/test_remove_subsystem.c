@@ -13,8 +13,8 @@ Test(subsystem, test_remove_subsystem1, .init=create_subsystems, .fini=clean_sub
         struct yall_subsystem *s = NULL;
 
         // At the end
-        cr_assert_eq((s = remove_subsystem("3")), _subsystems[3]);
-        cr_assert_eq(_subsystems[2]->next, NULL);
+        cr_assert_eq((s = remove_subsystem("5")), _subsystems[15]);
+        cr_assert_eq(_subsystems[10]->next, NULL);
 
         // In the middle without childs
         cr_assert_eq((s = remove_subsystem("1")), _subsystems[1]);
@@ -23,7 +23,7 @@ Test(subsystem, test_remove_subsystem1, .init=create_subsystems, .fini=clean_sub
 
         // With childs
         cr_assert_eq((s = remove_subsystem("2")), _subsystems[2]);
-        cr_assert_eq(_subsystems[0]->next, NULL);
+        cr_assert_eq(_subsystems[0]->next, _subsystems[3]);
         cr_assert_eq(s->childs, _subsystems[7]);
 }
 
