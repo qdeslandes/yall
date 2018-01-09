@@ -1,3 +1,4 @@
+Version 1.3.8 : Fix _get_subsystem() parameter shadowing.
 Version 1.3.7 : Debug subsystem name as parameter of yall_enable_debug & fix subsystem creation from C++ class
 Version 1.3.6 : Refactor Yall class
 Version 1.3.5 : Fix GCC & MSVC build warnings
