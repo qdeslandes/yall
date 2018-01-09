@@ -55,11 +55,14 @@ static enum yall_matches call_matches[MATCHES_SIZE] = { 0 };
 static char std_header_format[YALL_HEADER_LEN] = { 0 };
 static char call_header_format[YALL_HEADER_LEN] = { 0 };
 
-/*
- * is_modifier : returns true is the given character is a yall modifier, false
- *	otherwise. <match> is a pointer to an element of the matches array, it
- *	is used to order the modifier set in the header, and replace them
- *	properly during the header generation.
+/**
+ * \brief Returns true is the given character is a yall modifier, false
+ *	otherwise.
+ * \param c Character to check whether it is a yall modifier.
+ * \param match Pointer to an element of the modifiers matching array. It is
+ *	used to order the modifiers set in the header and replace them properly
+ *	during log message's header generation.
+ * \return Boolean whether the character is a yall modifier.
  */
 static inline bool is_modifier(char c, enum yall_matches *match)
 {
@@ -89,9 +92,10 @@ static inline bool is_modifier(char c, enum yall_matches *match)
 	return true;
 }
 
-/*
- * set_date : fill the <buff> string pointer with the current date time,
- *	formatted in a generic way.
+/**
+ * \brief Fill the given buffer with the current date.
+ * \param buff Buffer of at least YALL_DATE_LONG_LEN bytes used to store the
+ *	current date time in ASCII.
  */
 static void set_date(char *buff)
 {
@@ -113,10 +117,12 @@ static void set_date(char *buff)
 		tm.tm_sec);
 }
 
-/*
- * set_matches_and_header : from an <header_type>, it match the proper <header>
- *	and <matches> array. This avoid redundant code to manage std_header and
- *	call_header.
+/**
+ * \brief from an <header_type>, it match the proper <header> and <matches>
+ *	array. This avoid redundant code to manage std_header and call_header.
+ * \param hdr_type Type of header to match.
+ * \param header Pointer to a header format.
+ * \param matches Pointer to an array of matches.
  */
 static void set_matches_and_header(enum header_type hdr_type,
 	char **header, enum yall_matches **matches)
@@ -190,14 +196,16 @@ void fill_header_content(struct header_content *hc, const char *subsystem_name,
 	set_date(hc->date_long);
 }
 
-/*
- * generate_hdr : main function handling the header generation, the header
- *	format used depend of <hdr_type>. <buffer> will store the generated
- *	header, it won't write more than <len> (including the nul terminating
- *	character). <hc> can't be NULL.
- *	This function can be used as snprintf and friends, as if <len> is equals
- *	to 0, the number of characters that SHOULD HAVE been wrote will be
- *	returned.
+/**
+ * \brief Main function handling header generation, the header format used
+ *	depend of <hdr_type>.
+ * \param hdr_type Type of header to use. See enum header_type for more.
+ * \param buffer Buffer storing the generated header. This parameter can be NULL
+ *	if <len> is 0.
+ * \param len Maximum length to write on buffer. If this value is 0, then the
+ *	function returns the length required for buffer parameter.
+ * \param hc Content to write on the header : subsystem name, function name, ...
+ *	Can't be NULL.
  */
 static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 	struct header_content *hc)
