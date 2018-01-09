@@ -118,7 +118,7 @@ static void set_date(char *buff)
 }
 
 /**
- * \brief from an <header_type>, it match the proper <header> and <matches>
+ * \brief from an *header_type*, it match the proper *header* and *matches*
  *	array. This avoid redundant code to manage std_header and call_header.
  * \param hdr_type Type of header to match.
  * \param header Pointer to a header format.
@@ -198,10 +198,10 @@ void fill_header_content(struct header_content *hc, const char *subsystem_name,
 
 /**
  * \brief Main function handling header generation, the header format used
- *	depend of <hdr_type>.
+ *	depend of *hdr_type*.
  * \param hdr_type Type of header to use. See enum header_type for more.
  * \param buffer Buffer storing the generated header. This parameter can be NULL
- *	if <len> is 0.
+ *	if *len* is 0.
  * \param len Maximum length to write on buffer. If this value is 0, then the
  *	function returns the length required for buffer parameter.
  * \param hc Content to write on the header : subsystem name, function name, ...

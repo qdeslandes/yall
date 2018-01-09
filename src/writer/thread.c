@@ -113,7 +113,7 @@ static void write_queue_messages(struct qnode *msg_queue)
 /**
  * \brief Main function of the writer threader. It loops at >thread_frequency>
  *	Hz. Messages queue is swapped on each loop, wrote and deleted.
- *	Once the library is closed, <thread_run> is set to false and the thread
+ *	Once the library is closed, *thread_run* is set to false and the thread
  *	stop when the messages queue has been wrote a last time.
  * \param args Arguments to use inside the thread, required by pthread but
  *	unused.

@@ -89,7 +89,7 @@ struct yall_subsystem {
 
 /**
  * \brief Returns the subsystem of the given name. Starting the research from a
- *	subsystem's list. The <params> parameter is used to store the parameters
+ *	subsystem's list. The *params* parameter is used to store the parameters
  *	of the subsystem gathered through tree crawling.
  * \bug There is a possible flaw in this function :
  *	- subsystem0
@@ -261,7 +261,7 @@ void add_subsystem(const char *parent_name, struct yall_subsystem *s)
 	struct yall_subsystem *parent = parent_name ?
 		get_subsystem(parent_name, NULL) : NULL;
 
-	// Assign parent to <s>, no problem if parent is NULL
+	// Assign parent to *s*, no problem if parent is NULL
 	s->parent = parent;
 
 	// If the subsystem is a list head or sublist head
@@ -370,7 +370,7 @@ void free_subsystems(void)
 }
 
 /**
- * \brief Subsystems are sets in a tree way. Given a subsystem (<s> here), it
+ * \brief Subsystems are sets in a tree way. Given a subsystem (*s* here), it
  *	returns the next subsystem. Calling this function with the previously
  *	returned subsystem will allow to browse the subsystems tree. Once
  *	get_next_subsystem() returns NULL, all the subsystems have been

@@ -108,7 +108,7 @@ _YALL_PUBLIC yall_error yall_log(const char *subsystem,
 	...);
 
 /**
- * \brief Another logging function which call the given <function>
+ * \brief Another logging function which call the given *function*
  *      parameter to change message format. It will get the subsystem's
  *      parameters and use them to add header on the logging message. Then
  *      it will call the given function with a buffer to fill.
@@ -120,7 +120,7 @@ _YALL_PUBLIC yall_error yall_log(const char *subsystem,
  * \param filename Name of the file calling the log function.
  * \param line Line on which this function has been called.
  * \param formatter Function which will handle the logging of the message. The
- *	given <d> parameter of type yall_call_data will contain of the necessary
+ *	given *d* parameter of type yall_call_data will contain of the necessary
  *	data for yall to process the log message. Inside this formatting
  *	function yall_call_set_header() and yall_call_add_line() can be called.
  * \param args void * pointer to custom arguments to passe to the formatter
@@ -138,10 +138,10 @@ _YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
 /**
  * \brief This is the main subsystems function. This function handle subsystems
  *	creation and update.
- *	If <name> is the name of an existing subsystem, it is updated : removed
+ *	If *name* is the name of an existing subsystem, it is updated : removed
  *	from the subsystems tree, updated and replaced in its correct position
  *	with correct inheritance.
- *	If <name> is not the name of an existing subsystem, it is created with
+ *	If *name* is not the name of an existing subsystem, it is created with
  *	the proper parameters and inserted in the subsystems tree at the proper
  *      place.
  * \param name Name of the subsystem to add or update. Can't be NULL.
@@ -164,7 +164,7 @@ _YALL_PUBLIC yall_error yall_set_subsystem(const char *name,
 /**
  * \brief Close all the yall library set up. The function fail only if yall has
  *	not been previously initialized. If the function succeed, the
- *	initialization counter's value is decremented. If <initialized> equals
+ *	initialization counter's value is decremented. If *initialized* equals
  *	0 once decremented, the library is cleaned.
  * \return Error code depending of the success or failure of the function.
  */

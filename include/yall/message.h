@@ -90,14 +90,14 @@ void message_delete(struct message *msg);
 void message_delete_wrapper(void *msg);
 
 /**
- * \brief Create the log message. It fills <buffer> we given data and specific
+ * \brief Create the log message. It fills *buffer* we given data and specific
  *	format.
  * \param log_buffer Buffer in which the log message will be wrote.
  * \param len Length of the log buffer.
  * \param message_format Format to use when generating the log message.
  * \param args Arguments to use with the message's format. Can be empty.
  * \return Returns the number of characters wrote. It works the same way as
- *	snprintf and friends as if <len> equals 0, it returns the number of
+ *	snprintf and friends as if *len* equals 0, it returns the number of
  *	characters than would have been wrote.
  */
 size_t generate_std_msg(char *log_buffer, size_t len,

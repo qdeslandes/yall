@@ -72,7 +72,7 @@ _YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
 _YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
 /**
- * \brief If a subsystem of the given <name> is available,
+ * \brief If a subsystem of the given *name* is available,
  *      returns it. If not, the function returns NULL.
  * \param name Name of the subsystem to return. Can't be NULL.
  * \param params Structure holding the researched subsystem's parameters,
