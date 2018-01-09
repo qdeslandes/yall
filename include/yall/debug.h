@@ -80,26 +80,33 @@
 #include "yall/utils.h"
 #include "yall/msvc_defines.h"
 
-/*
- * yall_enable_debug : enable the debug mode on the library. This
- *      function must be called AFTER yall_init(). Also, the given
- *	subsystem name is the name of the subsystem to use as the
- *	debug one. It should not be modified during debug mode.
+/**
+ * \brief Enable the debug mode on the library. This function must be called
+ *	AFTER yall_init(). Debug message will be wrote using the given
+ *	subsystem.
+ * \param subsystem Name of the subsystem to us as debug subsystem. If the
+ *	subsystem does not exists, no debug message will be generated. Also,
+ *	this subsystem should not be modified during debug mode.
+ * \return Error code whether it succeed. 
  */
 _YALL_PUBLIC yall_error yall_enable_debug(const char *subsystem);
 
-/*
- * yall_disable_debug : disable the debug mode.
+/**
+ * \brief Disable debug mode. The debug subsystem is not removed nor modified.
+ * \return Error code whether it succeed. 
  */
 _YALL_PUBLIC yall_error yall_disable_debug(void);
 
-/*
- * yall_is_debug : return the debug mode status.
+/**
+ * \brief Return the status of the debug mode.
+ * \return Boolean whether the debug mode is initialized.
  */
 _YALL_PUBLIC bool yall_is_debug(void);
 
-/*
- * debug_subsystem_name : returns the name of the current debug subsystem.
+/**
+ * \brief Returns the name of the current debug subsystem.
+ * \return Nul-terminated string representing the name of the current debug
+ *	subsystem. Returns NULL if the debug mode is disactivated.
  */
 const char *debug_subsystem_name(void);
 
