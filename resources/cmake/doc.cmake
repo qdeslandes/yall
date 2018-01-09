@@ -3,3 +3,8 @@
 # For details see the LICENSE file distributed with yall.
 
 configure_file(${CMAKE_SOURCE_DIR}/resources/Doxyfile.in ${CMAKE_BINARY_DIR}/doc/Doxyfile)
+
+add_custom_target(doxygen_doc
+	COMMAND doxygen Doxyfile
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc
+	COMMENT "Generate Doxygen documentation")
