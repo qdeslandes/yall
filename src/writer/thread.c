@@ -73,7 +73,6 @@ uint8_t start_thread(uint16_t frequency)
 	if (thread_ret != 0)
 		ret = YALL_CANT_CREATE_THREAD;
 
-end:
 	return ret;
 }
 
