@@ -70,10 +70,8 @@ uint8_t start_thread(uint16_t frequency)
 
 	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
 
-	if (thread_ret != 0) {
+	if (thread_ret != 0)
 		ret = YALL_CANT_CREATE_THREAD;
-		goto end;
-	}
 
 end:
 	return ret;
