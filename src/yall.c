@@ -292,6 +292,6 @@ end:
 
 void yall_close_all(void)
 {
-	for ( ; yall_close() != YALL_NOT_INIT ; )
+	while (yall_close() != YALL_NOT_INIT)
 		;
 }

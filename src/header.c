@@ -98,11 +98,11 @@ static void set_date(char *buff)
 	struct tm tm;
 	time_t t = time(NULL);
 
-	#ifdef __linux__
+#	ifdef __linux__
 	localtime_r(&t, &tm);
-	#else
+#	else
 	localtime_s(&tm, &t);
-	#endif
+#	endif
 
 	snprintf(buff, YALL_DATE_LONG_LEN, "%04d-%02d-%02d %02d:%02d:%02d",
 		tm.tm_year + 1900,
@@ -122,14 +122,11 @@ static void set_matches_and_header(enum header_type hdr_type,
 	char **header, enum yall_matches **matches)
 {
 	switch (hdr_type) {
-	case std_header:
-		*matches = std_matches;
-		*header = std_header_format;
-		break;
 	case call_header:
 		*matches = call_matches;
 		*header = call_header_format;
 		break;
+	case std_header:
 	default:
 		*matches = std_matches;
 		*header = std_header_format;
