@@ -8,3 +8,7 @@ add_custom_target(doxygen_doc
 	COMMAND doxygen Doxyfile
 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc
 	COMMENT "Generate Doxygen documentation")
+
+if (WIN32)
+	set_property(TARGET doxygen_doc PROPERTY FOLDER "doc")
+endif ()
