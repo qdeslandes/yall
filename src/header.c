@@ -98,11 +98,11 @@ static void set_date(char *buff)
 	struct tm tm;
 	time_t t = time(NULL);
 
-	#ifdef __linux__
+#	ifdef __linux__
 	localtime_r(&t, &tm);
-	#else
+#	else
 	localtime_s(&tm, &t);
-	#endif
+#	endif
 
 	snprintf(buff, YALL_DATE_LONG_LEN, "%04d-%02d-%02d %02d:%02d:%02d",
 		tm.tm_year + 1900,
