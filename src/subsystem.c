@@ -107,47 +107,44 @@ struct yall_subsystem {
  * \return Pointer to the requested subsystem or NULL if not found.
  */
 static struct yall_subsystem *_get_subsystem(const char *name,
-	struct yall_subsystem *s,
-	struct yall_subsystem_params *params)
+	struct yall_subsystem *s, struct yall_subsystem_params *params)
 {
-	for (; s; s = s->next) {
-		// Write subsystem's parameters
-		if (s->childs || strncmp(s->name, name,
-			SUBSYS_NAME_LEN-1) == 0) {
+	struct yall_subsystem *req_subsys = NULL;
 
-			if (params && s->log_level != yall_inherited_level)
-				params->log_level = s->log_level;
+	if (! s)
+		return NULL;
 
-			/*
-			 * If a parent subsystem is disabled, do not override
-			 * the status with a child subsystem.
-			 * TODO : We could avoid parsing the tree if we return
-			 * once finding a disabled subsystem, but the caller
-			 * function must handle it.
-			 */
-			if (params && s->status != yall_inherited_status
-				&& params->status != yall_subsys_disable)
-				params->status = s->status;
+	if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
 
-			if (params && s->output_type != yall_inherited_output)
-				params->output_type = s->output_type;
-
-			if (params && s->output_file)
-				params->output_file = s->output_file;
+		if (params) {
+			params->log_level = s->log_level;
+			params->status = s->status;
+			params->output_type = s->output_type;
+			params->output_file = s->output_file;
 		}
 
-		// Is it the researched subsystem ?
-		if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0)
-			return s;
-
-		struct yall_subsystem *sc = _get_subsystem(name, s->childs,
-			params);
-
-		if (sc)
-			return sc;
+		return s;
 	}
 
-	return NULL;
+	req_subsys = _get_subsystem(name, s->childs, params);
+
+	if (req_subsys) {
+		if (params && params->log_level == yall_inherited_level)
+			params->log_level = s->log_level;
+
+		if (params && params->status == yall_inherited_status)
+			params->status = s->status;
+
+		if (params && params->output_type == yall_inherited_output)
+			params->output_type = s->output_type;
+
+		if(params && params->output_file == NULL)
+			params->output_file = s->output_file;
+
+		return req_subsys;
+	}
+
+	return _get_subsystem(name, s->next, params);
 }
 
 /**

@@ -48,3 +48,26 @@ Test(subsystem, test__get_subsystem1, .init=create_subsystems, .fini=clean_subsy
         cr_assert_eq(p.log_level, yall_debug);
         cr_assert_eq(p.output_type, yall_console_output);
 }
+
+/*
+ * Test if the parameters are shallowed :
+ * 	- subsystem 4
+ * 	  |- subsystem 40
+ * 	  |  |- subsystem 400
+ * 	  |- subsystem 41
+ * 	     |- subsystem 410
+ * This way, if subsystem 41 inherit from subsystem 4 but subsystem 40 does not,
+ * the parameters should not be shallowed.
+ */
+Test(subsystem, test__get_subsystem2, .init=create_subsystems, .fini=clean_subsystems)
+{
+	struct yall_subsystem_params p = { 0 };
+	cr_assert_eq(_get_subsystem("41", subsystems, &p), _subsystems[13]);
+
+	/*
+	 * Here, p.log_level should have the value of subsystem 4
+	 * (_subsystems[10]), but it has the value of subsystem 40
+	 * (_subsystems[11]).
+	 */
+	cr_assert_eq(p.log_level, _subsystems[10]->log_level);
+}

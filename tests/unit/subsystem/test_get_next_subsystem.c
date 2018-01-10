@@ -48,7 +48,7 @@ Test(subsystem, test_get_next_subsystem3, .init=create_subsystems, .fini=clean_s
 	int8_t d = 0;
 
 	// Crawling childs
-	cr_assert_eq(get_next_subsystem(_subsystems[3], false, &d), NULL);
+	cr_assert_eq(get_next_subsystem(_subsystems[15], false, &d), NULL);
 
 	/*
 	 * Here, the is not reason to test <d> as the function returned NULL.

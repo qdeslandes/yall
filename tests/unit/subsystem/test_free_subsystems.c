@@ -11,7 +11,7 @@ Test(subsystem, test_free_subsystems1, .init=create_subsystems, .fini=clean_subs
 {
         free_subsystems();
 
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i)
                 _subsystems[i] = NULL;
 
         cr_assert(1);

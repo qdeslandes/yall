@@ -3,6 +3,8 @@
 
 #include "yall/subsystem.h"
 
+#define _NB_TEST_SUBSYSTEMS 16
+
 /*
  * As this structure is defined inside a .c file, we need to redefine it here
  * to allow testing its content.
