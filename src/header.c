@@ -116,7 +116,8 @@ static void set_date(char *buff)
 /*
  * set_matches_and_header : from an <header_type>, it match the proper <header>
  *	and <matches> array. This avoid redundant code to manage std_header and
- *	call_header.
+ *	call_header. Here, std_header case is not matched, so it falls to the
+ *	default values.
  */
 static void set_matches_and_header(enum header_type hdr_type,
 	char **header, enum yall_matches **matches)
@@ -126,7 +127,6 @@ static void set_matches_and_header(enum header_type hdr_type,
 		*matches = call_matches;
 		*header = call_header_format;
 		break;
-	case std_header:
 	default:
 		*matches = std_matches;
 		*header = std_header_format;
