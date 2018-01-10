@@ -101,7 +101,8 @@ yall_error yall_log(const char *subsystem,
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
 	struct message *m = NULL;
-	va_list args, args_cpy;
+	va_list args;
+	va_list args_cpy;
 	size_t hdr_len = 0;
 	size_t buff_len = 0;
 	struct header_content hc = { 0 };
