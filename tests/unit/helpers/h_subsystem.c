@@ -5,7 +5,7 @@
 #include <yall/subsystem.h>
 
 extern struct yall_subsystem *subsystems;
-struct yall_subsystem *_subsystems[10] = { 0 };
+struct yall_subsystem *_subsystems[_NB_TEST_SUBSYSTEMS] = { 0 };
 
 struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_file)
 {
@@ -71,7 +71,7 @@ void create_subsystems(void)
         _subsystems[4]->next = NULL;
         _subsystems[4]->parent = _subsystems[0];
         _subsystems[4]->childs = NULL;
-
+	
         /* Subsystem 01*/
         _subsystems[5] = malloc(sizeof(struct yall_subsystem));
         subsystems->childs->next = _subsystems[5];
@@ -211,11 +211,119 @@ void create_subsystems(void)
         _subsystems[3]->childs = NULL;
 
         _subsystems[2]->next = _subsystems[3];
+
+        /* Subsystem 4 */
+        _subsystems[10] = malloc(sizeof(struct yall_subsystem));
+        subsystems->next->next->next->next = _subsystems[10];
+
+        strcpy(_subsystems[10]->name, "4");
+
+        _subsystems[10]->log_level = yall_debug;
+        _subsystems[10]->output_type = yall_console_output;
+        _subsystems[10]->output_file = NULL;
+        _subsystems[10]->status = yall_subsys_enable;
+        _subsystems[10]->delete_old_log_file = true;
+        _subsystems[10]->previous = _subsystems[3];
+        _subsystems[10]->next = NULL;
+        _subsystems[10]->parent = NULL;
+        _subsystems[10]->childs = NULL;
+
+        _subsystems[3]->next = _subsystems[10];
+
+        /* Subsystem 40 */
+        _subsystems[11] = malloc(sizeof(struct yall_subsystem));
+	subsystems->next->next->next->next->childs = _subsystems[11];
+
+        strcpy(_subsystems[11]->name, "40");
+
+        _subsystems[11]->log_level = yall_err;
+        _subsystems[11]->output_type = yall_console_output;
+        _subsystems[11]->output_file = NULL;
+        _subsystems[11]->status = yall_subsys_enable;
+        _subsystems[11]->delete_old_log_file = true;
+        _subsystems[11]->previous = NULL;
+        _subsystems[11]->next = NULL;
+        _subsystems[11]->parent = _subsystems[10];
+        _subsystems[11]->childs = NULL;
+
+        _subsystems[10]->childs = _subsystems[11];
+
+        /* Subsystem 400 */
+        _subsystems[12] = malloc(sizeof(struct yall_subsystem));
+	subsystems->next->next->next->next->childs->childs = _subsystems[12];
+
+        strcpy(_subsystems[12]->name, "400");
+
+        _subsystems[12]->log_level = yall_inherited_level;
+        _subsystems[12]->output_type = yall_console_output;
+        _subsystems[12]->output_file = NULL;
+        _subsystems[12]->status = yall_subsys_enable;
+        _subsystems[12]->delete_old_log_file = true;
+        _subsystems[12]->previous = NULL;
+        _subsystems[12]->next = NULL;
+        _subsystems[12]->parent = _subsystems[11];
+        _subsystems[12]->childs = NULL;
+
+        _subsystems[11]->childs = _subsystems[12];
+
+        /* Subsystem 41 */
+        _subsystems[13] = malloc(sizeof(struct yall_subsystem));
+	subsystems->next->next->next->next->childs->next = _subsystems[13];
+
+        strcpy(_subsystems[13]->name, "41");
+
+        _subsystems[13]->log_level = yall_inherited_level;
+        _subsystems[13]->output_type = yall_console_output;
+        _subsystems[13]->output_file = NULL;
+        _subsystems[13]->status = yall_subsys_enable;
+        _subsystems[13]->delete_old_log_file = true;
+        _subsystems[13]->previous = _subsystems[11];
+        _subsystems[13]->next = NULL;
+        _subsystems[13]->parent = _subsystems[10];
+        _subsystems[13]->childs = NULL;
+
+        _subsystems[11]->next = _subsystems[13];
+
+        /* Subsystem 410 */
+        _subsystems[14] = malloc(sizeof(struct yall_subsystem));
+	subsystems->next->next->next->next->childs->next->childs = _subsystems[14];
+
+        strcpy(_subsystems[14]->name, "410");
+
+        _subsystems[14]->log_level = yall_inherited_level;
+        _subsystems[14]->output_type = yall_console_output;
+        _subsystems[14]->output_file = NULL;
+        _subsystems[14]->status = yall_subsys_enable;
+        _subsystems[14]->delete_old_log_file = true;
+        _subsystems[14]->previous = NULL;
+        _subsystems[14]->next = NULL;
+        _subsystems[14]->parent = _subsystems[13];
+        _subsystems[14]->childs = NULL;
+
+        _subsystems[13]->childs = _subsystems[14];
+
+        /* Subsystem 5 */
+        _subsystems[15] = malloc(sizeof(struct yall_subsystem));
+        subsystems->next->next->next->next->next = _subsystems[15];
+
+        strcpy(_subsystems[15]->name, "5");
+
+        _subsystems[15]->log_level = yall_debug;
+        _subsystems[15]->output_type = yall_console_output;
+        _subsystems[15]->output_file = NULL;
+        _subsystems[15]->status = yall_subsys_enable;
+        _subsystems[15]->delete_old_log_file = true;
+        _subsystems[15]->previous = _subsystems[10];
+        _subsystems[15]->next = NULL;
+        _subsystems[15]->parent = NULL;
+        _subsystems[15]->childs = NULL;
+
+        _subsystems[10]->next = _subsystems[15];
 }
 
 void clean_subsystems(void)
 {
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i) {
                 if (_subsystems[i])
                         free(_subsystems[i]);
 
