@@ -122,14 +122,11 @@ static void set_matches_and_header(enum header_type hdr_type,
 	char **header, enum yall_matches **matches)
 {
 	switch (hdr_type) {
-	case std_header:
-		*matches = std_matches;
-		*header = std_header_format;
-		break;
 	case call_header:
 		*matches = call_matches;
 		*header = call_header_format;
 		break;
+	case std_header:
 	default:
 		*matches = std_matches;
 		*header = std_header_format;
