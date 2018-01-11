@@ -2,10 +2,12 @@
 
 #define YALL_ERROR(code, msg) { code, msg }
 
-static struct yall_errordesc {
+struct yall_errordesc {
 	yall_error code;
 	const char *message;
-} errordesc[] = {
+};
+
+static struct yall_errordesc errordesc[] = {
 	YALL_ERROR(YALL_SUCCESS, "Success."),
 	YALL_ERROR(YALL_UNKNOW_ERROR,
 		"Unknow error happened. Please contact the developpers."),
