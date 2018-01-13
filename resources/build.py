@@ -51,7 +51,6 @@ def prepare(build):
 """
 def defaultAnalyzer(cmd, code, stdout, stderr):
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	testResults(0 == code, cmd)
@@ -63,7 +62,6 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 
 def gccAnalyzer(cmd, code, stdout, stderr):
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	lines = stderr.split('\n')
@@ -95,11 +93,7 @@ def gccAnalyzer(cmd, code, stdout, stderr):
 	return not (notes or warnings or errors)
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
-	print("Test")
-	print("Info :", stdout)
-	print("Info bis :", stderr)
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	error = code != 0
@@ -143,7 +137,6 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 
 def unitAnalyzer(cmd, code, stdout, stderr):
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	fail = 0
@@ -178,7 +171,6 @@ def unitAnalyzer(cmd, code, stdout, stderr):
 
 def coverageAnalyzer(cmd, code, stdout, stderr):
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	resultsLine = ''
@@ -207,7 +199,6 @@ def coverageAnalyzer(cmd, code, stdout, stderr):
 
 def styleAnalyzer(cmd, code, stdout, stderr):
 	if fullOutput:
-		print(stdout)
 		print(stderr)
 
 	lines = stdout.split('\n')
