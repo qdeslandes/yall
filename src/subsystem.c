@@ -49,10 +49,10 @@ static struct yall_subsystem_params default_params = {
  *	\brief Name of the subsystem, can't be longer than SUBSYS_NAME_LEN
  *	(including nul-terminating character).
  * \var yall_subsystem::log_level
- * 	\brief Minimum log level for this subsystem. All log messages with a
+ *	\brief Minimum log level for this subsystem. All log messages with a
  *	lower log level will be discarded.
  * \var yall_subsystem::status
- * 	\brief Status of the subsystem. Used as an atomic variable on linux.
+ *	\brief Status of the subsystem. Used as an atomic variable on linux.
  *	See enum yall_subsys_status for more.
  * \var yall_subsystem::output_type
  *	\brief Defined output type for the subsystem. See enum yall_output_type
@@ -66,7 +66,7 @@ static struct yall_subsystem_params default_params = {
  * \var yall_subsystem::childs
  *	\brief List of the subsystem's childs, if any.
  * \var yall_subsystem::previous
- * 	\brief Previous subsystem in the list.
+ *	\brief Previous subsystem in the list.
  * \var yall_subsystem::next
  *	\brief Next subsystem in the list.
  */
