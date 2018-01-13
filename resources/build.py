@@ -24,10 +24,10 @@ class TestType:
 def testResults(status, cmd):
 	color = COLOR_GREEN if status else COLOR_RED
 	symbol = '+' if status else '-'
-	print("=== \t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
+	print("=== \t\t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
 
 def testError(msg):
-	print('=== \t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
+	print('=== \t\t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
 
 """
 	Setup
@@ -208,8 +208,8 @@ def styleAnalyzer(cmd, code, stdout, stderr):
 """
 def runTests(tests):
 	global isError
-	for shouldTest, cmd, analyzer in tests:
-		if shouldTest and not test(cmd, analyzer):
+	for cmd, analyzer in tests:
+		if not test(cmd, analyzer):
 			isError = True
 
 def test(cmd, analyzer=defaultAnalyzer):
@@ -232,23 +232,7 @@ def main(argv):
 	parser = argparse.ArgumentParser(description='Validate yall library sources')
 	parser.add_argument('--sourcesDir', required=True, help='Sources directory')
 	parser.add_argument('--buildDir', required=True, help='Build directory')
-	parser.add_argument('-b', '--build', action='store_true', help='Build the project')
-	parser.add_argument('-c', '--cValgrind', action='store_true', help='Process Valgrind check on C application')
-	parser.add_argument('-p', '--cppValgrind', action='store_true', help='Process Valgrind check on C++ application')
-	parser.add_argument('-u', '--unit', action='store_true', help='Process unit tests check')
-	parser.add_argument('-o', '--coverage', action='store_true', help='Process code coverage check')
-	parser.add_argument('-s', '--style', action='store_true', help='Process style check')
-
 	args = parser.parse_args()
-
-	# If no test argument, enable all
-	if not args.build and not args.cValgrind and not args.cppValgrind and not args.unit and not args.coverage and not args.style:
-		args.build = True
-		args.cValgrind = True
-		args.cppValgrind = True
-		args.unit = True
-		args.coverage = True
-		args.style = True
 
 	print('=== Code validity checking for yall library.')
 	print('=== Copyright (C) 2017 Quentin "Naccyde" Deslandes.')
@@ -259,17 +243,39 @@ def main(argv):
 	print('===')
 	print('=== Starting tests :')
 
-	tests = [
-		[args.build, 'cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
-		[args.build, 'make -C ' + args.buildDir + ' clean', defaultAnalyzer],
-		[args.build, 'make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
-		[args.cValgrind, 'valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
-		[args.cppValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
-		[args.unit, args.buildDir + '/yall_unit', unitAnalyzer],
-		[args.coverage, 'make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
-		[args.style, 'make -C ' + args.buildDir + ' checkstyle', styleAnalyzer]]
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Release :', sep='')
+	testsRelease = [
+		['cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' clean', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
+		['valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
+		[args.buildDir + '/yall_unit', unitAnalyzer],
+		['make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
+		['make -C ' + args.buildDir + ' doxygen_doc', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' package', defaultAnalyzer]]
 
-	runTests(tests)
+	runTests(testsRelease)
+
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Debug :', sep='')
+	testsDebug = [
+		['cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Debug', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' clean', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
+		['valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
+		[args.buildDir + '/yall_unit', unitAnalyzer],
+		['make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
+		['make -C ' + args.buildDir + ' doxygen_doc', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' package', defaultAnalyzer]]
+
+	runTests(testsDebug)
+
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Other :', sep='')
+	testsDebug = [
+		['make -C ' + args.buildDir + ' checkstyle', styleAnalyzer]]
+
+	runTests(testsDebug)
 
 	# Results
 	print('=== ')
