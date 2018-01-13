@@ -33,6 +33,8 @@ HIDE_IN_BODY_DOCS	= YES
 
 ENABLE_PREPROCESSING	= NO
 
+HAVE_DOT		= NO
+
 # Input files
 INPUT			= @CMAKE_SOURCE_DIR@/src \
 				@CMAKE_SOURCE_DIR@/include \
