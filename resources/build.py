@@ -234,7 +234,6 @@ def test(cmd, analyzer=defaultAnalyzer):
 
 	returnValue = analyzer(cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
 
-	print(cmd, "returned", returnValue)
 	return returnValue
 
 def main(argv):
