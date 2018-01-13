@@ -93,9 +93,6 @@ def gccAnalyzer(cmd, code, stdout, stderr):
 	return not (notes or warnings or errors)
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
-	if fullOutput:
-		print(stderr)
-
 	error = code != 0
 	stats = {}
 
