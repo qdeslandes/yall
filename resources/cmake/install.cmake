@@ -12,8 +12,7 @@ write_basic_package_version_file(
 configure_package_config_file(
 	"resources/cmake/yall-config.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config.cmake"
-	INSTALL_DESTINATION lib/cmake/yall
-	INSTALL_PREFIX /usr)
+	INSTALL_DESTINATION lib/cmake/yall)
 
 install(
 	FILES README.md
@@ -54,7 +53,8 @@ install(
 	
 install(EXPORT yall_targets
 	DESTINATION lib/cmake/yall
-	NAMESPACE yall::)
+	NAMESPACE yall::
+	CONFIGURATIONS Debug)
 
 if (WIN32)
 	install(FILES $<TARGET_PDB_FILE:yall> DESTINATION bin OPTIONAL)
