@@ -26,6 +26,8 @@ struct yall_subsystem {
 	struct yall_subsystem *next;
 };
 
+extern struct yall_subsystem *_subsystems[_NB_TEST_SUBSYSTEMS];
+
 struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_file);
 void free_fake_subsystem(struct yall_subsystem *s);
 void create_subsystems(void);

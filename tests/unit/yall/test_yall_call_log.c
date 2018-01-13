@@ -1,7 +1,6 @@
 #include "test_yall.h"
 
 extern struct yall_subsystem *subsystems;
-extern struct yall_subsystem *_subsystems[10];
 
 /*
  * Library not initialized

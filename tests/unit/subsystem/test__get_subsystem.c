@@ -5,7 +5,6 @@
  */
 
 extern struct yall_subsystem *subsystems;
-extern struct yall_subsystem *_subsystems[10];
 
 extern struct yall_subsystem *_get_subsystem(const char *name,
         struct yall_subsystem *s,

@@ -12,7 +12,6 @@
 #include "yall/subsystem.h"
 
 struct yall_subsystem *subsystems;
-struct yall_subsystem *_subsystems[10];
 
 struct yall_subsystem *_get_subsystem(const char *name,
         struct yall_subsystem *s,
