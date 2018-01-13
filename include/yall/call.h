@@ -36,10 +36,10 @@
  * \struct yall_call_data_line
  * \brief Represent a line during a call to a macro YALL_CALL_xxx.
  * \var yall_call_data_line::content
- * 	\brief Content of the line : nul-terminated string to be wrote on the
+ *	\brief Content of the line : nul-terminated string to be wrote on the
  *	output medium.
  * \var yall_call_data_line::next
- * 	\brief Next element of the lines list.
+ *	\brief Next element of the lines list.
  */
 struct yall_call_data_line {
 	char *content;

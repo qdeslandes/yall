@@ -52,16 +52,16 @@ _YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
 /**
  * \brief Returns the library version as a 32bits integer with the form :
- *      * 16 bits : major
- *      * 8 bits  : minor
- *      * 8 bits  : patch
+ *	* 16 bits : major
+ *	* 8 bits  : minor
+ *	* 8 bits  : patch
  * \return Current version of the library.
  */
 _YALL_PUBLIC uint32_t yall_get_version(void);
 
 /**
  * \brief Returns a formatted string containing the library name, its version,
- * 	and the developer name.
+ *	and the developer name.
  * \return Formatted string of the library version.
  */
 _YALL_PUBLIC const char *yall_get_version_string(void);
@@ -71,7 +71,7 @@ _YALL_PUBLIC const char *yall_get_version_string(void);
  *	initialized counter.
  *	This function must be called prior to anyone else. It the initialization
  *	fails, the library can't be used.
- * \return Error code whether it has been initialized. 
+ * \return Error code whether it has been initialized.
  */
 _YALL_PUBLIC yall_error yall_init(void);
 
@@ -84,7 +84,7 @@ _YALL_PUBLIC uint16_t yall_is_init(void);
 
 /**
  * \brief Major logging function, used to forge the message and write it on the
- * 	medium. Given the parameters, it will decide if the message should be
+ *	medium. Given the parameters, it will decide if the message should be
  *	logged or not. This function should not be used as it but through all
  *	the macro (YALL_DEBUG(), ...).
  * \param subsystem Name of the subsystem as a nul-terminated string. Can't be
@@ -109,9 +109,9 @@ _YALL_PUBLIC yall_error yall_log(const char *subsystem,
 
 /**
  * \brief Another logging function which call the given *function*
- *      parameter to change message format. It will get the subsystem's
- *      parameters and use them to add header on the logging message. Then
- *      it will call the given function with a buffer to fill.
+ *	parameter to change message format. It will get the subsystem's
+ *	parameters and use them to add header on the logging message. Then
+ *	it will call the given function with a buffer to fill.
  * \param subsystem Name of the calling function, defaultly used in the log
  *	message's header. Can't be NULL.
  * \param log_level Log level to use for this log message.
@@ -143,7 +143,7 @@ _YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
  *	with correct inheritance.
  *	If *name* is not the name of an existing subsystem, it is created with
  *	the proper parameters and inserted in the subsystems tree at the proper
- *      place.
+ *	place.
  * \param name Name of the subsystem to add or update. Can't be NULL.
  * \param parent Name of the parent to inherit from. If NULL, this subsystem
  *	will be at top-level of the tree.

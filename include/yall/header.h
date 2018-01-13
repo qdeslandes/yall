@@ -79,7 +79,7 @@ enum yall_matches {
  * \var header_content::filename
  *	\brief Name of the file where the log sending function is located, as
  *	a nul-terminated string.
- * \var header_content::line 
+ * \var header_content::line
  *	\brief Number of the line calling the log function. Can't be longer than
  *	YALL_LINE_STR_LEN.
  * \var header_content::date_long

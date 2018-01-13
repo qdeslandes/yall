@@ -87,13 +87,13 @@
  * \param subsystem Name of the subsystem to us as debug subsystem. If the
  *	subsystem does not exists, no debug message will be generated. Also,
  *	this subsystem should not be modified during debug mode.
- * \return Error code whether it succeed. 
+ * \return Error code whether it succeed.
  */
 _YALL_PUBLIC yall_error yall_enable_debug(const char *subsystem);
 
 /**
  * \brief Disable debug mode. The debug subsystem is not removed nor modified.
- * \return Error code whether it succeed. 
+ * \return Error code whether it succeed.
  */
 _YALL_PUBLIC yall_error yall_disable_debug(void);
 
