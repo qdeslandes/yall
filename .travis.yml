@@ -27,7 +27,7 @@ branches:
     - master
 
 before_install:
-  - docker pull naccyde/yall:latest
+  - docker pull naccyde/yall:1.0.0
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then export DEPLOY="true"; fi
 
 script:
