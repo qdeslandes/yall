@@ -27,14 +27,17 @@
 
 #include <stdint.h>
 
-/*
- * start_thread : start the writer thread of the library. Returns a status code.
+/**
+ * \brief Start the writer thread of the library. It is better to use
+ *	writer_init() instead, as it could setup environment before.
+ * \param frequency Frequency to use for the writer's thread loops.
+ * \return Error code depending of the success or failure of the function.
  */
 uint8_t start_thread(uint16_t frequency);
 
-/*
- * stop_thread : stop the writing thread of the library, this function can't
- *	fail.
+/**
+ * \brief Stop the writing thread.It is better to use writer_stop() instead, as
+ *	it could setup environment before.
  */
 void stop_thread(void);
 

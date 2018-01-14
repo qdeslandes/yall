@@ -25,9 +25,17 @@
 #ifndef _YALL_OUTPUT_TYPES_H
 #define _YALL_OUTPUT_TYPES_H
 
-/*
- * Theses values should always be powers of 2. This way we can easily define
- * target that will handle 2, 3 or more output types at once.
+/**
+ * \enum yall_output_type
+ * \brief This enum stores all the different output types for the subsystems.
+ *	These values has to be power of 2, as they can be combined to write on
+ *	multiple outputs.
+ * \var yall_output_type::yall_inherited_output
+ *	\brief Subsystem inherit its output type from its parent.
+ * \var yall_output_type::yall_console_output
+ *	\brief Subsystem log message will be wrote on console.
+ * \var yall_output_type::yall_file_output
+ *	\brief Subsystem log message will be wrote in file.
  */
 enum yall_output_type {
 	yall_inherited_output   = 0,

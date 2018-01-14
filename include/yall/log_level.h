@@ -25,6 +25,13 @@
 #ifndef _YALL_LOG_LEVELS_H
 #define _YALL_LOG_LEVELS_H
 
+/**
+ * \enum yall_log_level
+ * \brief This enumerator stores the different log level used by the library.
+ *	They are extracted from the Syslog protocol (RFC 5424). The last one :
+ *	yall_inherited_level is used to inform that a subsystem inherit its log
+ *	level from its parent.
+ */
 enum yall_log_level {
 	yall_debug,
 	yall_info,
@@ -37,6 +44,11 @@ enum yall_log_level {
 	yall_inherited_level
 };
 
+/**
+ * \brief From a log level, it returns its name as a nul-terminated string. This
+ *	string must not be freed.
+ * \param log_level Log level we want the name.
+ */
 const char *get_log_level_name(enum yall_log_level log_level);
 
 #endif

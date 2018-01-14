@@ -35,42 +35,48 @@
  * replace the head value to NULL, which lead to the creation of a "new" queue.
  */
 
-/*
- * struct qnode : represent a queue node. The <next> pointer is supposed to be
- *	volatile as is should not be optimized too much by the compiler.
+/**
+ * \struct qnode
+ * \brief This structure is used to represent a queue node.
+ * \var qnode::next
+ *	\brief Next element of the queue.
+ * \var qnode::data
+ *	\brief The data of the node.
  */
 struct qnode {
 	struct qnode *next;
 	void *data;
 };
 
-/*
- * qnode_new : create a new node with the given data. On windows, the
- *	implementation use an aligned version of malloc to get a memory
- *	pointer. <next> pointer of the node *MUST* be set to NULL, as it is
- *	used to check the queue's tail.
+/**
+ * \brief Create a new node with the given data. On windows, the implementation
+ *	use an aligned version of malloc to get a memory pointer. *next* pointer
+ *	of the created node *MUST* be set to NULL, as it is used to check the
+ *	queue's tail.
+ * \param data Data to store on the node.
+ * \return The new node.
  */
 struct qnode *qnode_new(void *data);
 
-/*
- * qnode_delete : delete the given queue node. <data_delete> is a function
- *	pointer (void funct(void *data)) use to delete the node data in a
- *	custom way. On windows, it use aligned_free to complete with
- *	aligned_malloc on qnode_new(). If NULL is given, qnode_delete will
- *	call free() on the data.
+/**
+ * \brief Delete the given queue node.
+ * \param node Queue node to delete.
+ * \param data_delete Function called to delete the node's data in a custom way.
  */
 void qnode_delete(struct qnode *node, void (*data_delete)(void *data));
 
-/*
- * enqueue : create a node with the given data and add it to the queue.
+/**
+ * \brief Create a node with the given data and add it to the queue.
+ * \param data Pointer to the data which must be added to the queue.
  */
 void enqueue(void *data);
 
-/*
- * swap_queue : as the writer thread get the whole queue when writing, there is
- *	no dequeue() function (currently), but a function to return the
- *	current's queue head, and the set head to NULL. If the queue is empty,
- *	NULL is returned.
+/**
+ * \brief As the writer thread get the whole queue when writing, there is no
+ *	dequeue() function (currently), but a function to return the current's
+ *	queue head, and the set head to NULL. If the queue is empty, NULL is
+ *	returned. The system will then add nodes to a new queue.
+ * \return The (previously) current queue head.
  */
 struct qnode *swap_queue(void);
 

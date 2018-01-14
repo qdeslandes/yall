@@ -35,6 +35,20 @@
 
 #define SUBSYS_NAME_LEN	 16
 
+/**
+ * \struct yall_subsystem_params
+ * \brief This structure is used as a placeholder for parameter during the
+ *	processing of a log message. It is not possible to directly use the
+ *	struct yall_subsystem parameters as it could contains inherited values.
+ * \var yall_subsystem::log_level
+ *	\brief Log level to use with the requested subsystem.
+ * \var yall_subsystem::status
+ *	\brief Current status of the requested subsystem.
+ * \var yall_subsystem::output_type
+ *	\brief Output type for the requested subsystem.
+ * \var yall_subsystem::output_file
+ *	\brief Output file for the request subsystem, can be NULL.
+ */
 struct yall_subsystem_params {
 	enum yall_log_level log_level;
 	enum yall_subsys_status status;
@@ -42,80 +56,99 @@ struct yall_subsystem_params {
 	const char *output_file;
 };
 
-/*
- * yall_disable_subsystem : this disable a given subsystem. The given name
- *      can't be NULL. This function can be called from different threads.
+/**
+ * \brief Disable a given subsystem. Once disabled, the subsystem can't emit
+ *	log messages anymore.
+ *	This function is not thread safe.
+ * \param subsys_name Name of the subsystem to disable. Can't be NULL.
  */
 _YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
 
-/*
- * yall_enable_subsystem : this enable a given subsystem. The given name can't
- *      be NULL. This function can be called from different threads.
+/**
+ * \brief Enable a given filesystem.
+ *	This function is not thread safe.
+ * \param subsys_name Name of the subsystem to enable. Can't be NULL.
  */
 _YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
-/*
- * get_subsystem : if a subsystem of the given <name> is available,
+/**
+ * \brief If a subsystem of the given *name* is available,
  *      returns it. If not, the function returns NULL.
- *      <name> can not be NULL and must be a NULL terminated string.
- *      <params> is a struct which will contains the subsystem's parameters.
- *      It will be filled with the default parameters in case some parameters
- *      are missing in the subsystem's.
+ * \param name Name of the subsystem to return. Can't be NULL.
+ * \param params Structure holding the researched subsystem's parameters,
+ *	replacing replacing inherited values with correct ones. If this
+ *	parameters is NULL, subsystems parameters are not retrieved. If a
+ *	parameter is missing, the default one is used.
+ * \return The requested subsystem.
  */
 struct yall_subsystem *get_subsystem(const char *name,
 	struct yall_subsystem_params *params);
 
-/*
- * create_subsystem : returns a newly create subsystem. <name> must not be NULL
- *      and must be a NULL terminated string. On error, NULL is returned.
+/**
+ * \brief Create a new subsystem with the given parameters and returns it. This
+ *	function can't fail. It is better to use this function instead of
+ *	manually crafting the subsystem as it set some pointers used for tree
+ *	crawling, which should have a specific value.
+ * \param name Name of the created subsystem. Can't be NULL.
+ * \param log_level Minimum log level for the created subsystem.
+ * \param output_type Output type for the created subsystem. See
+ *	enum yall_output_type for more.
+ * \param output_file Output file to write logs for the created subsystem, if
+ *	output_type is yall_file_output, can be NULL otherwise.
+ * \return The newly created subsystem.
  */
 struct yall_subsystem *create_subsystem(const char *name,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
 	const char *output_file);
 
-/*
- * add_subsystem : add the given subsystem to the subsystem's tree. Handle
- *      inheritance. If parent is NULL or not found, the subsystem will be
- *      added to the top-level tree. No subsystem with the new subsystem's
- *      name should be present in the tree. <s> must not be NULL. <parent>
- *      can be NULL or a NULL terminated string.
+/**
+ * \brief Add the given subsystem to the subsystem's tree. Handle inheritance.
+ *	If parent is NULL or not found, the subsystem will be added to the
+ *	top-level tree. No subsystem with the new subsystem's name should be
+ *	present in the tree.
+ * \param parent Name of the parent subsystem if any or NULL.
+ * \param s Subsystem to add to the tree; Can't be NULL.
  */
 void add_subsystem(const char *parent, struct yall_subsystem *s);
 
-/*
- * update_subsystem : update a given subsystem. <s> can't be NULL.
+/**
+ * \brief Update a given subsystem : from an existing subsystem it upadte its
+ *	parameters instead of creating a new one.
+ * \param s The subsystem to update.
+ * \param log_level New log level of the subsystem.
+ * \param output_type New output type of the subsystem.
+ * \param output_file New output file of the subsystem.
  */
 void update_subsystem(struct yall_subsystem *s,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
 	const char *output_file);
 
-/*
- * remove_subsystem : remove a subsystem from the subsystem tree. If this
- *  subsystem had childs, its childs will always be linked to it, <name> can
- *      not be NULL. If the subsystem is found, returns it, otherwise returns
- *      NULL and must be a NULL terminated string.
+/**
+ * \brief Remove a subsystem for the subsystems tree, it does not delete it. If
+ *	this subsystem has childs, the childs will be removed too.
+ * \param name Name of the subsystem to remove from the tree.
+ * \return The requested subsystem if found, NULL otherwise.
  */
 struct yall_subsystem *remove_subsystem(const char *name);
 
-/*
- * _free_subsystems : free the given subsystems tree through _free_subsystem
- *      function. <s> is used as the root of the tree, so its parents will not
- *      be freed.
+/**
+ * \brief Free the given subsystems list with _free_subsystem().
+ * \param s The list of subsystem to free. It will be used as the root of the
+ *	tree, so its parents won't be freed.
  */
 void _free_subsystems(struct yall_subsystem *s);
 
-/*
- * free_subsystems : free the library's subsystems list.
+/**
+ * \brief Free the library's subsystems list.
  */
 void free_subsystems(void);
 
-/*
- * yall_show_subsystems_tree : display the subsystems tree. Supports up to 32
- *	nested subsystems.
- *	/!\ This function can only be called when debug mode is activated.
- *	/!\ This function is not thread safe.
+/**
+ * \brief Display the subsystems tree. Supports up to 32
+ *	nested subsystems. This function is not thread safe.
+ * \remark This function can only be called when debug mode is activated.
  */
 _YALL_PUBLIC void yall_show_subsystems_tree(void);
 

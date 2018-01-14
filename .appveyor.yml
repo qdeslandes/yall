@@ -36,6 +36,9 @@ environment:
           DEPLOY: 0
           TAG: 0
 
+install:
+    - choco install doxygen.portable
+
 # Run CMake generation and define if the current build should be released.
 # As build is done only on PR and on master, if this is not a PR, it should
 # be released.
