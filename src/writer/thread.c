@@ -82,6 +82,13 @@ void stop_thread(void)
 	pthread_join(thread, NULL);
 }
 
+/**
+ * \brief This function is used to write all the message from the given queue,
+ *	through all writer function (write_log_console(), write_log_file(),
+ *	...).
+ *	Once the given queue has been wrote, it is freed.
+ * \param msg_queue List of messages queue to write.
+ */
 static void write_queue_messages(struct qnode *msg_queue)
 {
 	if (! msg_queue)
@@ -100,6 +107,14 @@ static void write_queue_messages(struct qnode *msg_queue)
 	qnode_delete(msg_queue, message_delete_wrapper);
 }
 
+/**
+ * \brief Main function of the writer threader. It loops at >thread_frequency>
+ *	Hz. Messages queue is swapped on each loop, wrote and deleted.
+ *	Once the library is closed, *thread_run* is set to false and the thread
+ *	stop when the messages queue has been wrote a last time.
+ * \param args Arguments to use inside the thread, required by pthread but
+ *	unused.
+ */
 static void *writer_thread(void *args)
 {
 	UNUSED(args);

@@ -32,20 +32,21 @@
 #include "yall/message.h"
 #include "yall/error.h"
 
-/*
- * writer_init : start the writing thread. Return YALL_OK on success, error
- *	otherwise.
+/**
+ * \brief Start the writing thread.
+ * \param frequency Frequency to use for the writer's thread loops.
+ * \return Error code depending of the success or failure of the function.
  */
 yall_error writer_init(uint16_t frequency);
 
-/*
- * write : enqueue the given message to the lock-free queue. Returns a status
- *	code.
+/**
+ * \brief Enqueue the given message to the lock-free queue.
+ * \return Error code depending of the success or failure of the function.
  */
 void write_msg(struct message *m);
 
-/*
- * writer_destroy : stop the writing thread.
+/**
+ * \brief Stop the writing thread.
  */
 void writer_close(void);
 

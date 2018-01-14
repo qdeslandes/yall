@@ -37,10 +37,21 @@
 #define MSG_HEADER_LEN	77
 #define FUNC_NAME_LEN	17
 
-/*
- * struct message : this structure is used to store the content of a log
- *	message, like the log level, the message itself, the output type, and
- *	many other useful data. It will be pushed to the messages queue.
+/**
+ * \struct message
+ * \brief This is a message. It contains a log line and its output parameters
+ *	(gathered from the proper subsystem). This structure is used to store
+ *	the different log messages inside a lockless queue, waiting to be wrote
+ *	on the medium. It should be avoided to create a message manually, use
+ *	message_new() instead.
+ * \var message::data
+ *	\brief Log message to write.
+ * \var message::log_level
+ *	\brief Log level to use when writing the message.
+ * \var message::output_type
+ *	\brief Output type to use when writing the message.
+ * \var message::output_file
+ *	\brief Output file to use when writing the message, if any.
  */
 struct message {
 	char *data;
@@ -49,44 +60,55 @@ struct message {
 	const char *output_file;
 };
 
-/*
- * message_new : craete and return a new message with the given parameters.
- *	This message must be freed with the proper function as internals must
- *	be handled specifically. <data> and <output_file> can be NULL. It is
- *	useless to test the return value, as it use malloc. If malloc fail,
- *	your first problem won't be the NULL returning function.
+/**
+ * \brief Create and returns a new message with the given parameters. This
+ *	message must be freed with the proper function as internals must be
+ *	handled specifically. It is useless to test the return value, as it use
+ *	malloc. If malloc fail, your first problem won't be the NULL returning
+ *	function.
+ * \param data Data to set inside the message. This value can be NULL.
+ * \param log_level Log level of the message.
+ * \param output_type Output type of the message.
+ * \param output_file Output file of the message. Can be NULL.
  */
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
 	enum yall_output_type output_type,
 	const char *output_file);
 
-/*
- * message_delete : delete a given message. <msg> can't be NULL.
+/**
+ * \brief Delete the given message. Free the data too.
+ * \param msg Message to delete. Can't be NULL.
  */
 void message_delete(struct message *msg);
 
-/*
- * message_delete_wrapper : used to suppress warnings as function deleting the
- *	message is called by a function requiring it to be as void (*)(void *).
+/**
+ * \brief Used to suppress warnings as function deleting the message is called
+ *	by a function requiring it to be as void (*)(void *).
+ * \param msg Message to delete. Can't be NULL.
  */
 void message_delete_wrapper(void *msg);
 
-/*
- * generate_message : create the log message. It fills <buffer> we given data
- *	and specific format. No pointer argument can be NULL, but <args> can be
- *	empty.
- *	Returns the number of characters wrote. It works the same way as
- *	snprintf and friends as if <len> equals 0, it returns the number of
+/**
+ * \brief Create the log message. It fills *buffer* we given data and specific
+ *	format.
+ * \param log_buffer Buffer in which the log message will be wrote.
+ * \param len Length of the log buffer.
+ * \param message_format Format to use when generating the log message.
+ * \param args Arguments to use with the message's format. Can be empty.
+ * \return Returns the number of characters wrote. It works the same way as
+ *	snprintf and friends as if *len* equals 0, it returns the number of
  *	characters than would have been wrote.
  */
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args);
 
-/*
- * generate_call_msg : create the log message from the call data. The call_data
- *	are freed after use.
- *	<buffer> and <d> can't be NULL.
+/**
+ * \brief Create the log message from the call data. The call_data are freed
+ *	after use.
+ * \param buffer Buffer in which log message will be wrote.
+ * \param len Length of the log buffer.
+ * \param d Call data to generate the log message from.
  */
 void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d);
 

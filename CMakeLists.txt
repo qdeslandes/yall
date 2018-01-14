@@ -12,6 +12,13 @@ set(pthread_HINTS "" CACHE STRING "Hint to find pthread directory")
 set(criterion_HINTS "" CACHE STRING "Hint to find criterion directory")
 option(TARGET_EXT_INFOS "Display extended infos about the CMake targets" OFF)
 
+set(CMAKE_C_FLAGS "")
+set(CMAKE_C_FLAGS_DEBUG "")
+set(CMAKE_C_FLAGS_RELEASE "")
+set(CMAKE_CXX_FLAGS "")
+set(CMAKE_CXX_FLAGS_DEBUG "")
+set(CMAKE_CXX_FLAGS_RELEASE "")
+
 if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "")
 	set(CMAKE_BUILD_TYPE "Release")
 endif ()
@@ -30,7 +37,7 @@ find_package(pthread REQUIRED)
 #]]
 set(YALL_VERSION_MAJOR 1)
 set(YALL_VERSION_MINOR 3)
-set(YALL_VERSION_PATCH 9)
+set(YALL_VERSION_PATCH 10)
 set(YALL_VERSION "${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.${YALL_VERSION_PATCH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/include/version.h.in" "${PROJECT_BINARY_DIR}/generated_headers/version.h")
@@ -42,10 +49,6 @@ message("==== Building yall version ${YALL_VERSION_MAJOR}.${YALL_VERSION_MINOR}.
 #[[
 	CMake internal configuration
 #]]
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED On)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED On)
 
 set(CMAKE_CONFIGURATION_TYPES "" CACHE STRING "" FORCE)
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}Debug;" CACHE STRING "" FORCE)
@@ -75,6 +78,7 @@ elseif (WIN32)
 	endif ()
 endif ()
 
+include(resources/cmake/doc.cmake)
 
 #[[
 	Project

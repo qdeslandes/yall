@@ -6,6 +6,7 @@ import sys, subprocess, getopt, os, re, shutil, argparse
 
 isError = False
 customEnv = []
+fullOutput = False
 
 COLOR_DEFAULT='\033[39m'
 COLOR_YELLOW='\033[33m'
@@ -24,10 +25,10 @@ class TestType:
 def testResults(status, cmd):
 	color = COLOR_GREEN if status else COLOR_RED
 	symbol = '+' if status else '-'
-	print("=== \t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
+	print("=== \t\t[", color, symbol, COLOR_DEFAULT, '] ', cmd, sep='')
 
 def testError(msg):
-	print('=== \t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
+	print('=== \t\t\t', COLOR_RED, '-> ', msg, COLOR_DEFAULT, sep='')
 
 """
 	Setup
@@ -49,6 +50,9 @@ def prepare(build):
 	Analyzers
 """
 def defaultAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
 	testResults(0 == code, cmd)
 
 	if 0 != code:
@@ -57,6 +61,9 @@ def defaultAnalyzer(cmd, code, stdout, stderr):
 	return 0 == code
 
 def gccAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
 	lines = stderr.split('\n')
 
 	warnings = 0
@@ -126,6 +133,9 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
 	return not error and not statErrors
 
 def unitAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
 	fail = 0
 	crash = 0
 	synthesisLine = ''
@@ -157,6 +167,9 @@ def unitAnalyzer(cmd, code, stdout, stderr):
 	return 0 == code and 0 == fail and 0 == crash
 
 def coverageAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
 	resultsLine = ''
 	coverage = 0.0
 
@@ -182,6 +195,9 @@ def coverageAnalyzer(cmd, code, stdout, stderr):
 	return 0 == code and not coverage < 95.0
 
 def styleAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
 	lines = stdout.split('\n')
 
 	warnings = 0
@@ -208,23 +224,21 @@ def styleAnalyzer(cmd, code, stdout, stderr):
 """
 def runTests(tests):
 	global isError
-	for shouldTest, cmd, analyzer in tests:
-		if shouldTest and not test(cmd, analyzer):
+	for cmd, analyzer in tests:
+		if not test(cmd, analyzer):
 			isError = True
 
 def test(cmd, analyzer=defaultAnalyzer):
 	returnValue = False
 	result = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
 
-	try:
-		returnValue = analyzer(cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
-	except:
-		pass
+	returnValue = analyzer(cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
 
 	return returnValue
 
 def main(argv):
 	global customEnv
+	global fullOutput
 
 	customEnv = os.environ.copy()
 	customEnv["LC_ALL"] = "C"
@@ -232,23 +246,14 @@ def main(argv):
 	parser = argparse.ArgumentParser(description='Validate yall library sources')
 	parser.add_argument('--sourcesDir', required=True, help='Sources directory')
 	parser.add_argument('--buildDir', required=True, help='Build directory')
-	parser.add_argument('-b', '--build', action='store_true', help='Build the project')
-	parser.add_argument('-c', '--cValgrind', action='store_true', help='Process Valgrind check on C application')
-	parser.add_argument('-p', '--cppValgrind', action='store_true', help='Process Valgrind check on C++ application')
-	parser.add_argument('-u', '--unit', action='store_true', help='Process unit tests check')
-	parser.add_argument('-o', '--coverage', action='store_true', help='Process code coverage check')
-	parser.add_argument('-s', '--style', action='store_true', help='Process style check')
-
+	parser.add_argument('-w', '--wrapper', action='store_true', help='Use SonarQube build wrapper')
+	parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output')
 	args = parser.parse_args()
 
-	# If no test argument, enable all
-	if not args.build and not args.cValgrind and not args.cppValgrind and not args.unit and not args.coverage and not args.style:
-		args.build = True
-		args.cValgrind = True
-		args.cppValgrind = True
-		args.unit = True
-		args.coverage = True
-		args.style = True
+	fullOutput = args.verbose
+	buildPrefix = ""
+	if args.wrapper:
+		buildPrefix = 'build-wrapper-linux-x86-64 --out-dir ' + args.buildDir + '/bw_output '
 
 	print('=== Code validity checking for yall library.')
 	print('=== Copyright (C) 2017 Quentin "Naccyde" Deslandes.')
@@ -259,17 +264,29 @@ def main(argv):
 	print('===')
 	print('=== Starting tests :')
 
-	tests = [
-		[args.build, 'cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
-		[args.build, 'make -C ' + args.buildDir + ' clean', defaultAnalyzer],
-		[args.build, 'make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
-		[args.cValgrind, 'valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
-		[args.cppValgrind, 'valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
-		[args.unit, args.buildDir + '/yall_unit', unitAnalyzer],
-		[args.coverage, 'make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
-		[args.style, 'make -C ' + args.buildDir + ' checkstyle', styleAnalyzer]]
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Release :', sep='')
+	testsRelease = [
+		['cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Release', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' clean', defaultAnalyzer],
+		[buildPrefix + 'make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
+		['valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_c', valgrindAnalyzer],
+		['valgrind --suppressions=' + args.sourcesDir + '/resources/valgrind_cpp.supp --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.buildDir + '/yall_cpp', valgrindAnalyzer],
+		[args.buildDir + '/yall_unit', unitAnalyzer],
+		['make -C ' + args.buildDir + ' coverage', coverageAnalyzer],
+		['make -C ' + args.buildDir + ' doxygen_doc', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' package', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' checkstyle', styleAnalyzer]]
 
-	runTests(tests)
+	runTests(testsRelease)
+
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Debug :', sep='')
+	testsDebug = [
+		['cmake -B' + args.buildDir + ' -H' + args.sourcesDir + ' -DCMAKE_BUILD_TYPE=Debug', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' clean', defaultAnalyzer],
+		['make -C ' + args.buildDir + ' -j 9', gccAnalyzer],
+		['make -C ' + args.buildDir + ' package', defaultAnalyzer]]
+
+	runTests(testsDebug)
 
 	# Results
 	print('=== ')

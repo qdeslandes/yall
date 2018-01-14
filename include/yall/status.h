@@ -25,6 +25,16 @@
 #ifndef _YALL_STATUS_H
 #define _YALL_STATUS_H
 
+/**
+ * \enum yall_subsys_status
+ * \brief Contain the different statuses of a yall subsystem.
+ * \var yall_subsys_status::yall_subsys_enable
+ *	\brief Subsystem is enable and can be used to write log messages.
+ * \var yall_subsys_status::yall_subsys_disable
+ *	\brief Subsystem is disable, all log messages will be discarded.
+ * \var yall_subsys_status::yall_inherited_status
+ *	\brief Subsystem use its parent's status.
+ */
 enum yall_subsys_status {
 	yall_subsys_enable,
 	yall_subsys_disable,

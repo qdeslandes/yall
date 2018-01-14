@@ -27,7 +27,6 @@
 
 #include "yall/utils.h"
 
-// Typedef'd as it should be used by end user.
 typedef enum {
 	YALL_SUCCESS		= 0x00,
 	YALL_UNKNOW_ERROR	= 0x01,
@@ -63,6 +62,11 @@ typedef enum {
 	yall_err_end		= 0x11
 } yall_error;
 
+/**
+ * \brief Returns a nul-terminated string of an explicit error message about
+ *	the given yall_error variable.
+ * \param err yall_error we want to get the description string.
+ */
 _YALL_PUBLIC const char *yall_strerror(yall_error err);
 
 #endif

@@ -29,18 +29,20 @@
 
 #include "yall/error.h"
 
-/*
- * write_log_file : write the message to the given log file. To do this,
- *      the function must lock a semaphore to avoid concurrent access
- *      on the file. If the lock fails, the message is not written.
- *      <file> and <msg> must not be NULL.
- *	Returns a yall_error.
+/**
+ * \brief Write the message to the given log file.
+ * \remark Currently, log file opened on each log, we should avoid this
+ *	behaviour and keep track of file descriptors.
+ * \param file Nul-terminated string represent the path to the log file to write
+ *	in.
+ * \param msg Final log message to write in the file.
+ * \return Error code depending of the success or failure of the function.
  */
 yall_error write_log_file(const char *file, const char *msg);
 
-/*
- * delete_old_log_file : used to remove an old log file on subsystem
- *      creation.
+/**
+ * \brief Used to remove an old log file from the system.
+ * \param filepath Path to the file to delete.
  */
 void delete_old_log_file(const char *filepath);
 
