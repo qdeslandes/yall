@@ -219,6 +219,17 @@ def styleAnalyzer(cmd, code, stdout, stderr):
 
 	return not (0 != code or warnings or errors)
 
+def versionAnalyzer(cmd, code, stdout, stderr):
+	if fullOutput:
+		print(stderr)
+
+	testResults(not code, cmd)
+
+	if 0 != code:
+		testError('Please update revision number.')
+	
+	return not code
+
 """
 	Tests management
 """
@@ -231,7 +242,7 @@ def runTests(tests):
 def test(cmd, analyzer=defaultAnalyzer):
 	returnValue = False
 	result = subprocess.run(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=customEnv)
-
+	
 	returnValue = analyzer(cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
 
 	return returnValue
@@ -287,6 +298,12 @@ def main(argv):
 		['make -C ' + args.buildDir + ' package', defaultAnalyzer]]
 
 	runTests(testsDebug)
+
+	print('===\t[', COLOR_YELLOW, '.', COLOR_DEFAULT, '] Other :', sep='')
+	testsOther = [
+		[args.sourcesDir + '/resources/check_version.sh ' + args.buildDir, versionAnalyzer]]
+
+	runTests(testsOther)
 
 	# Results
 	print('=== ')
