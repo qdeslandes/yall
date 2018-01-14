@@ -27,13 +27,12 @@ branches:
     - master
 
 before_install:
-  - docker pull naccyde/yall:1.0.0
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then export DEPLOY="true"; fi
 
 script:
   - echo $TRAVIS_PULL_REQUEST
   - echo $DEPLOY
-  - docker run -e "DEPLOY=$DEPLOY" -e "SONAR_KEY=$SONARCLOUD_API_KEY" -e "GITHUB_KEY=$GITHUB_PR_API_KEY" -e "GITHUB_PR=$TRAVIS_PULL_REQUEST" -v `pwd`:/yall --name yall naccyde/yall:latest
+  - docker run -e "DEPLOY=$DEPLOY" -e "SONAR_KEY=$SONARCLOUD_API_KEY" -e "GITHUB_KEY=$GITHUB_PR_API_KEY" -e "GITHUB_PR=$TRAVIS_PULL_REQUEST" -v `pwd`:/yall --name yall naccyde/yall:1.0.0
 
 after_success:
   - docker cp yall:/build/packages ./
