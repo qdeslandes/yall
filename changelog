@@ -1,3 +1,4 @@
+Version 1.3.11 : Remove _MSC_VER macro & fix exported targets
 Version 1.3.10 : Create Doxygen doc
 Version 1.3.9 : Declare variable in separated statement.
 Version 1.3.8 : Fix _get_subsystem() parameter shadowing.
