@@ -1,3 +1,4 @@
+Version 1.3.12 : Fix build type export on targets and linux package install directory
 Version 1.3.11 : Remove _MSC_VER macro & fix exported targets
 Version 1.3.10 : Create Doxygen doc
 Version 1.3.9 : Declare variable in separated statement.
