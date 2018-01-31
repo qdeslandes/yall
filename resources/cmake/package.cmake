@@ -4,6 +4,7 @@
 
 if (UNIX)
     set(CPACK_GENERATOR "DEB;ZIP;RPM")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "/usr/local")
 elseif (WIN32)
     set(CPACK_GENERATOR "ZIP")
 endif ()
