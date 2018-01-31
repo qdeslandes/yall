@@ -14,6 +14,12 @@ configure_package_config_file(
 	"${CMAKE_CURRENT_BINARY_DIR}/cmake/yall-config.cmake"
 	INSTALL_DESTINATION lib/cmake/yall)
 
+if (UNIX)
+	configure_file(resources/cmake/yall_targets-release_linux.cmake ${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake @ONLY)
+else ()
+	configure_file(resources/cmake/yall_targets-release_windows.cmake ${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake @ONLY)
+endif ()
+
 install(
 	FILES README.md
 	DESTINATION share/yall
@@ -47,6 +53,7 @@ install(
 	FILES
 		"${CMAKE_BINARY_DIR}/cmake/yall-config.cmake"
 		"${CMAKE_BINARY_DIR}/cmake/yall-config-version.cmake"
+		"${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake"
 		"${CMAKE_SOURCE_DIR}/resources/cmake/module/Findpthread.cmake"
 	DESTINATION lib/cmake/yall
 	CONFIGURATIONS Debug)
