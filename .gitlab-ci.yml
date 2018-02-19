@@ -438,7 +438,7 @@ Sonar:
     - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
     - find build/gcov -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
   script:
-    - sonar-scanner -Dsonar.cfamily.build-wrapper-output=build/bw_output -Dproject.settings=.sonar-project.properties -Dsonar.projectBaseDir=./ -Dsonar.cfamily.gcov.reportsPath=build/gcov -Dsonar.login=$SONAR_API_KEY -Dsonar.projectVersion=`cat /build/version/version`
+    - sonar-scanner -Dsonar.cfamily.build-wrapper-output=build/bw_output -Dproject.settings=.sonar-project.properties -Dsonar.projectBaseDir=./ -Dsonar.cfamily.gcov.reportsPath=build/gcov -Dsonar.login=$SONAR_API_KEY -Dsonar.projectVersion=`cat build/version/version`
   tags:
     - linux
     - yall
