@@ -1,0 +1,35 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
+add_executable(yall_c main.c)
+
+if (UNIX)
+	# Compile options
+	set(_PVT_OPT -Wall -Wextra -std=gnu11)
+	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_RELEASE -O3)
+elseif (WIN32)
+	# Compile options
+
+	#[[
+		* 4115 : named type defininition in parenthesis
+		* 4820 : padding
+	#]]
+
+	set(_PVT_OPT /wd4115 /wd4820 /Wall)
+	set(_PVT_OPT_DEBUG /Od)
+	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
+	
+	set_property(TARGET yall_c PROPERTY FOLDER "tests")
+endif ()
+
+target_compile_options(yall_c
+	PRIVATE
+		${_PVT_OPT}
+		$<$<CONFIG:DEBUG>:${_PVT_OPT_DEBUG}>
+		$<$<CONFIG:RELEASE>:${_PVT_OPT_RELEASE}>)
+
+target_link_libraries(yall_c PRIVATE yall)
+
+set_target_properties(yall_c PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/bin")

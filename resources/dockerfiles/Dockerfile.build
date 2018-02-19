@@ -1,0 +1,45 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
+FROM debian:stretch
+
+LABEL maintainer="naccyde@naccyde.eu"
+
+RUN apt-get update && \
+	apt-get install --no-install-recommends -y unzip wget ca-certificates bzip2 make libc6-dev g++ doxygen rpm lcov python-pip python-setuptools && \
+	rm -rf /var/lib/apt/lists/* && \
+	apt autoremove -y && \
+	apt-get clean -y
+
+# Install CMake (recent version)
+RUN wget https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh -O cmake.sh && \
+	chmod +x cmake.sh && \
+	./cmake.sh --skip-license && \
+	rm cmake.sh
+
+RUN wget https://github.com/Snaipe/Criterion/releases/download/v2.3.2/criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	tar jxf criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	rm -f criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	cp -R criterion-v2.3.2/* / && \
+	rm -rf criterion-v2.3.2
+
+# Install SonarQube scanner. The scanner is launched a first time to fill cache
+RUN wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip && \
+	unzip /sonar-scanner-cli-3.0.3.778-linux.zip && \
+	rm /sonar-scanner-cli-3.0.3.778-linux.zip && \
+	cp -R /sonar-scanner-3.0.3.778-linux/* / && \
+	rm -rf /sonar-scanner-3.0.3.778-linux && \
+	sonar-scanner -Dsonar.host.url=https://sonarcloud.io || true
+
+RUN wget https://sonarsource.bintray.com/CommercialDistribution/sonar-cpp-plugin/build-wrapper-3.10.zip && \
+	unzip /build-wrapper-3.10.zip && \
+	rm /build-wrapper-3.10.zip && \
+	cp /build-wrapper-3.10/linux-x86-64/build-wrapper-linux-x86-64 /bin && \
+	cp /build-wrapper-3.10/linux-x86-64/*.so /bin && \
+	rm -r /build-wrapper-3.10
+
+RUN pip install wheel 
+RUN pip install sphinx-autobuild sphinxjp.themes.dotted
+
+CMD /bin/sh

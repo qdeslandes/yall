@@ -1,0 +1,448 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
+#
+# Following path are used to store artifacts during different build steps :
+#   * build/binaries : generated binaries
+#   * build/packages : generated packages
+#   * build/gcda : files used to compute coverage
+#   * build/gcov : coverage output files
+#   * build/bw_output : output of the Sonar build wrapper
+#
+# When merging on master branch, documentation is generated with the following path :
+#   * public : user documentation, to use the library
+#   * public/coverage : GCOV HTML report of the current coverage
+#   * public/doxygen : Doxygen documentation of the library
+#
+
+stages:
+  - docker
+  - prebuild
+  - build
+  - test
+  - validation
+  - doc
+  - deploy
+
+###############################
+# Docker build
+#
+# Here, we use --cache-from option to define the container we use layers from.
+# It speeds up the build process.
+#
+###############################
+Build:
+  stage: docker
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u gitlab-ci-token -p $GITLAB_API_KEY registry.gitlab.com
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:build || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:build -t $CI_REGISTRY_IMAGE:build -f resources/dockerfiles/Dockerfile.build .
+    - docker pull $CI_REGISTRY_IMAGE:test || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:test -t $CI_REGISTRY_IMAGE:test -f resources/dockerfiles/Dockerfile.test .
+  after_script:
+    - docker push $CI_REGISTRY_IMAGE:build
+    - docker push $CI_REGISTRY_IMAGE:test
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+###############################
+# Prebuild step
+#
+# * Generate version from commit title :
+#     When merging on master, the title of the merging message will be like
+#     'major_feature/xxxx' which will lead the CI process to define the next
+#     version to set during library build.
+#
+###############################
+Version:
+  stage: prebuild
+  image: $CI_REGISTRY_IMAGE:test
+  before_script:
+    - mkdir -p build/version
+  script:
+    - python3 resources/python/version.py -c $CI_COMMIT_SHA -o build/version -p $CI_PROJECT_ID
+  artifacts:
+    paths:
+      - build/version
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  only:
+    - master
+
+###############################
+# Build step
+#
+# * Build on Linux with Debug config
+# * Build on Linux with Release config
+# * Build on Windows with Debug config
+# * Build on Windows with Release config
+#
+###############################
+Linux:Debug:
+  stage: build
+  image: $CI_REGISTRY_IMAGE:build
+  dependencies:
+    - Version
+  before_script:
+    - mkdir -p build
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Debug -DYALL_VERSION_MAJOR=$(cat build/version/major) -DYALL_VERSION_MINOR=$(cat build/version/minor) -DYALL_VERSION_PATCH=$(cat build/version/patch)
+  script:
+    - make -C build -j 9 package
+  artifacts:
+    paths:
+      - build/packages
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Linux:Release:
+  stage: build
+  image: $CI_REGISTRY_IMAGE:build
+  dependencies:
+    - Version
+  before_script:
+    - mkdir -p build/gcda
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_MAJOR=$(cat build/version/major) -DYALL_VERSION_MINOR=$(cat build/version/minor) -DYALL_VERSION_PATCH=$(cat build/version/patch)
+  script:
+    - build-wrapper-linux-x86-64 --out-dir build/bw_output make -C build -j 9 package
+  after_script:
+    - cp -R build/tests/unit/CMakeFiles/yall_unit_src_obj.dir/__/__/src/* build/gcda
+    - rm -rf build/bw_output/build-wrapper.log  # All environment variable are displayed in this file. So remove it before defining artifacts...
+  artifacts:
+    paths:
+      - build/binaries
+      - build/packages
+      - build/gcda
+      - build/bw_output
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Windows:MSVC14:
+  stage: build
+  dependencies:
+    - Version
+  before_script:
+    - set /p yall_major=<build/version/major
+    - set /p yall_minor=<build/version/minor
+    - set /p yall_patch=<build/version/patch
+    - cmake -Bbuild -H. -G"Visual Studio 14 2015 Win64" -DYALL_VERSION_MAJOR=%yall_major% -DYALL_VERSION_MINOR=%yall_minor% -DYALL_VERSION_PATCH=%yall_patch%
+  script:
+    - cmake --build build --config Debug --target package
+    - cmake --build build --config Release --target package
+  artifacts:
+    paths:
+      - build/packages
+      - build/binaries
+    expire_in: 1 hour
+  tags:
+    - windows
+    - yall
+  except:
+    - tags
+
+Windows:MSVC12:
+  stage: build
+  dependencies:
+    - Version
+  before_script:
+    - set /p yall_major=<build/version/major
+    - set /p yall_minor=<build/version/minor
+    - set /p yall_patch=<build/version/patch
+    - cmake -Bbuild -H. -G"Visual Studio 12 2013 Win64" -DYALL_VERSION_MAJOR=%yall_major% -DYALL_VERSION_MINOR=%yall_minor% -DYALL_VERSION_PATCH=%yall_patch%
+  script:
+    - cmake --build build --config Debug --target package
+    - cmake --build build --config Release --target package
+  artifacts:
+    paths:
+      - build/packages
+      - build/binaries
+    expire_in: 1 hour
+  tags:
+    - windows
+    - yall
+  except:
+    - tags
+
+###############################
+# Test library
+#
+# * Linux:Unit : Test unit testing binary (yall_unit), with Valgrind wrapper
+# * Linux:C : Test C application (yall_c), with Valgrind wrapper
+# * Linux:CPP : Test C++ application (yall_cpp), with Valgrind wrapper
+# * Windows:Unit : Run unit testing binary (MSVC 14)
+# * Intall:DEB : Install Debian package on Debian container
+# * Install:RPM : Install RPM package on Fedora container
+#
+###############################
+Linux:Unit:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:test
+  dependencies:
+    - Linux:Release
+    - Version
+  script:
+    - ./build/binaries/yall_unit
+  after_script:
+    - cp -R build/tests/unit/CMakeFiles/yall_unit_src_obj.dir/__/__/src/* build/gcda
+  artifacts:
+    paths:
+      - build/gcda
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Linux:C:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:test
+  dependencies:
+    - Linux:Release
+  script:
+    - LD_LIBRARY_PATH=`pwd`/build/binaries python3 ./tests/validation/valgrind.py --binary `pwd`/build/binaries/yall_c
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Linux:CPP:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:test
+  dependencies:
+    - Linux:Release
+  script:
+    - LD_LIBRARY_PATH=`pwd`/build/binaries python3 ./tests/validation/valgrind.py --binary `pwd`/build/binaries/yall_cpp
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Windows:Unit:
+  stage: test
+  dependencies:
+    - Windows:MSVC14
+  before_script:
+    - copy external\bin\criterion.dll build\binaries\Release
+    - copy external\bin\pthreadVC2.dll build\binaries\Release
+    - cd build/binaries/Release
+  script:
+    - yall_unit.exe
+  tags:
+    - windows
+    - yall
+  except:
+    - tags
+
+Install:DEB:
+  stage: test
+  image: debian:latest
+  dependencies:
+    - Linux:Debug
+    - Linux:Release
+  script:
+    - dpkg -I build/packages/yall_*.deb
+    - dpkg -i build/packages/yall_*.deb
+    - dpkg -I build/packages/yall-dev_*.deb
+    - dpkg -i build/packages/yall-dev_*.deb
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Install:RPM:
+  stage: test
+  image: fedora:latest
+  dependencies:
+    - Linux:Debug
+    - Linux:Release
+  script:
+    - rpm -qip build/packages/yall-[0-9]*
+    - rpm -i build/packages/yall-[0-9]*
+    - rpm -qip build/packages/yall-devel-[0-9]*
+    - rpm -i build/packages/yall-devel-[0-9]*
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+###############################
+# Validation
+#
+# * Style : This job is used to test sources against checkstyle script. A
+#     wrapper is called to parse results and disable some options which are
+#     not relevant for this project.
+# * Coverage : Check the current unit tests coverage percentage. It should not
+#     be below 95% of the build will fail.
+#
+###############################
+Style:
+  stage: validation
+  image: $CI_REGISTRY_IMAGE:test
+  script:
+    - python3 ./tests/validation/checkstyle.py --sourcesDir `pwd`
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Coverage:
+  stage: validation
+  image: $CI_REGISTRY_IMAGE:test
+  dependencies:
+    - Linux:Unit
+  before_script:
+    - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file" warning
+    - mkdir -p build/gcov && cd build/gcov
+  script:
+    - gcov -abcfu -s ../.. `find .. -name "*.gcda"`
+  artifacts:
+    paths:
+      - build/gcov
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+###############################
+# Generate doc step
+#
+# * Doxygen : generate Doxygen documentation
+# * Coverage-report : generate HTML coverage report
+#
+###############################
+Doxygen:
+  stage: doc
+  image: $CI_REGISTRY_IMAGE:build
+  before_script:
+    - mkdir -p build
+    - mkdir -p public/doxygen
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
+  script:
+    - make -C build -j 9 doxygen_doc
+    - cp -R build/doc/doxygen/html/* public/doxygen
+  artifacts:
+    paths:
+      - public/doxygen
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+Coverage-report:
+  stage: doc
+  image: naccyde/yall:build
+  before_script:
+    - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file" warning
+    - mkdir -p public/coverage
+  dependencies:
+    - Linux:Unit
+    - Coverage
+  script:
+    - lcov --capture --directory build --output-file build/coverage.info
+    - genhtml build/coverage.info --output-directory public/coverage
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 hour
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+
+###############################
+# Deploy step
+#
+# pages : generate Gitlab pages output (and deploy it)
+# Archives : deploy archives to the server (currently failing as Gitlab API upload endpoint does not works https://gitlab.com/gitlab-com/support-forum/issues/2994)
+# Sonar : update Sonar statistics
+#
+###############################
+pages:
+  stage: deploy
+  image: $CI_REGISTRY_IMAGE:build
+  dependencies:
+    - Doxygen
+    - Coverage-report
+  script:
+    - sphinx-build -M html doc build/doc
+  after_script:
+    - cp -R build/doc/html/* public
+  artifacts:
+    paths:
+      - public
+  tags:
+    - linux
+    - yall
+  only:
+    - master
+  except:
+    - tags
+
+Deploy:
+  stage: deploy
+  image: $CI_REGISTRY_IMAGE:test
+  dependencies:
+    - Linux:Debug
+    - Linux:Release
+    - Windows:MSVC14
+    - Windows:MSVC12
+    - Version
+  script:
+    - python3 ./resources/python/release.py -k $GITLAB_API_KEY -i $CI_PROJECT_ID -p build/packages -c $CI_COMMIT_SHA -t $(cat build/version/version)
+  tags:
+    - linux
+    - yall
+  only:
+    - master
+  except:
+    - tags
+
+Sonar:
+  stage: deploy
+  image: $CI_REGISTRY_IMAGE:build
+  dependencies:
+    - Linux:Release
+    - Coverage
+    - Version
+  before_script:
+    - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
+    - find build/gcov -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
+  script:
+    - sonar-scanner -Dsonar.cfamily.build-wrapper-output=build/bw_output -Dproject.settings=.sonar-project.properties -Dsonar.projectBaseDir=./ -Dsonar.cfamily.gcov.reportsPath=build/gcov -Dsonar.login=$SONAR_API_KEY -Dsonar.projectVersion=`cat /build/version/version`
+  tags:
+    - linux
+    - yall
+  only:
+    - master
+  except:
+    - tags

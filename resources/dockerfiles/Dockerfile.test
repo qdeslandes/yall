@@ -1,0 +1,20 @@
+# Copyright (C) 2017 Quentin "Naccyde" Deslandes.
+# Redistribution and use of this file is allowed according to the terms of the MIT license.
+# For details see the LICENSE file distributed with yall.
+
+FROM debian:stretch
+
+LABEL maintainer="naccyde@naccyde.eu"
+
+ENV PYTHONIOENCODING=utf-8
+RUN apt-get update && \
+	apt-get install --no-install-recommends -y python3 python3-requests lcov perl valgrind wget ca-certificates bzip2
+
+# Install Criterion
+RUN wget https://github.com/Snaipe/Criterion/releases/download/v2.3.2/criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	tar jxf criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	rm -f criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+	cp -R criterion-v2.3.2/* / && \
+	rm -rf criterion-v2.3.2
+
+CMD /bin/sh
