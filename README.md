@@ -1,17 +1,17 @@
-# YALL
+# yall
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
 
 [![!][1b]][1l] [![!][2b]][2l] [![!][3b]][3l] [![!][4b]][4l]
 
-YALL is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
+`yall` is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
 
-YALL is available on Linux and Windows (MSVC12 and MSVC14).
+`yall` is available on Linux and Windows (MSVC12 and MSVC14).
 
 
 ## How to use
 
-Informations about how to use YALL can be found on the [project wiki](https://naccyde.gitlab.io/yall/). As the documentation is under redaction, the old one can be found in [Git history](https://gitlab.com/naccyde/yall/blob/755569d405948297665aeaad41d4bb9f7856ad35/README.md).
+Informations about how to use `yall` can be found on the [project wiki](https://naccyde.gitlab.io/yall/). As the documentation is under redaction, the old one can be found in [Git history](https://gitlab.com/naccyde/yall/blob/755569d405948297665aeaad41d4bb9f7856ad35/README.md).
 
 The major steps are :
   * Initialize the library
@@ -21,7 +21,7 @@ The major steps are :
 
 ## Build
 
-Git LFS is required to clone the repository. YALL use CMake as build system generator, so, ensure CMake is installed on your system (version `3.6` minimum). The following dependencies are also required :
+Git LFS is required to clone the repository. yall use CMake as build system generator, so, ensure CMake is installed on your system (version `3.6` minimum). The following dependencies are also required :
 
 * `gcc` and `g++`.
 * `pthread` : a [Windows version](https://sourceforge.net/projects/pthreads4w/) is available. Installed by default on Linux.
@@ -29,6 +29,7 @@ Git LFS is required to clone the repository. YALL use CMake as build system gene
 * `criterion` : available on [Github](https://github.com/Snaipe/Criterion). Used for unit testing. On Windows, it is available inside `external` folder.
 * `valgrind` (optional, Linux only) : some tests scripts use it to test the library.
 * `rpmbuild` and `debbuild` (optional, Linux only) : to generate Linux packages.
+* `python-sphinx`, `python-sphinx-rtd-theme` and `breathe` (optional, Linux) : to build the user documentation.
 
 Then :
 

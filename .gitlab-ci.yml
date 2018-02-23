@@ -341,7 +341,6 @@ Doxygen:
   stage: doc
   image: $CI_REGISTRY_IMAGE:build
   before_script:
-    - mkdir -p build
     - mkdir -p public/doxygen
     - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
   script:
@@ -350,6 +349,7 @@ Doxygen:
   artifacts:
     paths:
       - public/doxygen
+      - build/doc/doxygen/xml
     expire_in: 1 hour
   tags:
     - linux
@@ -393,10 +393,14 @@ pages:
   dependencies:
     - Doxygen
     - Coverage-report
+  before_script:
+    - mkdir -p public
+    - mkdir -p build/doc/user
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
   script:
-    - sphinx-build -M html doc build/doc
+    - sphinx-build -c build doc build/doc/user
   after_script:
-    - cp -R build/doc/html/* public
+    - cp -R build/doc/user/* public
   artifacts:
     paths:
       - public
@@ -407,6 +411,30 @@ pages:
     - master
   except:
     - tags
+
+UserDoc:
+  stage: deploy
+  image: $CI_REGISTRY_IMAGE:build
+  dependencies:
+    - Doxygen
+    - Coverage-report
+  before_script:
+    - mkdir -p public
+    - mkdir -p build/doc/user
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
+  script:
+    - sphinx-build -c build doc build/doc/user
+  after_script:
+    - cp -R build/doc/user/* public
+  artifacts:
+    paths:
+      - public
+  tags:
+    - linux
+    - yall
+  except:
+    - tags
+    - master
 
 Deploy:
   stage: deploy
