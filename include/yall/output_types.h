@@ -38,9 +38,16 @@
  *	\brief Subsystem log message will be wrote in file.
  */
 enum yall_output_type {
-	yall_inherited_output   = 0,
-	yall_console_output     = 1 << 0,
+	yall_inherited_output	= 0,
+	yall_console_output	= 1 << 0,
 	yall_file_output	= 1 << 1
 };
+
+/**
+ * \brief Returns the output type corresponding to the given output type string.
+ * \param str Output type as a string.
+ * \retun Output type as a yall_output_type.
+ */
+enum yall_output_type str_to_output_type(const char *str);
 
 #endif

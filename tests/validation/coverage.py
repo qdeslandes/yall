@@ -29,7 +29,7 @@ def main(argv):
             exit(e.errno)
 
     c = YallCommand()
-    c.cmd = 'gcov -abcfu -s ' + args.sourcesDir + ' `find ' + args.gcdaDir + ' -name "*.gcda"`'
+    c.cmd = 'gcov -fr -s ' + args.sourcesDir + ' `find ' + args.gcdaDir + ' -name "*.gcda"`'
     c.env = customEnv
     c.cwd = args.outDir
     c.analyzer = coverageAnalyzer

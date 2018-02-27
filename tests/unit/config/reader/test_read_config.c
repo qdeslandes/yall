@@ -22,45 +22,12 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
+#include "config/test_config.h"
 
-#include <string.h>
-
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
-
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
-
-const char *get_log_level_name(enum yall_log_level log_level)
+/*
+ * File does not exists
+ */
+Test(config_reader, test_read_config0)
 {
-	return log_level_str[log_level].log_level_pretty_name;
-}
-
-enum yall_log_level str_to_log_level(const char *str)
-{
-	enum yall_log_level ll = yall_debug;
-
-	if (! str)
-		return ll;
-
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
-
-	return ll;
+	cr_assert_eq(YALL_JSON_CANT_READ_CONFIG, read_config("invalid"));
 }

@@ -22,45 +22,20 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
+#ifndef _YALL_CONFIG_READER_H
+#define _YALL_CONFIG_READER_H
 
-#include <string.h>
+#include "yall/error.h"
+#include "yall/utils.h"
 
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
+/**
+ * \brief Read the content of the given filename as a configuration. This
+ *	configuration should be stored in JSON format. For more informations
+ *	about object names, see documentation.
+ * \param filename Name of the file containing the configuration to apply. Can
+ *	be a relative or absolute path.
+ * \return Error code depending the result of the function.
+ */
+yall_error read_config(const char *filename);
 
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
-
-const char *get_log_level_name(enum yall_log_level log_level)
-{
-	return log_level_str[log_level].log_level_pretty_name;
-}
-
-enum yall_log_level str_to_log_level(const char *str)
-{
-	enum yall_log_level ll = yall_debug;
-
-	if (! str)
-		return ll;
-
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
-
-	return ll;
-}
+#endif

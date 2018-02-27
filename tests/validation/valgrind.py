@@ -18,10 +18,14 @@ def main(argv):
 
     parser = argparse.ArgumentParser(description='Run Valgrind on yall test binaries and analyze output')
     parser.add_argument('--binary', required=True, help='Binary to run with Valgrind')
+    parser.add_argument('--config', help='Configuration file to use with yall')
     args = parser.parse_args()
 
+    if not args.config:
+        args.config = ''
+
     c = YallCommand()
-    c.cmd = 'valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.binary
+    c.cmd = 'valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1337 ' + args.binary + ' ' + args.config
     c.env = customEnv
     c.analyzer = valgrindAnalyzer
 

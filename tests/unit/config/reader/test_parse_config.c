@@ -22,45 +22,44 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
+#include "config/test_config.h"
 
-#include <string.h>
+#include <jansson.h>
+#include "yall/config/reader.h"
 
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
+extern yall_error parse_config(json_t *config);
 
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
-
-const char *get_log_level_name(enum yall_log_level log_level)
+/*
+ * Proper parameters
+ */
+Test(config_reader, test_parse_config0)
 {
-	return log_level_str[log_level].log_level_pretty_name;
+	cr_assert_eq(YALL_SUCCESS, parse_config(json_object()));
 }
 
-enum yall_log_level str_to_log_level(const char *str)
+/*
+ * NULL parameter
+ */
+Test(config_reader, test_parse_config1)
 {
-	enum yall_log_level ll = yall_debug;
+	cr_assert_eq(YALL_SUCCESS, parse_config(NULL));
+}
 
-	if (! str)
-		return ll;
+/*
+ * Invalid JSON object type
+ */
+Test(config_reader, test_parse_config2)
+{
+	cr_assert_eq(YALL_SUCCESS, parse_config(json_array()));
+}
 
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
-
-	return ll;
+/*
+ * Validate remain coverage line
+ */
+Test(config_reader, test_parse_config3)
+{
+	json_t *r = json_object();
+	json_object_set(r, "testing", json_string("testing"));
+	
+	parse_config(r);
 }

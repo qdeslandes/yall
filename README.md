@@ -25,6 +25,7 @@ Git LFS is required to clone the repository. yall use CMake as build system gene
 
 * `gcc` and `g++`.
 * `pthread` : a [Windows version](https://sourceforge.net/projects/pthreads4w/) is available. Installed by default on Linux.
+* `jansson` : JSON parsing library.
 * `doxygen` : used to generate documentation.
 * `criterion` : available on [Github](https://github.com/Snaipe/Criterion). Used for unit testing. On Windows, it is available inside `external` folder.
 * `valgrind` (optional, Linux only) : some tests scripts use it to test the library.

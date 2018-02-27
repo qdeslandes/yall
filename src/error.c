@@ -58,7 +58,14 @@ static struct yall_errordesc errordesc[] = {
 
 	YALL_ERROR(YALL_CANT_CREATE_SUBSYS, "Could not create subsystem."),
 
-	YALL_ERROR(YALL_CANT_CREATE_THREAD, "Writing thread can't be created.")
+	YALL_ERROR(YALL_CANT_CREATE_THREAD, "Writing thread can't be created."),
+
+	YALL_ERROR(YALL_JSON_CANT_READ_CONFIG,
+		"Could not read JSON configuration."),
+	YALL_ERROR(YALL_JSON_UNDECLARED_SUBSYS,
+		"Undefined subsystem in JSON configuration."),
+	YALL_ERROR(YALL_JSON_CIRCLE_DEPENDENCY,
+		"Circle dependency detected in JSON subsystems.")
 };
 
 const char *yall_strerror(yall_error err)

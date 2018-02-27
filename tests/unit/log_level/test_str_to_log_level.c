@@ -22,45 +22,28 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
-
-#include <string.h>
+#include "test_log_level.h"
 
 struct log_level_str_set {
 	const char *log_level_name;
 	const char *log_level_pretty_name;
 };
 
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
+extern struct log_level_str_set log_level_str[8];
 
-const char *get_log_level_name(enum yall_log_level log_level)
+/*
+ * Valid log level
+ */
+Test(log_level, test_str_to_log_level0)
 {
-	return log_level_str[log_level].log_level_pretty_name;
+	for (int i = 0; i < 8; ++i) 
+		cr_assert_eq(i, str_to_log_level(log_level_str[i].log_level_name));
 }
 
-enum yall_log_level str_to_log_level(const char *str)
+/*
+ * Invalid log level
+ */
+Test(log_level, test_str_to_log_level1)
 {
-	enum yall_log_level ll = yall_debug;
-
-	if (! str)
-		return ll;
-
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
-
-	return ll;
+	cr_assert_eq(yall_debug, str_to_log_level("invalid"));
 }

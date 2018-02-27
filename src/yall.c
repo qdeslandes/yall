@@ -89,6 +89,21 @@ uint16_t yall_is_init(void)
 	return initialized;
 }
 
+yall_error yall_load_configuration(const char *filepath)
+{
+	yall_error ret = YALL_SUCCESS;
+
+	if (! initialized) {
+		ret = YALL_NOT_INIT;
+		goto end;
+	}
+
+	ret = read_config(filepath);
+
+end:
+	return ret;
+}
+
 yall_error yall_log(const char *subsystem,
 	enum yall_log_level log_level,
 	const char *function,

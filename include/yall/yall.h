@@ -37,10 +37,11 @@ extern "C" {
 #include "yall/error.h"
 #include "yall/utils.h"
 #include "yall/debug.h"
-#include "yall/config.h"
+#include "yall/config/parameters.h"
 #include "yall/log_level.h"
 #include "yall/output_types.h"
 #include "yall/subsystem.h"
+#include "yall/config/reader.h"
 
 /*
  * These functions are defined inside subsystem.c, but due to incompatibility
@@ -81,6 +82,15 @@ _YALL_PUBLIC yall_error yall_init(void);
  * \return The value of the initializations counter.
  */
 _YALL_PUBLIC uint16_t yall_is_init(void);
+
+/**
+ * \brief Load the configuration stored in the parameter. This configuration
+ *	file can store a list of configuration parameters and a list of
+ *	subsystems to define.
+ * \param filepath Path to the configuration file.
+ * \return Error code whether the configuration has been loaded.
+ */
+_YALL_PUBLIC yall_error yall_load_configuration(const char *filepath);
 
 /**
  * \brief Major logging function, used to forge the message and write it on the

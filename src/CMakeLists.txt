@@ -20,7 +20,7 @@ if (UNIX)
 		-Wwrite-strings -Waggregate-return -Wuninitialized
 		-Wduplicated-cond -Wlogical-op -Wnull-dereference -Wdouble-promotion
 		-fvisibility=hidden -fPIC)
-	set(_PVT_OPT_DEBUG  -O0)
+	set(_PVT_OPT_DEBUG  -O0 -g)
 	set(_PVT_OPT_RELEASE -O3 -Werror)
 elseif (WIN32)
 	# Compile options
@@ -66,7 +66,8 @@ target_include_directories(yall
 
 target_link_libraries(yall
 	PUBLIC
-		pthread::pthread)
+		pthread::pthread
+		jansson::jansson)
 
 
 #[[
