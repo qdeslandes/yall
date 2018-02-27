@@ -95,13 +95,14 @@ target_compile_options(yall_unit
 
 target_include_directories(yall_unit
 	PRIVATE
-        ${CMAKE_SOURCE_DIR}/include
+		${CMAKE_SOURCE_DIR}/include
 		${CMAKE_BINARY_DIR}/generated_headers
 		${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(yall_unit
 	PRIVATE
 		pthread::pthread
+		jansson::jansson
 		criterion::criterion
 		$<IF:$<C_COMPILER_ID:GNU>,m,>
 		$<IF:$<C_COMPILER_ID:GNU>,gcov,>)
@@ -116,14 +117,14 @@ endif ()
 	Coverage informations
 #]]
 
-add_custom_target(__coverage_prepare
-	COMMAND mkdir -p coverage
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-	COMMENT "Prepare coverage target")
-
 add_custom_target(coverage
-	COMMAND gcov -abcfu `find ${CMAKE_BINARY_DIR} -name \"*.gcda\"`
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
+	COMMAND python3 tests/validation/coverage.py --sourcesDir ${CMAKE_SOURCE_DIR} --outDir ${CMAKE_BINARY_DIR}/coverage --gcdaDir ${CMAKE_BINARY_DIR}
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	COMMENT "Run coverage target")
 
-add_dependencies(coverage __coverage_prepare)
+add_custom_target(html_coverage
+	COMMAND lcov --base-directory ${CMAKE_SOURCE_DIR} --directory ${CMAKE_BINARY_DIR} -c -o ${CMAKE_BINARY_DIR}/coverage.info
+	COMMAND lcov --remove ${CMAKE_BINARY_DIR}/coverage.info "*jansson*" -o ${CMAKE_BINARY_DIR}/coverage.info
+	COMMAND genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	COMMENT "Generate unit coverage HTML report")

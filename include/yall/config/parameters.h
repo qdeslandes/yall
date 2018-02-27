@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_CONFIG_H
-#define _YALL_CONFIG_H
+#ifndef _YALL_CONFIG_PARAMETERS_H
+#define _YALL_CONFIG_PARAMETERS_H
 
 #include <stdint.h>
 

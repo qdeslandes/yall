@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "test_config.h"
+#include "config/test_config.h"
 
 extern struct yall_config current_config;
 extern struct yall_config default_config;

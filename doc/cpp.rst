@@ -11,7 +11,6 @@ This class defines, as static, all the functions to manage the library :
     Yall::init();
     Yall::setSubsystem(...)
     Yall::closeAll();
-    ...
 
 Configuration
 *******************
@@ -24,7 +23,6 @@ To manage the configuration of the library, ``Yall`` provides a ``config`` metho
     Yall::config().setTabWidth(...);
     Yall::config().resetCallHeaderTemplate(...);
     Yall::config().getTabWidth();
-    ...
 
 Logging macros
 *******************
@@ -35,7 +33,6 @@ In C++, ``yall`` does not use ``printf()`` like format but C++ string streams, w
 
     VTS_EMERG("subsystem", "An error occured : " << string(e.what()));
     VTS_INFO("subsystem", "Current date is " << date());
-    ...
 
 Custom logging function
 ***********************

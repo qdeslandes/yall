@@ -22,45 +22,23 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
+#include "yall/output_types.h"
 
 #include <string.h>
 
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
-
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
-
-const char *get_log_level_name(enum yall_log_level log_level)
+enum yall_output_type str_to_output_type(const char *str)
 {
-	return log_level_str[log_level].log_level_pretty_name;
-}
-
-enum yall_log_level str_to_log_level(const char *str)
-{
-	enum yall_log_level ll = yall_debug;
+	enum yall_output_type ot = yall_console_output;
 
 	if (! str)
-		return ll;
+		return ot;
 
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
+	if (strcmp("yall_console_output", str) == 0)
+		ot = yall_console_output;
+	else if (strcmp("yall_file_output", str) == 0)
+		ot = yall_file_output;
+	else if (strcmp("yall_inherited_output", str) == 0)
+		ot = yall_inherited_output;
 
-	return ll;
+	return ot;
 }

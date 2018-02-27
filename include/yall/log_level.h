@@ -46,9 +46,18 @@ enum yall_log_level {
 
 /**
  * \brief From a log level, it returns its name as a nul-terminated string. This
- *	string must not be freed.
+ *	string must not be freed. This function is used in log messages to get
+ *	the explicit log level string capitalized, without "yall" prefix.
  * \param log_level Log level we want the name.
+ * \return Log level as a string.
  */
 const char *get_log_level_name(enum yall_log_level log_level);
+
+/**
+ * \brief Returns the log level corresponding to the given log level string.
+ * \param str Log level as a string.
+ * \retun Log level as a yall_log_level.
+ */
+enum yall_log_level str_to_log_level(const char *str);
 
 #endif

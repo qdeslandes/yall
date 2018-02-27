@@ -7,7 +7,7 @@ FROM debian:stretch
 LABEL maintainer="naccyde@naccyde.eu"
 
 RUN apt-get update && \
-	apt-get install --no-install-recommends -y unzip wget ca-certificates bzip2 make libc6-dev g++ doxygen rpm lcov python-pip python-setuptools python-sphinx python-sphinx-rtd-theme python-breathe && \
+	apt-get install --no-install-recommends -y unzip wget ca-certificates bzip2 make libc6-dev g++ doxygen rpm lcov python-pip python-sphinx python-sphinx-rtd-theme python-breathe python-setuptools libjansson-dev && \
 	rm -rf /var/lib/apt/lists/* && \
 	apt autoremove -y && \
 	apt-get clean -y

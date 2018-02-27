@@ -55,17 +55,23 @@ typedef enum {
 
 	YALL_CANT_CREATE_THREAD	= 0x10,
 
+	YALL_JSON_CANT_READ_CONFIG	= 0x11,
+	YALL_JSON_UNDECLARED_SUBSYS	= 0x12,
+	YALL_JSON_CIRCLE_DEPENDENCY	= 0x13,
+
 	/*
 	 * This is used to check if the given code is defined. It is ugly, but
 	 * it's the best I can currently find.
 	 */
-	yall_err_end		= 0x11
+	yall_err_end		= 0x14
 } yall_error;
 
 /**
  * \brief Returns a nul-terminated string of an explicit error message about
  *	the given yall_error variable.
  * \param err yall_error we want to get the description string.
+ * \return Error message corresponding to the error given. If there is not such
+ *	error, returns a default error message.
  */
 _YALL_PUBLIC const char *yall_strerror(yall_error err);
 

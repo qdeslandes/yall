@@ -22,45 +22,38 @@
  * SOFTWARE.
  */
 
-#include "yall/log_level.h"
+#include "config/test_config.h"
 
-#include <string.h>
+#include <jansson.h>
 
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
+extern yall_error parse_json_config(json_t *root);
 
-static struct log_level_str_set log_level_str[9] = {
-	{ "yall_debug", "DEBUG" },
-	{ "yall_info", "INFO" },
-	{ "yall_notice", "NOTICE" },
-	{ "yall_warning", "WARNING" },
-	{ "yall_error", "ERROR" },
-	{ "yall_crit", "CRITICAL" },
-	{ "yall_alert", "ALERT" },
-	{ "yall_emerg", "EMERGENCY" },
-	{ "yall_inherited_level", "INHERIT" }
-};
-
-const char *get_log_level_name(enum yall_log_level log_level)
+/*
+ * Undeclared subsystem
+ */
+Test(config_reader, test_parse_json_config0)
 {
-	return log_level_str[log_level].log_level_pretty_name;
+	json_t *root = json_object();
+	json_t *subsys = json_object();
+	json_t *subsys_root = json_object();
+	json_object_set(subsys_root, "parent", json_string("invalid"));
+	json_object_set(subsys, "root", subsys_root);
+	json_object_set(root, "subsystems", subsys);
+
+	cr_assert_eq(YALL_JSON_UNDECLARED_SUBSYS, parse_json_config(root));
 }
 
-enum yall_log_level str_to_log_level(const char *str)
+/*
+ * Success
+ * yall_set_subsystem() is called, so the library should be initialized
+ */
+Test(config_reader, test_parse_json_config1, .init=test_config_json_subsystems_init, .fini=test_config_json_subsystems_clean)
 {
-	enum yall_log_level ll = yall_debug;
+	json_t *root = json_object();
+	json_t *subsys = json_object();
+	json_t *subsys_root = json_object();
+	json_object_set(subsys, "root", subsys_root);
+	json_object_set(root, "subsystems", subsys);
 
-	if (! str)
-		return ll;
-
-	for (int i = 0; i < 9; ++i) {
-		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
-			ll = i;
-			break;
-		}
-	}
-
-	return ll;
+	cr_assert_eq(YALL_SUCCESS, parse_json_config(root));
 }

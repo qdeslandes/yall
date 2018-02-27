@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "yall/config.h"
+#include "yall/config/parameters.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "yall/config.h"
+#include "yall/config/parameters.h"
 
 // TODO : remove the limited line length
 
