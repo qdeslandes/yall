@@ -22,23 +22,38 @@
  * SOFTWARE.
  */
 
-#include "test_output_types.h"
+#ifndef _YALL_OUTPUT_TYPES_H
+#define _YALL_OUTPUT_TYPES_H
 
-/*
- * Valid output type
- */
-Test(log_level, test_str_to_output_types0)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type("yall_console_output"));
-	cr_assert_eq(yall_file_output, str_to_output_type("yall_file_output"));
-	cr_assert_eq(yall_syslog_output, str_to_output_type("yall_syslog_output"));
-}
+#include "yall/output/console.h"
+#include "yall/output/file.h"
 
-/*
- * Invalid output type
+/**
+ * \enum yall_output_type
+ * \brief This enum stores all the different output types for the subsystems.
+ *	These values has to be power of 2, as they can be combined to write on
+ *	multiple outputs.
+ * \var yall_output_type::yall_inherited_output
+ *	\brief Subsystem inherit its output type from its parent.
+ * \var yall_output_type::yall_console_output
+ *	\brief Subsystem log message will be wrote on console.
+ * \var yall_output_type::yall_file_output
+ *	\brief Subsystem log message will be wrote in file.
+ * \var yall_output_type::yall_syslog_output
+ *	\brief Subsystem log message will be redirected to syslog.
  */
-Test(log_level, test_str_to_output_types1)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type(NULL));
-	cr_assert_eq(yall_console_output, str_to_output_type("invalid"));
-}
+enum yall_output_type {
+	yall_inherited_output	= 0,
+	yall_console_output	= 1 << 0,
+	yall_file_output	= 1 << 1,
+	yall_syslog_output	= 1 << 2
+};
+
+/**
+ * \brief Returns the output type corresponding to the given output type string.
+ * \param str Output type as a string.
+ * \retun Output type as a yall_output_type.
+ */
+enum yall_output_type str_to_output_type(const char *str);
+
+#endif

@@ -162,7 +162,7 @@ yall_error yall_log(const char *subsystem,
 
 	// Allocate the log message buffer
 	buff = malloc(buff_len);
-	m = message_new(buff, log_level, p.output_type, p.output_file);
+	m = message_new(buff, log_level, &p);
 
 	/*
 	 * Header generation, hdr_len does not take in account the '\0', so
@@ -234,7 +234,7 @@ yall_error yall_call_log(const char *subsystem,
 	buff_len = hdr_len + d.message_size + 1;
 
 	buff = malloc(buff_len);
-	m = message_new(buff, log_level, p.output_type, p.output_file);
+	m = message_new(buff, log_level, &p);
 
 	generate_call_hdr(buff, hdr_len + 1, &hc);
 	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);

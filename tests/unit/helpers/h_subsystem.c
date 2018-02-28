@@ -38,14 +38,12 @@ struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_f
         s->childs = NULL;
         s->previous = NULL;
         s->next = NULL;
-        s->output_file = NULL;
+        s->file.filename = NULL;
 
         strcpy(s->name, name);
 
-        if (output_file) {
-                s->output_file = malloc(strlen(output_file) + 1);
-                strcpy(s->output_file, output_file);
-        }
+        if (output_file)
+                s->file.filename = strdup(output_file);
 
         s->log_level = yall_debug;
         s->output_type = yall_console_output;
@@ -58,7 +56,7 @@ struct yall_subsystem *get_fake_subsystem(const char *name, const char *output_f
 
 void free_fake_subsystem(struct yall_subsystem *s)
 {
-        free(s->output_file);
+        free((char *)s->file.filename);
         free(s);
 }
 
@@ -72,7 +70,7 @@ void create_subsystems(void)
 
         _subsystems[0]->log_level = yall_debug;
         _subsystems[0]->output_type = yall_console_output;
-        _subsystems[0]->output_file = NULL;
+        _subsystems[0]->file.filename = NULL;
         _subsystems[0]->status = yall_subsys_enable;
         _subsystems[0]->delete_old_log_file = true;
         _subsystems[0]->previous = NULL;
@@ -88,7 +86,7 @@ void create_subsystems(void)
 
         _subsystems[4]->log_level = yall_inherited_level;
         _subsystems[4]->output_type = yall_inherited_output;
-        _subsystems[4]->output_file = NULL;
+        _subsystems[4]->file.filename = NULL;
         _subsystems[4]->status = yall_subsys_enable;
         _subsystems[4]->delete_old_log_file = true;
         _subsystems[4]->previous = NULL;
@@ -104,7 +102,7 @@ void create_subsystems(void)
 
         _subsystems[5]->log_level = yall_inherited_level;
         _subsystems[5]->output_type = yall_inherited_output;
-        _subsystems[5]->output_file = NULL;
+        _subsystems[5]->file.filename = NULL;
         _subsystems[5]->status = yall_subsys_enable;
         _subsystems[5]->delete_old_log_file = true;
         _subsystems[5]->previous = _subsystems[4];
@@ -122,7 +120,7 @@ void create_subsystems(void)
 
         _subsystems[6]->log_level = yall_warning;
         _subsystems[6]->output_type = yall_console_output;
-        _subsystems[6]->output_file = NULL;
+        _subsystems[6]->file.filename = NULL;
         _subsystems[6]->status = yall_subsys_enable;
         _subsystems[6]->delete_old_log_file = true;
         _subsystems[6]->previous = _subsystems[5];
@@ -140,7 +138,7 @@ void create_subsystems(void)
 
         _subsystems[1]->log_level = yall_notice;
         _subsystems[1]->output_type = yall_console_output;
-        _subsystems[1]->output_file = NULL;
+        _subsystems[1]->file.filename = NULL;
         _subsystems[1]->status = yall_subsys_enable;
         _subsystems[1]->delete_old_log_file = true;
         _subsystems[1]->previous = _subsystems[0];
@@ -158,7 +156,7 @@ void create_subsystems(void)
 
         _subsystems[2]->log_level = yall_warning;
         _subsystems[2]->output_type = yall_console_output;
-        _subsystems[2]->output_file = NULL;
+        _subsystems[2]->file.filename = NULL;
         _subsystems[2]->status = yall_subsys_enable;
         _subsystems[2]->delete_old_log_file = true;
         _subsystems[2]->previous = _subsystems[1];
@@ -176,7 +174,7 @@ void create_subsystems(void)
 
         _subsystems[7]->log_level = yall_inherited_level;
         _subsystems[7]->output_type = yall_console_output;
-        _subsystems[7]->output_file = NULL;
+        _subsystems[7]->file.filename = NULL;
         _subsystems[7]->status = yall_subsys_enable;
         _subsystems[7]->delete_old_log_file = true;
         _subsystems[7]->previous = NULL;
@@ -192,7 +190,7 @@ void create_subsystems(void)
 
         _subsystems[8]->log_level = yall_inherited_level;
         _subsystems[8]->output_type = yall_inherited_output;
-        _subsystems[8]->output_file = NULL;
+        _subsystems[8]->file.filename = NULL;
         _subsystems[8]->status = yall_subsys_enable;
         _subsystems[8]->delete_old_log_file = true;
         _subsystems[8]->previous = NULL;
@@ -208,7 +206,7 @@ void create_subsystems(void)
 
         _subsystems[9]->log_level = yall_debug;
         _subsystems[9]->output_type = yall_inherited_output;
-        _subsystems[9]->output_file = NULL;
+        _subsystems[9]->file.filename = NULL;
         _subsystems[9]->status = yall_subsys_enable;
         _subsystems[9]->delete_old_log_file = true;
         _subsystems[9]->previous = _subsystems[8];
@@ -226,7 +224,7 @@ void create_subsystems(void)
 
         _subsystems[3]->log_level = yall_err;
         _subsystems[3]->output_type = yall_console_output;
-        _subsystems[3]->output_file = NULL;
+        _subsystems[3]->file.filename = NULL;
         _subsystems[3]->status = yall_subsys_enable;
         _subsystems[3]->delete_old_log_file = true;
         _subsystems[3]->previous = _subsystems[2];
@@ -244,7 +242,7 @@ void create_subsystems(void)
 
         _subsystems[10]->log_level = yall_debug;
         _subsystems[10]->output_type = yall_console_output;
-        _subsystems[10]->output_file = NULL;
+        _subsystems[10]->file.filename = NULL;
         _subsystems[10]->status = yall_subsys_enable;
         _subsystems[10]->delete_old_log_file = true;
         _subsystems[10]->previous = _subsystems[3];
@@ -262,7 +260,7 @@ void create_subsystems(void)
 
         _subsystems[11]->log_level = yall_err;
         _subsystems[11]->output_type = yall_console_output;
-        _subsystems[11]->output_file = NULL;
+        _subsystems[11]->file.filename = NULL;
         _subsystems[11]->status = yall_subsys_enable;
         _subsystems[11]->delete_old_log_file = true;
         _subsystems[11]->previous = NULL;
@@ -280,7 +278,7 @@ void create_subsystems(void)
 
         _subsystems[12]->log_level = yall_inherited_level;
         _subsystems[12]->output_type = yall_console_output;
-        _subsystems[12]->output_file = NULL;
+        _subsystems[12]->file.filename = NULL;
         _subsystems[12]->status = yall_subsys_enable;
         _subsystems[12]->delete_old_log_file = true;
         _subsystems[12]->previous = NULL;
@@ -298,7 +296,7 @@ void create_subsystems(void)
 
         _subsystems[13]->log_level = yall_inherited_level;
         _subsystems[13]->output_type = yall_console_output;
-        _subsystems[13]->output_file = NULL;
+        _subsystems[13]->file.filename = NULL;
         _subsystems[13]->status = yall_subsys_enable;
         _subsystems[13]->delete_old_log_file = true;
         _subsystems[13]->previous = _subsystems[11];
@@ -316,7 +314,7 @@ void create_subsystems(void)
 
         _subsystems[14]->log_level = yall_inherited_level;
         _subsystems[14]->output_type = yall_console_output;
-        _subsystems[14]->output_file = NULL;
+        _subsystems[14]->file.filename = NULL;
         _subsystems[14]->status = yall_subsys_enable;
         _subsystems[14]->delete_old_log_file = true;
         _subsystems[14]->previous = NULL;
@@ -334,7 +332,7 @@ void create_subsystems(void)
 
         _subsystems[15]->log_level = yall_debug;
         _subsystems[15]->output_type = yall_console_output;
-        _subsystems[15]->output_file = NULL;
+        _subsystems[15]->file.filename = NULL;
         _subsystems[15]->status = yall_subsys_enable;
         _subsystems[15]->delete_old_log_file = true;
         _subsystems[15]->previous = _subsystems[10];

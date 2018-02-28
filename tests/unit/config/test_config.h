@@ -31,6 +31,7 @@
 #include "helpers/h_utils.h"
 #include "yall/config/parameters.h"
 #include "yall/error.h"
+#include "yall/subsystem.h"
 
 void test_config_config_setup(void);
 void test_config_config_clean(void);

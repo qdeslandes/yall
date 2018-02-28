@@ -22,23 +22,22 @@
  * SOFTWARE.
  */
 
-#include "test_output_types.h"
+#include "writer/test_writer.h"
+
+#include "yall/writer/file.h"
 
 /*
- * Valid output type
+ * Should fail
  */
-Test(log_level, test_str_to_output_types0)
+Test(writer_file, test_write_log_file0)
 {
-	cr_assert_eq(yall_console_output, str_to_output_type("yall_console_output"));
-	cr_assert_eq(yall_file_output, str_to_output_type("yall_file_output"));
-	cr_assert_eq(yall_syslog_output, str_to_output_type("yall_syslog_output"));
+	disable_fopen();
+	cr_assert_eq(write_log_file("./yall_unit_test_out.log", "test"), YALL_FILE_OPEN_ERR);
+	enable_fopen();
 }
 
-/*
- * Invalid output type
- */
-Test(log_level, test_str_to_output_types1)
+Test(writer_file, test_write_log_file1)
 {
-	cr_assert_eq(yall_console_output, str_to_output_type(NULL));
-	cr_assert_eq(yall_console_output, str_to_output_type("invalid"));
+	cr_assert_eq(write_log_file("./yall_unit_test_out.log", "test"), YALL_SUCCESS);
+	remove("./yall_unit_test_out.log");
 }

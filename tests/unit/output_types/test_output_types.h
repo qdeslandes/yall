@@ -29,7 +29,7 @@
 #include <criterion/redirect.h>
 
 #include "helpers/h_utils.h"
-#include "yall/output_types.h"
+#include "yall/output/types.h"
 #include "yall/error.h"
 
 #endif

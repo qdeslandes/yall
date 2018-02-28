@@ -22,23 +22,25 @@
  * SOFTWARE.
  */
 
-#include "test_output_types.h"
+#include "yall/output/types.h"
 
-/*
- * Valid output type
- */
-Test(log_level, test_str_to_output_types0)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type("yall_console_output"));
-	cr_assert_eq(yall_file_output, str_to_output_type("yall_file_output"));
-	cr_assert_eq(yall_syslog_output, str_to_output_type("yall_syslog_output"));
-}
+#include <string.h>
 
-/*
- * Invalid output type
- */
-Test(log_level, test_str_to_output_types1)
+enum yall_output_type str_to_output_type(const char *str)
 {
-	cr_assert_eq(yall_console_output, str_to_output_type(NULL));
-	cr_assert_eq(yall_console_output, str_to_output_type("invalid"));
+	enum yall_output_type ot = yall_console_output;
+
+	if (! str)
+		return ot;
+
+	if (strcmp("yall_console_output", str) == 0)
+		ot = yall_console_output;
+	else if (strcmp("yall_file_output", str) == 0)
+		ot = yall_file_output;
+	else if (strcmp("yall_syslog_output", str) == 0)
+		ot = yall_syslog_output;
+	else if (strcmp("yall_inherited_output", str) == 0)
+		ot = yall_inherited_output;
+
+	return ot;
 }

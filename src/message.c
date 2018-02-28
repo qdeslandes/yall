@@ -38,15 +38,14 @@
 
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
-	enum yall_output_type output_type,
-	const char *output_file)
+	struct yall_subsystem_params *p)
 {
 	struct message *msg = malloc(sizeof(struct message));
 
 	msg->data = data;
 	msg->log_level = log_level;
-	msg->output_type = output_type;
-	msg->output_file = output_file;
+	msg->output_type = p->output_type;
+	msg->file.filename = p->file.filename;
 
 	return msg;
 }

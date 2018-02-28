@@ -51,7 +51,7 @@ Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line), yall, 
 {
         uint8_t waiting_for = YALL_SUCCESS;
         uint8_t ret = yall_call_log(s, ll, f, F, line, tests_call_log_function, NULL);
-        struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "yall_default.log" };
+        struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, { 0 }, { "yall_default.log" } };
         _get_subsystem(s, subsystems, &p);
 
         if (ll < p.log_level)

@@ -32,7 +32,7 @@ static void tests_yall_setup(void)
 static void tests_yall_clean(void)
 {
         _tests_restore_stderr();
-        remove(default_params.output_file);
+        remove(default_params.file.filename);
 }
 
 TestSuite(yall, .init=tests_yall_setup, .fini=tests_yall_clean);

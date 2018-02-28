@@ -27,28 +27,47 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __linux__
+#include <syslog.h>
+#endif
+
 #include "yall/debug.h"
 #include "yall/header.h"
 
 // TODO : set C++ wrapper for these functions
 
+/*
+ * Default values
+ */
 static const struct yall_config default_config = {
 	.std_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
 	.call_header_template = "%-16.16s ::: %-9l :: %-17.17f :: %d : ",
-	.tab_width = 4
+	.tab_width = 4,
+	.syslog_ident = "yall",
+	.syslog_facility = yall_fac_user
 };
 
+/*
+ * Current values
+ */
 static struct yall_config current_config = {
 	.std_header_template = NULL,
 	.call_header_template = NULL,
-	.tab_width = 0
+	.tab_width = 0,
+	.syslog_ident = NULL,
+	.syslog_facility = 0
 };
 
+/*
+ * Setup
+ */
 void config_setup(void)
 {
 	yall_config_reset_std_header_template();
 	yall_config_reset_call_header_template();
 	yall_config_reset_tab_width();
+	yall_config_reset_syslog_ident();
+	yall_config_reset_syslog_facility();
 }
 
 void config_clean(void)
@@ -60,8 +79,16 @@ void config_clean(void)
 	current_config.call_header_template = NULL;
 
 	current_config.tab_width = 0;
+
+	free((void *)current_config.syslog_ident);
+	current_config.syslog_ident = NULL;
+
+	current_config.syslog_facility = 0;
 }
 
+/*
+ * Configuration parameters
+ */
 void yall_config_set_std_header_template(const char *std_header_template)
 {
 	free((void *)current_config.std_header_template);
@@ -112,4 +139,48 @@ void yall_config_reset_tab_width(void)
 uint8_t yall_config_get_tab_width(void)
 {
 	return current_config.tab_width;
+}
+
+void yall_config_set_syslog_ident(const char *ident)
+{
+	if (! ident)
+		return;
+
+	free((void *)current_config.syslog_ident);
+	current_config.syslog_ident = strdup(ident);
+
+#ifdef __linux__
+	closelog();
+	openlog(current_config.syslog_ident, 0, current_config.syslog_facility);
+#endif
+}
+
+void yall_config_reset_syslog_ident(void)
+{
+	yall_config_set_syslog_ident(default_config.syslog_ident);
+}
+
+const char *yall_config_get_syslog_ident(void)
+{
+	return current_config.syslog_ident;
+}
+
+void yall_config_set_syslog_facility(enum yall_syslog_facility f)
+{
+	current_config.syslog_facility = f;
+
+#ifdef __linux__
+	closelog();
+	openlog(current_config.syslog_ident, 0, current_config.syslog_facility);
+#endif
+}
+
+void yall_config_reset_syslog_facility(void)
+{
+	yall_config_set_syslog_facility(default_config.syslog_facility);
+}
+
+enum yall_syslog_facility yall_config_get_syslog_facility(void)
+{
+	return current_config.syslog_facility;
 }

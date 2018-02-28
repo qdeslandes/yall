@@ -22,23 +22,22 @@
  * SOFTWARE.
  */
 
-#include "test_output_types.h"
+#include "writer/test_writer.h"
 
-/*
- * Valid output type
- */
-Test(log_level, test_str_to_output_types0)
+#ifdef __linux__
+#include <syslog.h>
+
+extern int get_syslog_level(enum yall_log_level ll);
+
+Test(writer_syslog, test_get_syslog_level0)
 {
-	cr_assert_eq(yall_console_output, str_to_output_type("yall_console_output"));
-	cr_assert_eq(yall_file_output, str_to_output_type("yall_file_output"));
-	cr_assert_eq(yall_syslog_output, str_to_output_type("yall_syslog_output"));
+	cr_assert_eq(get_syslog_level(yall_debug), LOG_DEBUG);
+	cr_assert_eq(get_syslog_level(yall_info), LOG_INFO);
+	cr_assert_eq(get_syslog_level(yall_notice), LOG_NOTICE);
+	cr_assert_eq(get_syslog_level(yall_warning), LOG_WARNING);
+	cr_assert_eq(get_syslog_level(yall_err), LOG_ERR);
+	cr_assert_eq(get_syslog_level(yall_crit), LOG_CRIT);
+	cr_assert_eq(get_syslog_level(yall_alert), LOG_ALERT);
 }
 
-/*
- * Invalid output type
- */
-Test(log_level, test_str_to_output_types1)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type(NULL));
-	cr_assert_eq(yall_console_output, str_to_output_type("invalid"));
-}
+#endif

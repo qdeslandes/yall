@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-#include "test_output_types.h"
+#ifndef _YALL_OUTPUT_CONSOLE_H
+#define _YALL_OUTPUT_CONSOLE_H
 
-/*
- * Valid output type
- */
-Test(log_level, test_str_to_output_types0)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type("yall_console_output"));
-	cr_assert_eq(yall_file_output, str_to_output_type("yall_file_output"));
-	cr_assert_eq(yall_syslog_output, str_to_output_type("yall_syslog_output"));
-}
+#include <stdint.h>
 
-/*
- * Invalid output type
+/**
+ * \struct yall_console_output_config
+ * \brief This structure is used to store the set of console output type
+ *	parameters. Currently, no parameters are available for console output
+ *	type.
  */
-Test(log_level, test_str_to_output_types1)
-{
-	cr_assert_eq(yall_console_output, str_to_output_type(NULL));
-	cr_assert_eq(yall_console_output, str_to_output_type("invalid"));
-}
+struct yall_console_output_config {
+	uint8_t placeholder;
+};
+
+#endif

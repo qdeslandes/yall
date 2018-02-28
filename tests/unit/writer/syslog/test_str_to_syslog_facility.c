@@ -22,23 +22,15 @@
  * SOFTWARE.
  */
 
-#include "yall/output_types.h"
+#include "writer/test_writer.h"
 
-#include <string.h>
+#include "yall/writer/syslog.h"
 
-enum yall_output_type str_to_output_type(const char *str)
+Test(writer_syslog, test_str_to_syslog_facility0)
 {
-	enum yall_output_type ot = yall_console_output;
-
-	if (! str)
-		return ot;
-
-	if (strcmp("yall_console_output", str) == 0)
-		ot = yall_console_output;
-	else if (strcmp("yall_file_output", str) == 0)
-		ot = yall_file_output;
-	else if (strcmp("yall_inherited_output", str) == 0)
-		ot = yall_inherited_output;
-
-	return ot;
+	cr_assert_eq(str_to_syslog_facility("yall_fac_user"), yall_fac_user);
+	cr_assert_eq(str_to_syslog_facility("invalid"), yall_fac_user);
+	cr_assert_eq(str_to_syslog_facility("yall_fac_kern"), yall_fac_kern);
+	cr_assert_eq(str_to_syslog_facility("yall_fac_inherited"), yall_fac_inherited);
+	cr_assert_eq(str_to_syslog_facility("yall_fac_local1"), yall_fac_local1);
 }

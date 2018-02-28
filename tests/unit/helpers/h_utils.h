@@ -84,6 +84,9 @@ TESTS_REDEFINE_PROTO(pthread_create, (pthread_t *thread, const pthread_attr_t *a
 TESTS_REDEFINE_PROTO_LIGHT(malloc);
 void *_tests_malloc(size_t size);
 
+TESTS_REDEFINE_PROTO_LIGHT(fopen);
+FILE *_tests_fopen(const char *pathname, const char *mode);
+
 #ifdef __linux__
 TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
 TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));

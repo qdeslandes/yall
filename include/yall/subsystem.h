@@ -31,9 +31,55 @@
 #include "yall/utils.h"
 #include "yall/status.h"
 #include "yall/log_level.h"
-#include "yall/output_types.h"
+#include "yall/output/types.h"
 
 #define SUBSYS_NAME_LEN	 16
+
+/**
+ * \struct yall_subsystem
+ * \brief This structure contains all the parameters and configuration for a
+ *	given subsystem.
+ * \var yall_subsystem::name
+ *	\brief Name of the subsystem, can't be longer than SUBSYS_NAME_LEN
+ *	(including nul-terminating character).
+ * \var yall_subsystem::log_level
+ *	\brief Minimum log level for this subsystem. All log messages with a
+ *	lower log level will be discarded.
+ * \var yall_subsystem::status
+ *	\brief Status of the subsystem. Used as an atomic variable on linux.
+ *	See enum yall_subsys_status for more.
+ * \var yall_subsystem::output_type
+ *	\brief Defined output type for the subsystem. See enum yall_output_type
+ *	for more.
+ * \var yall_subsystem::console
+ *	\brief Store the console's output type configuration.
+ * \var yall_subsystem::file
+ *	\brief Store the file's output type configuration.
+ * \var yall_subsystem::parent
+ *	\brief Parent of the subsystem, can be NULL. If this value is set,
+ *	yall_inherited_xxxx can be set to some of the subsystem's parameters.
+ * \var yall_subsystem::childs
+ *	\brief List of the subsystem's childs, if any.
+ * \var yall_subsystem::previous
+ *	\brief Previous subsystem in the list.
+ * \var yall_subsystem::next
+ *	\brief Next subsystem in the list.
+ */
+struct yall_subsystem {
+	char name[SUBSYS_NAME_LEN];
+	enum yall_log_level log_level;
+	enum yall_subsys_status status;
+	enum yall_output_type output_type;
+	bool delete_old_log_file;
+	/* Configuration */
+	struct yall_console_output_config console;
+	struct yall_file_output_config file;
+	/* Node data */
+	struct yall_subsystem *parent;
+	struct yall_subsystem *childs;
+	struct yall_subsystem *previous;
+	struct yall_subsystem *next;
+};
 
 /**
  * \struct yall_subsystem_params
@@ -46,14 +92,17 @@
  *	\brief Current status of the requested subsystem.
  * \var yall_subsystem::output_type
  *	\brief Output type for the requested subsystem.
- * \var yall_subsystem::output_file
- *	\brief Output file for the request subsystem, can be NULL.
+ * \var yall_subsystem::console
+ *	\brief Console output type parameters.
+ * \var yall_subsystem::file
+ *	\brief File output type parameters.
  */
 struct yall_subsystem_params {
 	enum yall_log_level log_level;
 	enum yall_subsys_status status;
 	enum yall_output_type output_type;
-	const char *output_file;
+	struct yall_console_output_config console;
+	struct yall_file_output_config file;
 };
 
 /**

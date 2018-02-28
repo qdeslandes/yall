@@ -32,7 +32,7 @@
 #include "yall/debug.h"
 #include "yall/error.h"
 #include "yall/queue.h"
-#include "yall/output_types.h"
+#include "yall/output/types.h"
 #include "yall/message.h"
 #include "yall/writer/file.h"
 #include "yall/writer/console.h"
@@ -102,7 +102,10 @@ static void write_queue_messages(struct qnode *msg_queue)
 		write_log_console(m->log_level, m->data);
 
 	if (yall_file_output & m->output_type)
-		write_log_file(m->output_file, m->data);
+		write_log_file(m->file.filename, m->data);
+
+	if (yall_syslog_output & m->output_type)
+		write_log_syslog(m->log_level, m->data);
 
 	qnode_delete(msg_queue, message_delete_wrapper);
 }

@@ -30,8 +30,11 @@
 
 #include "yall/header.h"
 #include "yall/call.h"
+#include "yall/subsystem.h"
 #include "yall/log_level.h"
-#include "yall/output_types.h"
+#include "yall/output/types.h"
+#include "yall/output/file.h"
+#include "yall/output/console.h"
 
 #define YALL_MSG_LEN	512
 #define MSG_HEADER_LEN	77
@@ -50,14 +53,17 @@
  *	\brief Log level to use when writing the message.
  * \var message::output_type
  *	\brief Output type to use when writing the message.
- * \var message::output_file
- *	\brief Output file to use when writing the message, if any.
+ * \var message::console
+ *	\brief Console output type parameters.
+ * \var message::file
+ *	\brief File output type parameters.
  */
 struct message {
 	char *data;
 	enum yall_log_level log_level;
 	enum yall_output_type output_type;
-	const char *output_file;
+	struct yall_console_output_config console;
+	struct yall_file_output_config file;
 };
 
 /**
@@ -68,13 +74,12 @@ struct message {
  *	function.
  * \param data Data to set inside the message. This value can be NULL.
  * \param log_level Log level of the message.
- * \param output_type Output type of the message.
- * \param output_file Output file of the message. Can be NULL.
+ * \param p Parameters used to write the log message. It is used to copy
+ *	the different configuration parameters.
  */
 struct message *message_new(char *data,
 	enum yall_log_level log_level,
-	enum yall_output_type output_type,
-	const char *output_file);
+	struct yall_subsystem_params *p);
 
 /**
  * \brief Delete the given message. Free the data too.

@@ -35,56 +35,12 @@
 static struct yall_subsystem *subsystems = NULL;
 
 static struct yall_subsystem_params default_params = {
-	yall_warning,
-	yall_subsys_enable,
-	yall_file_output,
-	"yall_default.log"
-};
-
-/**
- * \struct yall_subsystem
- * \brief This structure contains all the parameters and configuration for a
- *	given subsystem.
- * \var yall_subsystem::name
- *	\brief Name of the subsystem, can't be longer than SUBSYS_NAME_LEN
- *	(including nul-terminating character).
- * \var yall_subsystem::log_level
- *	\brief Minimum log level for this subsystem. All log messages with a
- *	lower log level will be discarded.
- * \var yall_subsystem::status
- *	\brief Status of the subsystem. Used as an atomic variable on linux.
- *	See enum yall_subsys_status for more.
- * \var yall_subsystem::output_type
- *	\brief Defined output type for the subsystem. See enum yall_output_type
- *	for more.
- * \var yall_subsystem::output_file
- *	\brief File in which log will be wrote is output type is
- *	yall_file_ouput.
- * \var yall_subsystem::parent
- *	\brief Parent of the subsystem, can be NULL. If this value is set,
- *	yall_inherited_xxxx can be set to some of the subsystem's parameters.
- * \var yall_subsystem::childs
- *	\brief List of the subsystem's childs, if any.
- * \var yall_subsystem::previous
- *	\brief Previous subsystem in the list.
- * \var yall_subsystem::next
- *	\brief Next subsystem in the list.
- */
-struct yall_subsystem {
-	char name[SUBSYS_NAME_LEN];
-	enum yall_log_level log_level;
-#ifdef __linux__
-	_Atomic enum yall_subsys_status status;
-#elif _WIN32
-	enum yall_subsys_status status;
-#endif
-	enum yall_output_type output_type;
-	char *output_file;
-	bool delete_old_log_file;
-	struct yall_subsystem *parent;
-	struct yall_subsystem *childs;
-	struct yall_subsystem *previous;
-	struct yall_subsystem *next;
+	.log_level = yall_debug,
+	.status = yall_subsys_enable,
+	.output_type = yall_console_output,
+	.console = { 0 },
+	.file = {
+		.filename = "yall.log" }
 };
 
 /**
@@ -115,12 +71,11 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 		return NULL;
 
 	if (strncmp(s->name, name, SUBSYS_NAME_LEN-1) == 0) {
-
 		if (params) {
 			params->log_level = s->log_level;
 			params->status = s->status;
 			params->output_type = s->output_type;
-			params->output_file = s->output_file;
+			params->file.filename = s->file.filename;
 		}
 
 		return s;
@@ -138,8 +93,8 @@ static struct yall_subsystem *_get_subsystem(const char *name,
 		if (params && params->output_type == yall_inherited_output)
 			params->output_type = s->output_type;
 
-		if(params && params->output_file == NULL)
-			params->output_file = s->output_file;
+		if (params && params->file.filename == NULL)
+			params->file.filename = s->file.filename;
 
 		return req_subsys;
 	}
@@ -153,7 +108,7 @@ static struct yall_subsystem *_get_subsystem(const char *name,
  */
 static void _free_subsystem(struct yall_subsystem *s)
 {
-	free(s->output_file);
+	free((char *)s->file.filename);
 	free(s);
 }
 
@@ -168,7 +123,8 @@ static void set_default_params(struct yall_subsystem_params *params)
 	params->log_level = default_params.log_level;
 	params->status = default_params.status;
 	params->output_type = default_params.output_type;
-	params->output_file = default_params.output_file;
+
+	params->file.filename = default_params.file.filename;
 }
 
 /**
@@ -184,6 +140,30 @@ static void set_subsys_status(
 
 	if (s)
 		s->status = status;
+}
+
+/**
+ * \brief reset_subsystem Used to reset the internal values of a subsystem. It
+ *	is useless to set default values for string pointer as if they are NULL,
+ *	the default value is used instead. On the other, default values which
+ *	are not pointers must be set because they will contain garbage
+ *	otherwise.
+ * \param s Pointer to the subsystem to reset.
+ */
+static void reset_subsystem(struct yall_subsystem *s)
+{
+	s->name[0] = '\0';
+	s->log_level = yall_inherited_level;
+	s->status = yall_inherited_status;
+	s->output_type = yall_inherited_output;
+	s->delete_old_log_file = true;
+
+	s->file.filename = NULL;
+
+	s->parent = NULL;
+	s->childs = NULL;
+	s->previous = NULL;
+	s->next = NULL;
 }
 
 void yall_disable_subsystem(const char *subsys_name)
@@ -219,11 +199,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 	struct yall_subsystem *s = malloc(sizeof(struct yall_subsystem));
 
 	// Set each optional pointer to NULL, to avoid surprises
-	s->output_file = NULL;
-	s->parent = NULL;
-	s->childs = NULL;
-	s->previous = NULL;
-	s->next = NULL;
+	reset_subsystem(s);
 
 	strncpy(s->name, name, SUBSYS_NAME_LEN-1);
 	s->name[SUBSYS_NAME_LEN-1] = 0;
@@ -231,9 +207,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 	s->output_type = output_type;
 
 	if (output_file) {
-		s->output_file = malloc(strlen(output_file) + 1);
-
-		strncpy(s->output_file, output_file, strlen(output_file)+1);
+		s->file.filename = strdup(output_file);
 
 		/*
 		 * By default, the old log file will be delete each time the
@@ -242,7 +216,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 		 * configuration file.
 		 */
 		s->delete_old_log_file = true;
-		delete_old_log_file(s->output_file);
+		delete_old_log_file(s->file.filename);
 	}
 
 	s->status = yall_subsys_enable;
@@ -283,29 +257,22 @@ void add_subsystem(const char *parent_name, struct yall_subsystem *s)
 	s->previous = previous;
 }
 
-void update_subsystem(struct yall_subsystem *s,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
-	const char *output_file)
+void update_subsystem(struct yall_subsystem *s, enum yall_log_level log_level,
+	enum yall_output_type output_type, const char *output_file)
 {
 	/*
 	 * Always free output_file of the subsystem. It will be replaced in
 	 * every case.
 	 * The subsystem's status does not change.
 	 */
-	free(s->output_file);
-	s->output_file = NULL;
+	free((char *)s->file.filename);
+	reset_subsystem(s);
 
 	s->log_level = log_level;
 	s->output_type = output_type;
 
-	s->parent = NULL;
-	s->childs = NULL;
-	s->previous = NULL;
-	s->next = NULL;
-
 	if (output_file)
-		s->output_file = strdup(output_file);
+		s->file.filename = strdup(output_file);
 }
 
 struct yall_subsystem *remove_subsystem(const char *name)

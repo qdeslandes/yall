@@ -22,32 +22,17 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_OUTPUT_TYPES_H
-#define _YALL_OUTPUT_TYPES_H
+#ifndef _YALL_OUTPUT_FILE_H
+#define _YALL_OUTPUT_FILE_H
 
 /**
- * \enum yall_output_type
- * \brief This enum stores all the different output types for the subsystems.
- *	These values has to be power of 2, as they can be combined to write on
- *	multiple outputs.
- * \var yall_output_type::yall_inherited_output
- *	\brief Subsystem inherit its output type from its parent.
- * \var yall_output_type::yall_console_output
- *	\brief Subsystem log message will be wrote on console.
- * \var yall_output_type::yall_file_output
- *	\brief Subsystem log message will be wrote in file.
+ * \struct yall_file_output_config
+ * \brief This structure is used to store the set of file output type parameters
+ * \var yall_file_output_config::filename
+ *	\brief Output file for the request subsystem, can be NULL.
  */
-enum yall_output_type {
-	yall_inherited_output	= 0,
-	yall_console_output	= 1 << 0,
-	yall_file_output	= 1 << 1
+struct yall_file_output_config {
+	const char *filename;
 };
-
-/**
- * \brief Returns the output type corresponding to the given output type string.
- * \param str Output type as a string.
- * \retun Output type as a yall_output_type.
- */
-enum yall_output_type str_to_output_type(const char *str);
 
 #endif
