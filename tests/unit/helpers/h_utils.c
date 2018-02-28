@@ -98,6 +98,15 @@ void *_tests_malloc(size_t size)
         return malloc(size);
 }
 
+TESTS_REDEFINE_LIGHT(fopen)
+FILE *_tests_fopen(const char *pathname, const char *mode)
+{
+	if (fopen_fail)
+		return NULL;
+	
+	return fopen(pathname, mode);
+}
+
 TESTS_REDEFINE(vsnprintf, -1, (char *str, size_t size, const char *format, va_list args), str, size, format, args)
 TESTS_REDEFINE(strlen, -2, (const char *str), str)
 TESTS_REDEFINE(pthread_create, -1, (pthread_t *thread, const pthread_attr_t *attr,

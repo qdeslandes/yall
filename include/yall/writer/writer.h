@@ -27,7 +27,7 @@
 
 #include <stdint.h>
 
-#include "yall/output_types.h"
+#include "yall/output/types.h"
 #include "yall/log_level.h"
 #include "yall/message.h"
 #include "yall/error.h"

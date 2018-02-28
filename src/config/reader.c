@@ -55,6 +55,11 @@ static void set_json_config(const char *key, json_t *value)
 		yall_config_set_call_header_template(json_string_value(value));
 	else if (strcmp("tab_width", key) == 0 && json_is_integer(value))
 		yall_config_set_tab_width((uint8_t)json_integer_value(value));
+	else if (strcmp("syslog_ident", key) == 0 && json_is_string(value))
+		yall_config_set_syslog_ident(json_string_value(value));
+	else if (strcmp("syslog_facility", key) == 0 && json_is_string(value))
+		yall_config_set_syslog_facility(
+			str_to_syslog_facility(json_string_value(value)));
 	else
 		_YALL_DBG_WARNING("Parameter key or type invalid for \"%s\"",
 			key);

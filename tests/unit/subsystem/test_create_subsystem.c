@@ -49,5 +49,5 @@ Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), su
         cr_assert_str_eq(s->name, subsys_name);
         cr_assert_eq(s->log_level, ll);
         cr_assert_eq(s->output_type, ot);
-        cr_assert_str_eq(s->output_file, of);
+        cr_assert_str_eq(s->file.filename, of);
 }

@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
 	yall_set_subsystem("Executor", "CPU", yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("scheduler", "yall_c_tests", yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("debug", "yall_c_tests", yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("syslog_yall", NULL, yall_debug, yall_syslog_output, NULL);
 	yall_enable_debug("debug");
 
 

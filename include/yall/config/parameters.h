@@ -28,6 +28,7 @@
 #include <stdint.h>
 
 #include "yall/utils.h"
+#include "yall/writer/syslog.h"
 
 /*
  * All these function handle the library parameters. No description is required
@@ -57,6 +58,8 @@ struct yall_config {
 	const char *std_header_template;
 	const char *call_header_template;
 	uint8_t tab_width;
+	const char *syslog_ident;
+	enum yall_syslog_facility syslog_facility;
 };
 
 /**
@@ -125,5 +128,39 @@ _YALL_PUBLIC void yall_config_reset_tab_width(void);
  * \return Current tabulation width value.
  */
 _YALL_PUBLIC uint8_t yall_config_get_tab_width(void);
+
+/**
+ * \brief Set the syslog ident for the library.
+ * \param ident Identificator to use with syslog.
+ */
+_YALL_PUBLIC void yall_config_set_syslog_ident(const char *ident);
+
+/**
+ * \brief Reset syslog ident to default value.
+ */
+_YALL_PUBLIC void yall_config_reset_syslog_ident(void);
+
+/**
+ * \brief Returns the current syslog identificator.
+ * \return Current syslog identificator.
+ */
+_YALL_PUBLIC const char *yall_config_get_syslog_ident(void);
+
+/**
+ * \brief Set the syslog facility for the library.
+ * \param ident Facility to use with syslog.
+ */
+_YALL_PUBLIC void yall_config_set_syslog_facility(enum yall_syslog_facility f);
+
+/**
+ * \brief Reset syslog facility to default value.
+ */
+_YALL_PUBLIC void yall_config_reset_syslog_facility(void);
+
+/**
+ * \brief Returns the current syslog facility.
+ * \return Current syslog facility.
+ */
+_YALL_PUBLIC enum yall_syslog_facility yall_config_get_syslog_facility(void);
 
 #endif

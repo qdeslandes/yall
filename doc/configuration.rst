@@ -45,6 +45,8 @@ Library configuration can be stored in a plain text file as JSON data. The confi
   * `std_header_template`
   * `call_header_template`
   * `tab_width`
+  * `syslog_ident`
+  * `syslog_facility`
 * `subsystems` : store the subsystems configuration. Parameters are :
   * `parent`
   * `log_level`
@@ -66,7 +68,9 @@ Example of yall JSON configuration :
         "config" : {
             "std_header_template" : "%f ::",
             "call_header_template" : "%l : %d ::",
-            "tab_width" : 8
+            "tab_width" : 8,
+            "syslog_ident" : "mylibrary",
+            "syslog_facility" : "yall_fac_user"
         },
         "subsystems" : {
             "root" : {

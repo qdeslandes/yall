@@ -317,9 +317,9 @@ Coverage:
     - Linux:Unit
   before_script:
     - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file" warning
-    - mkdir -p build/gcov
+    - mkdir -p build/gcov && cd $_
   script:
-    - python3 tests/validation/coverage.py --sourcesDir `pwd` --outDir `pwd`/build/gcov --gcdaDir `pwd`/build
+    - gcov -fr -s ../.. `find ../ -name "*.gcda"`
   artifacts:
     paths:
       - build/gcov
@@ -370,6 +370,9 @@ Coverage-report:
     - lcov --base-directory `pwd` --directory `pwd`/build -c -o `pwd`/build/coverage.info
     - lcov --remove `pwd`/build/coverage.info "*jansson*" -o `pwd`/build/coverage.info
     - genhtml `pwd`/build/coverage.info --output-directory `pwd`/build/coverage
+  after_script:
+    - rm -rf build/coverage/*.gcov
+    - cp -R build/coverage/* public/coverage
   artifacts:
     paths:
       - public

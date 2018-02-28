@@ -39,7 +39,7 @@ extern "C" {
 #include "yall/debug.h"
 #include "yall/config/parameters.h"
 #include "yall/log_level.h"
-#include "yall/output_types.h"
+#include "yall/output/types.h"
 #include "yall/subsystem.h"
 #include "yall/config/reader.h"
 

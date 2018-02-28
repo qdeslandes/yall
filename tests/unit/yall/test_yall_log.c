@@ -41,7 +41,7 @@ Test(yall, test_yall_log0)
  */
 Test(yall, test_yall_log1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
 {
-        cr_assert_eq(yall_log("", yall_debug, "", "", 0, ""), YALL_LOG_LEVEL_TOO_LOW);
+        cr_assert_eq(yall_log("", yall_debug, "", "", 0, ""), YALL_SUCCESS);
         cr_assert_eq(yall_log("nope", yall_warning, "", "MAIN.c", 0, ""), YALL_SUCCESS);
         cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", "", 43, ""), YALL_SUCCESS);
 }
@@ -62,7 +62,7 @@ Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line, char *f
 {
         uint8_t waiting_for = YALL_SUCCESS;
         uint8_t ret = yall_log(s, ll, f, F, line, format);
-        struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, "yall_default.log" };
+        struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, { 0 }, { "yall_default.log" } };
         _get_subsystem(s, subsystems, &p);
 
         if (ll < p.log_level)

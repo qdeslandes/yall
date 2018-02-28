@@ -26,6 +26,7 @@
 
 static void tests_output_types_setup(void)
 {
+	
 }
 
 static void tests_output_types_clean(void)

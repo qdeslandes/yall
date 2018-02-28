@@ -32,7 +32,7 @@ Test(subsystem, test_update_subsystem0)
         update_subsystem(s, yall_crit, yall_console_output, NULL);
         cr_assert_eq(s->log_level, yall_crit);
         cr_assert_eq(s->output_type, yall_console_output);
-        cr_assert_eq(s->output_file, NULL);
+        cr_assert_eq(s->file.filename, NULL);
         cr_assert_eq(s->parent, NULL);
         cr_assert_eq(s->childs, NULL);
         cr_assert_eq(s->previous, NULL);
@@ -45,7 +45,7 @@ Test(subsystem, test_update_subsystem0)
         update_subsystem(s, yall_emerg, yall_file_output, "1.log");
         cr_assert_eq(s->log_level, yall_emerg);
         cr_assert_eq(s->output_type, yall_file_output);
-        cr_assert_eq(strcmp(s->output_file, "1.log"), 0);
+        cr_assert_eq(strcmp(s->file.filename, "1.log"), 0);
         cr_assert_eq(s->parent, NULL);
         cr_assert_eq(s->childs, NULL);
         cr_assert_eq(s->previous, NULL);
