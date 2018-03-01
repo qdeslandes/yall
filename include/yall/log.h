@@ -49,7 +49,7 @@
  *	      YALL_DEBUG(sub, "This is " << "my log " << "msg");
  */
 
-#include "yall/msvc_defines.h"
+#include "yall/msvc/defines.h"
 
 #define FUNCTION __func__
 

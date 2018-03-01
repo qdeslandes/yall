@@ -39,7 +39,7 @@ Test(yall, test_yall_set_subsystem0)
  */
 Test(yall, test_yall_set_subsystem1, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
 {
-        cr_assert_eq(yall_set_subsystem(NULL, NULL, yall_debug, yall_console_output, NULL), YALL_NO_NAME);
+        cr_assert_eq(yall_set_subsystem(NULL, NULL, yall_debug, yall_console_output, NULL), YALL_SUBSYS_NO_NAME);
 }
 
 /*

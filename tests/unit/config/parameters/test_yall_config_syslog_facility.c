@@ -43,8 +43,8 @@ Test(config, test_yall_config_syslog_facility1, .init=test_config_config_setup, 
     yall_config_set_syslog_facility(yall_fac_lpr);
     cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
 
-    yall_config_set_syslog_facility(yall_fac_ntp);
-    cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_ntp);
+    yall_config_set_syslog_facility(yall_fac_lpr);
+    cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
 }
 
 Test(config, test_yall_config_syslog_facility2, .init=test_config_config_setup, .fini=test_config_config_clean)
@@ -53,7 +53,7 @@ Test(config, test_yall_config_syslog_facility2, .init=test_config_config_setup, 
     yall_config_reset_syslog_facility();
     cr_assert_eq(yall_config_get_syslog_facility(), default_config.syslog_facility);
 
-    yall_config_set_syslog_facility(yall_fac_ftp);
+    yall_config_set_syslog_facility(yall_fac_lpr);
     yall_config_reset_syslog_facility();
     cr_assert_eq(current_config.syslog_facility, default_config.syslog_facility);
 }

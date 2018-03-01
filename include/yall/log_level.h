@@ -51,7 +51,7 @@ enum yall_log_level {
  * \param log_level Log level we want the name.
  * \return Log level as a string.
  */
-const char *get_log_level_name(enum yall_log_level log_level);
+const char *log_level_to_pretty_str(enum yall_log_level log_level);
 
 /**
  * \brief Returns the log level corresponding to the given log level string.

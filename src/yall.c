@@ -36,6 +36,7 @@
 #include "yall/debug.h"
 #include "yall/writer/writer.h"
 #include "yall/queue.h"
+#include "yall/config/reader.h"
 
 #define WRITER_THREAD_FREQUENCY 60
 
@@ -259,7 +260,7 @@ yall_error yall_set_subsystem(const char *name,
 	}
 
 	if (! name) {
-		ret = YALL_NO_NAME;
+		ret = YALL_SUBSYS_NO_NAME;
 		goto end;
 	}
 

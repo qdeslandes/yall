@@ -23,9 +23,9 @@
  */
  
  /*
- * Configuration file storing the project version.
- */
+  * Configuration file storing the project version.
+  */
 
-#define YALL_MAJOR      @YALL_VERSION_MAJOR@
-#define YALL_MINOR      @YALL_VERSION_MINOR@
-#define YALL_PATCH      @YALL_VERSION_PATCH@
+#define YALL_MAJOR	@YALL_VERSION_MAJOR@
+#define YALL_MINOR	@YALL_VERSION_MINOR@
+#define YALL_PATCH	@YALL_VERSION_PATCH@

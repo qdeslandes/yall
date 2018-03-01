@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_THREAD_H
-#define _YALL_THREAD_H
+#ifndef _YALL_WRITER_THREAD_H
+#define _YALL_WRITER_THREAD_H
 
 #include <stdint.h>
 

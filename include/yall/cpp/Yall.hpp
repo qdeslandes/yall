@@ -31,8 +31,6 @@
 #include <exception>
 #include <sstream>
 
-#include "yall/yall.h"
-
 class YallData;
 
 struct YallCallParams {
@@ -149,6 +147,36 @@ public:
 	void resetTabWidth()
 	{
 		yall_config_reset_tab_width();
+	}
+
+	void setSyslogIdent(std::string ident)
+	{
+		yall_config_set_syslog_ident(ident.c_str());
+	}
+
+	std::string getSyslogIdent()
+	{
+		return std::string(yall_config_get_syslog_ident());
+	}
+
+	void resetSyslogIdent()
+	{
+		yall_config_reset_syslog_ident();
+	}
+
+	void setSyslogFacility(enum yall_syslog_facility f)
+	{
+		yall_config_set_syslog_facility(f);
+	}
+
+	enum yall_syslog_facility getSyslogFacility()
+	{
+		return yall_config_get_syslog_facility();
+	}
+
+	void resetSyslogFacility()
+	{
+		yall_config_reset_syslog_facility();
 	}
 };
 

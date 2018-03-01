@@ -28,42 +28,44 @@
 #include "yall/utils.h"
 
 typedef enum {
-	YALL_SUCCESS		= 0x00,
-	YALL_UNKNOW_ERROR	= 0x01,
+	/* Generic messages */
+	YALL_SUCCESS			= 0x00,
+	YALL_UNKNOW_ERROR		= 0x01,
 
-	// TODO : specify error categories
-	YALL_ALREADY_INIT	= 0x02,
-	YALL_NOT_INIT		= 0x03,
-	YALL_SEM_INIT_ERR	= 0x04,
-	YALL_NO_MEM		= 0x05,
-	YALL_LOG_LEVEL_TOO_LOW	= 0x06,
+	/* Library setup */
+	YALL_ALREADY_INIT		= 0x02,
+	YALL_NOT_INIT			= 0x03,
+	YALL_SEM_INIT_ERR		= 0x04,
+	YALL_NO_MEM			= 0x05,
+	YALL_LOG_LEVEL_TOO_LOW		= 0x06,
 
-	YALL_NO_NAME		= 0x07,
+	/* Subsystem errors */
+	YALL_SUBSYS_NO_NAME		= 0x07,
+	YALL_SUBSYS_NOT_EXISTS		= 0x08,
+	YALL_SUBSYS_DISABLED		= 0x09,
+	YALL_CANT_CREATE_SUBSYS		= 0x0A,
 
-	YALL_FILE_LOCK_ERR	= 0x08,
-	YALL_FILE_OPEN_ERR	= 0x09,
+	/* File output errors */
+	YALL_FILE_LOCK_ERR		= 0x0B,
+	YALL_FILE_OPEN_ERR		= 0x0C,
 
-	YALL_CONSOLE_LOCK_ERR	= 0x0A,
-	YALL_CONSOLE_WRITE_ERR	= 0x0B,
+	/* Console output errors */
+	YALL_CONSOLE_LOCK_ERR		= 0x0D,
+	YALL_CONSOLE_WRITE_ERR		= 0x0E,
 
-	YALL_STRING_WRITE_ERR	= 0x0C,
+	/* Threading system */
+	YALL_CANT_CREATE_THREAD		= 0x0F,
 
-	YALL_SUBSYS_NOT_EXISTS	= 0x0D,
-	YALL_SUBSYS_DISABLED	= 0x0E,
-
-	YALL_CANT_CREATE_SUBSYS	= 0x0F,
-
-	YALL_CANT_CREATE_THREAD	= 0x10,
-
-	YALL_JSON_CANT_READ_CONFIG	= 0x11,
-	YALL_JSON_UNDECLARED_SUBSYS	= 0x12,
-	YALL_JSON_CIRCLE_DEPENDENCY	= 0x13,
+	/* JSON configuration */
+	YALL_JSON_CANT_READ_CONFIG	= 0x10,
+	YALL_JSON_UNDECLARED_SUBSYS	= 0x11,
+	YALL_JSON_CIRCLE_DEPENDENCY	= 0x12,
 
 	/*
 	 * This is used to check if the given code is defined. It is ugly, but
 	 * it's the best I can currently find.
 	 */
-	yall_err_end		= 0x14
+	yall_err_end			= 0x13
 } yall_error;
 
 /**

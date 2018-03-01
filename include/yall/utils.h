@@ -26,10 +26,10 @@
 #define _YALL_UTILS_H
 
 #ifdef __linux__
-#       define _YALL_PUBLIC     __attribute__((visibility("default")))
+#	define _YALL_PUBLIC __attribute__((visibility("default")))
 #elif _WIN32
-#       define _YALL_PUBLIC     __declspec(dllexport)
-#	include "yall/msvc_defines.h"
+#	define _YALL_PUBLIC __declspec(dllexport)
+#	include "yall/msvc/defines.h"
 #endif
 
 #define _STRINGIFY(x) #x

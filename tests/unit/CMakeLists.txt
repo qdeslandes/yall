@@ -12,7 +12,7 @@ add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 
 if (UNIX)
 	# Compile options
-	set(_PVT_OPT -Wall -Wextra -std=gnu11 -coverage)
+	set(_PVT_OPT -Wall -Wextra -std=gnu11 --coverage)
 	set(_PVT_OPT_DEBUG -O0)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
@@ -52,6 +52,8 @@ target_include_directories(yall_unit_src_obj
 		${CMAKE_SOURCE_DIR}/include
 		${pthread_INCLUDE_DIR}
 		${CMAKE_BINARY_DIR}/generated_headers)
+	
+set_target_properties(yall_unit_src_obj PROPERTIES EXCLUDE_FROM_ALL On)
 
 #[[
 	Yall unit tests
@@ -112,6 +114,8 @@ if (MSVC_VERSION EQUAL 1900)
 	
 	set_property(TARGET unit PROPERTY FOLDER "launch")
 endif ()
+
+set_target_properties(yall_unit PROPERTIES EXCLUDE_FROM_ALL On)
 
 #[[
 	Coverage informations

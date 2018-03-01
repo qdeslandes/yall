@@ -26,7 +26,8 @@
 #define _YALL_H
 
 #ifdef __cplusplus
-#include <sstream>
+#	include <sstream>
+
 extern "C" {
 #endif
 
@@ -41,15 +42,6 @@ extern "C" {
 #include "yall/log_level.h"
 #include "yall/output/types.h"
 #include "yall/subsystem.h"
-#include "yall/config/reader.h"
-
-/*
- * These functions are defined inside subsystem.c, but due to incompatibility
- *      between <atomic> (C++) and <stdatomic.h> (C), subsystem.h can't be
- *      included here.
- */
-_YALL_PUBLIC void yall_disable_subsystem(const char *subsys_name);
-_YALL_PUBLIC void yall_enable_subsystem(const char *subsys_name);
 
 /**
  * \brief Returns the library version as a 32bits integer with the form :
@@ -110,12 +102,8 @@ _YALL_PUBLIC yall_error yall_load_configuration(const char *filepath);
  * \return Error code depending of the success or failure of the function.
  */
 _YALL_PUBLIC yall_error yall_log(const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function,
-	const char *filename,
-	int32_t line,
-	const char *format,
-	...);
+	enum yall_log_level log_level, const char *function,
+	const char *filename, int32_t line, const char *format, ...);
 
 /**
  * \brief Another logging function which call the given *function*
@@ -138,10 +126,8 @@ _YALL_PUBLIC yall_error yall_log(const char *subsystem,
  * \return Error code depending of the success or failure of the function.
  */
 _YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
-	enum yall_log_level log_level,
-	const char *function_name,
-	const char *filename,
-	int32_t line,
+	enum yall_log_level log_level, const char *function_name,
+	const char *filename, int32_t line,
 	void (*formatter)(yall_call_data *d, const void *args),
 	const void *args);
 
@@ -166,10 +152,8 @@ _YALL_PUBLIC yall_error yall_call_log(const char *subsystem,
  * \return Error code depending of the success or failure of the function.
  */
 _YALL_PUBLIC yall_error yall_set_subsystem(const char *name,
-	const char *parent,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
-	const char *output_file);
+	const char *parent, enum yall_log_level log_level,
+	enum yall_output_type output_type, const char *output_file);
 
 /**
  * \brief Close all the yall library set up. The function fail only if yall has
@@ -189,6 +173,8 @@ _YALL_PUBLIC void yall_close_all(void);
 
 #ifdef __cplusplus
 }
+
+#	include "yall/cpp/Yall.hpp"
 #endif
 
 #endif

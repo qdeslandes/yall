@@ -26,7 +26,7 @@ do
         *cpp*)
 	    continue
 	    ;;
-        *msvc_defines.h)
+        *msvc/defines.h)
 	    continue
 	    ;;
     esac

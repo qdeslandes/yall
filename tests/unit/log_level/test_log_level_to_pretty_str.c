@@ -24,14 +24,14 @@
 
 #include "test_log_level.h"
 
-Test(log_level, test_get_log_level_name0)
+Test(log_level, test_log_level_to_pretty_str0)
 {
-	cr_assert_str_eq(get_log_level_name(yall_debug), "DEBUG");
-	cr_assert_str_eq(get_log_level_name(yall_info), "INFO");
-	cr_assert_str_eq(get_log_level_name(yall_notice), "NOTICE");
-	cr_assert_str_eq(get_log_level_name(yall_warning), "WARNING");
-	cr_assert_str_eq(get_log_level_name(yall_err), "ERROR");
-	cr_assert_str_eq(get_log_level_name(yall_crit), "CRITICAL");
-	cr_assert_str_eq(get_log_level_name(yall_alert), "ALERT");
-	cr_assert_str_eq(get_log_level_name(yall_emerg), "EMERGENCY");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_debug), "DEBUG");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_info), "INFO");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_notice), "NOTICE");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_warning), "WARNING");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_err), "ERROR");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_crit), "CRITICAL");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_alert), "ALERT");
+	cr_assert_str_eq(log_level_to_pretty_str(yall_emerg), "EMERGENCY");
 }
