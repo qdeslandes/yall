@@ -67,6 +67,7 @@ target_include_directories(yall
 target_link_libraries(yall
 	PUBLIC
 		pthread::pthread
+	PRIVATE
 		jansson::jansson)
 
 
@@ -115,6 +116,7 @@ install(
 		"${CMAKE_BINARY_DIR}/cmake/yall-config.cmake"
 		"${CMAKE_BINARY_DIR}/cmake/yall-config-version.cmake"
 		"${CMAKE_SOURCE_DIR}/resources/cmake/module/Findpthread.cmake"
+		"${CMAKE_SOURCE_DIR}/resources/cmake/yall_targets-release.cmake"
 	DESTINATION lib/cmake/yall
 	CONFIGURATIONS Debug)
 	

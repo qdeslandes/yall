@@ -24,6 +24,8 @@
 
 #include "config/test_config.h"
 
+#include "yall/config/reader.h"
+
 /*
  * File does not exists
  */

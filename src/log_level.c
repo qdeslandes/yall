@@ -43,7 +43,7 @@ static struct log_level_str_set log_level_str[9] = {
 	{ "yall_inherited_level", "INHERIT" }
 };
 
-const char *get_log_level_name(enum yall_log_level log_level)
+const char *log_level_to_pretty_str(enum yall_log_level log_level)
 {
 	return log_level_str[log_level].log_level_pretty_name;
 }

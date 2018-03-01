@@ -46,8 +46,8 @@ Test(config_reader, test_set_json_config0)
 	set_json_config("syslog_ident", json_string("syslog_ident"));
 	cr_assert_str_eq(current_config.syslog_ident, "syslog_ident");
 
-	set_json_config("syslog_facility", json_string("yall_fac_ntp"));
-	cr_assert_eq(current_config.syslog_facility, yall_fac_ntp);
+	set_json_config("syslog_facility", json_string("yall_fac_lpr"));
+	cr_assert_eq(current_config.syslog_facility, yall_fac_lpr);
 }
 
 /*

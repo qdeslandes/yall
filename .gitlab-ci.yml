@@ -17,7 +17,6 @@
 #
 
 stages:
-  - docker
   - prebuild
   - build
   - test
@@ -25,35 +24,9 @@ stages:
   - doc
   - deploy
 
-###############################
-# Docker build
-#
-# Here, we use --cache-from option to define the container we use layers from.
-# It speeds up the build process.
-#
-###############################
-Build:
-  stage: docker
-  image: docker:latest
-  variables:
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u gitlab-ci-token -p $GITLAB_API_KEY registry.gitlab.com
-  script:
-    - docker pull $CI_REGISTRY_IMAGE:build || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:build -t $CI_REGISTRY_IMAGE:build -f resources/dockerfiles/Dockerfile.build .
-    - docker pull $CI_REGISTRY_IMAGE:test || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:test -t $CI_REGISTRY_IMAGE:test -f resources/dockerfiles/Dockerfile.test .
-  after_script:
-    - docker push $CI_REGISTRY_IMAGE:build
-    - docker push $CI_REGISTRY_IMAGE:test
-  tags:
-    - linux
-    - yall
-  except:
-    - tags
+variables:
+  SONAR_SCANNER: "/usr/local/opt/sonar-scanner/bin/sonar-scanner"
+  BUILD_WRAPPER: "/usr/local/opt/build-wrapper/build-wrapper-linux-x86-64"
 
 ###############################
 # Prebuild step
@@ -66,7 +39,6 @@ Build:
 ###############################
 Version:
   stage: prebuild
-  image: $CI_REGISTRY_IMAGE:test
   before_script:
     - mkdir -p build/version
   script:
@@ -78,6 +50,7 @@ Version:
   tags:
     - linux
     - yall
+    - shell
   only:
     - master
 
@@ -92,7 +65,6 @@ Version:
 ###############################
 Linux:Debug:
   stage: build
-  image: $CI_REGISTRY_IMAGE:build
   dependencies:
     - Version
   before_script:
@@ -107,32 +79,30 @@ Linux:Debug:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
 Linux:Release:
   stage: build
-  image: $CI_REGISTRY_IMAGE:build
   dependencies:
     - Version
   before_script:
-    - mkdir -p build/gcda
     - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_MAJOR=$(cat build/version/major) -DYALL_VERSION_MINOR=$(cat build/version/minor) -DYALL_VERSION_PATCH=$(cat build/version/patch)
   script:
-    - build-wrapper-linux-x86-64 --out-dir build/bw_output make -C build -j 9 package
+    - ${BUILD_WRAPPER} --out-dir build/bw_output make -C build -j 9 package yall_c yall_cpp
   after_script:
-    - cp -R build/tests/unit/CMakeFiles/yall_unit_src_obj.dir/__/__/src/* build/gcda
     - rm -rf build/bw_output/build-wrapper.log  # All environment variable are displayed in this file. So remove it before defining artifacts...
   artifacts:
     paths:
       - build/binaries
       - build/packages
-      - build/gcda
       - build/bw_output
     expire_in: 1 hour
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
@@ -148,6 +118,7 @@ Windows:MSVC14:
   script:
     - cmake --build build --config Debug --target package
     - cmake --build build --config Release --target package
+    - cmake --build build --config Release --target yall_unit
   artifacts:
     paths:
       - build/packages
@@ -195,10 +166,13 @@ Windows:MSVC12:
 ###############################
 Linux:Unit:
   stage: test
-  image: $CI_REGISTRY_IMAGE:test
   dependencies:
     - Linux:Release
     - Version
+  before_script:
+    - mkdir -p build/gcda
+    - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DYALL_VERSION_MAJOR=$(cat build/version/major) -DYALL_VERSION_MINOR=$(cat build/version/minor) -DYALL_VERSION_PATCH=$(cat build/version/patch)
+    - make -C build -j 9 yall_unit
   script:
     - ./build/binaries/yall_unit
   after_script:
@@ -210,12 +184,12 @@ Linux:Unit:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
 Linux:C:
   stage: test
-  image: $CI_REGISTRY_IMAGE:test
   dependencies:
     - Linux:Release
   script:
@@ -223,12 +197,12 @@ Linux:C:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
 Linux:CPP:
   stage: test
-  image: $CI_REGISTRY_IMAGE:test
   dependencies:
     - Linux:Release
   script:
@@ -236,6 +210,7 @@ Linux:CPP:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
@@ -269,6 +244,7 @@ Install:DEB:
   tags:
     - linux
     - yall
+    - docker
   except:
     - tags
 
@@ -286,6 +262,7 @@ Install:RPM:
   tags:
     - linux
     - yall
+    - docker
   except:
     - tags
 
@@ -301,18 +278,17 @@ Install:RPM:
 ###############################
 Style:
   stage: validation
-  image: $CI_REGISTRY_IMAGE:test
   script:
     - python3 ./tests/validation/checkstyle.py --sourcesDir `pwd`
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
 Coverage:
   stage: validation
-  image: $CI_REGISTRY_IMAGE:test
   dependencies:
     - Linux:Unit
   before_script:
@@ -327,6 +303,7 @@ Coverage:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
@@ -339,7 +316,6 @@ Coverage:
 ###############################
 Doxygen:
   stage: doc
-  image: $CI_REGISTRY_IMAGE:build
   before_script:
     - mkdir -p public/doxygen
     - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
@@ -354,12 +330,12 @@ Doxygen:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
 Coverage-report:
   stage: doc
-  image: naccyde/yall:build
   before_script:
     - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file" warning
     - mkdir -p public/coverage
@@ -380,6 +356,7 @@ Coverage-report:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
 
@@ -387,13 +364,12 @@ Coverage-report:
 # Deploy step
 #
 # pages : generate Gitlab pages output (and deploy it)
-# Archives : deploy archives to the server (currently failing as Gitlab API upload endpoint does not works https://gitlab.com/gitlab-com/support-forum/issues/2994)
+# Archives : deploy archives to the server
 # Sonar : update Sonar statistics
 #
 ###############################
 pages:
   stage: deploy
-  image: $CI_REGISTRY_IMAGE:build
   dependencies:
     - Doxygen
     - Coverage-report
@@ -411,6 +387,7 @@ pages:
   tags:
     - linux
     - yall
+    - shell
   only:
     - master
   except:
@@ -418,7 +395,6 @@ pages:
 
 UserDoc:
   stage: deploy
-  image: $CI_REGISTRY_IMAGE:build
   dependencies:
     - Doxygen
     - Coverage-report
@@ -436,13 +412,13 @@ UserDoc:
   tags:
     - linux
     - yall
+    - shell
   except:
     - tags
     - master
 
 Deploy:
   stage: deploy
-  image: $CI_REGISTRY_IMAGE:test
   dependencies:
     - Linux:Debug
     - Linux:Release
@@ -454,6 +430,7 @@ Deploy:
   tags:
     - linux
     - yall
+    - shell
   only:
     - master
   except:
@@ -461,7 +438,6 @@ Deploy:
 
 Sonar:
   stage: deploy
-  image: $CI_REGISTRY_IMAGE:build
   dependencies:
     - Linux:Release
     - Coverage
@@ -470,10 +446,11 @@ Sonar:
     - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
     - find build/gcov -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file"
   script:
-    - sonar-scanner -Dsonar.cfamily.build-wrapper-output=build/bw_output -Dproject.settings=.sonar-project.properties -Dsonar.projectBaseDir=./ -Dsonar.cfamily.gcov.reportsPath=build/gcov -Dsonar.login=$SONAR_API_KEY -Dsonar.projectVersion=`cat build/version/version`
+    - ${SONAR_SCANNER} -Dsonar.cfamily.build-wrapper-output=build/bw_output -Dproject.settings=.sonar-project.properties -Dsonar.projectBaseDir=./ -Dsonar.cfamily.gcov.reportsPath=build/gcov -Dsonar.login=$SONAR_API_KEY -Dsonar.projectVersion=`cat build/version/version`
   tags:
     - linux
     - yall
+    - shell
   only:
     - master
   except:

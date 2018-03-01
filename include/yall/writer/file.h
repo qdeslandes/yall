@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef _YALL_FILE_H
-#define _YALL_FILE_H
+#ifndef _YALL_WRITER_FILE_H
+#define _YALL_WRITER_FILE_H
 
 #include <stdint.h>
 

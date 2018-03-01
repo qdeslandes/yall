@@ -80,7 +80,7 @@
 #include "yall/yall.h"
 #include "yall/error.h"
 #include "yall/utils.h"
-#include "yall/msvc_defines.h"
+#include "yall/msvc/defines.h"
 
 /**
  * \brief Enable the debug mode on the library. This function must be called

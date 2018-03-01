@@ -25,36 +25,39 @@
 #include "yall/writer/syslog.h"
 
 #include <string.h>
+
 #ifdef __linux__
-#include <syslog.h>
+#	include <syslog.h>
 #endif
 
-static const char *syslog_facility_str[25] = {
-	"yall_fac_kern",
-	"yall_fac_user",
-	"yall_fac_mail",
-	"yall_fac_daemon",
-	"yall_fac_auth",
-	"yall_fac_syslog",
-	"yall_fac_lpr",
-	"yall_fac_news",
-	"yall_fac_uucp",
-	"yall_fac_cloc",
-	"yall_fac_authpriv",
-	"yall_fac_ftp",
-	"yall_fac_ntp",
-	"yall_fac_audit",
-	"yall_fac_alert",
-	"yall_fac_cron",
-	"yall_fac_local0",
-	"yall_fac_local1",
-	"yall_fac_local2",
-	"yall_fac_local3",
-	"yall_fac_local4",
-	"yall_fac_local5",
-	"yall_fac_local6",
-	"yall_fac_local7",
-	"yall_fac_inherited",
+#include "yall/config/parameters.h"
+
+#define NB_FACILITIES 20
+
+struct {
+	const char *str;
+	int value;
+} syslog_facilities_set[] = {
+	{ "yall_fac_kern", LOG_KERN },
+	{ "yall_fac_user", LOG_USER },
+	{ "yall_fac_mail", LOG_MAIL },
+	{ "yall_fac_daemon", LOG_DAEMON },
+	{ "yall_fac_auth", LOG_AUTH },
+	{ "yall_fac_syslog", LOG_SYSLOG },
+	{ "yall_fac_lpr", LOG_LPR },
+	{ "yall_fac_news", LOG_NEWS },
+	{ "yall_fac_uucp", LOG_UUCP },
+	{ "yall_fac_cloc", LOG_CRON },
+	{ "yall_fac_authpriv", LOG_AUTHPRIV },
+	{ "yall_fac_ftp", LOG_FTP },
+	{ "yall_fac_local0", LOG_LOCAL0 },
+	{ "yall_fac_local1", LOG_LOCAL1 },
+	{ "yall_fac_local2", LOG_LOCAL2 },
+	{ "yall_fac_local3", LOG_LOCAL3 },
+	{ "yall_fac_local4", LOG_LOCAL4 },
+	{ "yall_fac_local5", LOG_LOCAL5 },
+	{ "yall_fac_local6", LOG_LOCAL6 },
+	{ "yall_fac_local7", LOG_LOCAL7 }
 };
 
 /**
@@ -78,9 +81,9 @@ static int get_syslog_level(enum yall_log_level ll)
 
 enum yall_syslog_facility str_to_syslog_facility(const char *s)
 {
-	for (int i = 0; i < 25; ++i) {
-		if (strcmp(syslog_facility_str[i], s) == 0)
-			return i;
+	for (int i = 0; i < NB_FACILITIES; ++i) {
+		if (strcmp(syslog_facilities_set[i].str, s) == 0)
+			return syslog_facilities_set[i].value;
 	}
 
 	return yall_fac_user;
@@ -89,8 +92,8 @@ enum yall_syslog_facility str_to_syslog_facility(const char *s)
 void write_log_syslog(enum yall_log_level log_level, const char *msg)
 {
 #ifdef __linux__
-	syslog(LOG_MAKEPRI(LOG_LOCAL1, get_syslog_level(log_level)),
-		msg);
+	syslog((int)LOG_MAKEPRI((int)yall_config_get_syslog_facility(),
+		get_syslog_level(log_level)), msg);
 #else
 #endif
 }

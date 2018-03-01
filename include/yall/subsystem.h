@@ -71,9 +71,11 @@ struct yall_subsystem {
 	enum yall_subsys_status status;
 	enum yall_output_type output_type;
 	bool delete_old_log_file;
+
 	/* Configuration */
 	struct yall_console_output_config console;
 	struct yall_file_output_config file;
+
 	/* Node data */
 	struct yall_subsystem *parent;
 	struct yall_subsystem *childs;
@@ -147,8 +149,7 @@ struct yall_subsystem *get_subsystem(const char *name,
  * \return The newly created subsystem.
  */
 struct yall_subsystem *create_subsystem(const char *name,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
+	enum yall_log_level log_level, enum yall_output_type output_type,
 	const char *output_file);
 
 /**
@@ -170,8 +171,7 @@ void add_subsystem(const char *parent, struct yall_subsystem *s);
  * \param output_file New output file of the subsystem.
  */
 void update_subsystem(struct yall_subsystem *s,
-	enum yall_log_level log_level,
-	enum yall_output_type output_type,
+	enum yall_log_level log_level, enum yall_output_type output_type,
 	const char *output_file);
 
 /**

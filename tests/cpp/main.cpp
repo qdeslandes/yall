@@ -25,7 +25,7 @@
 #include <iostream>
 #include <pthread.h>
 
-#include <yall/Yall.hpp>
+#include <yall/yall.h>
 
 using namespace std;
 

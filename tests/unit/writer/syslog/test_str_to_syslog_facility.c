@@ -31,6 +31,6 @@ Test(writer_syslog, test_str_to_syslog_facility0)
 	cr_assert_eq(str_to_syslog_facility("yall_fac_user"), yall_fac_user);
 	cr_assert_eq(str_to_syslog_facility("invalid"), yall_fac_user);
 	cr_assert_eq(str_to_syslog_facility("yall_fac_kern"), yall_fac_kern);
-	cr_assert_eq(str_to_syslog_facility("yall_fac_inherited"), yall_fac_inherited);
+	cr_assert_eq(str_to_syslog_facility("yall_fac_lpr"), yall_fac_lpr);
 	cr_assert_eq(str_to_syslog_facility("yall_fac_local1"), yall_fac_local1);
 }

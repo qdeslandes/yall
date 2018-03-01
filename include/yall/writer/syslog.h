@@ -27,6 +27,31 @@
 
 #include <stdint.h>
 
+#ifdef __linux__
+#        include <syslog.h>
+#else
+#   define LOG_KERN 0
+#   define LOG_USER 0
+#   define LOG_MAIL 0
+#   define LOG_DAEMON 0
+#   define LOG_AUTH 0
+#   define LOG_SYSLOG 0
+#   define LOG_LPR 0
+#   define LOG_NEWS 0
+#   define LOG_UUCP 0
+#   define LOG_CRON 0
+#   define LOG_AUTHPRIV 0
+#   define LOG_FTP 0
+#   define LOG_LOCAL0 0
+#   define LOG_LOCAL1 0
+#   define LOG_LOCAL2 0
+#   define LOG_LOCAL3 0
+#   define LOG_LOCAL4 0
+#   define LOG_LOCAL5 0
+#   define LOG_LOCAL6 0
+#   define LOG_LOCAL7 0
+#endif
+
 #include "yall/error.h"
 #include "yall/output/types.h"
 #include "yall/log_level.h"
@@ -60,14 +85,6 @@
  *	\brief Security / authorization messages.
  * \var yall_syslog_facility::yall_fac_ftp
  *	\brief FTP daemon.
- * \var yall_syslog_facility::yall_fac_ntp
- *	\brief NTP subsystem.
- * \var yall_syslog_facility::yall_fac_audit
- *	\brief Log audit.
- * \var yall_syslog_facility::yall_fac_alert
- *	\brief Log alert.
- * \var yall_syslog_facility::yall_fac_cron
- *	\brief Clock daemon.
  * \var yall_syslog_facility::yall_fac_local0
  *	\brief Local use 0.
  * \var yall_syslog_facility::yall_fac_local1
@@ -84,38 +101,46 @@
  *	\brief Local use 6.
  * \var yall_syslog_facility::yall_fac_local7
  *	\brief Local use 7.
- * \var yall_syslog_facility::yall_fac_inherited
- *	\brief Used to defined inheritance between subsystems.
  */
+
 enum yall_syslog_facility {
-	yall_fac_kern,
-	yall_fac_user,
-	yall_fac_mail,
-	yall_fac_daemon,
-	yall_fac_auth,
-	yall_fac_syslog,
-	yall_fac_lpr,
-	yall_fac_news,
-	yall_fac_uucp,
-	yall_fac_cloc,
-	yall_fac_authpriv,
-	yall_fac_ftp,
-	yall_fac_ntp,
-	yall_fac_audit,
-	yall_fac_alert,
-	yall_fac_cron,
-	yall_fac_local0,
-	yall_fac_local1,
-	yall_fac_local2,
-	yall_fac_local3,
-	yall_fac_local4,
-	yall_fac_local5,
-	yall_fac_local6,
-	yall_fac_local7,
-	yall_fac_inherited
+	yall_fac_kern = LOG_KERN,
+	yall_fac_user = LOG_USER,
+	yall_fac_mail = LOG_MAIL,
+	yall_fac_daemon = LOG_DAEMON,
+	yall_fac_auth = LOG_AUTH,
+	yall_fac_syslog = LOG_SYSLOG,
+	yall_fac_lpr = LOG_LPR,
+	yall_fac_news = LOG_NEWS,
+	yall_fac_uucp = LOG_UUCP,
+	yall_fac_cloc = LOG_CRON,
+	yall_fac_authpriv = LOG_AUTHPRIV,
+	yall_fac_ftp = LOG_FTP,
+	yall_fac_local0 = LOG_LOCAL0,
+	yall_fac_local1 = LOG_LOCAL1,
+	yall_fac_local2 = LOG_LOCAL2,
+	yall_fac_local3 = LOG_LOCAL3,
+	yall_fac_local4 = LOG_LOCAL4,
+	yall_fac_local5 = LOG_LOCAL5,
+	yall_fac_local6 = LOG_LOCAL6,
+	yall_fac_local7 = LOG_LOCAL7
 };
 
+/**
+ * \brief Convert the given string to the corresponding yall syslog facility.
+ * \param s Syslog facility as string. It should contain the facility using the
+ *	same name a available un yall_syslog_facility enumerator.
+ * \return Value of type yall_syslog_facility
+ */
 enum yall_syslog_facility str_to_syslog_facility(const char *s);
+
+/**
+ * \brief Write the given message using syslog mechanism. The log level is used
+ *	to compute the message priority inside syslog, through LOG_MAKEPRI()
+ *	macro.
+ * \param log_level Log level to use to write the log message.
+ * \param msg Log message to write using syslog.
+ */
 void write_log_syslog(enum yall_log_level log_level, const char *msg);
 
 #endif

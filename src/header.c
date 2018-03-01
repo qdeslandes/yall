@@ -183,7 +183,7 @@ void fill_header_content(struct header_content *hc, const char *subsystem_name,
 	const char *filename, int32_t line)
 {
 	hc->subsystem = subsystem_name;
-	hc->log_level = get_log_level_name(log_level);
+	hc->log_level = log_level_to_pretty_str(log_level);
 	hc->function_name = function_name;
 	hc->filename = filename;
 

@@ -25,6 +25,8 @@ Each subsystem can have, a parent from which it can inherits some parameters.
 
 If ``output_type`` is ``yall_file_output``, then ``output_file`` can be set to the output file name, or to ``NULL`` to use the parent's output file.
 
+When using `yall_syslog_output`, the formatted output can be broken if using line feed. To avoid this, update syslog configuration to disable control characters escaping (on `rsyslog`, parameter is `parser.escapeControlCharactersOnReceive`).
+
 Destruction
 *******************
 
