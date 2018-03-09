@@ -28,28 +28,38 @@
 #include <stdint.h>
 
 #ifdef __linux__
-#        include <syslog.h>
+#	include <syslog.h>
 #else
-#   define LOG_KERN 0
-#   define LOG_USER 0
-#   define LOG_MAIL 0
-#   define LOG_DAEMON 0
-#   define LOG_AUTH 0
-#   define LOG_SYSLOG 0
-#   define LOG_LPR 0
-#   define LOG_NEWS 0
-#   define LOG_UUCP 0
-#   define LOG_CRON 0
-#   define LOG_AUTHPRIV 0
-#   define LOG_FTP 0
-#   define LOG_LOCAL0 0
-#   define LOG_LOCAL1 0
-#   define LOG_LOCAL2 0
-#   define LOG_LOCAL3 0
-#   define LOG_LOCAL4 0
-#   define LOG_LOCAL5 0
-#   define LOG_LOCAL6 0
-#   define LOG_LOCAL7 0
+#	define LOG_KERN 0
+#	define LOG_USER 0
+#	define LOG_MAIL 0
+#	define LOG_DAEMON 0
+#	define LOG_AUTH 0
+#	define LOG_SYSLOG 0
+#	define LOG_LPR 0
+#	define LOG_NEWS 0
+#	define LOG_UUCP 0
+#	define LOG_CRON 0
+#	define LOG_AUTHPRIV 0
+#	define LOG_FTP 0
+#	define LOG_LOCAL0 0
+#	define LOG_LOCAL1 0
+#	define LOG_LOCAL2 0
+#	define LOG_LOCAL3 0
+#	define LOG_LOCAL4 0
+#	define LOG_LOCAL5 0
+#	define LOG_LOCAL6 0
+#	define LOG_LOCAL7 0
+
+#	define LOG_DEBUG yall_debug
+#	define LOG_INFO yall_info
+#	define LOG_NOTICE yall_notice
+#	define LOG_WARNING yall_warning
+#	define LOG_ERR yall_err
+#	define LOG_CRIT yall_crit
+#	define LOG_ALERT yall_alert
+#	define LOG_EMERG yall_emerg
+
 #endif
 
 #include "yall/error.h"

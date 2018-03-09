@@ -141,7 +141,6 @@ static void set_matches_and_header(enum header_type hdr_type,
 void header_compile_format(enum header_type hdr_type, const char *format)
 {
 	// TODO : avoid using "int", use more clear type : uint16_t, ...
-	// TODO : handle successive "%"
 
 	int hdr_len = 0;
 	int match_idx = 0;

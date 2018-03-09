@@ -22,47 +22,37 @@
  * SOFTWARE.
  */
 
-#include "test_yall.h"
-
-extern uint16_t initialized;
+#include "yall/test.h"
 
 /*
- * Normal init
+ * O.K.
  */
-Test(yall, test_yall_init0)
+Test(yall, test_yall_init0, .fini=test_close_yall)
 {
-        cr_assert_eq(yall_init(), YALL_SUCCESS);
-        cr_assert_eq(initialized, 1);
-        cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
-        cr_assert_eq(initialized, 2);
-
-        yall_close();
-
-        cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
-        cr_assert_eq(initialized, 2);
-        cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
-        cr_assert_eq(initialized, 3);
+	cr_assert_eq(yall_init(), YALL_SUCCESS);
+	cr_assert_eq(initialized, 1);
 }
 
 /*
+ * O.K.
  * Failed writer_init()
  */
-Test(yall, test_yall_init1)
+Test(yall, test_yall_init1, .fini=test_close_yall)
 {
-        disable_pthread_create();
+	disable_pthread_create();
 
-        cr_assert_eq(yall_init(), YALL_CANT_CREATE_THREAD);
-        cr_assert_eq(initialized, 0);
+	cr_assert_eq(yall_init(), YALL_CANT_CREATE_THREAD);
+	cr_assert_eq(initialized, 0);
 
-        enable_pthread_create();
+	enable_pthread_create();
+}
 
-        cr_assert_eq(yall_init(), YALL_SUCCESS);
-        cr_assert_eq(initialized, 1);
-        cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
-        cr_assert_eq(initialized, 2);
-
-        yall_close();
-
-        cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
-        cr_assert_eq(initialized, 2);
+/*
+ * O.K.
+ * Already initialized
+ */
+Test(yall, test_yall_init2, .init=test_init_yall, .fini=test_close_yall)
+{
+	cr_assert_eq(yall_init(), YALL_ALREADY_INIT);
+	cr_assert_eq(initialized, 2);
 }

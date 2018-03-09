@@ -22,36 +22,25 @@
  * SOFTWARE.
  */
 
-#include "test_call.h"
+#include "call/test.h"
 
 /*
- * Empty lines set
+ * O.K.
+ * Empty line set
  */
 Test(call, test_remove_first_line0)
 {
-        struct yall_call_data d = { 0, "", NULL };
+	struct yall_call_data d = { 0 };
 
-        cr_assert_eq(remove_first_line(&d), NULL);
+	cr_assert_eq(NULL, remove_first_line(&d));
 }
 
 /*
- * Non-empty lines set
+ * O.K.
+ * Non-empty line set
  */
-Test(call, test_remove_first_line1)
+Test(call, test_remove_first_line1, .init=test_2_call_data_lines, .fini=test_clean_2_call_data_lines)
 {
-        struct yall_call_data d = { 3, "", NULL };
-
-        struct yall_call_data_line l = { "2", NULL };
-        struct yall_call_data_line m = { "1", &l };
-        struct yall_call_data_line n = { "0", &m };
-        d.lines = &n;
-
-        cr_assert_eq(remove_first_line(&d), &n);
-        cr_assert_eq(d.message_size, 2);
-
-        cr_assert_eq(remove_first_line(&d), &m);
-        cr_assert_eq(d.message_size, 1);
-
-        cr_assert_eq(remove_first_line(&d), &l);
-        cr_assert_eq(d.message_size, 0);
+	cr_assert_eq(test_call_data_lines_array[0], remove_first_line(&test_call_data));
+	cr_assert_eq(test_call_data_lines_array[1], remove_first_line(&test_call_data));
 }

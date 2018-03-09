@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-#include "test_message.h"
+#include "message/test.h"
 
 /*
+ * O.K.
  * Len equals 0
  */
 Test(message, test_generate_call_message0)
@@ -53,7 +54,8 @@ Test(message, test_generate_call_message0)
 }
 
 /*
- * Too long
+ * O.K.
+ * Content too long
  */
 Test(message, test_generate_call_message1)
 {
@@ -81,6 +83,7 @@ Test(message, test_generate_call_message1)
 }
 
 /*
+ * O.K.
  * Short lines
  */
 Test(message, test_generate_call_message2)
@@ -109,6 +112,7 @@ Test(message, test_generate_call_message2)
 }
 
 /*
+ * O.K.
  * Longer lines
  */
 Test(message, test_generate_call_message3)

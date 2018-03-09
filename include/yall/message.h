@@ -96,7 +96,8 @@ void message_delete_wrapper(void *msg);
 
 /**
  * \brief Create the log message. It fills *buffer* we given data and specific
- *	format.
+ *	format. By the way, the function returns the required buffer size of the
+ *	length parameter is 0, by it does not add room for '\n' and '\0'.
  * \param log_buffer Buffer in which the log message will be wrote.
  * \param len Length of the log buffer.
  * \param message_format Format to use when generating the log message.

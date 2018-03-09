@@ -22,20 +22,15 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
-#include "helpers/h_subsystem.h"
-#include "yall/test_yall.h"
-
-extern void tests_yall_init_lib(void);
-extern void tests_yall_close_lib(void);
-extern void show_subsystems_tree_call(struct yall_call_data *d, const void *args);
+#include "subsystem/test.h"
 
 /*
+ * O.K.
  * Only 1 subsystem
  */
-Test(subsystem, test_show_subsystems_tree_call0, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
+Test(subsystem, test_show_subsystems_tree_call0, .init=test_init_yall, .fini=test_close_yall)
 {
-    yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
 	yall_enable_debug("debug_subsys");
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
@@ -55,13 +50,14 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=tests_yall_init_lib, .fin
 }
 
 /*
- * Subsystems availables
+ * O.K.
+ * Many subsystems availables
  */
-Test(subsystem, test_show_subsystems_tree_call1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
+Test(subsystem, test_show_subsystems_tree_call1, .init=test_init_yall, .fini=test_close_yall)
 {
 	create_subsystems();
 
-    yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
+	yall_set_subsystem("debug_subsys", NULL, yall_debug, yall_console_output, NULL);
 	yall_enable_debug("debug_subsys");
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
@@ -83,9 +79,10 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=tests_yall_init_lib, .fin
 }
 
 /*
+ * O.K.
  * No subsystems
  */
-Test(subsystem, test_show_subsystems_tree_call2, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
+Test(subsystem, test_show_subsystems_tree_call2, .init=test_init_yall, .fini=test_close_yall)
 {
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);

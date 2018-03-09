@@ -22,10 +22,13 @@
  * SOFTWARE.
  */
 
-#include "test_yall.h"
+#include "yall/test.h"
 
+/*
+ * O.K.
+ */
 Test(yall, test_yall_get_version_string0)
 {
-        yall_get_version_string();
-        cr_assert(1);
+	yall_get_version_string();
+	cr_assert(1);
 }

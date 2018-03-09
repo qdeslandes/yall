@@ -22,14 +22,21 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
+#include "config/reader/test.h"
 
-#include "yall/config/reader.h"
+/*
+ * O.K.
+ * Requires creation of a file
+ */
+Test(config_reader, test_read_config0, .init=test_create_json_config_file, .fini=test_remove_json_config_file)
+{
+	cr_assert_eq(YALL_SUCCESS, read_config(_YALL_TEST_JSON_FILE));
+}
 
 /*
  * File does not exists
  */
-Test(config_reader, test_read_config0)
+Test(config_reader, test_read_config1)
 {
 	cr_assert_eq(YALL_JSON_CANT_READ_CONFIG, read_config("invalid"));
 }

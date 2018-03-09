@@ -22,32 +22,40 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
+#include "subsystem/test.h"
 
+#ifdef __linux__
 /*
- * Test parameters combination
+ * Currently set this tests for Linux only, as on Windows they are really slow.
+ * However, Windows and Linux code for this feature are identical, so there
+ * shouldn't be any problem.
  */
 TheoryDataPoints(subsystem, test_create_subsystem0) = {
-        DataPoints(char *, "short", "middlename", "toolongnameforasubsystemidkwhattodowiththat"),
-        DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
-        DataPoints(enum yall_output_type, yall_console_output, yall_file_output, yall_inherited_output),
-        DataPoints(char *, "log.log")
+	DataPoints(char *, "short", "middlename", "toolongnameforasubsystemidkwhattodowiththat"),
+	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
+	DataPoints(enum yall_output_type, yall_console_output, yall_file_output, yall_inherited_output),
+	DataPoints(char *, "log.log")
 };
 
+/*
+ * O.K.
+ * Use theory to test parameters combination
+ */
 Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), subsystem, test_create_subsystem0)
 {
-        char subsys_name[SUBSYS_NAME_LEN] = { 0 };
-        strncpy(subsys_name, n, SUBSYS_NAME_LEN - 1);
+	char subsys_name[SUBSYS_NAME_LEN] = { 0 };
+	strncpy(subsys_name, n, SUBSYS_NAME_LEN - 1);
 
-        struct yall_subsystem *s = create_subsystem(n, ll, ot, of);
+	struct yall_subsystem *s = create_subsystem(n, ll, ot, of);
 
-        cr_assert(s);
-        cr_assert_eq(s->parent, NULL);
-        cr_assert_eq(s->childs, NULL);
-        cr_assert_eq(s->previous, NULL);
-        cr_assert_eq(s->next, NULL);
-        cr_assert_str_eq(s->name, subsys_name);
-        cr_assert_eq(s->log_level, ll);
-        cr_assert_eq(s->output_type, ot);
-        cr_assert_str_eq(s->file.filename, of);
+	cr_assert(s);
+	cr_assert_eq(s->parent, NULL);
+	cr_assert_eq(s->childs, NULL);
+	cr_assert_eq(s->previous, NULL);
+	cr_assert_eq(s->next, NULL);
+	cr_assert_str_eq(s->name, subsys_name);
+	cr_assert_eq(s->log_level, ll);
+	cr_assert_eq(s->output_type, ot);
+	cr_assert_str_eq(s->file.filename, of);
 }
+#endif

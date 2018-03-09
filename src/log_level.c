@@ -26,12 +26,10 @@
 
 #include <string.h>
 
-struct log_level_str_set {
+static struct log_level_str_set {
 	const char *log_level_name;
 	const char *log_level_pretty_name;
-};
-
-static struct log_level_str_set log_level_str[9] = {
+} log_level_str[9] = {
 	{ "yall_debug", "DEBUG" },
 	{ "yall_info", "INFO" },
 	{ "yall_notice", "NOTICE" },

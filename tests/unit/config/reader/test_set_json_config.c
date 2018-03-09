@@ -22,15 +22,10 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
-
-#include <jansson.h>
-
-extern struct yall_config current_config;
-extern void set_json_config(const char *key, json_t *value);
+#include "config/reader/test.h"
 
 /*
- * Valid key
+ * O.K.
  */
 Test(config_reader, test_set_json_config0)
 {
@@ -52,14 +47,14 @@ Test(config_reader, test_set_json_config0)
 
 /*
  * Invalid key
- * Only check if it does not crash as we can't check if any of the configuration
- * parameters have changed.
+ * Only check if it does not crash as we can't check if any of the configuration parameters have changed.
  */
 Test(config_reader, test_set_json_config1)
 {
 	set_json_config("invalid_key", json_string("std_header_template"));
-
 	set_json_config("invalid_key", json_integer(3));
+
+	cr_assert(1);
 }
 
 /*

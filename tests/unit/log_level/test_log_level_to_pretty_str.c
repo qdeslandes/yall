@@ -22,8 +22,11 @@
  * SOFTWARE.
  */
 
-#include "test_log_level.h"
+#include "log_level/test.h"
 
+/*
+ * O.K.
+ */
 Test(log_level, test_log_level_to_pretty_str0)
 {
 	cr_assert_str_eq(log_level_to_pretty_str(yall_debug), "DEBUG");

@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-#include "writer/test_writer.h"
+#include "writer/syslog/test.h"
 
-#include "yall/writer/syslog.h"
-
+/*
+ * O.K.
+ */
 Test(writer_syslog, test_write_log_syslog0)
 {
-	write_log_syslog(yall_debug, "test");
+	write_log_syslog(yall_debug, "");
 	cr_assert(1);
 }

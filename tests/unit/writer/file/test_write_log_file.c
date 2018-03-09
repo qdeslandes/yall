@@ -22,22 +22,31 @@
  * SOFTWARE.
  */
 
-#include "writer/test_writer.h"
-
-#include "yall/writer/file.h"
+#include "writer/file/test.h"
 
 /*
- * Should fail
+ * O.K.
  */
-Test(writer_file, test_write_log_file0)
+Test(writer_file, test_write_log_file0, .fini=test_clean_delete_log_file)
 {
-	disable_fopen();
-	cr_assert_eq(write_log_file("./yall_unit_test_out.log", "test"), YALL_FILE_OPEN_ERR);
-	enable_fopen();
+	cr_assert_eq(YALL_SUCCESS, write_log_file(_YALL_TEST_LOG_FILE, "yall"));
 }
 
-Test(writer_file, test_write_log_file1)
+/*
+ * O.K.
+ * NULL message
+ */
+Test(writer_file, test_write_log_file1, .fini=test_clean_delete_log_file)
 {
-	cr_assert_eq(write_log_file("./yall_unit_test_out.log", "test"), YALL_SUCCESS);
-	remove("./yall_unit_test_out.log");
+	cr_assert_eq(YALL_SUCCESS, write_log_file(_YALL_TEST_LOG_FILE, NULL));
+}
+
+/*
+ * fopen fail
+ */
+Test(writer_file, test_write_log_file2, .fini=test_clean_delete_log_file)
+{
+	disable_fopen();
+	cr_assert_eq(YALL_FILE_OPEN_ERR, write_log_file(_YALL_TEST_LOG_FILE, "yall"));
+	enable_fopen();
 }

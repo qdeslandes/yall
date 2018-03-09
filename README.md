@@ -73,4 +73,3 @@ For any problem that can't be solved using `Debugging` section of the documentat
 [3l]: https://sonarcloud.io/dashboard?id=yall
 [4b]: https://sonarcloud.io/api/badges/measure?key=yall&metric=sqale_debt_ratio
 [4l]: https://sonarcloud.io/dashboard?id=yall
-

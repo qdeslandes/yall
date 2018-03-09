@@ -54,12 +54,6 @@ yall_error yall_enable_debug(const char *subsystem)
 	 * but it will not find it, ...
 	 */
 
-	/*
-	 * TODO : what if the subsystem already exists ? Then the parameters
-	 * will be overrided by the following instruction. It could be
-	 * interesting to check availability of such subsystem.
-	 */
-
 	debug_subsystem = strdup(subsystem);
 
 	debug = true;

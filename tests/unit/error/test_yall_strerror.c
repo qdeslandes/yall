@@ -22,17 +22,23 @@
  * SOFTWARE.
  */
 
-#include "test_error.h"
+#include "error/test.h"
 
-extern struct yall_errordesc {
-	yall_error code;
-	const char *message;
-} errordesc[];
+/*
+ * O.K.
+ */
+Test(error, test_yall_strerror0)
+{
+	for (int i = 0; i < yall_err_end; ++i) {
+		cr_assert_str_eq(yall_strerror(i), errordesc[i].message);
+		cr_assert_eq(errordesc[i].code, i);
+	}
+}
 
 /*
  * Value too low
  */
-Test(error, test_yall_strerror0)
+Test(error, test_yall_strerror1)
 {
 	cr_assert_str_eq(yall_strerror((yall_error)-1), errordesc[YALL_UNKNOW_ERROR].message);
 }
@@ -40,20 +46,8 @@ Test(error, test_yall_strerror0)
 /*
  * Value too high
  */
-Test(error, test_yall_strerror1)
-{
-	cr_assert_str_eq(yall_strerror(yall_err_end), errordesc[YALL_UNKNOW_ERROR].message);
-
-	cr_assert_str_eq(yall_strerror(yall_err_end+1), errordesc[YALL_UNKNOW_ERROR].message);
-}
-
-/*
- * Correct value
- */
 Test(error, test_yall_strerror2)
 {
-	for (int i = 0; i < yall_err_end; ++i) {
-		const char *str = errordesc[i].message;
-		cr_assert_str_eq(yall_strerror(i), str);
-	}
+	cr_assert_str_eq(yall_strerror(yall_err_end), errordesc[YALL_UNKNOW_ERROR].message);
+	cr_assert_str_eq(yall_strerror(yall_err_end+1), errordesc[YALL_UNKNOW_ERROR].message);
 }

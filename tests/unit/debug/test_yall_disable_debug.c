@@ -22,41 +22,28 @@
  * SOFTWARE.
  */
 
-#include "test_debug.h"
-
-extern uint16_t initialized;
-extern bool debug;
-extern const char *debug_subsystem;
+#include "debug/test.h"
 
 /*
- *Library not initialized
+ * O.K.
  */
-Test(debug, test_yall_disable_debug0)
+Test(debug, test_yall_disable_debug0, .init=test_init_yall, .fini=test_close_yall)
 {
-        cr_assert_eq(debug, false);
-        
-        cr_assert_eq(yall_disable_debug(), YALL_NOT_INIT);
+	yall_set_subsystem("debug", NULL, yall_debug, yall_console_output, NULL);
+	yall_enable_debug("debug");
 
-        cr_assert_eq(debug, false);
+	yall_disable_debug();
+	cr_assert_eq(YALL_SUCCESS, yall_disable_debug());
+	cr_assert_eq(debug, false);
+	cr_assert_eq(debug_subsystem, NULL);
 }
 
 /*
- * Multiple disabling
+ * Library not initialized
  */
-Test(debug, test_yall_disable_debug1)
+Test(debug, test_yall_disable1)
 {
-        cr_assert_eq(debug, false);
-
-        yall_init();
-        yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL);
-        yall_enable_debug("test");
-        
-        cr_assert_eq(debug, true);
-
-        yall_disable_debug();
-        cr_assert_eq(debug, false);
-        cr_assert_eq(debug_subsystem, NULL);
-        yall_disable_debug();
-        cr_assert_eq(debug, false);
-        cr_assert_eq(debug_subsystem, NULL);
+	cr_assert_eq(YALL_NOT_INIT, yall_disable_debug());
+	cr_assert_eq(debug, false);
+	cr_assert_eq(debug_subsystem, NULL);
 }

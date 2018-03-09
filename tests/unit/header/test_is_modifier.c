@@ -22,12 +22,10 @@
  * SOFTWARE.
  */
 
-#include "test_header.h"
-
-extern bool is_modifier(char c, enum yall_matches *match);
+#include "header/test.h"
 
 /*
- * IS a modifier.
+ * O.K.
  */
 Test(header, test_is_modifier0)
 {
@@ -53,7 +51,7 @@ Test(header, test_is_modifier0)
 }
 
 /*
- * Is NOT a modifier.
+ * Is NOT a modifier
  */
 Test(header, test_is_modifier1)
 {

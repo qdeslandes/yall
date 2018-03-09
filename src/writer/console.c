@@ -93,8 +93,7 @@ static void reset_color(void)
 }
 #endif
 
-yall_error write_log_console(enum yall_log_level log_level,
-	const char *msg)
+yall_error write_log_console(enum yall_log_level log_level, const char *msg)
 {
 	yall_error ret = YALL_SUCCESS;
 
