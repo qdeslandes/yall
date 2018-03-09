@@ -22,15 +22,16 @@
  * SOFTWARE.
  */
 
-#include "test_header.h"
+#include "header/test.h"
 
-extern void set_date(char *date);
-
+/*
+ * O.K.
+ */
 Test(header, test_set_date0)
 {
-    char date[YALL_DATE_LONG_LEN] = { 0 };
+	char date[YALL_DATE_LONG_LEN] = { 0 };
 
-    set_date(date);
+	set_date(date);
 
-    cr_assert_eq(date[YALL_DATE_LONG_LEN - 1], '\0');
+	cr_assert_eq(date[YALL_DATE_LONG_LEN - 1], '\0');
 }

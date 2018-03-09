@@ -39,7 +39,7 @@ void init_call_data(struct yall_call_data *d)
 
 	d->header = malloc(DEFAULT_LINE_SIZE);
 	d->header[0] = '\n';
-	d->header[1] = 0;
+	d->header[1] = '\0';
 
 	d->lines = NULL;
 }

@@ -66,10 +66,11 @@ size_t generate_std_msg(char *log_buffer, size_t len,
 {
 	size_t ret = (size_t)vsnprintf(log_buffer, len, message_format, args);
 
-	if (log_buffer) {
+	if (len >= 2)
 		log_buffer[len-2] = '\n';
+
+	if (len >= 1)
 		log_buffer[len-1] = '\0';
-	}
 
 	return ret;
 }

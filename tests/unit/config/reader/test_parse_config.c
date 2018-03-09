@@ -22,15 +22,10 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
-
-#include <jansson.h>
-#include "yall/config/reader.h"
-
-extern yall_error parse_config(json_t *config);
+#include "config/reader/test.h"
 
 /*
- * Proper parameters
+ * O.K.
  */
 Test(config_reader, test_parse_config0)
 {
@@ -38,28 +33,28 @@ Test(config_reader, test_parse_config0)
 }
 
 /*
- * NULL parameter
+ * O.K. with JSON content
  */
 Test(config_reader, test_parse_config1)
+{
+	json_t *r = json_object();
+	json_object_set(r, "azerty", json_string("azerty"));
+	
+	cr_assert_eq(YALL_SUCCESS, parse_config(r));
+}
+
+/*
+ * NULL parameter
+ */
+Test(config_reader, test_parse_config2)
 {
 	cr_assert_eq(YALL_SUCCESS, parse_config(NULL));
 }
 
 /*
- * Invalid JSON object type
- */
-Test(config_reader, test_parse_config2)
-{
-	cr_assert_eq(YALL_SUCCESS, parse_config(json_array()));
-}
-
-/*
- * Validate remain coverage line
+ * Parameter is not a JSON object
  */
 Test(config_reader, test_parse_config3)
 {
-	json_t *r = json_object();
-	json_object_set(r, "testing", json_string("testing"));
-	
-	parse_config(r);
+	cr_assert_eq(YALL_SUCCESS, parse_config(json_array()));
 }

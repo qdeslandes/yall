@@ -22,17 +22,10 @@
  * SOFTWARE.
  */
 
-#include "test_log_level.h"
-
-struct log_level_str_set {
-	const char *log_level_name;
-	const char *log_level_pretty_name;
-};
-
-extern struct log_level_str_set log_level_str[8];
+#include "log_level/test.h"
 
 /*
- * Valid log level
+ * O.K.
  */
 Test(log_level, test_str_to_log_level0)
 {
@@ -46,4 +39,12 @@ Test(log_level, test_str_to_log_level0)
 Test(log_level, test_str_to_log_level1)
 {
 	cr_assert_eq(yall_debug, str_to_log_level("invalid"));
+}
+
+/*
+ * NULL log level
+ */
+Test(log_level, test_str_to_log_level2)
+{
+	cr_assert_eq(yall_debug, str_to_log_level(NULL));
 }

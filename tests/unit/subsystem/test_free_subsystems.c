@@ -22,21 +22,29 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
+#include "subsystem/test.h"
 
+/*
+ * O.K.
+ * No subsystems
+ */
 Test(subsystem, test_free_subsystems0)
 {
-        free_subsystems();
+	free_subsystems();
 
-        cr_assert(1);
+	cr_assert(1);
 }
 
+/*
+ * O.K.
+ * Fill subsystems
+ */
 Test(subsystem, test_free_subsystems1, .init=create_subsystems, .fini=clean_subsystems)
 {
-        free_subsystems();
+	free_subsystems();
 
-        for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i)
-                _subsystems[i] = NULL;
+	for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i)
+		_subsystems[i] = NULL;
 
-        cr_assert(1);
+	cr_assert(1);
 }

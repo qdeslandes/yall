@@ -22,22 +22,32 @@
  * SOFTWARE.
  */
 
-#include "test_yall.h"
+#include "yall/test.h"
 
 /*
- * Library not init
+ * O.K.
  */
-Test(yall, test_yall_load_configuration0)
-{
-	cr_assert_eq(YALL_NOT_INIT, yall_load_configuration("invalid"));
-}
-
-/*
- * Bad configuration file
- */
-Test(yall, test_yall_load_configuration1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
+Test(yall, test_yall_log_configuration0, .init=test_create_json_config_file, .fini=test_remove_json_config_file)
 {
 	yall_init();
 
-        cr_assert_eq(YALL_JSON_CANT_READ_CONFIG, yall_load_configuration("invalid"));
+	cr_assert_eq(YALL_SUCCESS, yall_load_configuration(_YALL_TEST_JSON_FILE));
+
+	yall_close();
+}
+
+/*
+ * Not initialized
+ */
+Test(yall, test_yall_log_configuration1)
+{
+	cr_assert_eq(YALL_NOT_INIT, yall_load_configuration(_YALL_TEST_JSON_FILE));
+}
+
+/*
+ * read_config() returns an error
+ */
+Test(yall, test_yall_log_configuration2, .init=test_init_yall, .fini=test_close_yall)
+{
+	cr_assert_eq(YALL_JSON_CANT_READ_CONFIG, yall_load_configuration("invalid"));
 }

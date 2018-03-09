@@ -22,23 +22,35 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
+#include "subsystem/test.h"
 
+/*
+ * O.K.
+ * NULL parameter
+ */
 Test(subsystem, test__free_subsystems0)
 {
-        _free_subsystems(NULL);
+	_free_subsystems(NULL);
 
-        cr_assert(1);
+	cr_assert(1);
 }
 
-Test(subsystem, test__free_subsystems1, .init=create_subsystems, .fini=clean_subsystems)
+/*
+ * O.K.
+ * Free complete trees
+ */
+Test(subsystem, test__free_subsystems1, .init=create_subsystems)
 {
-        _free_subsystems(subsystems->childs);
-        _free_subsystems(subsystems->next->next->childs->childs);
-        _free_subsystems(subsystems);
+	_free_subsystems(subsystems->childs);
+	cr_assert_eq(subsystems->childs, NULL);
 
-        for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i)
-                _subsystems[i] = NULL;
+	_free_subsystems(subsystems->next->next->childs->childs);
+	cr_assert_eq(subsystems->next->next->childs->childs, NULL);
 
-        cr_assert(1);
+	_free_subsystems(subsystems);
+
+	for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i)
+		_subsystems[i] = NULL;
+
+	cr_assert(1);
 }

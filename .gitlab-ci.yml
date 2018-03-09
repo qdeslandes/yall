@@ -236,6 +236,8 @@ Install:DEB:
   dependencies:
     - Linux:Debug
     - Linux:Release
+  before_script:
+    - apt update && apt install -y libjansson4 libjansson-dev
   script:
     - dpkg -I build/packages/yall_*.deb
     - dpkg -i build/packages/yall_*.deb
@@ -254,6 +256,8 @@ Install:RPM:
   dependencies:
     - Linux:Debug
     - Linux:Release
+  before_script:
+    - dnf install -y jansson jansson-devel
   script:
     - rpm -qip build/packages/yall-[0-9]*
     - rpm -i build/packages/yall-[0-9]*
@@ -295,7 +299,7 @@ Coverage:
     - find build/gcda -type f -exec touch {} +  # Avoiding warning "Source file is newer than notes file" warning
     - mkdir -p build/gcov && cd $_
   script:
-    - gcov -fr -s ../.. `find ../ -name "*.gcda"`
+    - gcov -abcfu -s ../.. `find ../ -name "*.gcda"`
   artifacts:
     paths:
       - build/gcov

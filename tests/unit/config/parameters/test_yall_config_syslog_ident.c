@@ -22,38 +22,49 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
+#include "config/parameters/test.h"
 
-extern struct yall_config current_config;
-extern struct yall_config default_config;
-
-Test(config, test_yall_condig_syslog_ident0, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Setter.
+ */
+Test(config_parameters, test_yall_condig_syslog_ident0, .init=test_yall_init, .fini=test_yall_close)
 {
-    yall_config_set_syslog_ident(NULL);
-    cr_assert_str_eq(current_config.syslog_ident, default_config.syslog_ident);
+	yall_config_set_syslog_ident("ident");
+	cr_assert_str_eq(current_config.syslog_ident, "ident");
 
-    yall_config_set_syslog_ident("hello there");
-    cr_assert_str_eq(current_config.syslog_ident, "hello there");
+	yall_config_set_syslog_ident("another_ident");
+	cr_assert_str_eq(current_config.syslog_ident, "another_ident");
+
+	yall_config_set_syslog_ident(NULL);
+	cr_assert_str_eq(current_config.syslog_ident, "another_ident");
 }
 
-Test(config, test_yall_condig_syslog_ident1, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Getter.
+ */
+Test(config_parameters, test_yall_condig_syslog_ident1, .init=test_yall_init, .fini=test_yall_close)
 {
-    cr_assert_str_eq(yall_config_get_syslog_ident(), current_config.syslog_ident);
+	cr_assert_str_eq(yall_config_get_syslog_ident(), current_config.syslog_ident);
+	cr_assert_str_eq(yall_config_get_syslog_ident(), default_config.syslog_ident);
 
-    yall_config_set_syslog_ident("yall");
-    cr_assert_str_eq(yall_config_get_syslog_ident(), "yall");
+	yall_config_set_syslog_ident("yall");
+	cr_assert_str_eq(yall_config_get_syslog_ident(), "yall");
 
-    yall_config_set_syslog_ident("yalll");
-    cr_assert_str_eq(yall_config_get_syslog_ident(), "yalll");
+	yall_config_set_syslog_ident("ident");
+	cr_assert_str_eq(yall_config_get_syslog_ident(), "ident");
 }
 
-Test(config, test_yall_condig_syslog_ident2, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Resetter.
+ */
+Test(config_parameters, test_yall_condig_syslog_ident2, .init=test_yall_init, .fini=test_yall_close)
 {
-    cr_assert_str_eq(yall_config_get_syslog_ident(), default_config.syslog_ident);
-    yall_config_reset_syslog_ident();
-    cr_assert_str_eq(yall_config_get_syslog_ident(), default_config.syslog_ident);
+	yall_config_set_syslog_ident("ident");
+	cr_assert_str_eq(current_config.syslog_ident, "ident");
 
-    yall_config_set_syslog_ident("not_default");
-    yall_config_reset_syslog_ident();
-    cr_assert_str_eq(current_config.syslog_ident, default_config.syslog_ident);
+	yall_config_reset_syslog_ident();
+	cr_assert_str_eq(current_config.syslog_ident, default_config.syslog_ident);
 }

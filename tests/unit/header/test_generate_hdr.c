@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-#include "test_header.h"
-
-extern size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len, struct header_content *hc);
+#include "header/test.h"
 
 /*
- * Do not write
+ * O.K.
+ * Do not write, only get required space
  */
-Test(header, test_generate_hdr0, .init=test_generate_hdr_setup, .fini=test_generate_hdr_clean)
+Test(header, test_generate_hdr0, .init=test_init_yall, .fini=test_close_yall)
 {
 	size_t len = 0;
 	yall_config_set_std_header_template("%s");
@@ -53,7 +52,7 @@ Test(header, test_generate_hdr0, .init=test_generate_hdr_setup, .fini=test_gener
 /*
  * Write the header
  */
-Test(header, test_generate_hdr1, .init=test_generate_hdr_setup, .fini=test_generate_hdr_clean)
+Test(header, test_generate_hdr1, .init=test_init_yall, .fini=test_close_yall)
 {
 	size_t len = 0;
 	char header[64] = { 0 };

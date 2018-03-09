@@ -22,41 +22,38 @@
  * SOFTWARE.
  */
 
-#include "test_call.h"
+#include "call/test.h"
 
 /*
- * Add a header for the first time
+ * O.K.
  */
 Test(call, test_yall_call_set_header0)
 {
-        struct yall_call_data d = { 1, NULL, NULL };
-                d.header = malloc(DEFAULT_LINE_SIZE);
-                d.header[0] = '\n';
-                d.header[1] = 0;
+	struct yall_call_data d = { 0 };
+	init_call_data(&d);
 
-        yall_call_set_header(&d, "header");
-        cr_assert_str_eq(d.header, "header\n");
+	yall_call_set_header(&d, "header");
+	cr_assert_str_eq(d.header, "header\n");
+	cr_assert_eq(d.message_size, 7);
 
-        yall_call_set_header(&d, "header %c %d", 't', 3);
-        cr_assert_str_eq(d.header, "header t 3\n");
+	yall_call_set_header(&d, "header %c %d", 't', 3);
+	cr_assert_str_eq(d.header, "header t 3\n");
+	cr_assert_eq(d.message_size, 11);
 
-        free(d.header);
+	free(d.header);
 }
 
 /*
- * Replace an-existing header
+ * Too long header
  */
 Test(call, test_yall_call_set_header1)
 {
-        char *tmp = malloc(DEFAULT_LINE_SIZE);
-        strcpy(tmp, "hello");
-        struct yall_call_data d = { 0, tmp, NULL };
+	struct yall_call_data d = { 0 };
+	init_call_data(&d);
 
-        yall_call_set_header(&d, "header");
-        cr_assert_str_eq(d.header, "header\n");
+	yall_call_set_header(&d, _TEST_1088_LONG_CALL_HEADER);
+	cr_assert_str_eq(d.header, _TEST_1023_LONG_CALL_HEADER);
+	cr_assert_eq(d.message_size, 1023);
 
-        yall_call_set_header(&d, "header %c %d", 't', 3);
-        cr_assert_str_eq(d.header, "header t 3\n");
-
-        free(d.header);
+	free(d.header);
 }

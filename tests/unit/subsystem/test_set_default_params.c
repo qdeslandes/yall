@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
+#include "subsystem/test.h"
 
+/*
+ * O.K.
+ */
 Test(subsystem, test_set_default_params)
 {
-        struct yall_subsystem_params p = { 0 };
+	struct yall_subsystem_params p = { 0 };
 
-        set_default_params(&p);
-        cr_assert_eq(p.log_level, yall_debug);
-        cr_assert_eq(p.output_type, yall_console_output);
-        cr_assert_str_eq(p.file.filename, "yall.log");
+	set_default_params(&p);
+	cr_assert_eq(p.log_level, yall_debug);
+	cr_assert_eq(p.output_type, yall_console_output);
+	cr_assert_str_eq(p.file.filename, "yall.log");
 }

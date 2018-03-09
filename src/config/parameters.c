@@ -34,8 +34,6 @@
 #include "yall/debug.h"
 #include "yall/header.h"
 
-// TODO : set C++ wrapper for these functions
-
 /*
  * Default values
  */

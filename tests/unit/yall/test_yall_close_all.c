@@ -22,26 +22,27 @@
  * SOFTWARE.
  */
 
-#include "test_yall.h"
-
-extern uint16_t initialized;
+#include "yall/test.h"
 
 /*
  * Library not init
  */
 Test(yall, test_yall_close_all0)
 {
-        yall_close_all();
-        cr_assert_eq(initialized, 0);
+	yall_close_all();
+	cr_assert_eq(initialized, 0);
 }
 
+/*
+ * O.K.
+ */
 Test(yall, test_yall_close_all1)
 {
-        yall_init();
+	yall_init();
 	yall_init();
 
-        yall_close_all();
-        cr_assert_eq(initialized, 0);
-        yall_close_all();
-        cr_assert_eq(initialized, 0);
+	yall_close_all();
+	cr_assert_eq(initialized, 0);
+	yall_close_all();
+	cr_assert_eq(initialized, 0);
 }

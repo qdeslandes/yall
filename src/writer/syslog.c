@@ -71,7 +71,7 @@ static int get_syslog_level(enum yall_log_level ll)
 {
 #ifdef __linux__
 	static int syslog_ll[] = { LOG_DEBUG, LOG_INFO, LOG_NOTICE, LOG_WARNING,
-		LOG_ERR, LOG_CRIT, LOG_ALERT };
+		LOG_ERR, LOG_CRIT, LOG_ALERT , LOG_EMERG };
 
 	return syslog_ll[ll];
 #else

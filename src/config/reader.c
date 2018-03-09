@@ -30,6 +30,8 @@
 
 #include "yall/debug.h"
 
+#define _YALL_JSON_ALREADY_PARSED "__yall_checked_object"
+
 /**
  * \brief From a parameter key and its value, this function set up the proper
  *	library's parameter configuration. This isn't the best way we could
@@ -98,7 +100,6 @@ end:
  *	the parent as second parameter, untile their is no parent requested. See
  *	the documentation for informations about how to define a subsystem in
  *	configuration file.
- *	/!\ TODO : what if there is a recursive dependency ?
  * \param subsystems Root subsystems object of the JSON data.
  * \param subsystem_str Subsystem to start from.
  * \return Error code depending the result of the function.
@@ -122,9 +123,9 @@ static yall_error parse_subsystems(json_t *subsystems,
 		goto end;
 	}
 
-	if (json_object_get(s, "yall_checked_object"))
+	if (json_object_get(s, _YALL_JSON_ALREADY_PARSED))
 		return YALL_JSON_CIRCLE_DEPENDENCY;
-	json_object_set_new(s, "yall_checked_object", json_object());
+	json_object_set_new(s, _YALL_JSON_ALREADY_PARSED, json_object());
 
 	parent = json_object_get(s, "parent");
 	if (parent) {

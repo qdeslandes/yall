@@ -22,54 +22,115 @@
  * SOFTWARE.
  */
 
-#include "test_subsystem.h"
+#include "subsystem/test.h"
 
+/*
+ * O.K.
+ * No parent, no existing subsystem
+ */
 Test(subsystem, test_add_subsystem0)
 {
-        // Without parent
-        struct yall_subsystem *s = get_fake_subsystem("0", NULL);
-        add_subsystem(NULL, s);
-        cr_assert_eq(subsystems, s);
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem(NULL, s);
 
-        s = get_fake_subsystem("1", NULL);
-        add_subsystem(NULL, s);
-        cr_assert_eq(subsystems->next, s);
-        cr_assert_eq(s->previous, subsystems);
+	cr_assert_eq(subsystems, s);
 
-        s = get_fake_subsystem("2", NULL);
-        add_subsystem(NULL, s);
-        cr_assert_eq(subsystems->next->next, s);
-        cr_assert_eq(s->previous, subsystems->next);
+	_free_subsystems(subsystems);
+	subsystems = NULL;
+}
 
-        // With parent
-        s = get_fake_subsystem("00", NULL);
-        add_subsystem("0", s);
-        cr_assert_eq(subsystems->childs, s);
-        cr_assert_eq(s->parent, subsystems);
+/*
+ * O.K.
+ * No parent, existing subsystems
+ */
+Test(subsystem, test_add_subsystem1)
+{
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem(NULL, s);
 
-        s = get_fake_subsystem("20", NULL);
-        add_subsystem("2", s);
-        cr_assert_eq(subsystems->next->next->childs, s);
-        cr_assert_eq(s->parent, subsystems->next->next);
+	s = get_fake_subsystem("1", NULL);
+	add_subsystem(NULL, s);
 
-        s = get_fake_subsystem("21", NULL);
-        add_subsystem("2", s);
-        cr_assert_eq(subsystems->next->next->childs->next, s);
-        cr_assert_eq(s->parent, subsystems->next->next);
-        cr_assert_eq(s->previous, subsystems->next->next->childs);
+	cr_assert_eq(subsystems->next, s);
+	cr_assert_eq(s->previous, subsystems);
 
-        // Without parent (last time)
-        s = get_fake_subsystem("3", NULL);
-        add_subsystem(NULL, s);
-        cr_assert_eq(subsystems->next->next->next, s);
-        cr_assert_eq(s->previous, subsystems->next->next);
+	_free_subsystems(subsystems);
+	subsystems = NULL;
+}
 
-        free_fake_subsystem(subsystems->next->next->next);
-        free_fake_subsystem(subsystems->next->next->childs->next);
-        free_fake_subsystem(subsystems->next->next->childs);
-        free_fake_subsystem(subsystems->next->next);
-        free_fake_subsystem(subsystems->next);
-        free_fake_subsystem(subsystems->childs);
-        free_fake_subsystem(subsystems);
-        subsystems = NULL;
+/*
+ * O.K.
+ * Parent (non-existing), no existing subsystems
+ */
+Test(subsystem, test_add_subsystem2)
+{
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem("invalid", s);
+
+	cr_assert_eq(subsystems, s);
+	cr_assert_eq(s->parent, NULL);
+
+	_free_subsystems(subsystems);
+	subsystems = NULL;
+}
+
+/*
+ * O.K.
+ * Parent (non-existing), existing subsystems
+ */
+Test(subsystem, test_add_subsystem3)
+{
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem(NULL, s);
+
+	s = get_fake_subsystem("1", NULL);
+	add_subsystem("invalid", s);
+
+	cr_assert_eq(subsystems->next, s);
+	cr_assert_eq(s->previous, subsystems);
+	cr_assert_eq(s->parent, NULL);
+
+	_free_subsystems(subsystems);
+	subsystems = NULL;
+}
+
+/*
+ * O.K.
+ * Parent, existing subsystems
+ */
+Test(subsystem, test_add_subsystem4)
+{
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem(NULL, s);
+
+	s = get_fake_subsystem("1", NULL);
+	add_subsystem("0", s);
+
+	cr_assert_eq(subsystems->childs, s);
+	cr_assert_eq(s->previous, NULL);
+	cr_assert_eq(s->parent, subsystems);
+
+	_free_subsystems(subsystems);
+	subsystems = NULL;
+}
+
+/*
+ * O.K.
+ * Add a brother to a child
+ */
+Test(subsystem, test_add_subsystem5)
+{
+	struct yall_subsystem *s = get_fake_subsystem("0", NULL);
+	add_subsystem(NULL, s);
+	s = get_fake_subsystem("1", NULL);
+	add_subsystem("0", s);
+	s = get_fake_subsystem("2", NULL);
+	add_subsystem("0", s);
+
+	cr_assert_eq(subsystems->childs->next, s);
+	cr_assert_eq(s->previous, subsystems->childs);
+	cr_assert_eq(s->parent, subsystems);
+
+	_free_subsystems(subsystems);
+	subsystems = NULL;
 }

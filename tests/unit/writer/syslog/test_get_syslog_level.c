@@ -22,22 +22,24 @@
  * SOFTWARE.
  */
 
-#include "writer/test_writer.h"
+#include "writer/syslog/test.h"
 
-#ifdef __linux__
-#include <syslog.h>
-
-extern int get_syslog_level(enum yall_log_level ll);
-
+/*
+ * O.K.
+ */
 Test(writer_syslog, test_get_syslog_level0)
 {
-	cr_assert_eq(get_syslog_level(yall_debug), LOG_DEBUG);
-	cr_assert_eq(get_syslog_level(yall_info), LOG_INFO);
-	cr_assert_eq(get_syslog_level(yall_notice), LOG_NOTICE);
-	cr_assert_eq(get_syslog_level(yall_warning), LOG_WARNING);
-	cr_assert_eq(get_syslog_level(yall_err), LOG_ERR);
-	cr_assert_eq(get_syslog_level(yall_crit), LOG_CRIT);
-	cr_assert_eq(get_syslog_level(yall_alert), LOG_ALERT);
+	cr_assert_eq(yall_fac_kern, str_to_syslog_facility("yall_fac_kern"));
+	cr_assert_eq(yall_fac_authpriv, str_to_syslog_facility("yall_fac_authpriv"));
+	cr_assert_eq(yall_fac_local7, str_to_syslog_facility("yall_fac_local7"));
 }
 
-#endif
+/*
+ * O.K.
+ * Facility does not exists
+ */
+Test(writer_syslog, test_get_syslog_level1)
+{
+	cr_assert_eq(yall_fac_user, str_to_syslog_facility("yall"));
+	cr_assert_eq(yall_fac_user, str_to_syslog_facility("invalid"));
+}

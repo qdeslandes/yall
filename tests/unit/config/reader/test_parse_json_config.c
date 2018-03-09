@@ -22,16 +22,38 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
+#include "config/reader/test.h"
 
-#include <jansson.h>
 
-extern yall_error parse_json_config(json_t *root);
+/*
+ * O.K.
+ * yall_set_subsystem() is called, so the library must be initialized.
+ */
+Test(config_reader, test_parse_json_config0, .init=test_yall_init, .fini=test_yall_close)
+{
+	json_t *root = json_object();
+	json_t *subsys = json_object();
+	json_t *subsys_root = json_object();
+
+	json_object_set(subsys, "root", subsys_root);
+	json_object_set(root, "subsystems", subsys);
+
+	cr_assert_eq(YALL_SUCCESS, parse_json_config(root));
+}
+
+/*
+ * O.K.
+ * NULL JSON parameter
+ */
+Test(config_reader, test_parse_json_config1)
+{
+	cr_assert_eq(YALL_SUCCESS, parse_json_config(NULL));
+}
 
 /*
  * Undeclared subsystem
  */
-Test(config_reader, test_parse_json_config0)
+Test(config_reader, test_parse_json_config2)
 {
 	json_t *root = json_object();
 	json_t *subsys = json_object();
@@ -41,19 +63,4 @@ Test(config_reader, test_parse_json_config0)
 	json_object_set(root, "subsystems", subsys);
 
 	cr_assert_eq(YALL_JSON_UNDECLARED_SUBSYS, parse_json_config(root));
-}
-
-/*
- * Success
- * yall_set_subsystem() is called, so the library should be initialized
- */
-Test(config_reader, test_parse_json_config1, .init=test_config_json_subsystems_init, .fini=test_config_json_subsystems_clean)
-{
-	json_t *root = json_object();
-	json_t *subsys = json_object();
-	json_t *subsys_root = json_object();
-	json_object_set(subsys, "root", subsys_root);
-	json_object_set(root, "subsystems", subsys);
-
-	cr_assert_eq(YALL_SUCCESS, parse_json_config(root));
 }

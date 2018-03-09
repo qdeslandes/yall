@@ -22,38 +22,46 @@
  * SOFTWARE.
  */
 
-#include "config/test_config.h"
+#include "config/parameters/test.h"
 
-extern struct yall_config current_config;
-extern struct yall_config default_config;
-
-Test(config, test_yall_config_syslog_facility0, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Setter.
+ */
+Test(config_parameters, test_yall_config_set_syslog_facility0, .init=test_yall_init, .fini=test_yall_close)
 {
-    yall_config_set_syslog_facility(yall_fac_user);
-    cr_assert_eq(current_config.syslog_facility, yall_fac_user);
+	yall_config_set_syslog_facility(yall_fac_user);
+	cr_assert_eq(current_config.syslog_facility, yall_fac_user);
 
-    yall_config_set_syslog_facility(yall_fac_lpr);
-    cr_assert_eq(current_config.syslog_facility, yall_fac_lpr);
+	yall_config_set_syslog_facility(yall_fac_lpr);
+	cr_assert_eq(current_config.syslog_facility, yall_fac_lpr);
 }
 
-Test(config, test_yall_config_syslog_facility1, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Getter.
+ */
+Test(config_parameters, test_yall_config_get_syslog_facility0, .init=test_yall_init, .fini=test_yall_close)
 {
-    cr_assert_eq(yall_config_get_syslog_facility(), current_config.syslog_facility);
+	cr_assert_eq(yall_config_get_syslog_facility(), current_config.syslog_facility);
+	cr_assert_eq(yall_config_get_syslog_facility(), default_config.syslog_facility);
 
-    yall_config_set_syslog_facility(yall_fac_lpr);
-    cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
+	yall_config_set_syslog_facility(yall_fac_lpr);
+	cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
 
-    yall_config_set_syslog_facility(yall_fac_lpr);
-    cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
+	yall_config_set_syslog_facility(yall_fac_lpr);
+	cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
 }
 
-Test(config, test_yall_config_syslog_facility2, .init=test_config_config_setup, .fini=test_config_config_clean)
+/*
+ * O.K.
+ * Resetter.
+ */
+Test(config_parameters, test_yall_config_reset_syslog_facility0, .init=test_yall_init, .fini=test_yall_close)
 {
-    cr_assert_eq(yall_config_get_syslog_facility(), default_config.syslog_facility);
-    yall_config_reset_syslog_facility();
-    cr_assert_eq(yall_config_get_syslog_facility(), default_config.syslog_facility);
+	yall_config_set_syslog_facility(yall_fac_lpr);
+	cr_assert_eq(yall_config_get_syslog_facility(), yall_fac_lpr);
 
-    yall_config_set_syslog_facility(yall_fac_lpr);
-    yall_config_reset_syslog_facility();
-    cr_assert_eq(current_config.syslog_facility, default_config.syslog_facility);
+	yall_config_reset_syslog_facility();
+	cr_assert_eq(current_config.syslog_facility, default_config.syslog_facility);
 }

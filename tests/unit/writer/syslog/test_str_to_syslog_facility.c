@@ -22,15 +22,20 @@
  * SOFTWARE.
  */
 
-#include "writer/test_writer.h"
+#include "writer/syslog/test.h"
 
-#include "yall/writer/syslog.h"
+ParameterizedTestParameters(writer_syslog, test_str_to_syslog_facility0) {
+	return cr_make_param_array(struct param_set_syslog_level, yall_ll_and_syslog_ll, 7);
+}
 
-Test(writer_syslog, test_str_to_syslog_facility0)
+/*
+ * O.K.
+ */
+ParameterizedTest(struct param_set_syslog_level *p, writer_syslog, test_str_to_syslog_facility0)
 {
-	cr_assert_eq(str_to_syslog_facility("yall_fac_user"), yall_fac_user);
-	cr_assert_eq(str_to_syslog_facility("invalid"), yall_fac_user);
-	cr_assert_eq(str_to_syslog_facility("yall_fac_kern"), yall_fac_kern);
-	cr_assert_eq(str_to_syslog_facility("yall_fac_lpr"), yall_fac_lpr);
-	cr_assert_eq(str_to_syslog_facility("yall_fac_local1"), yall_fac_local1);
+    #ifdef __linux__
+	cr_assert_eq(p->syslog_ll, get_syslog_level(p->yall_ll));
+    #else
+    cr_assert(1);
+    #endif
 }

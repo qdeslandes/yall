@@ -38,13 +38,13 @@
 #include "yall/writer/console.h"
 
 #ifdef __linux__
-#include <stdatomic.h>
-#include <unistd.h>
-#define yall_sleep(ms) usleep(ms * 1000)
+#	include <stdatomic.h>
+#	include <unistd.h>
+#	define yall_sleep(ms) usleep(ms * 1000)
 static atomic_bool thread_run = true;
 #elif _WIN32
-#include <Windows.h>
-#define yall_sleep(ms) Sleep(ms)
+#	include <Windows.h>
+#	define yall_sleep(ms) Sleep(ms)
 static __declspec(align(64)) bool thread_run = true;
 #endif
 

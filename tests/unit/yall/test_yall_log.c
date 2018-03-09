@@ -22,70 +22,77 @@
  * SOFTWARE.
  */
 
-#include "test_yall.h"
-
-extern struct yall_subsystem *subsystems;
+#include "yall/test.h"
 
 /*
  * Library not initialized
  */
 Test(yall, test_yall_log0)
 {
-        cr_assert_eq(yall_log("", yall_debug, "", "main.c", 0, ""), YALL_NOT_INIT);
-        cr_assert_eq(yall_log("nope", yall_debug, "", "/mnt/main.c", 3, ""), YALL_NOT_INIT);
-        cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_debug, "", "C:/main.c", 0, ""), YALL_NOT_INIT);
+	cr_assert_eq(yall_log("", yall_debug, "", "main.c", 0, ""), YALL_NOT_INIT);
+	cr_assert_eq(yall_log("nope", yall_debug, "", "/mnt/main.c", 3, ""), YALL_NOT_INIT);
+	cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_debug, "", "C:/main.c", 0, ""), YALL_NOT_INIT);
 }
 
 /*
  * Empty subsystems list, so using the default subsystem
  */
-Test(yall, test_yall_log1, .init=tests_yall_init_lib, .fini=tests_yall_close_lib)
+Test(yall, test_yall_log1, .init=test_init_yall, .fini=test_close_yall)
 {
-        cr_assert_eq(yall_log("", yall_debug, "", "", 0, ""), YALL_SUCCESS);
-        cr_assert_eq(yall_log("nope", yall_warning, "", "MAIN.c", 0, ""), YALL_SUCCESS);
-        cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", "", 43, ""), YALL_SUCCESS);
+	cr_assert_eq(yall_log("", yall_debug, "", "", 0, ""), YALL_SUCCESS);
+	cr_assert_eq(yall_log("nope", yall_warning, "", "MAIN.c", 0, ""), YALL_SUCCESS);
+	cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", "", 43, ""), YALL_SUCCESS);
 }
 
+#ifdef __linux__
+/*
+ * Currently set this tests for Linux only, as on Windows they are really slow.
+ * However, Windows and Linux code for this feature are identical, so there
+ * shouldn't be any problem.
+ */
 /*
  * Test on getting subsystem and checking log level
  */
 TheoryDataPoints(yall, test_yall_log2) = {
-        DataPoints(char *, "0", "00", "01", "02", "1", "2", "20", "200", "201", "3"),
-        DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
-        DataPoints(char *, "toolongnameforafunctionnameinthelibrary", "main", "int main()", "main()", "Class::Method", "int Class::Method", "int Class::Method()"),
+	DataPoints(char *, "0", "00", "01", "02", "1", "2", "20", "200", "201", "3"),
+	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
+	DataPoints(char *, "toolongnameforafunctionnameinthelibrary", "main", "int main()", "main()", "Class::Method", "int Class::Method", "int Class::Method()"),
 	DataPoints(char *, "main.c", "C:/test/code/dev/main.c", "/mnt/storage/Projects/yall/yall.c", "MAIN.C", ""),
 	DataPoints(int32_t, 123, 321, 0, 111111, 3, -1, 34),
-        DataPoints(char *, "")
+	DataPoints(char *, "")
 };
 
-Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line, char *format), yall, test_yall_log2, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line, char *format), yall, test_yall_log2, .init=create_subsystems, .fini=clean_subsystems)
 {
-        uint8_t waiting_for = YALL_SUCCESS;
-        uint8_t ret = yall_log(s, ll, f, F, line, format);
-        struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, { 0 }, { "yall_default.log" } };
-        _get_subsystem(s, subsystems, &p);
+	uint8_t waiting_for = YALL_SUCCESS;
+	uint8_t ret = yall_log(s, ll, f, F, line, format);
+	struct yall_subsystem_params p = { yall_warning, yall_file_output, yall_subsys_enable, { 0 }, { "yall_default.log" } };
+	_get_subsystem(s, subsystems, &p);
 
-        if (ll < p.log_level)
-                waiting_for = YALL_LOG_LEVEL_TOO_LOW;
+	if (ll < p.log_level)
+		waiting_for = YALL_LOG_LEVEL_TOO_LOW;
 
-        cr_assert_eq(ret, waiting_for);
+	cr_assert_eq(ret, waiting_for);
 }
+#endif
 
 /*
+ * O.K.
  * Variadic parameters list
  */
-Test(yall, test_yall_log3, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log3, .init=test_init_yall, .fini=test_close_yall)
 {
-        cr_assert_eq(yall_log("0", yall_emerg, "", "main.c", 0, "%s %d", "hello", 3), YALL_SUCCESS);
-        cr_assert_eq(yall_log("3", yall_emerg, "", "", 0, "%X %d", 4, 3), YALL_SUCCESS);
+	cr_assert_eq(yall_log("0", yall_emerg, "", "main.c", 0, "%s %d", "hello", 3), YALL_SUCCESS);
+	cr_assert_eq(yall_log("3", yall_emerg, "", "", 0, "%X %d", 4, 3), YALL_SUCCESS);
 }
 
 /*
  * Disabled subsystem
  */
-Test(yall, test_yall_log4, .init=tests_yall_log_setup, .fini=tests_yall_log_clean)
+Test(yall, test_yall_log4, .init=create_subsystems, .fini=clean_subsystems)
 {
-        _subsystems[0]->status = yall_subsys_disable;
+	_subsystems[0]->status = yall_subsys_disable;
 
-        cr_assert_eq(yall_log("0", yall_emerg, "", "", 0, ""), YALL_SUBSYS_DISABLED);
+	cr_assert_eq(yall_log("0", yall_emerg, "", "", 0, ""), YALL_SUBSYS_DISABLED);
+
 }

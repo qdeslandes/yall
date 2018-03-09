@@ -22,72 +22,87 @@
  * SOFTWARE.
  */
 
-#include "test_header.h"
-
-extern enum yall_matches std_matches[10];
-extern char std_header_format[64];
+#include "header/test.h"
 
 /*
- * Empty
+ * O.K.
+ * Empty header
  */
 Test(header, test_header_compile_format0)
 {
-    header_compile_format(std_header, "");
-    cr_assert_str_eq(std_header_format, "");
+	header_compile_format(std_header, "");
+	cr_assert_str_eq(std_header_format, "");
 
-    for (int i = 0; i < 10; ++i)
-        cr_assert_eq(std_matches[i], 0);
+	for (int i = 0; i < 10; ++i)
+	cr_assert_eq(std_matches[i], 0);
 }
 
 /*
- * Short without modifiers
+ * O.K.
+ * No modifier in format
  */
 Test(header, test_header_compile_format1)
 {
-    header_compile_format(std_header, "foo bar foo bar");
-    cr_assert_str_eq(std_header_format, "foo bar foo bar");
+	header_compile_format(std_header, "foo bar foo bar");
+	cr_assert_str_eq(std_header_format, "foo bar foo bar");
 
-    for (int i = 0; i < 10; ++i)
-        cr_assert_eq(std_matches[i], 0);
+	for (int i = 0; i < 10; ++i)
+	cr_assert_eq(std_matches[i], 0);
 }
 
 /*
- * Short with modifiers
+ * O.K.
+ * Small format with modifiers
  */
 Test(header, test_header_compile_format2)
 {
-    header_compile_format(std_header, "%04l %05f :: %s :: -> ");
-    cr_assert_str_eq(std_header_format, "%04s %05s :: %s :: -> ");
+	header_compile_format(std_header, "%04l %05f :: %s :: -> ");
+	cr_assert_str_eq(std_header_format, "%04s %05s :: %s :: -> ");
 
-    cr_assert_eq(std_matches[0], match_log_level);
-    cr_assert_eq(std_matches[1], match_function);
-    cr_assert_eq(std_matches[2], match_subsystem);
-    for (int i = 3; i < 10; ++i)
-        cr_assert_eq(std_matches[i], 0);
+	cr_assert_eq(std_matches[0], match_log_level);
+	cr_assert_eq(std_matches[1], match_function);
+	cr_assert_eq(std_matches[2], match_subsystem);
+	for (int i = 3; i < 10; ++i)
+	cr_assert_eq(std_matches[i], 0);
 }
 
 /*
- * Too long
+ * O.K.
+ * Format too long, will be cut, no modifiers
  */
 Test(header, test_header_compile_format3)
 {
-    header_compile_format(std_header, "aaaaaaaaaa" "bbbbbbbbbb" "cccccccccc" "dddddddddd" "eeeeeeeeee" "ffffffffff" "gggggggggg");
-    cr_assert_str_eq(std_header_format, "aaaaaaaaaa" "bbbbbbbbbb" "cccccccccc" "dddddddddd" "eeeeeeeeee" "ffffffffff" "ggg");
+	header_compile_format(std_header, "aaaaaaaaaa" "bbbbbbbbbb" "cccccccccc" "dddddddddd" "eeeeeeeeee" "ffffffffff" "gggggggggg");
+	cr_assert_str_eq(std_header_format, "aaaaaaaaaa" "bbbbbbbbbb" "cccccccccc" "dddddddddd" "eeeeeeeeee" "ffffffffff" "ggg");
 
-    for (int i = 0; i < 10; ++i)
-        cr_assert_eq(std_matches[i], match_empty);
+	for (int i = 0; i < 10; ++i)
+	cr_assert_eq(std_matches[i], match_empty);
 }
 
 /*
- * Others
+ * O.K.
+ * Format too long, will be cut, modifiers
  */
 Test(header, test_header_compile_format5)
 {
-    header_compile_format(std_header, "a%04-faaaa" "bbbbbbbbbb" "cccccccccc" "%pdddddddd" "eeeeeeeeee" "ffffffff%0" "gggggggggg");
-    cr_assert_str_eq(std_header_format, "a%04-saaaa" "bbbbbbbbbb" "cccccccccc" "%psddddddd" "eeeeeeeeee" "ffffffff%0" "ggg");
+	header_compile_format(std_header, "a%04-faaaa" "bbbbbbbbbb" "cccccccccc" "%pdddddddd" "eeeeeeeeee" "ffffffff%0" "gggggggggg");
+	cr_assert_str_eq(std_header_format, "a%04-saaaa" "bbbbbbbbbb" "cccccccccc" "%psddddddd" "eeeeeeeeee" "ffffffff%0" "ggg");
 
-    cr_assert_eq(std_matches[0], match_function);
-    cr_assert_eq(std_matches[1], match_date);
-    for (int i = 2; i < 10; ++i)
-        cr_assert_eq(std_matches[i], 0);
+	cr_assert_eq(std_matches[0], match_function);
+	cr_assert_eq(std_matches[1], match_date);
+	for (int i = 2; i < 10; ++i)
+	cr_assert_eq(std_matches[i], 0);
+}
+
+/*
+ * O.K.
+ * Too many modifiers
+ */
+Test(header, test_header_compile_format6)
+{
+	header_compile_format(std_header, "%f %f %f %f %f %f %f %f %f %f %f");
+	cr_assert_str_eq(std_header_format, "%s %s %s %s %s %s %s %s %s %s %s");
+
+	for (int i = 0; i < 10; ++i)
+	cr_assert_eq(std_matches[i], match_function);
 }
