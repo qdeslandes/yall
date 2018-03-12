@@ -331,6 +331,7 @@ void _free_subsystems(struct yall_subsystem *s)
 void free_subsystems(void)
 {
 	_free_subsystems(subsystems);
+	subsystems = NULL;
 }
 
 /**
