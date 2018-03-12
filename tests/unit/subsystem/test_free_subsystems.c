@@ -48,3 +48,19 @@ Test(subsystem, test_free_subsystems1, .init=create_subsystems, .fini=clean_subs
 
 	cr_assert(1);
 }
+
+/*
+ * O.K.
+ * Double free or corruption
+ * Cause : when freeing subsystem, list pointer is not set to NULL, so reopening
+ * the library will lead to adding a subsystem to the ghost one.
+ */
+Test(subsystem, test_free_subsystems2)
+{
+	yall_init();
+	yall_set_subsystem("root", NULL, yall_debug, yall_console_output, NULL);
+	yall_close_all();
+	yall_init();
+	yall_set_subsystem("root", NULL, yall_debug, yall_console_output, NULL);
+	yall_close_all();
+}
