@@ -12,7 +12,7 @@
 ## How to use
 
 
-Informations about how to use `yall` can be found on the [project wiki](https://naccyde.gitlab.io/yall/). As the documentation is under redaction, the old one can be found in [Git history](https://gitlab.com/naccyde/yall/blob/755569d405948297665aeaad41d4bb9f7856ad35/README.md).
+Informations about how to use `yall` can be found on the [project wiki](https://naccyde.github.io/yall/).
 
 The major steps are :
   * Initialize the library
@@ -61,8 +61,7 @@ The way to contribute to the project is define is `CONTRIBUTING.md` (currently u
 
 For any problem that can't be solved using `Debugging` section of the documentation, there is multiple solutions :
 
-* Create an [issue](https://gitlab.com/naccyde/yall/issues) on the project, following the template.
-* Send a mail to the project's service desk : `incoming+naccyde/yall <at> gitlab <dot> com`.
+* Create an [issue](https://github.com/Naccyde/yall/issues) on the project, following the template.
 * Send a mail to the maintainer : `naccyde <at> naccyde <dot> eu`.
 
 
