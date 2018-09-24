@@ -27,9 +27,9 @@ make -C ${YALL_ROOT}/build doc
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     SONAR_EXTRA_OPTIONS="-Dsonar.pullrequest.branch=${TRAVIS_BRANCH} -Dsonar.pullrequest.key=${TRAVIS_PULL_REQUEST} -Dsonar.pullrequest.base=develop -Dsonar.pullrequest.provider=github -Dsonar.pullrequest.github.repository=${GITHUB_REPO}"
 elif [ "$TRAVIS_BRANCH" = "develop" ]; then
-    SONAR_EXTRA_OPTIONS="-Dsonar.branch.target=develop -Dsonar.branch.name=${TRAVIS_BRANCH}"
+    SONAR_EXTRA_OPTIONS="-Dsonar.branch.name=develop"
 elif [ "$TRAVIS_BRANCH" = "master" ]; then
-    SONAR_EXTRA_OPTIONS="-Dsonar.branch.name=${TRAVIS_BRANCH}"
+    SONAR_EXTRA_OPTIONS="-Dsonar.branch.name=master"
 fi
 
 sonar-scanner \
