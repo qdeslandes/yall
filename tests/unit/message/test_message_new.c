@@ -1,0 +1,74 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 Quentin "Naccyde" Deslandes.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#include "message/test.h"
+
+/*
+ * O.K.
+ * No output file name
+ */
+Test(message, test_message_new0)
+{
+	struct yall_subsystem_params p = { 
+	.log_level = yall_debug,
+	.output_type = yall_console_output,
+	.file = {
+		.filename = NULL
+	}
+	};
+
+	struct message *m = message_new(strdup("test"), yall_debug, &p);
+
+	cr_assert_str_eq(m->data, "test");
+	cr_assert_eq(m->log_level, yall_debug);
+	cr_assert_eq(m->output_type, p.output_type);
+	cr_assert_eq(m->file.filename, NULL);
+
+	message_delete(m);
+}
+
+/*
+ * O.K.
+ * Output file name
+ */
+Test(message, test_message_new1)
+{
+	struct yall_subsystem_params p = { 
+	.log_level = yall_debug,
+	.output_type = yall_console_output,
+	.file = {
+		.filename = strdup("test")
+	}
+	};
+
+	struct message *m = message_new(strdup("test"), yall_debug, &p);
+
+	cr_assert_str_eq(m->data, "test");
+	cr_assert_eq(m->log_level, yall_debug);
+	cr_assert_eq(m->output_type, p.output_type);
+	cr_assert_str_eq(m->file.filename, "test");
+
+	free((char *)p.file.filename);
+	message_delete(m);
+}

@@ -1,0 +1,14 @@
+# Folders
+build
+__pycache__
+*.kdev4
+*.vscode
+.scannerwork
+
+# Files
+*.todo
+*.swp
+out.txt
+.vimrc
+tags
+yall.log
