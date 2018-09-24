@@ -11,36 +11,30 @@ COLOR_YELLOW='\033[33m'
 COLOR_GREEN='\033[32m'
 COLOR_RED='\033[31m'
 
-def testResults(success, cmd, successMsg, errorMsg):
+def testResults(retValue, cmd, successMsg, errorMsg):
+    success = 0 == retValue
     color = COLOR_GREEN if success else COLOR_RED
     resInfo = 'SUCCESS' if success else 'FAILURE'
     print(color, resInfo, COLOR_DEFAULT, ' -> ', cmd, sep='')
 
-    if success:
+    if 0 == retValue:
         print('\t' + successMsg)
     else:
         print('\t' + errorMsg)
 
-    return success
+    return retValue
 
 """
     Analyzers
 """
 def defaultAnalyzer(cmd, code, stdout, stderr):
-    print(stderr)
-    print("Default")
-    #testResults(0 == code, cmd)
-
     if 0 != code:
-        testError('Run the test manually for more detailed output.')
+        print(stderr)
+        print(stdout)
 
-    return 0 == code
+    return 1
 
 def coverageAnalyzer(cmd, code, stdout, stderr):
-    print("hihi")
-    print(stdout)
-    print(stderr)
-
     resultsLine = ''
     coverage = 0.0
 
@@ -56,17 +50,19 @@ def coverageAnalyzer(cmd, code, stdout, stderr):
     except:
         coverage = 0.0
 
-    success = 0 == code and coverage > 95.0
+    if 0 == code and coverage > 95.0:
+        retValue = 0
+    else:
+        retValue = 1
+        print(stdout)
+        print(stderr)
 
     errorMsg = 'Code coverage should be at least 95.0% (currently ' + str(coverage) + '%).'
     successMsg = 'Code coverage is above 95.0% (currently ' + str(coverage) + '%).'
 
-    return testResults(success, cmd, successMsg, errorMsg)
+    return testResults(retValue, cmd, successMsg, errorMsg)
 
 def styleAnalyzer(cmd, code, stdout, stderr):
-    print(stdout)
-    print(stderr)
-
     lines = stdout.split('\n')
 
     warnings = 0
@@ -77,17 +73,20 @@ def styleAnalyzer(cmd, code, stdout, stderr):
         elif re.match('ERROR', line):
             errors += 1
 
-    success = code == 0 and (warnings + errors) == 0
+    if code == 0 and (warnings + errors) == 0:
+        retValue = 0
+    else:
+        retValue = 1
+        print(stdout)
+        print(stderr)
 
     errorMsg = 'Checkstyle failed : ' + str(warnings) + ' warnings, ' + str(errors) + ' errors.'
     successMsg = 'Checkstyle passed.'
 
-    return testResults(success, cmd, successMsg, errorMsg)
+    return testResults(retValue, cmd, successMsg, errorMsg)
 
 
 def valgrindAnalyzer(cmd, code, stdout, stderr):
-    print(stdout)
-    print(stderr)
     stats = {}
 
     # Do not count suppressed error, as it comes from suppression files
@@ -113,7 +112,12 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
             if val:
                 stats['still reachable'] = val
 
-    success = 0 == code and 0 == len(stats)
+    if 0 == code and 0 == len(stats):
+        retValue = 0
+    else:
+        retValue = 1
+        print(stdout)
+        print(stderr)
 
     resume = ''
     for key in stats:
@@ -124,12 +128,9 @@ def valgrindAnalyzer(cmd, code, stdout, stderr):
     errorMsg = 'Valgrind test failed : ' + resume
     successMsg = 'Valgrind test success.'
 
-    return testResults(success, cmd, successMsg, errorMsg)
+    return testResults(retValue, cmd, successMsg, errorMsg)
 
 def unitAnalyzer(cmd, code, stdout, stderr):
-    print(stdout)
-    print(stderr)
-
     fail = 0
     crash = 0
     synthesisLine = ''
@@ -149,11 +150,17 @@ def unitAnalyzer(cmd, code, stdout, stderr):
                 elif 'Crashing' in l[0]:
                     crash = val
 
-    success = 0 == code and 0 == (fail + crash)
+    if 0 == code and 0 == (fail + crash):
+        retValue = 0
+    else:
+        retValue = 1
+        print(stdout)
+        print(stderr)
+
     errorMsg = 'Unit tests failed : ' + str(fail) + ' tests failed, ' + str(crash) + ' tests crashed.'
     successMsg = 'Unit tests success.'
 
-    return testResults(success, cmd, successMsg, errorMsg)
+    return testResults(retValue, cmd, successMsg, errorMsg)
 
 class YallCommand:
     def __init__(self):
@@ -166,4 +173,5 @@ def analyze(yallCmd):
     result = subprocess.run(yallCmd.cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=yallCmd.env, cwd=yallCmd.cwd, shell=True)
 
     # Reverse the analyzer returned value as outside this module, return values are used normally (1 is then an error)
-    return not yallCmd.analyzer(yallCmd.cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
+    #return not yallCmd.analyzer(yallCmd.cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
+    return yallCmd.analyzer(yallCmd.cmd, result.returncode, result.stdout.decode('UTF-8'), result.stderr.decode('UTF-8'))
