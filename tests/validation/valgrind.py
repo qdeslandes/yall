@@ -6,6 +6,7 @@
 
 import sys, os, argparse, subprocess
 import errno
+import sys
 
 # UGLY HACK
 sys.path.insert(0, './resources/python')

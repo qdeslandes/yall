@@ -3,6 +3,7 @@ build
 __pycache__
 *.kdev4
 *.vscode
+.scannerwork
 
 # Files
 *.todo
@@ -10,3 +11,4 @@ __pycache__
 out.txt
 .vimrc
 tags
+yall.log
