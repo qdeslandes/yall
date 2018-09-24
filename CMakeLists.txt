@@ -95,6 +95,9 @@ elseif (WIN32)
 	endif ()
 endif ()
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/out/public/doxygen)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/out/coverage)
+
 add_subdirectory(src)
-add_subdirectory(doc)
 add_subdirectory(tests)
+add_subdirectory(doc)

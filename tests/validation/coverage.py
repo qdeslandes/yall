@@ -7,9 +7,6 @@
 import sys, os, argparse, subprocess
 import errno
 
-# UGLY HACK
-sys.path.insert(0, './resources/python')
-
 from helper import *
 
 def main(argv):
@@ -19,7 +16,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Check yall sources coverage')
     parser.add_argument('--sourcesDir', required=True, help='Sources directory')
     parser.add_argument('--outDir', required=True, help='GCOV files output directory')
-    parser.add_argument('--gcdaDir', required=True, help='GCDA files directory')
+    parser.add_argument('--gcnoDir', required=True, help='GCNO files directory')
     args = parser.parse_args()
     
     try:
@@ -29,7 +26,7 @@ def main(argv):
             exit(e.errno)
 
     c = YallCommand()
-    c.cmd = 'gcov -abcfu -s ' + args.sourcesDir + ' `find ' + args.gcdaDir + ' -name "*.gcda"`'
+    c.cmd = 'gcov -abcfu `find ' + args.gcnoDir + ' -name "*.gcno"`'
     c.env = customEnv
     c.cwd = args.outDir
     c.analyzer = coverageAnalyzer

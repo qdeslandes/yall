@@ -5,18 +5,21 @@
 configure_file(${CMAKE_SOURCE_DIR}/resources/Doxyfile.in ${CMAKE_BINARY_DIR}/doc/Doxyfile @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/doc/conf.py.in ${CMAKE_BINARY_DIR}/conf.py @ONLY)
 
-add_custom_target(doxygen_doc
+add_custom_target(_doxygen_doc
 	COMMAND doxygen Doxyfile
 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc
 	COMMENT "Generate Doxygen documentation")
 
-add_custom_target(user_doc
-	DEPENDS doxygen_doc
-	COMMAND sphinx-build -c ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/doc ${CMAKE_BINARY_DIR}/doc/user
+add_custom_target(_coverage_doc
+	COMMAND LC_ALL=C lcov --base-directory ${CMAKE_SOURCE_DIR} --directory ${CMAKE_BINARY_DIR} -c -o ${CMAKE_BINARY_DIR}/coverage.info
+	COMMAND LC_ALL=C lcov --remove ${CMAKE_BINARY_DIR}/coverage.info "*jansson*" -o ${CMAKE_BINARY_DIR}/coverage.info
+	COMMAND LC_ALL=C genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/out/public/coverage)
+
+add_custom_target(_user_doc
+	COMMAND sphinx-build -c ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/doc ${CMAKE_BINARY_DIR}/out/public
+	COMMAND touch ${CMAKE_BINARY_DIR}/out/public/.nojekyll
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	COMMENT "Generate Sphinx documentation")
 
-if (WIN32)
-	set_property(TARGET doxygen_doc PROPERTY FOLDER "doc")
-	set_property(TARGET user_doc PROPERTY FOLDER "doc")
-endif ()
+add_custom_target(doc
+	DEPENDS _doxygen_doc _coverage_doc _user_doc)

@@ -33,5 +33,4 @@ target_compile_options(yall_c
 target_link_libraries(yall_c PRIVATE yall)
 
 set_target_properties(yall_c PROPERTIES
-	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/bin"
-	EXCLUDE_FROM_ALL On)
+	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/bin")

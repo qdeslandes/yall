@@ -22,6 +22,7 @@ yall library documentation
    call
    cpp
    debugging
+   contributing
 
 Development links: 
 
@@ -29,8 +30,8 @@ Development links:
 
 - `Coverage`_
 
-.. _Doxygen: https://naccyde.gitlab.io/yall/doxygen/
-.. _Coverage: https://naccyde.gitlab.io/yall/coverage
+.. _Doxygen: doxygen/index.html
+.. _Coverage: coverage/index.html
 
 
 Indices and tables
