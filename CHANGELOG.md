@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
-* Move to GitHub
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [1.7.7]
+### Added
+### Changed
 ### Deprecated
 ### Removed
 ### Fixed
@@ -18,5 +25,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
-* CPP configuration loading
 ### Security

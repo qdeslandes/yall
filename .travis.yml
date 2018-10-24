@@ -25,12 +25,12 @@ install:
 script:
   # Build
   - ./resources/ci.sh
-  - if [ -n "$TRAVIS_TAG" ]; then bash python3 resources/artifacts.py -g $GITHUB_API_KEY -p $PACKAGECLOUD_API_KEY -t $TRAVIS_TAG --zip --linux; fi
+  - if [ -n "$TRAVIS_TAG" ]; then bash python3 resources/artifacts.py -g $GITHUB_TOKEN -p $PACKAGE_CLOUD_TOKEN -t $TRAVIS_TAG --zip --linux; fi
 
 deploy:
   provider: pages
   skip_cleanup: true
   local_dir: build/out/public
-  github_token: $GITHUB_API_KEY
+  github_token: $GITHUB_TOKEN
   on:
     tags: true
