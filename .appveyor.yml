@@ -56,7 +56,7 @@ deploy:
     provider: GitHub
     artifact: yall_pack
     auth_token:
-        secure: Qr+BRwTaVfPkPIXSNfty09HQlEnKugCmnccXKUZm5VYjHlzSFVqw2dSc0z5StU4J
+        secure: TuQhBe4d+wcVLRETe+eopnipYx3swQuytr0a6nyKJMgAXg5L09P1CMFseftJTdmx
     draft: false
     force_update: true
     on:
