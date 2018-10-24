@@ -13,7 +13,7 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/*
 
 # Sonar
-RUN wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip && \
+RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip && \
     unzip sonar-scanner-cli-3.2.0.1227-linux.zip && \
     rm sonar-scanner-cli-3.2.0.1227-linux.zip && \
     mv sonar-scanner-3.2.0.1227-linux /opt && \
@@ -24,12 +24,10 @@ RUN wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-sc
     ln -s /opt/build-wrapper-linux-x86/libinterceptor-x86_64.so /opt/build-wrapper-linux-x86/libinterceptor-haswell.so
 
 # Criterion
-RUN wget "https://launchpad.net/~snaipewastaken/+archive/ubuntu/ppa/+files/criterion-dev_2.3.2-5-ubuntu1~bionic1_amd64.deb" -O criterion-dev.deb && \
-    dpkg --force-all -i ./criterion-dev.deb && \
-    rm criterion-dev.deb && \
-    wget "https://launchpad.net/~snaipewastaken/+archive/ubuntu/ppa/+files/criterion_2.3.2-5-ubuntu1~bionic1_amd64.deb" -O criterion.deb && \
-    dpkg --force-all -i  ./criterion.deb && \
-    rm criterion.deb && \
-    ln -s /usr/lib/x86_64-linux-gnu/libgit2.so.27 /usr/lib/x86_64-linux-gnu/libgit2.so.26
+RUN wget https://github.com/Snaipe/Criterion/releases/download/v2.3.2/criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+    tar xf criterion-v2.3.2-linux-x86_64.tar.bz2 && \
+    mv criterion-v2.3.2/include/criterion /usr/include && \
+    mv criterion-v2.3.2/lib/* /usr/lib
+
 
 WORKDIR /code

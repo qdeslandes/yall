@@ -5,6 +5,7 @@
 set -ex
 
 YALL_ROOT=`pwd`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 GITHUB_REPO=naccyde/yall
 MAJOR=$(echo $TRAVIS_TAG | cut -d. -f1)
 MINOR=$(echo $TRAVIS_TAG | cut -d. -f2)
@@ -24,12 +25,10 @@ build-wrapper-linux-x86-64 --out-dir ${YALL_ROOT}/build/out/bw make -C ${YALL_RO
 make -C ${YALL_ROOT}/build test
 make -C ${YALL_ROOT}/build doc
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    SONAR_EXTRA_OPTIONS="-Dsonar.pullrequest.branch=${TRAVIS_BRANCH} -Dsonar.pullrequest.key=${TRAVIS_PULL_REQUEST} -Dsonar.pullrequest.base=develop -Dsonar.pullrequest.provider=github -Dsonar.pullrequest.github.repository=${GITHUB_REPO}"
-elif [ "$TRAVIS_BRANCH" = "develop" ]; then
-    SONAR_EXTRA_OPTIONS="-Dsonar.branch.name=develop"
-elif [ "$TRAVIS_BRANCH" = "master" ]; then
-    SONAR_EXTRA_OPTIONS="-Dsonar.branch.name=master"
+if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$BRANCH" = "develop" ]; then
+    SONAR_EXTRA_OPTIONS="-Dsonar.branch.target=develop -Dsonar.branch.name=${BRANCH}"
+else
+    SONAR_EXTRA_OPTIONS="-Dsonar.pullrequest.branch=${BRANCH} -Dsonar.pullrequest.key=${TRAVIS_PULL_REQUEST} -Dsonar.pullrequest.base=develop -Dsonar.pullrequest.provider=github -Dsonar.pullrequest.github.repository=${GITHUB_REPO}"
 fi
 
 sonar-scanner \

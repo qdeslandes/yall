@@ -48,7 +48,7 @@ test_script:
     - cmd: if "%generator%" NEQ "Visual Studio 12 2013 Win64" cmake --build . --target unit
 
 artifacts:
-    - path: 'packages/yall-*.zip'
+    - path: 'out/packages/yall-*.zip'
       name: yall_pack
 
 deploy:
@@ -56,7 +56,7 @@ deploy:
     provider: GitHub
     artifact: yall_pack
     auth_token:
-        secure: QSX7txvCyahz/Gn9fFFMwF6sDhonCM6tx90NCY6Mf+OgNYPCjxbRVv/n/rWa90Nz
+        secure: TuQhBe4d+wcVLRETe+eopnipYx3swQuytr0a6nyKJMgAXg5L09P1CMFseftJTdmx
     draft: false
     force_update: true
     on:
