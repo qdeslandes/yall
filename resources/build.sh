@@ -6,7 +6,7 @@ set -ex
 
 YALL_ROOT=`pwd`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
-GITHUB_REPO=naccyde/testing
+GITHUB_REPO=naccyde/yall
 MAJOR=$(echo $TRAVIS_TAG | cut -d. -f1)
 MINOR=$(echo $TRAVIS_TAG | cut -d. -f2)
 PATCH=$(echo $TRAVIS_TAG | cut -d. -f3)
