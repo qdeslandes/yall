@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+* Thread loop timer (integer overflow)
 ### Security
 
 ## [1.7.7]
