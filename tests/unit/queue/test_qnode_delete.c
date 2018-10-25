@@ -27,7 +27,7 @@
 /*
  * O.K.
  */
-Test(error, test_qnode_delete0)
+Test(queue, test_qnode_delete0)
 {
 	struct qnode *n = qnode_new(NULL);
 
@@ -40,7 +40,7 @@ Test(error, test_qnode_delete0)
  * O.K.
  * Using custom deleter
  */
-Test(error, test_qnode_delete1)
+Test(queue, test_qnode_delete1)
 {
 	struct qnode *n = qnode_new(NULL);
 
