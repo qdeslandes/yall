@@ -26,29 +26,26 @@
 
 /*
  * O.K.
+ * NULL queue
  */
-Test(queue, test_qnode_new0)
+Test(queue, test_queue_reverse0)
 {
-	struct qnode *n = qnode_new(strdup("test"));
-
-	cr_assert(n != NULL);
-	cr_assert_eq(NULL, n->next);
-	cr_assert_str_eq("test", n->data);
-
-	qnode_delete(n, NULL);
+	cr_assert_eq(queue_reverse(NULL), NULL);
 }
 
 /*
  * O.K.
- * NULL data
+ * Non-NULL queue
  */
-Test(queue, test_qnode_new1)
+Test(queue, test_queue_reverse1)
 {
-	struct qnode *n = qnode_new(NULL);
+	struct qnode q0 = { NULL, NULL };
+	struct qnode q1 = { &q0, NULL };
+	struct qnode q2 = { &q1, NULL };
 
-	cr_assert(n != NULL);
-	cr_assert_eq(NULL, n->next);
-	cr_assert_eq(NULL, n->data);
+	struct qnode *r = queue_reverse(&q2);
 
-	qnode_delete(n, NULL);
+	cr_assert_eq(r, &q0);
+	cr_assert_eq(r->next, &q1);
+	cr_assert_eq(r->next->next, &q2);
 }

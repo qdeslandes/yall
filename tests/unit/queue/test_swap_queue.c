@@ -27,7 +27,7 @@
 /*
  * O.K.
  */
-Test(error, test_swap_queue0)
+Test(queue, test_swap_queue0)
 {
 	enqueue(NULL);
 	struct qnode *n = head;
@@ -39,7 +39,7 @@ Test(error, test_swap_queue0)
  * O.K.
  * NULL head
  */
-Test(error, test_swap_queue1)
+Test(queue, test_swap_queue1)
 {	
 	cr_assert_eq(NULL, swap_queue());
 }

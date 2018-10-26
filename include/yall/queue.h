@@ -80,4 +80,11 @@ void enqueue(void *data);
  */
 struct qnode *swap_queue(void);
 
+/**
+ * \brief Reverse the given queue. Tail becomes head and head becomes tail.
+ * \param q Pointer to the queue.
+ * \return Pointer to the reversed queue.
+ */
+struct qnode *queue_reverse(struct qnode *q);
+
 #endif
