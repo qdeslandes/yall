@@ -133,18 +133,21 @@ static void *writer_thread(void *args)
 {
 	UNUSED(args);
 
-	int loop_duration_ms = (int)((1.0 / thread_frequency) * 1000.0);
+	int32_t loop_dt_ms = (int32_t)((1.0 / thread_frequency) * 1000.0);
+	int64_t loop_el_ms = 0;	// Loop consumed time
+	int64_t loop_wa_ms = 0;	// Loop waiting duration
 
 	while (thread_run) {
 		clock_t begin = clock();
-
 		struct qnode *msg_queue = swap_queue();
 
 		write_queue_messages(msg_queue);
 
-		uint32_t wait_ms = (uint32_t)(loop_duration_ms -
-			((clock() - begin) / CLOCKS_PER_SEC) * 1000);
-		yall_sleep(wait_ms);
+		loop_el_ms = (clock() - begin) / CLOCKS_PER_SEC * 1000;
+		loop_wa_ms = loop_dt_ms - loop_el_ms;
+
+		if (0 < loop_wa_ms && loop_wa_ms < loop_dt_ms)
+			yall_sleep((uint32_t)loop_wa_ms);
 	}
 
 	/*
