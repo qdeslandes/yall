@@ -26,67 +26,73 @@
 
 #include <stdlib.h>
 
-typedef struct cqueue_node_t cqueue_node_t;
-typedef struct cqueue_t cqueue_t;
+#ifdef __linux__
+#include <stdatomic.h>
+#define yall_aligned_alloc(alignment, size) aligned_alloc(alignment, size)
+#define yall_aligned_free(ptr) free(ptr)
+#elif _WIN32
+#include <Windows.h>
+#define yall_aligned_alloc(alignment, size) _aligned_malloc(size, alignment)
+#define yall_aligned_free(ptr) _aligned_free(ptr)
+#endif
 
 struct cqueue_node_t {
-    cqueue_node_t *next;
-    void *data;
+	cqueue_node_t *next;
+	void *data;
 };
 
-struct cqueue_t{
-    cqueue_node_t *nodes;
+struct cqueue_t {
+	cqueue_node_t *nodes;
 };
 
 cqueue_node_t *cq_node_new(void *data)
 {
-    cqueue_node_t *n = malloc(sizeof(cqueue_node_t));
+	cqueue_node_t *n = yall_aligned_alloc(64, sizeof(cqueue_node_t));
 
-    n->next = NULL;
-    n->data = data;
+	n->next = NULL;
+	n->data = data;
 
-    return n;
+	return n;
 }
 
 void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data))
 {
-    if (data_delete)
-        data_delete(n->data);
-    else
-        free(n->data);
+	if (data_delete)
+		data_delete(n->data);
+	else
+		free(n->data);
 
-    free(n);
+	yall_aligned_free(n);
 }
 
 cqueue_t *cq_new(void)
 {
-    cqueue_t *q = malloc(sizeof(cqueue_t));
+	cqueue_t *q = malloc(sizeof(cqueue_t));
 
-    q->nodes = NULL;
+	q->nodes = NULL;
 
-    return q;
+	return q;
 }
 
-// NON concurrent
 void cq_delete(cqueue_t *q, void (*data_delete)(void *data))
 {
-    cqueue_node_t *n = q->nodes;
+	cqueue_node_t *n = q->nodes;
 
-    while (n) {
-        cqueue_node_t *next = n->next;
+	while (n) {
+		cqueue_node_t *next = n->next;
 
-        cq_node_delete(n, data_delete);
+		cq_node_delete(n, data_delete);
 
-        n = next;
-    }
+		n = next;
+	}
 
-    free(q);
+	free(q);
 }
 
 void cq_enqueue(cqueue_t *q, void *data)
 {
-    cqueue_node_t *n = cq_node_new(data);
-    cqueue_node_t *head = NULL;
+	cqueue_node_t *n = cq_node_new(data);
+	cqueue_node_t *head = NULL;
 
 	do {
 		head = q->nodes;
@@ -101,11 +107,11 @@ void cq_enqueue(cqueue_t *q, void *data)
 
 void *cq_dequeue(cqueue_t *q)
 {
-    void *data = NULL;
-    cqueue_node_t *n = q->nodes;
+	void *data = NULL;
+	cqueue_node_t *n = q->nodes;
 
-    if (! q->nodes)
-        goto end;
+	if (! q->nodes)
+		goto end;
 
 	do {
 		n = q->nodes;
@@ -116,11 +122,60 @@ void *cq_dequeue(cqueue_t *q)
 		InterlockedCompareExchangePointer(&q->nodes, n->next, n));
 #endif
 
-    if (n) {
-        data = n->data;
-        free(n);
-    }
+	if (n) {
+		data = n->data;
+
+		n->data = NULL;
+		cq_node_delete(n, NULL);
+	}
 
 end:
-    return data;
+	return data;
+}
+
+cqueue_t *cq_swap(cqueue_t *q)
+{
+	cqueue_t *new_q = NULL;
+	cqueue_node_t *head = NULL;
+
+	if (! q->nodes)
+		goto end;
+
+	do {
+		head = q->nodes;
+#ifdef __linux__
+	} while (! atomic_compare_exchange_weak(&head, &head, NULL));
+#else
+	} while (orig_head !=
+		InterlockedCompareExchangePointer(&head, NULL, head));
+#endif
+
+	new_q = cq_new();
+	new_q->nodes = head;
+
+end:
+	return new_q;
+}
+
+void cq_reverse(struct cqueue_t *q)
+{
+	cqueue_node_t *head = NULL;
+	cqueue_node_t *base = NULL;
+	cqueue_node_t *next = NULL;
+
+	while (head) {
+		next = head->next;
+		head->next = NULL;
+
+		if (! base) {
+			base = head;
+		} else {
+			head->next = base;
+			base = head;
+		}
+
+		head = next;
+	}
+
+	q->nodes = base;
 }
