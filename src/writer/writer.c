@@ -62,5 +62,10 @@ void writer_close(void)
 {
 	stop_thread();
 
+	/*
+	 * Do not call specific message deletion wrapper here as if log messages
+	 * remains here, it will trigger Valgrind. We want to be sure every
+	 * log message has been printed before closing the library.
+	 */
 	cq_delete(msg_queue, NULL);
 }
