@@ -32,6 +32,15 @@ typedef struct cqueue_t cqueue_t;
  * This file store all the function to create and use concurrent queues. This
  * means this kind of queue can be modified in a multithread environment. Thus,
  * enqueing, dequeing and queue swapping is thread safe.
+ * This structure use a single-linked-list in order to easily add / remove
+ * nodes. It means dequeueing from a queue does not returns the first inserted
+ * node, you have to call 'cq_reverse()' on it before.
+ * 
+ * The typical workflow to use with this concurrent queue is:
+ * 	- cq_enqueue() to add elements
+ *	- cq_swap() to get all queue's elements, allowing to insert new ones
+ *	- cq_reverse() to reverse the old queue
+ *	- cq_dequeue() to get node's elements
  */
 
 /**
