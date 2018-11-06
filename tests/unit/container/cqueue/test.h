@@ -26,5 +26,16 @@
 #define _TEST_CONTAINER_CQUEUE_H
 
 #include "container/test.h"
+#include "yall/container/cqueue.h"
+
+struct test_cqueue_node_data {
+	int a;
+	int b;
+	int c;
+};
+
+void test_cqueue_node_data_deleter(void *data);
+cqueue_t *test_cqueue_empty_queue(void);
+cqueue_t *test_cqueue_queue(void);
 
 #endif
