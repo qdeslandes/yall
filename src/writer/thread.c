@@ -61,7 +61,7 @@ static __declspec(align(64)) bool thread_run = true;
 static uint16_t thread_frequency;
 static pthread_t thread;
 static void *writer_thread(void *args);
-static cqueue_t *msg_queue = NULL;
+static cqueue_t *messages = NULL;
 
 uint8_t start_thread(uint16_t frequency, cqueue_t *messages_queue)
 {
@@ -69,7 +69,7 @@ uint8_t start_thread(uint16_t frequency, cqueue_t *messages_queue)
 
 	thread_run = true;
 	thread_frequency = frequency;
-	msg_queue = messages_queue;
+	messages = messages_queue;
 
 	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
 
@@ -133,7 +133,7 @@ static void *writer_thread(void *args)
 	while (thread_run) {
 		clock_t begin = clock();
 
-		cq_swap(msg_queue, swapped_queue);
+		cq_swap(messages, swapped_queue);
 		handle_messages_queue(swapped_queue);
 
 		loop_el_ms = (clock() - begin) / CLOCKS_PER_SEC * 1000;

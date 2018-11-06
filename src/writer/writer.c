@@ -47,6 +47,9 @@ yall_error writer_init(uint16_t frequency)
 
 	ret = start_thread(frequency, msg_queue);
 
+	if (ret)
+		cq_delete(msg_queue, NULL);
+
 	return ret;
 }
 

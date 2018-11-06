@@ -28,7 +28,7 @@
 typedef struct cqueue_node_t cqueue_node_t;
 
 /**
- * \struct struct cqueue_t
+ * \struct cqueue_t
  * \brief This structure represents a concurrent queue.
  * \var cqueue_t::nodes
  *	\brief Singly linked-list of queue nodes.

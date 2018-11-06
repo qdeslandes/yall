@@ -35,7 +35,10 @@
 /**
  * \brief Start the writing thread. Also, this function does create a cqueue_t
  *	object and send it to the thread. This object is used to share the
- *	messages to write between the threads and the writing thread.
+ *	messages to write between the threads and the writing thread. If the
+ *	function fail, message queue is deleted. This should not be a problem
+ *	as no function should use this message queue until writer_init()
+ *	succeed.
  * \param frequency Frequency to use for the writer's thread loops.
  * \return Error code depending of the success or failure of the function.
  */
