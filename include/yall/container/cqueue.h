@@ -41,12 +41,16 @@ typedef struct cqueue_t cqueue_t;
  *	- cq_swap() to get all queue's elements, allowing to insert new ones
  *	- cq_reverse() to reverse the old queue
  *	- cq_dequeue() to get node's elements
+ *
+ * Concurrent queue mechanism implemented here does take ownership of the data
+ * present in the nodes. The only way to take back data ownership is through
+ * dequeueing. Otherwise, the queue does handle all the life of the node's data.
  */
 
 /**
  * \brief Create a new node with the given data. 'data' can be anything,
  *	thus the function won't copy it, so it musn't be freed outside.
- * \param data Pointer to the data contained by the node.
+ * \param data Pointer to the data contained by the node. Can be NULL.
  * \return Pointer to the new node.
  */
 cqueue_node_t *cq_node_new(void *data);
@@ -55,7 +59,7 @@ cqueue_node_t *cq_node_new(void *data);
  * \brief Delete the given node. 'data_delete' is a pointer to a
  *	function which can be called to delete the node's data. If 'data_delete'
  *	is NULL, a simple 'free()' is called.
- * \param n Node to delete.
+ * \param n Node to delete. Can't be NULL.
  * \param data_delete Function to call in order to free the node's data or NULL.
  */
 void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data));
@@ -70,7 +74,7 @@ cqueue_t *cq_new(void);
  * \brief Delete the given concurrent queue. Each element of the queue will
  *	be freed too. The node's content will be deleted using 'data_delete'
  *	function, or 'free()' if 'data_delete' is NULL.
- * \param q Pointer to the queue to delete.
+ * \param q Pointer to the queue to delete. Can't be NULL.
  * \param data_delete Function to call in order to free the node's data or NULL.
  */
 void cq_delete(cqueue_t *q, void (*data_delete)(void *data));
@@ -79,8 +83,8 @@ void cq_delete(cqueue_t *q, void (*data_delete)(void *data));
  * \brief Add data to the given queue. 'data' will be added in a new queue node,
  *	and this queue node will be inserted as first element of the queue.
  *	This function is thread-safe.
- * \param q Pointer to the queue
- * \param data Pointer to the data to add to the given queue.
+ * \param q Pointer to the queue. Can't be NULL.
+ * \param data Pointer to the data to add to the given queue. Can be NULL.
  */
 void cq_enqueue(cqueue_t *q, void *data);
 
@@ -88,8 +92,8 @@ void cq_enqueue(cqueue_t *q, void *data);
  * \brief Dequeue the last node of the given queue and return the data. The node
  *	is deleted.
  *	This function is thread-safe.
- * \param q Queue to remove a node from.
- * \return Pointer to the removed node's data.
+ * \param q Queue to remove a node from. Can't be NULL.
+ * \return Pointer to the removed node's data. Can be NULL.
  */
 void *cq_dequeue(cqueue_t *q);
 
@@ -98,15 +102,16 @@ void *cq_dequeue(cqueue_t *q);
  *	list. The original queue is now empty.
  *	This function is thread safe.
  * \param q Queue to swap. After function completion, node list of this queue
- *	will be empty.
+ *	will be empty. Can't be NULL.
  * \return Swapped queue. This queue has to be freed by the user once done.
+ *	Can't be NULL.
  */
 cqueue_t *cq_swap(cqueue_t *q);
 
 /**
  * \brief Reverse the given queue. Once done, the head of the queue is now the
  *	tail...
- * \param q Queue to reverse.
+ * \param q Queue to reverse. Can't be NULL.
  */
 void cq_reverse(struct cqueue_t *q);
 

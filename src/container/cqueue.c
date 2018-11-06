@@ -144,10 +144,10 @@ cqueue_t *cq_swap(cqueue_t *q)
 	do {
 		head = q->nodes;
 #ifdef __linux__
-	} while (! atomic_compare_exchange_weak(&head, &head, NULL));
+	} while (! atomic_compare_exchange_weak(&q->nodes, &head, NULL));
 #else
 	} while (orig_head !=
-		InterlockedCompareExchangePointer(&head, NULL, head));
+		InterlockedCompareExchangePointer(&q->nodes, NULL, head));
 #endif
 
 	new_q = cq_new();
@@ -159,7 +159,7 @@ end:
 
 void cq_reverse(struct cqueue_t *q)
 {
-	cqueue_node_t *head = NULL;
+	cqueue_node_t *head = q->nodes;
 	cqueue_node_t *base = NULL;
 	cqueue_node_t *next = NULL;
 
