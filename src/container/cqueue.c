@@ -145,7 +145,7 @@ void cq_enqueue(cqueue_t *q, void *data)
 #ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&q->nodes, &head, n));
 #else
-	} while (orig_head !=
+	} while (head !=
 		InterlockedCompareExchangePointer(&q->nodes, n, head));
 #endif
 }
@@ -163,7 +163,7 @@ void *cq_dequeue(cqueue_t *q)
 #ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&q->nodes, &n, n->next));
 #else
-	} while (orig_head !=
+	} while (n !=
 		InterlockedCompareExchangePointer(&q->nodes, n->next, n));
 #endif
 
@@ -190,7 +190,7 @@ void cq_swap(cqueue_t *from, cqueue_t *to)
 #ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&from->nodes, &head, NULL));
 #else
-	} while (orig_head !=
+	} while (head !=
 		InterlockedCompareExchangePointer(&from->nodes, NULL, head));
 #endif
 
