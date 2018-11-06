@@ -25,9 +25,36 @@
 #include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * No data, no deleter
  */
 Test(container_cqueue, test_cq_node_delete0)
 {
+	cqueue_node_t *n = cq_node_new(NULL);
+	cq_node_delete(n, NULL);
+
+	cr_assert(1);
+}
+
+/*
+ * Data, no deleter
+ */
+Test(container_cqueue, test_cq_node_delete1)
+{
+	CREATE_NODE(a, 1, 2, 3);
+	cqueue_node_t *n = cq_node_new(a);
+	cq_node_delete(n, NULL);
+
+	cr_assert(1);
+}
+
+/*
+ * Data, deleter
+ */
+Test(container_cqueue, test_cq_node_delete2)
+{
+	CREATE_NODE(a, 1, 2, 3);
+	cqueue_node_t *n = cq_node_new(a);
+	cq_node_delete(n, &test_cqueue_node_data_deleter);
+
 	cr_assert(1);
 }

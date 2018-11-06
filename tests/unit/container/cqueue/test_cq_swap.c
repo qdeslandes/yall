@@ -24,10 +24,65 @@
 
 #include "container/cqueue/test.h"
 
+extern struct test_cqueue_node_data *nodes[3];
+
 /*
- * O.K.
+ * Empty queue
  */
 Test(container_cqueue, test_cq_swap0)
 {
-	cr_assert(1);
+	cqueue_t *q0 = test_cqueue_empty_queue();
+	cqueue_t *q1 = NULL;
+
+	q1 = cq_swap(q0);
+
+	cr_assert_eq(cq_dequeue(q0), NULL);
+	cr_assert_eq(q1, NULL);
+
+	cq_delete(q0, NULL);
+}
+
+/*
+ * 1 element in queue
+ */
+Test(container_cqueue, test_cq_swap1)
+{
+	cqueue_t *q0 = test_cqueue_empty_queue();
+	cqueue_t *q1 = NULL;
+
+	CREATE_NODE(a, 10, 20, 30);
+	cq_enqueue(q0, a);
+
+	q1 = cq_swap(q0);
+
+	cr_assert_eq(cq_dequeue(q0), NULL);
+	cr_assert_eq(cq_dequeue(q1), a);
+	free(a);
+
+	cq_delete(q0, NULL);
+	cq_delete(q1, NULL);
+}
+
+/*
+ * Multiple elements in queue
+ */
+Test(container_cqueue, test_cq_swap2)
+{
+	cqueue_t *q0 = test_cqueue_queue();
+	cqueue_t *q1 = NULL;
+
+	q1 = cq_swap(q0);
+
+	cr_assert_eq(cq_dequeue(q0), NULL);
+	cr_assert_eq(cq_dequeue(q1), nodes[2]);
+	free(nodes[2]);
+
+	cr_assert_eq(cq_dequeue(q1), nodes[1]);
+	free(nodes[1]);
+
+	cr_assert_eq(cq_dequeue(q1), nodes[0]);
+	free(nodes[0]);
+
+	cq_delete(q0, NULL);
+	cq_delete(q1, NULL);
 }

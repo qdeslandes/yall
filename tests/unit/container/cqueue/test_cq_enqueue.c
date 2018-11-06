@@ -25,9 +25,139 @@
 #include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * No nodes, insert 1 data
  */
 Test(container_cqueue, test_cq_enqueue0)
 {
-	cr_assert(1);
+	cqueue_t *q = test_cqueue_empty_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	CREATE_NODE(a, 10, 20, 30);
+
+	cq_enqueue(q, a);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 10);
+	cr_assert_eq(data->b, 20);
+	cr_assert_eq(data->c, 30);
+
+	free(data);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * No nodes, insert multiple data
+ */
+Test(container_cqueue, test_cq_enqueue1)
+{
+	cqueue_t *q = test_cqueue_empty_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	CREATE_NODE(a, 3, 7, 11);
+	CREATE_NODE(b, 13, 17, 19);
+
+	cq_enqueue(q, a);
+	cq_enqueue(q, b);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, b);
+	cr_assert_eq(data->a, 13);
+	cr_assert_eq(data->b, 17);
+	cr_assert_eq(data->c, 19);
+	free(data);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 3);
+	cr_assert_eq(data->b, 7);
+	cr_assert_eq(data->c, 11);
+	free(data);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * No nodes, insert 1 data, remove it (so queue is empty) and insert back
+ */
+Test(container_cqueue, test_cq_enqueue2)
+{
+	cqueue_t *q = test_cqueue_empty_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	CREATE_NODE(a, 3, 7, 11);
+
+	cq_enqueue(q, a);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 3);
+	cr_assert_eq(data->b, 7);
+	cr_assert_eq(data->c, 11);
+	
+	cq_enqueue(q, data);
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 3);
+	cr_assert_eq(data->b, 7);
+	cr_assert_eq(data->c, 11);
+	free(data);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * Nodes available, insert 1 data
+ */
+Test(container_cqueue, test_cq_enqueue3)
+{
+	cqueue_t *q = test_cqueue_empty_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	CREATE_NODE(a, 3, 7, 11);
+
+	cq_enqueue(q, a);
+
+	// Here, as the queue is not reversed, we read the last element inserted
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 3);
+	cr_assert_eq(data->b, 7);
+	cr_assert_eq(data->c, 11);
+
+	free(data);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * Nodes available, insert multiple data
+ */
+Test(container_cqueue, test_cq_enqueue4)
+{
+	cqueue_t *q = test_cqueue_empty_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	CREATE_NODE(a, 3, 7, 11);
+	CREATE_NODE(b, 13, 17, 19);
+
+	cq_enqueue(q, a);
+	cq_enqueue(q, b);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, b);
+	cr_assert_eq(data->a, 13);
+	cr_assert_eq(data->b, 17);
+	cr_assert_eq(data->c, 19);
+	free(data);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(data, a);
+	cr_assert_eq(data->a, 3);
+	cr_assert_eq(data->b, 7);
+	cr_assert_eq(data->c, 11);
+	free(data);
+
+	cq_delete(q, NULL);
 }

@@ -24,10 +24,37 @@
 
 #include "container/cqueue/test.h"
 
+extern struct test_cqueue_node_data *nodes[3];
+
 /*
- * O.K.
+ * Dequeue empty queue
  */
 Test(container_cqueue, test_cq_dequeue0)
 {
-	cr_assert(1);
+	cqueue_t *q = test_cqueue_empty_queue();
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+}
+
+/*
+ * Dequeue non-empty queue
+ */
+Test(container_cqueue, test_cq_dequeue1)
+{
+	cqueue_t *q = test_cqueue_queue();
+	struct test_cqueue_node_data *a = NULL;
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[2]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[1]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[0]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, NULL);
+
+	cq_delete(q, NULL);
 }

@@ -28,6 +28,15 @@
 #include "container/test.h"
 #include "yall/container/cqueue.h"
 
+#define CREATE_NODE(name, val0, val1, val2) \
+	struct test_cqueue_node_data *name = NULL; \
+	do { \
+		name = malloc(sizeof(struct test_cqueue_node_data)); \
+		name->a = val0; \
+		name->b = val1; \
+		name->c = val2; \
+	} while (0)
+
 struct test_cqueue_node_data {
 	int a;
 	int b;

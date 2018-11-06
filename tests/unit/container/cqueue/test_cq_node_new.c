@@ -25,9 +25,26 @@
 #include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * Without data
  */
 Test(container_cqueue, test_cq_node_new0)
 {
-	cr_assert(1);
+	cqueue_node_t *n = cq_node_new(NULL);
+
+	cr_assert(n);
+
+	cq_node_delete(n, NULL);
+}
+
+/*
+ * With data
+ */
+Test(container_cqueue, test_cq_node_new1)
+{
+	void *data = malloc(3);
+	cqueue_node_t *n = cq_node_new(data);
+
+	cr_assert(n);
+
+	cq_node_delete(n, NULL);
 }

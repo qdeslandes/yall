@@ -24,10 +24,63 @@
 
 #include "container/cqueue/test.h"
 
+extern struct test_cqueue_node_data *nodes[3];
+
 /*
- * O.K.
+ * Empty queue
  */
 Test(container_cqueue, test_cq_reverse0)
 {
-	cr_assert(1);
+	cqueue_t *q = test_cqueue_empty_queue();
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+	cq_reverse(q);
+	cr_assert_eq(cq_dequeue(q), NULL);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * 1 element in queue
+ */
+Test(container_cqueue, test_cq_reverse1)
+{
+	cqueue_t *q = test_cqueue_empty_queue();
+
+	CREATE_NODE(data, 10, 20, 30);
+	cq_enqueue(q, data);
+
+	cq_reverse(q);
+	cr_assert_eq(cq_dequeue(q), data);
+	free(data);
+	cr_assert_eq(cq_dequeue(q), NULL);
+
+	cq_delete(q, NULL);
+}
+
+/*
+ * Multiple elements in queue
+ */
+Test(container_cqueue, test_cq_reverse2)
+{
+	cqueue_t *q = test_cqueue_queue();
+	struct test_cqueue_node_data *data = NULL;
+
+	cq_reverse(q);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(nodes[0], data);
+	free(data);
+
+	data = cq_dequeue(q);
+	cr_assert_eq(nodes[1], data);
+	free(data);
+	
+	data = cq_dequeue(q);
+	cr_assert_eq(nodes[2], data);
+	free(data);
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+
+	cq_delete(q, NULL);
 }

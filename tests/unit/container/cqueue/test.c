@@ -46,26 +46,19 @@ cqueue_t *test_cqueue_empty_queue(void)
 	return cq_new();
 }
 
-#define FILL_NODE_DATA(s, counter) \
-	do { \
-		(s) = malloc(sizeof(struct test_cqueue_node_data)); \
-		(s)->a = counter++; \
-		(s)->b = counter++; \
-		(s)->c = counter++; \
-	} while (0)
+struct test_cqueue_node_data *nodes[3] = { 0 };
 
 cqueue_t *test_cqueue_queue(void)
 {
 	cqueue_t *q = cq_new();
-	int counter = 0;
 
-	struct test_cqueue_node_data *a = NULL;
-	struct test_cqueue_node_data *b = NULL;
-	struct test_cqueue_node_data *c = NULL;
+	CREATE_NODE(a, 0, 1, 2);
+	CREATE_NODE(b, 3, 4, 5);
+	CREATE_NODE(c, 6, 7, 8);
 
-	FILL_NODE_DATA(a, counter);
-	FILL_NODE_DATA(b, counter);
-	FILL_NODE_DATA(c, counter);
+	nodes[0] = a;
+	nodes[1] = b;
+	nodes[2] = c;
 
 	cq_enqueue(q, a);
 	cq_enqueue(q, b);

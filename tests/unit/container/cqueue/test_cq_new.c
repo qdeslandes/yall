@@ -29,5 +29,10 @@
  */
 Test(container_cqueue, test_cq_new0)
 {
-	cr_assert(1);
+	cqueue_t *q = cq_new();
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+	cr_assert(NULL != q);
+
+	cq_delete(q, NULL);
 }
