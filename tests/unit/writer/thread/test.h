@@ -32,17 +32,14 @@
 #include <criterion/parameterized.h>
 #include <jansson.h>
 
+#include "message/test.h"
 #include "yall/queue.h"
 #include "yall/subsystem.h"
 #include "yall/writer/thread.h"
 
-extern struct qnode *test_msg_queue;
-extern void write_queue_messages(struct qnode *msg_queue);
+extern void handle_messages_queue(cqueue_t *q);
 extern void *writer_thread(void *args);
 
-void test_start_thread(void);
-void test_stop_thread(void);
-void test_create_msg_queue(void);
-void test_delete_msg_queue(void);
+cqueue_t *test_message_queue(void);
 
 #endif

@@ -45,7 +45,7 @@ struct test_cqueue_node_data {
 
 extern struct test_cqueue_node_data *nodes[3];
 extern cqueue_node_t *cq_node_new(void *data);
-extern void cq_reverse(struct cqueue_t *q);
+extern void cq_reverse(cqueue_t *q);
 extern void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data));
 
 void test_cqueue_node_data_deleter(void *data);

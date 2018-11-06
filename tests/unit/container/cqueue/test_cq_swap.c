@@ -30,14 +30,15 @@
 Test(container_cqueue, test_cq_swap0)
 {
 	cqueue_t *q0 = test_cqueue_empty_queue();
-	cqueue_t *q1 = NULL;
+	cqueue_t *q1 = test_cqueue_empty_queue();
 
-	q1 = cq_swap(q0);
+	cq_swap(q0, q1);
 
 	cr_assert_eq(cq_dequeue(q0), NULL);
-	cr_assert_eq(q1, NULL);
+	cr_assert_eq(cq_dequeue(q1), NULL);
 
 	cq_delete(q0, NULL);
+	cq_delete(q1, NULL);
 }
 
 /*
@@ -46,12 +47,12 @@ Test(container_cqueue, test_cq_swap0)
 Test(container_cqueue, test_cq_swap1)
 {
 	cqueue_t *q0 = test_cqueue_empty_queue();
-	cqueue_t *q1 = NULL;
+	cqueue_t *q1 = test_cqueue_empty_queue();;
 
 	CREATE_NODE(a, 10, 20, 30);
 	cq_enqueue(q0, a);
 
-	q1 = cq_swap(q0);
+	cq_swap(q0, q1);
 
 	cr_assert_eq(cq_dequeue(q0), NULL);
 	cr_assert_eq(cq_dequeue(q1), a);
@@ -67,9 +68,9 @@ Test(container_cqueue, test_cq_swap1)
 Test(container_cqueue, test_cq_swap2)
 {
 	cqueue_t *q0 = test_cqueue_queue();
-	cqueue_t *q1 = NULL;
+	cqueue_t *q1 = cq_new();
 
-	q1 = cq_swap(q0);
+	cq_swap(q0, q1);
 
 	cr_assert_eq(cq_dequeue(q0), NULL);
 	cr_assert_eq(cq_dequeue(q1), nodes[0]);

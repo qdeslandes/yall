@@ -24,20 +24,32 @@
 
 #include "writer/thread/test.h"
 
+#include "container/cqueue/test.h"
+
 /*
- * O.K.
- * Do not call free function on .fini step as it will try to free already freed memory
+ * Empty queue
  */
-Test(writer_thread, test_write_queue_messages0, .init=test_create_msg_queue)
+Test(writer_thread, test_handle_messages_queue0)
 {
-	write_queue_messages(test_msg_queue);
+	cqueue_t *q = test_cqueue_empty_queue();
+	
+	handle_messages_queue(q);
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+
+	cq_delete(q, NULL);
 }
 
 /*
  * O.K.
- * NULL parameter
+ * Do not call free function on .fini step as it will try to free already freed memory
  */
-Test(writer_thread, test_write_queue_messages1)
+Test(writer_thread, test_handle_messages_queue1)
 {
-	write_queue_messages(NULL);
+	cqueue_t *q = test_message_queue();
+
+	handle_messages_queue(q);
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+	cq_delete(q, NULL);
 }
