@@ -26,7 +26,16 @@
 #define _YALL_CONTAINER_CQUEUE_H
 
 typedef struct cqueue_node_t cqueue_node_t;
-typedef struct cqueue_t cqueue_t;
+
+/**
+ * \struct struct cqueue_t
+ * \brief This structure represents a concurrent queue.
+ * \var cqueue_t::nodes
+ *	\brief Singly linked-list of queue nodes.
+ */
+typedef struct cqueue_t {
+	cqueue_node_t *nodes;
+} cqueue_t;
 
 /*
  * This file store all the function to create and use concurrent queues. This
@@ -82,14 +91,17 @@ void cq_enqueue(cqueue_t *q, void *data);
 void *cq_dequeue(cqueue_t *q);
 
 /**
- * \brief Swap the given queue. Return a new queue containing the swapped nodes
- *	list. The original queue is now empty.
+ * \brief Swap the given queue. Nodes from 'from' queue will be set as node from
+ *	'to' queue. 'to' queue will then be reversed, meaning the user, once
+ *	'cq_swap' called, can call 'cq_dequeue()' on 'to' queue. 'from' queue
+ *	is then empty.
  *	This function is thread safe.
- * \param q Queue to swap. After function completion, node list of this queue
+ * \param from Queue to swap. After function completion, node list of this queue
  *	will be empty. Can't be NULL.
+ * \param to Queue containing the reversed node once function completes.
  * \return Swapped queue. This queue has to be freed by the user once done.
  *	Can't be NULL.
  */
-cqueue_t *cq_swap(cqueue_t *q);
+void cq_swap(cqueue_t *from, cqueue_t *to);
 
 #endif

@@ -36,13 +36,17 @@
 #define yall_aligned_free(ptr) _aligned_free(ptr)
 #endif
 
+/**
+ * \struct cqueue_node_t
+ * \brief This structure represents a queue node.
+ * \var cqueue_node_t::next
+ *	\brief Pointer to the next node in the list.
+ * \var cqueue_node_t::data
+ *	\brief Node's data.
+ */
 struct cqueue_node_t {
 	cqueue_node_t *next;
 	void *data;
-};
-
-struct cqueue_t {
-	cqueue_node_t *nodes;
 };
 
 /**
@@ -83,7 +87,7 @@ static void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data))
  *	tail...
  * \param q Queue to reverse. Can't be NULL.
  */
-static void cq_reverse(struct cqueue_t *q)
+static void cq_reverse(cqueue_t *q)
 {
 	cqueue_node_t *head = q->nodes;
 	cqueue_node_t *base = NULL;
@@ -174,28 +178,23 @@ end:
 	return data;
 }
 
-cqueue_t *cq_swap(cqueue_t *q)
+void cq_swap(cqueue_t *from, cqueue_t *to)
 {
-	cqueue_t *new_q = NULL;
 	cqueue_node_t *head = NULL;
 
-	if (! q->nodes)
-		goto end;
+	if (! from->nodes)
+		return;
 
 	do {
-		head = q->nodes;
+		head = from->nodes;
 #ifdef __linux__
-	} while (! atomic_compare_exchange_weak(&q->nodes, &head, NULL));
+	} while (! atomic_compare_exchange_weak(&from->nodes, &head, NULL));
 #else
 	} while (orig_head !=
-		InterlockedCompareExchangePointer(&q->nodes, NULL, head));
+		InterlockedCompareExchangePointer(&from->nodes, NULL, head));
 #endif
 
-	new_q = cq_new();
-	new_q->nodes = head;
+	to->nodes = head;
 
-	cq_reverse(new_q);
-
-end:
-	return new_q;
+	cq_reverse(to);
 }

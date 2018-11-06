@@ -28,6 +28,7 @@
 #include <Windows.h>
 #endif
 
+#include "yall/container/cqueue.h"
 #include "yall/error.h"
 #include "yall/writer/thread.h"
 #include "yall/utils.h"
@@ -36,21 +37,27 @@
 #include "yall/debug.h"
 #include "yall/queue.h"
 
+static cqueue_t *msg_queue = NULL;
+
 yall_error writer_init(uint16_t frequency)
 {
 	yall_error ret = YALL_SUCCESS;
 
-	ret = start_thread(frequency);
+	msg_queue = cq_new();
+
+	ret = start_thread(frequency, msg_queue);
 
 	return ret;
 }
 
 void write_msg(struct message *m)
 {
-	enqueue(m);
+	cq_enqueue(msg_queue, m);
 }
 
 void writer_close(void)
 {
 	stop_thread();
+
+	cq_delete(msg_queue, NULL);
 }
