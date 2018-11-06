@@ -24,8 +24,6 @@
 
 #include "container/cqueue/test.h"
 
-extern struct test_cqueue_node_data *nodes[3];
-
 /*
  * Empty queue
  */
@@ -74,14 +72,14 @@ Test(container_cqueue, test_cq_swap2)
 	q1 = cq_swap(q0);
 
 	cr_assert_eq(cq_dequeue(q0), NULL);
-	cr_assert_eq(cq_dequeue(q1), nodes[2]);
-	free(nodes[2]);
+	cr_assert_eq(cq_dequeue(q1), nodes[0]);
+	free(nodes[0]);
 
 	cr_assert_eq(cq_dequeue(q1), nodes[1]);
 	free(nodes[1]);
 
-	cr_assert_eq(cq_dequeue(q1), nodes[0]);
-	free(nodes[0]);
+	cr_assert_eq(cq_dequeue(q1), nodes[2]);
+	free(nodes[2]);
 
 	cq_delete(q0, NULL);
 	cq_delete(q1, NULL);

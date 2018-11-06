@@ -45,7 +45,13 @@ struct cqueue_t {
 	cqueue_node_t *nodes;
 };
 
-cqueue_node_t *cq_node_new(void *data)
+/**
+ * \brief Create a new node with the given data. 'data' can be anything,
+ *	thus the function won't copy it, so it musn't be freed outside.
+ * \param data Pointer to the data contained by the node. Can be NULL.
+ * \return Pointer to the new node.
+ */
+static cqueue_node_t *cq_node_new(void *data)
 {
 	cqueue_node_t *n = yall_aligned_alloc(64, sizeof(cqueue_node_t));
 
@@ -55,7 +61,14 @@ cqueue_node_t *cq_node_new(void *data)
 	return n;
 }
 
-void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data))
+/**
+ * \brief Delete the given node. 'data_delete' is a pointer to a
+ *	function which can be called to delete the node's data. If 'data_delete'
+ *	is NULL, a simple 'free()' is called.
+ * \param n Node to delete. Can't be NULL.
+ * \param data_delete Function to call in order to free the node's data or NULL.
+ */
+static void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data))
 {
 	if (data_delete)
 		data_delete(n->data);
@@ -63,6 +76,34 @@ void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data))
 		free(n->data);
 
 	yall_aligned_free(n);
+}
+
+/**
+ * \brief Reverse the given queue. Once done, the head of the queue is now the
+ *	tail...
+ * \param q Queue to reverse. Can't be NULL.
+ */
+static void cq_reverse(struct cqueue_t *q)
+{
+	cqueue_node_t *head = q->nodes;
+	cqueue_node_t *base = NULL;
+	cqueue_node_t *next = NULL;
+
+	while (head) {
+		next = head->next;
+		head->next = NULL;
+
+		if (! base) {
+			base = head;
+		} else {
+			head->next = base;
+			base = head;
+		}
+
+		head = next;
+	}
+
+	q->nodes = base;
 }
 
 cqueue_t *cq_new(void)
@@ -153,29 +194,8 @@ cqueue_t *cq_swap(cqueue_t *q)
 	new_q = cq_new();
 	new_q->nodes = head;
 
+	cq_reverse(new_q);
+
 end:
 	return new_q;
-}
-
-void cq_reverse(struct cqueue_t *q)
-{
-	cqueue_node_t *head = q->nodes;
-	cqueue_node_t *base = NULL;
-	cqueue_node_t *next = NULL;
-
-	while (head) {
-		next = head->next;
-		head->next = NULL;
-
-		if (! base) {
-			base = head;
-		} else {
-			head->next = base;
-			base = head;
-		}
-
-		head = next;
-	}
-
-	q->nodes = base;
 }

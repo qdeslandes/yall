@@ -33,36 +33,20 @@ typedef struct cqueue_t cqueue_t;
  * means this kind of queue can be modified in a multithread environment. Thus,
  * enqueing, dequeing and queue swapping is thread safe.
  * This structure use a single-linked-list in order to easily add / remove
- * nodes. It means dequeueing from a queue does not returns the first inserted
- * node, you have to call 'cq_reverse()' on it before.
+ * nodes. It means that, in order to dequeue in the proper order, you have to
+ * call 'cq_swap()', this function aims to define a new cqueue_t object storing
+ * the previous queue in the proper order. Thus, you can't dequeue from a
+ * cqueue_t you have enqueued without calling 'cq_swap()' before.
  * 
  * The typical workflow to use with this concurrent queue is:
  * 	- cq_enqueue() to add elements
  *	- cq_swap() to get all queue's elements, allowing to insert new ones
- *	- cq_reverse() to reverse the old queue
  *	- cq_dequeue() to get node's elements
  *
  * Concurrent queue mechanism implemented here does take ownership of the data
  * present in the nodes. The only way to take back data ownership is through
  * dequeueing. Otherwise, the queue does handle all the life of the node's data.
  */
-
-/**
- * \brief Create a new node with the given data. 'data' can be anything,
- *	thus the function won't copy it, so it musn't be freed outside.
- * \param data Pointer to the data contained by the node. Can be NULL.
- * \return Pointer to the new node.
- */
-cqueue_node_t *cq_node_new(void *data);
-
-/**
- * \brief Delete the given node. 'data_delete' is a pointer to a
- *	function which can be called to delete the node's data. If 'data_delete'
- *	is NULL, a simple 'free()' is called.
- * \param n Node to delete. Can't be NULL.
- * \param data_delete Function to call in order to free the node's data or NULL.
- */
-void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data));
 
 /**
  * \brief Create a new concurrent queue.
@@ -107,12 +91,5 @@ void *cq_dequeue(cqueue_t *q);
  *	Can't be NULL.
  */
 cqueue_t *cq_swap(cqueue_t *q);
-
-/**
- * \brief Reverse the given queue. Once done, the head of the queue is now the
- *	tail...
- * \param q Queue to reverse. Can't be NULL.
- */
-void cq_reverse(struct cqueue_t *q);
 
 #endif

@@ -24,8 +24,6 @@
 
 #include "container/cqueue/test.h"
 
-extern struct test_cqueue_node_data *nodes[3];
-
 /*
  * Dequeue empty queue
  */
