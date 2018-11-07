@@ -142,7 +142,7 @@ void *q_dequeue(queue_t *q)
 
 	if (n == q->head)
 		q->head = NULL;
-	
+
 	data = n->data;
 	n->data = NULL;
 	q_node_delete(n, NULL);
