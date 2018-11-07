@@ -24,35 +24,21 @@
 
 #include "writer/thread/test.h"
 
-extern cqueue_t *messages;
-extern uint16_t thread_frequency;
 /*
  * O.K.
  */
-Test(writer_thread, test_start_thread0)
+Test(writer_thread, test_start_thread0, .fini=test_stop_thread)
 {
-	cqueue_t *q = cq_new();
-
-	cr_assert_eq(YALL_SUCCESS, start_thread(60, q));
-	cr_assert_eq(messages, q);
-	cr_assert_eq(thread_frequency, 60);
-
-	cq_delete(q, NULL);
+	cr_assert_eq(YALL_SUCCESS, start_thread(60));
 }
 
 /*
  * O.K.
  * Do not use standard frequency
  */
-Test(writer_thread, test_start_thread1)
+Test(writer_thread, test_start_thread1, .fini=test_stop_thread)
 {
-	cqueue_t *q = cq_new();
-
-	cr_assert_eq(YALL_SUCCESS, start_thread(260, q));
-	cr_assert_eq(messages, q);
-	cr_assert_eq(thread_frequency, 260);
-
-	cq_delete(q, NULL);
+	cr_assert_eq(YALL_SUCCESS, start_thread(260));
 }
 
 /*
@@ -61,14 +47,6 @@ Test(writer_thread, test_start_thread1)
 Test(writer_thread, test_start_thread2)
 {
 	disable_pthread_create();
-
-	cqueue_t *q = cq_new();
-
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, start_thread(60, q));
-	cr_assert_eq(messages, q);
-	cr_assert_eq(thread_frequency, 60);
-
-	cq_delete(q, NULL);
-
+	cr_assert_eq(YALL_CANT_CREATE_THREAD, start_thread(60));
 	enable_pthread_create();
 }

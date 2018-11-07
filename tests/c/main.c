@@ -24,7 +24,6 @@
 
 #include <stdio.h>
 #include <pthread.h>
-#include <time.h>
 
 #include <yall/yall.h>
 
@@ -104,34 +103,6 @@ void *thread4(void *args)
 	return NULL;
 }
 
-void benchmark_output(uint32_t loops, uint32_t nb_messages)
-{
-	double t_dt_s = 0;
-
-	for (uint32_t i = 0; i < loops; ++i) {
-		clock_t begin = clock();
-
-		yall_init();
-		yall_set_subsystem("yall_c_test", NULL, yall_debug, yall_console_output, NULL);
-
-		for (uint32_t j = 0; j < nb_messages; ++j) {
-			YALL_DEBUG("yall_c_test", "message %d", j);
-		}
-
-		yall_close_all();
-
-		clock_t elapsed = clock() - begin;
-		t_dt_s += (double)elapsed / CLOCKS_PER_SEC;
-	}
-
-	uint32_t t_msg = nb_messages * loops;
-
-	printf("Benchmark results:\n");
-	printf("\tTotal time: %.3lfs\n", t_dt_s);
-	printf("\tTime for %d messages (avg.): %.3lfs\n", nb_messages, t_dt_s / loops);
-	printf("\tMessages per second (avg.): %.0lf\n", (double)t_msg / (double)t_dt_s);
-}
-
 int main(int argc, char *argv[])
 {
 	const char *config_file = NULL;
@@ -158,6 +129,7 @@ int main(int argc, char *argv[])
 	yall_set_subsystem("debug", "yall_c_tests", yall_debug, yall_console_output, NULL);
 	yall_set_subsystem("syslog_yall", NULL, yall_debug, yall_syslog_output, NULL);
 	yall_enable_debug("debug");
+
 
 	yall_load_configuration(config_file);
 	yall_show_subsystems_tree();

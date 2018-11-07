@@ -27,7 +27,7 @@
 /*
  * O.K.
  */
-Test(queue, test_enqueue0)
+Test(error, test_enqueue0)
 {
 	enqueue(NULL);
 

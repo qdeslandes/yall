@@ -34,15 +34,6 @@
 
 #include "yall/message.h"
 
-#define CREATE_MESSAGE(name, content) \
-	struct message *name = NULL; \
-	do { \
-		name = malloc(sizeof(struct message)); \
-		name->data = strdup(content); \
-		name->log_level = yall_debug; \
-		name->output_type = yall_console_output; \
-	} while (0)
-
 size_t std_wrapper(char *log_buffer, size_t len, const char *message_format, ...);
 
 #endif

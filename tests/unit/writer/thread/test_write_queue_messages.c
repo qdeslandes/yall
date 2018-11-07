@@ -22,39 +22,22 @@
  * SOFTWARE.
  */
 
-#include "container/cqueue/test.h"
+#include "writer/thread/test.h"
 
 /*
- * No data, no deleter
+ * O.K.
+ * Do not call free function on .fini step as it will try to free already freed memory
  */
-Test(container_cqueue, test_cq_node_delete0)
+Test(writer_thread, test_write_queue_messages0, .init=test_create_msg_queue)
 {
-	cqueue_node_t *n = cq_node_new(NULL);
-	cq_node_delete(n, NULL);
-
-	cr_assert(1);
+	write_queue_messages(test_msg_queue);
 }
 
 /*
- * Data, no deleter
+ * O.K.
+ * NULL parameter
  */
-Test(container_cqueue, test_cq_node_delete1)
+Test(writer_thread, test_write_queue_messages1)
 {
-	CREATE_NODE(a, 1, 2, 3);
-	cqueue_node_t *n = cq_node_new(a);
-	cq_node_delete(n, NULL);
-
-	cr_assert(1);
-}
-
-/*
- * Data, deleter
- */
-Test(container_cqueue, test_cq_node_delete2)
-{
-	CREATE_NODE(a, 1, 2, 3);
-	cqueue_node_t *n = cq_node_new(a);
-	cq_node_delete(n, &test_cqueue_node_data_deleter);
-
-	cr_assert(1);
+	write_queue_messages(NULL);
 }

@@ -24,15 +24,12 @@
 
 #include "writer/writer/test.h"
 
-extern cqueue_t *msg_queue;
-
 /*
  * O.K.
  */
 Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+	writer_init(60);
 }
 
 /*

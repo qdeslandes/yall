@@ -90,7 +90,6 @@ void message_delete(struct message *msg);
 /**
  * \brief Used to suppress warnings as function deleting the message is called
  *	by a function requiring it to be as void (*)(void *).
- *	TODO: Delete
  * \param msg Message to delete. Can't be NULL.
  */
 void message_delete_wrapper(void *msg);

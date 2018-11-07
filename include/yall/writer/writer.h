@@ -33,12 +33,7 @@
 #include "yall/error.h"
 
 /**
- * \brief Start the writing thread. Also, this function does create a cqueue_t
- *	object and send it to the thread. This object is used to share the
- *	messages to write between the threads and the writing thread. If the
- *	function fail, message queue is deleted. This should not be a problem
- *	as no function should use this message queue until writer_init()
- *	succeed.
+ * \brief Start the writing thread.
  * \param frequency Frequency to use for the writer's thread loops.
  * \return Error code depending of the success or failure of the function.
  */
@@ -51,7 +46,7 @@ yall_error writer_init(uint16_t frequency);
 void write_msg(struct message *m);
 
 /**
- * \brief Stop the writing thread. Delete messages queue which should be empty.
+ * \brief Stop the writing thread.
  */
 void writer_close(void);
 

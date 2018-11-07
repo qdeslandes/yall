@@ -45,3 +45,8 @@ void test_stop_writer(void)
 {
 	writer_close();
 }
+
+void test_delete_queue(void)
+{
+	qnode_delete(head, message_delete_wrapper);
+}

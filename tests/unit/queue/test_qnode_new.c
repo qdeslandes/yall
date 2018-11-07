@@ -27,7 +27,7 @@
 /*
  * O.K.
  */
-Test(queue, test_qnode_new0)
+Test(error, test_qnode_new0)
 {
 	struct qnode *n = qnode_new(strdup("test"));
 
@@ -42,7 +42,7 @@ Test(queue, test_qnode_new0)
  * O.K.
  * NULL data
  */
-Test(queue, test_qnode_new1)
+Test(error, test_qnode_new1)
 {
 	struct qnode *n = qnode_new(NULL);
 

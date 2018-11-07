@@ -61,15 +61,12 @@ static __declspec(align(64)) bool thread_run = true;
 static uint16_t thread_frequency;
 static pthread_t thread;
 static void *writer_thread(void *args);
-static cqueue_t *messages = NULL;
 
-uint8_t start_thread(uint16_t frequency, cqueue_t *messages_queue)
+uint8_t start_thread(uint16_t frequency)
 {
 	uint8_t ret = YALL_SUCCESS;
 
-	thread_run = true;
 	thread_frequency = frequency;
-	messages = messages_queue;
 
 	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
 
@@ -88,29 +85,29 @@ void stop_thread(void)
 /**
  * \brief This function is used to write all the message from the given queue,
  *	through all writer function (write_log_console(), write_log_file(),
- *	...). The given message queue must be reversed as, for concurrency
- *	purposes, we can't enqueue message in the proper order. Thus, is the
- *	queue is not reversed, the messages will be printed in reversed order.
+ *	...).
  *	Once the given queue has been wrote, it is freed.
- * \param q Concurrent queue containing the messages. This queue must be ready
- *	for 'cq_dequeue()' calls.
+ * \param msg_queue List of messages queue to write.
  */
-static void handle_messages_queue(cqueue_t *q)
+static void write_queue_messages(struct qnode *msg_queue)
 {
-	struct message *m = NULL;
+	if (! msg_queue)
+		return;
 
-	while ((m = cq_dequeue(q))) {
-		if (yall_console_output & m->output_type)
-			write_log_console(m->log_level, m->data);
+	write_queue_messages(msg_queue->next);
 
-		if (yall_file_output & m->output_type)
-			write_log_file(m->file.filename, m->data);
+	struct message *m = msg_queue->data;
 
-		if (yall_syslog_output & m->output_type)
-			write_log_syslog(m->log_level, m->data);
+	if (yall_console_output & m->output_type)
+		write_log_console(m->log_level, m->data);
 
-		message_delete(m);
-	}
+	if (yall_file_output & m->output_type)
+		write_log_file(m->file.filename, m->data);
+
+	if (yall_syslog_output & m->output_type)
+		write_log_syslog(m->log_level, m->data);
+
+	qnode_delete(msg_queue, message_delete_wrapper);
 }
 
 /**
@@ -125,22 +122,18 @@ static void *writer_thread(void *args)
 {
 	UNUSED(args);
 
-	cqueue_t *swapped_queue = cq_new();
-	int32_t loop_dt_ms = (int32_t)((1.0 / thread_frequency) * 1000.0);
-	int64_t loop_el_ms = 0;	// Loop consumed time
-	int64_t loop_wa_ms = 0;	// Loop waiting duration
+	int loop_duration_ms = (int)((1.0 / thread_frequency) * 1000.0);
 
 	while (thread_run) {
 		clock_t begin = clock();
 
-		cq_swap(messages, swapped_queue);
-		handle_messages_queue(swapped_queue);
+		struct qnode *msg_queue = swap_queue();
 
-		loop_el_ms = (clock() - begin) / CLOCKS_PER_SEC * 1000;
-		loop_wa_ms = loop_dt_ms - loop_el_ms;
+		write_queue_messages(msg_queue);
 
-		if (0 < loop_wa_ms && loop_wa_ms < loop_dt_ms)
-			yall_sleep((uint32_t)loop_wa_ms);
+		uint32_t wait_ms = (uint32_t)(loop_duration_ms -
+			((clock() - begin) / CLOCKS_PER_SEC) * 1000);
+		yall_sleep(wait_ms);
 	}
 
 	/*
@@ -150,10 +143,7 @@ static void *writer_thread(void *args)
 	 * between swap_queue() and thread_run = false assignation are
 	 * displayed.
 	 */
-	cq_swap(messages, swapped_queue);
-	handle_messages_queue(swapped_queue);
-
-	cq_delete(swapped_queue, NULL);
+	write_queue_messages(swap_queue());
 
 	// When execution is here, the queue's head should be equal to NULL.
 

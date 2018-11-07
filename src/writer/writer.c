@@ -28,7 +28,6 @@
 #include <Windows.h>
 #endif
 
-#include "yall/container/cqueue.h"
 #include "yall/error.h"
 #include "yall/writer/thread.h"
 #include "yall/utils.h"
@@ -37,35 +36,21 @@
 #include "yall/debug.h"
 #include "yall/queue.h"
 
-static cqueue_t *msg_queue = NULL;
-
 yall_error writer_init(uint16_t frequency)
 {
 	yall_error ret = YALL_SUCCESS;
 
-	msg_queue = cq_new();
-
-	ret = start_thread(frequency, msg_queue);
-
-	if (ret)
-		cq_delete(msg_queue, NULL);
+	ret = start_thread(frequency);
 
 	return ret;
 }
 
 void write_msg(struct message *m)
 {
-	cq_enqueue(msg_queue, m);
+	enqueue(m);
 }
 
 void writer_close(void)
 {
 	stop_thread();
-
-	/*
-	 * Do not call specific message deletion wrapper here as if log messages
-	 * remains here, it will trigger Valgrind. We want to be sure every
-	 * log message has been printed before closing the library.
-	 */
-	cq_delete(msg_queue, NULL);
 }

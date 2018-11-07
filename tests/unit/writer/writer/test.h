@@ -37,7 +37,10 @@
 #include "yall/writer/thread.h"
 #include "yall/writer/writer.h"
 
+extern struct qnode *head;
+
 void test_init_writer(void);
 void test_stop_writer(void);
+void test_delete_queue(void);
 
 #endif
