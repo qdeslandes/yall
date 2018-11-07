@@ -22,25 +22,37 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
-
-extern cqueue_t *msg_queue;
+#include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * Dequeue empty queue
  */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+Test(container_cqueue, test_cq_dequeue0)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+	cqueue_t *q = test_cqueue_empty_queue();
+
+	cr_assert_eq(cq_dequeue(q), NULL);
 }
 
 /*
- * Could not start thread and thus writer
+ * Dequeue non-empty queue
  */
-Test(writer_writer, test_writer_init1)
+Test(container_cqueue, test_cq_dequeue1)
 {
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+	cqueue_t *q = test_cqueue_queue();
+	struct test_cqueue_node_data *a = NULL;
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[2]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[1]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, nodes[0]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, NULL);
+
+	cq_delete(q, NULL);
 }

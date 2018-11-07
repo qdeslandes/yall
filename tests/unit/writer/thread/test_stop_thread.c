@@ -24,11 +24,19 @@
 
 #include "writer/thread/test.h"
 
+extern cqueue_t *messages;
+
 /*
  * O.K.
  */
-Test(writer_thread, test_stop_thread0, .init=test_start_thread)
+Test(writer_thread, test_stop_thread0)
 {
+	cqueue_t *q = cq_new();
+	start_thread(60, q);
+
+	cr_assert_eq(messages, q);
+
 	stop_thread();
+
 	cr_assert(1);
 }

@@ -22,25 +22,44 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
-
-extern cqueue_t *msg_queue;
+#include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * No nodes, no deleter
  */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+Test(container_cqueue, test_cq_delete0)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+	cq_delete(test_cqueue_empty_queue(), NULL);
+
+	cr_assert(1);
 }
 
 /*
- * Could not start thread and thus writer
+ * No nodes, deleter
  */
-Test(writer_writer, test_writer_init1)
+Test(container_cqueue, test_cq_delete1)
 {
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+	cq_delete(test_cqueue_empty_queue(), &test_cqueue_node_data_deleter);
+
+	cr_assert(1);
+}
+
+/*
+ * Nodes, no deleter
+ */
+Test(container_cqueue, test_cq_delete2)
+{
+	cq_delete(test_cqueue_queue(), NULL);
+
+	cr_assert(1);
+}
+
+/*
+ * Nodes, deleter
+ */
+Test(container_cqueue, test_cq_delete3)
+{
+	cq_delete(test_cqueue_queue(), &test_cqueue_node_data_deleter);
+
+	cr_assert(1);
 }

@@ -22,25 +22,34 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
+#ifndef _TEST_CONTAINER_CQUEUE_H
+#define _TEST_CONTAINER_CQUEUE_H
 
-extern cqueue_t *msg_queue;
+#include "container/test.h"
+#include "yall/container/cqueue.h"
 
-/*
- * O.K.
- */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
-{
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
-}
+#define CREATE_NODE(name, val0, val1, val2) \
+	struct test_cqueue_node_data *name = NULL; \
+	do { \
+		name = malloc(sizeof(struct test_cqueue_node_data)); \
+		name->a = val0; \
+		name->b = val1; \
+		name->c = val2; \
+	} while (0)
 
-/*
- * Could not start thread and thus writer
- */
-Test(writer_writer, test_writer_init1)
-{
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
-}
+struct test_cqueue_node_data {
+	int a;
+	int b;
+	int c;
+};
+
+extern struct test_cqueue_node_data *nodes[3];
+extern cqueue_node_t *cq_node_new(void *data);
+extern void cq_reverse(cqueue_t *q);
+extern void cq_node_delete(cqueue_node_t *n, void (*data_delete)(void *data));
+
+void test_cqueue_node_data_deleter(void *data);
+cqueue_t *test_cqueue_empty_queue(void);
+cqueue_t *test_cqueue_queue(void);
+
+#endif
