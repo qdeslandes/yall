@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
+* Set queue as cqueue (concurrent queue)
 ### Deprecated
 ### Removed
 ### Fixed
+* Add `-g` flag to unit test debug build
+* Thread loop timer (integer overflow)
+* Stack overflow when too many messages are printed
 ### Security
 
 ## [1.7.7]

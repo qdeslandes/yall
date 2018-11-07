@@ -101,3 +101,25 @@ struct qnode *swap_queue(void)
 
 	return orig_head;
 }
+
+struct qnode *queue_reverse(struct qnode *q)
+{
+	struct qnode *base = NULL;
+	struct qnode *next = NULL;
+
+	while (q) {
+		next = q->next;
+		q->next = NULL;
+
+		if (! base) {
+			base = q;
+		} else {
+			q->next = base;
+			base = q;
+		}
+
+		q = next;
+	}
+
+	return base;
+}

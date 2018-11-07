@@ -22,25 +22,17 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
-
-extern cqueue_t *msg_queue;
+#include "container/cqueue/test.h"
 
 /*
  * O.K.
  */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+Test(container_cqueue, test_cq_new0)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
-}
+	cqueue_t *q = cq_new();
 
-/*
- * Could not start thread and thus writer
- */
-Test(writer_writer, test_writer_init1)
-{
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+	cr_assert_eq(cq_dequeue(q), NULL);
+	cr_assert(NULL != q);
+
+	cq_delete(q, NULL);
 }

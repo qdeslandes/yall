@@ -22,25 +22,30 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
-
-extern cqueue_t *msg_queue;
+#include "queue/test.h"
 
 /*
  * O.K.
+ * NULL queue
  */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+Test(queue, test_queue_reverse0)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+	cr_assert_eq(queue_reverse(NULL), NULL);
 }
 
 /*
- * Could not start thread and thus writer
+ * O.K.
+ * Non-NULL queue
  */
-Test(writer_writer, test_writer_init1)
+Test(queue, test_queue_reverse1)
 {
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+	struct qnode q0 = { NULL, NULL };
+	struct qnode q1 = { &q0, NULL };
+	struct qnode q2 = { &q1, NULL };
+
+	struct qnode *r = queue_reverse(&q2);
+
+	cr_assert_eq(r, &q0);
+	cr_assert_eq(r->next, &q1);
+	cr_assert_eq(r->next->next, &q2);
 }
