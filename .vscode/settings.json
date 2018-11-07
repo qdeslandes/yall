@@ -1,18 +1,24 @@
 {
-	"editor.detectIndentation": false,
-	"[c]": {
-		"editor.insertSpaces": false,
-		"editor.tabSize": 8,
-		"editor.rulers": [
-			80
-		],
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp"
+    },
+    "editor.detectIndentation": false,
+    "C_Cpp.autoAddFileAssociations": false,
+    "[c]": {
+        "editor.insertSpaces": false,
+        "editor.tabSize": 8,
+        "editor.rulers": [
+            80
+        ],
     },
     "[cpp]": {
-		"editor.insertSpaces": true,
-		"editor.tabSize": 4,
-		"editor.rulers": [
-			120
-		],
-    },
-	"C_Cpp.autoAddFileAssociations": false
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.rulers": [
+            120
+        ],
+    }
 }
