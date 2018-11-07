@@ -152,7 +152,7 @@ static void *writer_thread(void *args)
 	 */
 	cq_swap(messages, swapped_queue);
 	handle_messages_queue(swapped_queue);
-	
+
 	cq_delete(swapped_queue, NULL);
 
 	// When execution is here, the queue's head should be equal to NULL.

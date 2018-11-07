@@ -46,9 +46,9 @@ typedef struct cqueue_t {
  * call 'cq_swap()', this function aims to define a new cqueue_t object storing
  * the previous queue in the proper order. Thus, you can't dequeue from a
  * cqueue_t you have enqueued without calling 'cq_swap()' before.
- * 
+ *
  * The typical workflow to use with this concurrent queue is:
- * 	- cq_enqueue() to add elements
+ *	- cq_enqueue() to add elements
  *	- cq_swap() to get all queue's elements, allowing to insert new ones
  *	- cq_dequeue() to get node's elements
  *
