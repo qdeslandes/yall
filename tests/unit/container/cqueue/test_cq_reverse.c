@@ -67,15 +67,15 @@ Test(container_cqueue, test_cq_reverse2)
 	cq_reverse(q);
 
 	data = cq_dequeue(q);
-	cr_assert_eq(nodes[0], data);
+	cr_assert_eq(cq_nodes[0], data);
 	free(data);
 
 	data = cq_dequeue(q);
-	cr_assert_eq(nodes[1], data);
+	cr_assert_eq(cq_nodes[1], data);
 	free(data);
 	
 	data = cq_dequeue(q);
-	cr_assert_eq(nodes[2], data);
+	cr_assert_eq(cq_nodes[2], data);
 	free(data);
 
 	cr_assert_eq(cq_dequeue(q), NULL);

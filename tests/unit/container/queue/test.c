@@ -22,37 +22,47 @@
  * SOFTWARE.
  */
 
-#include "container/cqueue/test.h"
+#include "container/queue/test.h"
 
-/*
- * Dequeue empty queue
- */
-Test(container_cqueue, test_cq_dequeue0)
+struct test_queue_data *q_nodes[3] = { 0 };
+
+static void tests_container_queue_setup(void)
 {
-	cqueue_t *q = test_cqueue_empty_queue();
 
-	cr_assert_eq(cq_dequeue(q), NULL);
 }
 
-/*
- * Dequeue non-empty queue
- */
-Test(container_cqueue, test_cq_dequeue1)
+static void tests_container_queue_clean(void)
 {
-	cqueue_t *q = test_cqueue_queue();
-	struct test_cqueue_node_data *a = NULL;
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[2]);
+}
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[1]);
+TestSuite(container_queue, .init=tests_container_queue_setup, .fini=tests_container_queue_clean);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[0]);
+void test_queue_data_deleter(void *data)
+{
+	free(data);
+}
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, NULL);
+queue_t *test_queue_empty_queue(void)
+{
+	return q_new();
+}
 
-	cq_delete(q, NULL);
+queue_t *test_queue_queue(void)
+{
+	queue_t *q = q_new();
+
+	CREATE_QUEUE_DATA(a, 0, 1, 2);
+	CREATE_QUEUE_DATA(b, 3, 4, 5);
+	CREATE_QUEUE_DATA(c, 6, 7, 8);
+
+	q_nodes[0] = a;
+	q_nodes[1] = b;
+	q_nodes[2] = c;
+
+	q_enqueue(q, a);
+	q_enqueue(q, b);
+	q_enqueue(q, c);
+
+	return q;
 }

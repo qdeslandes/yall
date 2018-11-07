@@ -22,37 +22,33 @@
  * SOFTWARE.
  */
 
-#include "container/cqueue/test.h"
+#ifndef _TEST_CONTAINER_QUEUE_H
+#define _TEST_CONTAINER_QUEUE_H
 
-/*
- * Dequeue empty queue
- */
-Test(container_cqueue, test_cq_dequeue0)
-{
-	cqueue_t *q = test_cqueue_empty_queue();
+#include "container/test.h"
+#include "yall/container/queue.h"
 
-	cr_assert_eq(cq_dequeue(q), NULL);
-}
+#define CREATE_QUEUE_DATA(name, val0, val1, val2) \
+	struct test_queue_data *name = NULL; \
+	do { \
+		name = malloc(sizeof(struct test_queue_data)); \
+		name->a = val0; \
+		name->b = val1; \
+		name->c = val2; \
+	} while (0)
 
-/*
- * Dequeue non-empty queue
- */
-Test(container_cqueue, test_cq_dequeue1)
-{
-	cqueue_t *q = test_cqueue_queue();
-	struct test_cqueue_node_data *a = NULL;
+struct test_queue_data {
+	int a;
+	int b;
+	int c;
+};
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[2]);
+extern struct test_queue_data *q_nodes[3];
+extern queue_node_t *q_node_new(void *data);
+extern void q_node_delete(queue_node_t *n, void (*data_delete)(void *data));
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[1]);
+void test_queue_data_deleter(void *data);
+queue_t *test_queue_empty_queue(void);
+queue_t *test_queue_queue(void);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[0]);
-
-	a = cq_dequeue(q);
-	cr_assert_eq(a, NULL);
-
-	cq_delete(q, NULL);
-}
+#endif

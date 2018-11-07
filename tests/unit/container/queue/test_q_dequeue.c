@@ -22,37 +22,37 @@
  * SOFTWARE.
  */
 
-#include "container/cqueue/test.h"
+#include "container/queue/test.h"
 
 /*
  * Dequeue empty queue
  */
-Test(container_cqueue, test_cq_dequeue0)
+Test(container_queue, test_q_dequeue0)
 {
-	cqueue_t *q = test_cqueue_empty_queue();
+	queue_t *q = test_queue_empty_queue();
 
-	cr_assert_eq(cq_dequeue(q), NULL);
+	cr_assert_eq(q_dequeue(q), NULL);
 }
 
 /*
  * Dequeue non-empty queue
  */
-Test(container_cqueue, test_cq_dequeue1)
+Test(container_queue, test_q_dequeue1)
 {
-	cqueue_t *q = test_cqueue_queue();
-	struct test_cqueue_node_data *a = NULL;
+	queue_t *q = test_queue_queue();
+	struct test_queue_data *a = NULL;
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[2]);
+	a = q_dequeue(q);
+	cr_assert_eq(a, q_nodes[0]);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[1]);
+	a = q_dequeue(q);
+	cr_assert_eq(a, q_nodes[1]);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[0]);
+	a = q_dequeue(q);
+	cr_assert_eq(a, q_nodes[2]);
 
-	a = cq_dequeue(q);
+	a = q_dequeue(q);
 	cr_assert_eq(a, NULL);
 
-	cq_delete(q, NULL);
+	q_delete(q, NULL);
 }
