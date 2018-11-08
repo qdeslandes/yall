@@ -106,7 +106,31 @@ end:
 
 static llist_node_t *ll_remove_node_at(llist_t *l, int32_t index)
 {
-	return NULL;
+	llist_node_t *n = ll_get_node_at(l, index);
+
+	if (! n)
+		goto end;
+
+	if (l->head == n) {
+		l->head = n->next;
+		if (l->head)
+			l->head->previous = NULL;
+	}
+	
+	if (l->tail == n) {
+		l->tail = n->previous;
+		if (l->tail)
+			l->tail->next = NULL;
+	}
+	
+	if (n->previous)
+		n->previous->next = n->next;
+	
+	if (n->next)
+		n->next->previous = n->previous;
+
+end:
+	return n;
 }
 
 static void ll_insert_node_at(llist_t *l, int32_t index, llist_node_t *n)
