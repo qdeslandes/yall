@@ -26,6 +26,8 @@
 
 #include <stdlib.h>
 
+#include "yall/utils.h"
+
 struct llist_node_t {
 	struct llist_node_t *next;
 	struct llist_node_t *previous;
@@ -35,7 +37,7 @@ struct llist_node_t {
 struct llist_t {
 	struct llist_node_t *head;
 	struct llist_node_t *tail;
-	uint32_t size;
+	int32_t size;
 };
 
 /**
@@ -77,12 +79,21 @@ static void *ll_node_delete(llist_node_t *n, void (*data_delete)(void *data))
 		data_delete(n->data);
 		data = NULL;
 	}
-	
+
 	free(n);
 
 	return data;
 }
 
+/**
+ * \brief Return the node at the given index. If 'index' is from 0 to the size
+ *	of the list, the function will return a pointer to the requested node.
+ *	If 'index' is greater than the size of the list, the last node will be
+ *	returned. If the list is empty, NULL is returned.
+ * \param l Pointer to the linked-list. Can't be NULL.
+ * \param index Index of the node to get.
+ * \return Pointer to the node or NULL is the list is empty.
+ */
 static llist_node_t *ll_get_node_at(llist_t *l, int32_t index)
 {
 	llist_node_t *n = NULL;
@@ -90,11 +101,11 @@ static llist_node_t *ll_get_node_at(llist_t *l, int32_t index)
 	// List is empty
 	if (! l->size)
 		goto end;
-	
+
 	// We want the last element
-	if (-1 == index || (uint32_t)index >= l->size)
+	if (-1 == index || index >= l->size)
 		return l->tail;
-	
+
 	// We want an element inside the list
 	n = l->head;
 	for (int32_t i = 0; i < index; ++i)
@@ -104,6 +115,14 @@ end:
 	return n;
 }
 
+/**
+ * \brief Remove the node at the given index. The node is not deleted. This
+ *	function works in the same way than 'll_get_node_at', besides it
+ *	removes the node from the list.
+ * \param l Pointer to the linked-list. Can't be NULL.
+ * \param index Index of the node to remove.
+ * \return Pointer to the node, or NULL if the list is empty.
+ */
 static llist_node_t *ll_remove_node_at(llist_t *l, int32_t index)
 {
 	llist_node_t *n = ll_get_node_at(l, index);
@@ -116,26 +135,66 @@ static llist_node_t *ll_remove_node_at(llist_t *l, int32_t index)
 		if (l->head)
 			l->head->previous = NULL;
 	}
-	
+
 	if (l->tail == n) {
 		l->tail = n->previous;
 		if (l->tail)
 			l->tail->next = NULL;
 	}
-	
+
 	if (n->previous)
 		n->previous->next = n->next;
-	
+
 	if (n->next)
 		n->next->previous = n->previous;
+
+	--l->size;
 
 end:
 	return n;
 }
 
+/**
+ * \brief Insert a node at the given index. If 'index' is greater than the size
+ *	of the list, the new node will be inserted as the tail.
+ * \param l Pointer to the linked-list. Can't be NULL.
+ * \param index Index of the new node.
+ * \param n Pointer to the node. Can't be NULL.
+ */
 static void ll_insert_node_at(llist_t *l, int32_t index, llist_node_t *n)
 {
+	llist_node_t *next = ll_get_node_at(l, index);
+	llist_node_t *previous = NULL;
 
+	if (! next) {
+		l->head = n;
+		l->tail = n;
+		++l->size;
+		return;
+	}
+
+	if (next == l->head) {
+		l->head = n;
+		next->previous = n;
+		n->next = next;
+	} else if (next == l->tail && (-1 == index || index >= l->size)) {
+		/*
+		 * The condition here ensure we want to replace the tail and
+		 * not the last element (inserting before the tail).
+		 */
+		l->tail = n;
+		next->next = n;
+		n->previous = next;
+	} else {
+		previous = next->previous;
+
+		previous->next = n;
+		n->previous = previous;
+		n->next = next;
+		next->previous = n;
+	}
+
+	++l->size;
 }
 
 llist_t *ll_new(void)
@@ -151,17 +210,24 @@ llist_t *ll_new(void)
 
 void ll_delete(llist_t *l, void (*data_delete)(void *data))
 {
-	// TODOllist
+	llist_node_t *n = l->head;
+
+	while (n) {
+		llist_node_t *next = n->next;
+
+		ll_node_delete(n, data_delete);
+
+		n = next;
+	}
+
+	free(l);
 }
 
 void ll_insert_at(llist_t *l, int32_t index, void *data)
 {
-	// TODOllist
-	/*
 	llist_node_t *n = ll_node_new(data);
 
-	if (index > l->count)*/
-
+	ll_insert_node_at(l, index, n);
 }
 
 void ll_insert_first(llist_t *l, void *data)
@@ -176,8 +242,13 @@ void ll_insert_last(llist_t *l, void *data)
 
 void *ll_get_at(llist_t *l, int32_t index)
 {
-	// TODOllist
-	return NULL;
+	void *data = NULL;
+	llist_node_t *n = ll_get_node_at(l, index);
+
+	if (n)
+		data = n->data;
+
+	return data;
 }
 
 void *ll_get_first(llist_t *l)
@@ -193,11 +264,14 @@ void *ll_get_last(llist_t *l)
 void *ll_remove_at(llist_t *l, int32_t index)
 {
 	void *data = NULL;
-	llist_node_t *n = ll_get_node_at(l, index);
+	llist_node_t *n = ll_remove_node_at(l, index);
 
-	if (! n)
-	// TODOllist
-	return NULL;
+	if (n) {
+		data = n->data;
+		ll_node_delete(n, NULL);
+	}
+
+	return data;
 }
 
 void *ll_remove_first(llist_t *l)

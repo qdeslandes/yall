@@ -25,8 +25,85 @@
 #include "container/llist/test.h"
 
 /*
- * O.K.
+ * Empty list, get first
  */
 Test(container_llist, test_ll_get_at0)
 {
+	llist_t *l = ll_new();
+
+	cr_assert_eq(ll_get_at(l, 0), NULL);
+
+	ll_delete(l, NULL);
+}
+
+/*
+ * Empty list, get last
+ */
+Test(container_llist, test_ll_get_at1)
+{
+	llist_t *l = ll_new();
+
+	cr_assert_eq(ll_get_at(l, -1), NULL);
+
+	ll_delete(l, NULL);
+}
+
+/*
+ * Empty list, get 'middle'
+ */
+Test(container_llist, test_ll_get_at2)
+{
+	llist_t *l = ll_new();
+
+	cr_assert_eq(ll_get_at(l, 2), NULL);
+
+	ll_delete(l, NULL);
+}
+
+/*
+ * Non-empty list, get first
+ */
+Test(container_llist, test_ll_get_at3)
+{
+	llist_t *l = test_llist_test_data();
+
+	cr_assert_eq(ll_get_at(l, 0), llist_data[0]->data);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, get last
+ */
+Test(container_llist, test_ll_get_at4)
+{
+	llist_t *l = test_llist_test_data();
+
+	cr_assert_eq(ll_get_at(l, -1), llist_data[4]->data);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, get 'middle'
+ */
+Test(container_llist, test_ll_get_at5)
+{
+	llist_t *l = test_llist_test_data();
+
+	cr_assert_eq(ll_get_at(l, 2), llist_data[2]->data);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, get bigger than size
+ */
+Test(container_llist, test_ll_get_at6)
+{
+	llist_t *l = test_llist_test_data();
+
+	cr_assert_eq(ll_get_at(l, 50), llist_data[4]->data);
+
+	ll_delete(l, &free);
 }

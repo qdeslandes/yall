@@ -25,8 +25,34 @@
 #include "container/llist/test.h"
 
 /*
- * O.K.
+ * Empty list, insert last
  */
 Test(container_llist, test_ll_insert_last0)
 {
+	llist_t *l = ll_new();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_last(l, a);
+	cr_assert_eq(l->head->data, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->size, 1);
+
+	free(l);
+	free(a);
+}
+
+/*
+ * Non-empty list, insert last
+ */
+Test(container_llist, test_ll_insert_last1)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_last(l, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->tail->previous, llist_data[4]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
 }

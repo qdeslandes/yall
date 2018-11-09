@@ -34,6 +34,7 @@ Test(container_llist, test_ll_remove_node_at0)
 	cr_assert_eq(ll_remove_node_at(l, 0), NULL);
 	cr_assert_eq(ll_remove_node_at(l, -1), NULL);
 	cr_assert_eq(ll_remove_node_at(l, 10), NULL);
+	cr_assert_eq(l->size, 0);
 
 	free(l);
 }
@@ -49,6 +50,7 @@ Test(container_llist, test_ll_remove_node_at1)
 	cr_assert_eq(n, llist_data[0]);
 	cr_assert_eq(l->head, llist_data[1]);
 	cr_assert_eq(l->head->previous, NULL);
+	cr_assert_eq(l->size, 4);
 
 	test_llist_free_data(l);
 }
@@ -64,6 +66,7 @@ Test(container_llist, test_ll_remove_node_at2)
 	cr_assert_eq(n, llist_data[4]);
 	cr_assert_eq(l->tail, llist_data[3]);
 	cr_assert_eq(l->tail->next, NULL);
+	cr_assert_eq(l->size, 4);
 
 	test_llist_free_data(l);
 }
@@ -80,6 +83,7 @@ Test(container_llist, test_ll_remove_node_at3)
 	cr_assert_eq(l->head, llist_data[0]);
 	cr_assert_eq(l->head->next, llist_data[2]);
 	cr_assert_eq(l->head->next->previous, llist_data[0]);
+	cr_assert_eq(l->size, 4);
 
 	test_llist_free_data(l);
 }
@@ -95,6 +99,7 @@ Test(container_llist, test_ll_remove_node_at4)
 	cr_assert_eq(n, llist_data[4]);
 	cr_assert_eq(l->tail, llist_data[3]);
 	cr_assert_eq(l->tail->next, NULL);
+	cr_assert_eq(l->size, 4);
 
 	test_llist_free_data(l);
 }

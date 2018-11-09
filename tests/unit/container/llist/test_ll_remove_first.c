@@ -25,8 +25,28 @@
 #include "container/llist/test.h"
 
 /*
- * O.K.
+ * Empty list, insert first
  */
 Test(container_llist, test_ll_remove_first0)
 {
+	llist_t *l = ll_new();
+
+	cr_assert_eq(ll_remove_first(l), NULL);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert first
+ */
+Test(container_llist, test_ll_remove_first1)
+{
+	llist_t *l = test_llist_test_data();
+	struct test_llist_data *d = NULL;
+
+	d = ll_remove_at(l, 0);
+	cr_assert(d);
+	cr_assert_eq(l->head, llist_data[1]);
+
+	ll_delete(l, &free);
 }

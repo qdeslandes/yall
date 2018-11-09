@@ -25,8 +25,129 @@
 #include "container/llist/test.h"
 
 /*
- * O.K.
+ * Empty list, insert first
  */
 Test(container_llist, test_ll_insert_at0)
 {
+	llist_t *l = ll_new();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 0, a);
+	cr_assert_eq(l->head->data, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->size, 1);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Empty list, insert last
+ */
+Test(container_llist, test_ll_insert_at1)
+{
+	llist_t *l = ll_new();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, -1, a);
+	cr_assert_eq(l->head->data, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->size, 1);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Empty list, insert 'middle'
+ */
+Test(container_llist, test_ll_insert_at2)
+{
+	llist_t *l = ll_new();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 2, a);
+	cr_assert_eq(l->head->data, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->size, 1);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert first
+ */
+Test(container_llist, test_ll_insert_at3)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 0, a);
+	cr_assert_eq(l->head->data, a);
+	cr_assert_eq(l->head->next, llist_data[0]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert last
+ */
+Test(container_llist, test_ll_insert_at4)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, -1, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->tail->previous, llist_data[4]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert 'middle'
+ */
+Test(container_llist, test_ll_insert_at5)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 2, a);
+	cr_assert_eq(l->head->next->next->data, a);
+	cr_assert_eq(l->head->next->next->next, llist_data[2]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert bigger than size
+ */
+Test(container_llist, test_ll_insert_at6)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 100, a);
+	cr_assert_eq(l->tail->data, a);
+	cr_assert_eq(l->tail->previous, llist_data[4]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
+}
+
+/*
+ * Non-empty list, insert just before the last one
+ */
+Test(container_llist, test_ll_insert_at7)
+{
+	llist_t *l = test_llist_test_data();
+	CREATE_LLIST_DATA(a, 1, 2, 3);
+
+	ll_insert_at(l, 4, a);
+	cr_assert_eq(l->tail->previous->data, a);
+	cr_assert_eq(l->tail->previous->next, llist_data[4]);
+	cr_assert_eq(l->size, 6);
+
+	ll_delete(l, &free);
 }

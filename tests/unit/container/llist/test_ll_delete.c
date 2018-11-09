@@ -51,7 +51,6 @@ Test(container_llist, test_ll_delete1)
 /*
  * Non-empty list, no deleter
  */
-/*
 Test(container_llist, test_ll_delete2)
 {
 	struct test_llist_test_data *data[5] = { 0 };
@@ -67,12 +66,10 @@ Test(container_llist, test_ll_delete2)
 	for (int i = 0; i < 5; ++i)
 		free(data[i]);
 }
-*/
 
 /*
  * Non-empty list, deleter
  */
-/*
 Test(container_llist, test_ll_delete3)
 {
 	llist_t *n = test_llist_test_data();
@@ -81,4 +78,3 @@ Test(container_llist, test_ll_delete3)
 
 	cr_assert(1);
 }
-*/
