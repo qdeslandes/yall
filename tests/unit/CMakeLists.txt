@@ -13,7 +13,7 @@ add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -fprofile-arcs -ftest-coverage  -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options
@@ -65,7 +65,7 @@ add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options

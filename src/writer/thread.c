@@ -66,6 +66,7 @@ uint8_t start_thread(uint16_t frequency)
 {
 	uint8_t ret = YALL_SUCCESS;
 
+	thread_run = true;
 	thread_frequency = frequency;
 
 	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
@@ -85,29 +86,39 @@ void stop_thread(void)
 /**
  * \brief This function is used to write all the message from the given queue,
  *	through all writer function (write_log_console(), write_log_file(),
- *	...).
+ *	...). The given message queue must be reversed as, for concurrency
+ *	purposes, we can't enqueue message in the proper order. Thus, is the
+ *	queue is not reversed, the messages will be printed in reversed order.
  *	Once the given queue has been wrote, it is freed.
  * \param msg_queue List of messages queue to write.
  */
 static void write_queue_messages(struct qnode *msg_queue)
 {
+	struct qnode *node_next = NULL;
+	struct message *m = NULL;
+
 	if (! msg_queue)
 		return;
 
-	write_queue_messages(msg_queue->next);
+	msg_queue = queue_reverse(msg_queue);
 
-	struct message *m = msg_queue->data;
+	while (msg_queue) {
+		node_next = msg_queue->next;
+		m = msg_queue->data;
 
-	if (yall_console_output & m->output_type)
-		write_log_console(m->log_level, m->data);
+		if (yall_console_output & m->output_type)
+			write_log_console(m->log_level, m->data);
 
-	if (yall_file_output & m->output_type)
-		write_log_file(m->file.filename, m->data);
+		if (yall_file_output & m->output_type)
+			write_log_file(m->file.filename, m->data);
 
-	if (yall_syslog_output & m->output_type)
-		write_log_syslog(m->log_level, m->data);
+		if (yall_syslog_output & m->output_type)
+			write_log_syslog(m->log_level, m->data);
 
-	qnode_delete(msg_queue, message_delete_wrapper);
+		qnode_delete(msg_queue, message_delete_wrapper);
+
+		msg_queue = node_next;
+	}
 }
 
 /**
@@ -122,18 +133,21 @@ static void *writer_thread(void *args)
 {
 	UNUSED(args);
 
-	int loop_duration_ms = (int)((1.0 / thread_frequency) * 1000.0);
+	int32_t loop_dt_ms = (int32_t)((1.0 / thread_frequency) * 1000.0);
+	int64_t loop_el_ms = 0;	// Loop consumed time
+	int64_t loop_wa_ms = 0;	// Loop waiting duration
 
 	while (thread_run) {
 		clock_t begin = clock();
-
 		struct qnode *msg_queue = swap_queue();
 
 		write_queue_messages(msg_queue);
 
-		uint32_t wait_ms = (uint32_t)(loop_duration_ms -
-			((clock() - begin) / CLOCKS_PER_SEC) * 1000);
-		yall_sleep(wait_ms);
+		loop_el_ms = (clock() - begin) / CLOCKS_PER_SEC * 1000;
+		loop_wa_ms = loop_dt_ms - loop_el_ms;
+
+		if (0 < loop_wa_ms && loop_wa_ms < loop_dt_ms)
+			yall_sleep((uint32_t)loop_wa_ms);
 	}
 
 	/*
