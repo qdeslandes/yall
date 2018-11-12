@@ -22,37 +22,29 @@
  * SOFTWARE.
  */
 
-#include "container/cqueue/test.h"
+#include "container/queue/test.h"
 
 /*
- * Dequeue empty queue
+ * Without data
  */
-Test(container_cqueue, test_cq_dequeue0)
+Test(container_queue, test_q_node_new0)
 {
-	cqueue_t *q = test_cqueue_empty_queue();
+	queue_node_t *n = q_node_new(NULL);
 
-	cr_assert_eq(cq_dequeue(q), NULL);
+	cr_assert(n);
+
+	q_node_delete(n, NULL);
 }
 
 /*
- * Dequeue non-empty queue
+ * With data
  */
-Test(container_cqueue, test_cq_dequeue1)
+Test(container_queue, test_q_node_new1)
 {
-	cqueue_t *q = test_cqueue_queue();
-	struct test_cqueue_node_data *a = NULL;
+	void *data = malloc(3);
+	queue_node_t *n = q_node_new(data);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[2]);
+	cr_assert(n);
 
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[1]);
-
-	a = cq_dequeue(q);
-	cr_assert_eq(a, cq_nodes[0]);
-
-	a = cq_dequeue(q);
-	cr_assert_eq(a, NULL);
-
-	cq_delete(q, NULL);
+	q_node_delete(n, NULL);
 }

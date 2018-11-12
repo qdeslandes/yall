@@ -24,6 +24,8 @@
 
 #include "container/cqueue/test.h"
 
+struct test_cqueue_node_data *cq_nodes[3] = { 0 };
+
 static void tests_container_cqueue_setup(void)
 {
 
@@ -46,8 +48,6 @@ cqueue_t *test_cqueue_empty_queue(void)
 	return cq_new();
 }
 
-struct test_cqueue_node_data *nodes[3] = { 0 };
-
 cqueue_t *test_cqueue_queue(void)
 {
 	cqueue_t *q = cq_new();
@@ -56,9 +56,9 @@ cqueue_t *test_cqueue_queue(void)
 	CREATE_NODE(b, 3, 4, 5);
 	CREATE_NODE(c, 6, 7, 8);
 
-	nodes[0] = a;
-	nodes[1] = b;
-	nodes[2] = c;
+	cq_nodes[0] = a;
+	cq_nodes[1] = b;
+	cq_nodes[2] = c;
 
 	cq_enqueue(q, a);
 	cq_enqueue(q, b);

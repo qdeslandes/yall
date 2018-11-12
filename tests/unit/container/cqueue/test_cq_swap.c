@@ -73,14 +73,14 @@ Test(container_cqueue, test_cq_swap2)
 	cq_swap(q0, q1);
 
 	cr_assert_eq(cq_dequeue(q0), NULL);
-	cr_assert_eq(cq_dequeue(q1), nodes[0]);
-	free(nodes[0]);
+	cr_assert_eq(cq_dequeue(q1), cq_nodes[0]);
+	free(cq_nodes[0]);
 
-	cr_assert_eq(cq_dequeue(q1), nodes[1]);
-	free(nodes[1]);
+	cr_assert_eq(cq_dequeue(q1), cq_nodes[1]);
+	free(cq_nodes[1]);
 
-	cr_assert_eq(cq_dequeue(q1), nodes[2]);
-	free(nodes[2]);
+	cr_assert_eq(cq_dequeue(q1), cq_nodes[2]);
+	free(cq_nodes[2]);
 
 	cq_delete(q0, NULL);
 	cq_delete(q1, NULL);
