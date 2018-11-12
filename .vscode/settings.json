@@ -1,26 +1,18 @@
 {
-    "files.associations": {
-        "*.h": "c",
-        "*.c": "c",
-        "*.hpp": "cpp",
-        "*.cpp": "cpp"
-    },
-    "editor.detectIndentation": false,
-    "C_Cpp.autoAddFileAssociations": false,
-    "[c]": {
-        "editor.insertSpaces": false,
-        "editor.tabSize": 8,
-        "editor.rulers": [
-            80
-        ],
+	"editor.detectIndentation": false,
+	"[c]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 8,
+		"editor.rulers": [
+			80
+		],
     },
     "[cpp]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "editor.rulers": [
-            120
-        ],
+		"editor.insertSpaces": true,
+		"editor.tabSize": 4,
+		"editor.rulers": [
+			120
+		],
     },
-    "files.trimTrailingWhitespace": true,
-    "diffEditor.ignoreTrimWhitespace": false
+	"C_Cpp.autoAddFileAssociations": false
 }
