@@ -22,25 +22,34 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
+#include "writer/thread/test.h"
 
-extern cqueue_t *msg_queue;
+#include "container/cqueue/test.h"
 
 /*
- * O.K.
+ * Empty queue
  */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+Test(writer_thread, test_handle_messages_queue0)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+	cqueue_t *q = test_cqueue_empty_queue();
+	
+	handle_messages_queue(q);
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+
+	cq_delete(q, NULL);
 }
 
 /*
- * Could not start thread and thus writer
+ * O.K.
+ * Do not call free function on .fini step as it will try to free already freed memory
  */
-Test(writer_writer, test_writer_init1)
+Test(writer_thread, test_handle_messages_queue1)
 {
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+	cqueue_t *q = test_message_queue();
+
+	handle_messages_queue(q);
+
+	cr_assert_eq(cq_dequeue(q), NULL);
+	cq_delete(q, NULL);
 }

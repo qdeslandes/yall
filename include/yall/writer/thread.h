@@ -27,13 +27,17 @@
 
 #include <stdint.h>
 
+#include "yall/container/cqueue.h"
+
 /**
  * \brief Start the writer thread of the library. It is better to use
  *	writer_init() instead, as it could setup environment before.
  * \param frequency Frequency to use for the writer's thread loops.
+ * \param messages_queue cqueue_t object representing the messages queue used
+ *	to communicate with the thread.
  * \return Error code depending of the success or failure of the function.
  */
-uint8_t start_thread(uint16_t frequency);
+uint8_t start_thread(uint16_t frequency, cqueue_t *messages_queue);
 
 /**
  * \brief Stop the writing thread.It is better to use writer_stop() instead, as

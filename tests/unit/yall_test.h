@@ -40,6 +40,7 @@
 #include "yall/yall.h"
 #include "yall/message.h"
 #include "yall/config/parameters.h"
+#include "yall/container/cqueue.h"
 #include "yall/error.h"
 #include "yall/subsystem.h"
 #include "yall/config/reader.h"

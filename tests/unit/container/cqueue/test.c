@@ -22,25 +22,47 @@
  * SOFTWARE.
  */
 
-#include "writer/writer/test.h"
+#include "container/cqueue/test.h"
 
-extern cqueue_t *msg_queue;
-
-/*
- * O.K.
- */
-Test(writer_writer, test_writer_init0, .fini=test_stop_writer)
+static void tests_container_cqueue_setup(void)
 {
-	cr_assert_eq(YALL_SUCCESS, writer_init(60));
-	cr_assert(msg_queue);
+
 }
 
-/*
- * Could not start thread and thus writer
- */
-Test(writer_writer, test_writer_init1)
+static void tests_container_cqueue_clean(void)
 {
-	disable_pthread_create();
-	cr_assert_eq(YALL_CANT_CREATE_THREAD, writer_init(60));
-	enable_pthread_create();
+
+}
+
+TestSuite(container_cqueue, .init=tests_container_cqueue_setup, .fini=tests_container_cqueue_clean);
+
+void test_cqueue_node_data_deleter(void *data)
+{
+	free(data);
+}
+
+cqueue_t *test_cqueue_empty_queue(void)
+{
+	return cq_new();
+}
+
+struct test_cqueue_node_data *nodes[3] = { 0 };
+
+cqueue_t *test_cqueue_queue(void)
+{
+	cqueue_t *q = cq_new();
+
+	CREATE_NODE(a, 0, 1, 2);
+	CREATE_NODE(b, 3, 4, 5);
+	CREATE_NODE(c, 6, 7, 8);
+
+	nodes[0] = a;
+	nodes[1] = b;
+	nodes[2] = c;
+
+	cq_enqueue(q, a);
+	cq_enqueue(q, b);
+	cq_enqueue(q, c);
+
+	return q;
 }

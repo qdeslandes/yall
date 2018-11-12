@@ -24,6 +24,8 @@
 
 #include "writer/thread/test.h"
 
+#include "yall/container/cqueue.h"
+
 static void tests_writer_thread_setup(void)
 {
 	cr_redirect_stderr();
@@ -36,50 +38,18 @@ static void tests_writer_thread_clean(void)
 
 TestSuite(writer_thread, .init=tests_writer_thread_setup, .fini=tests_writer_thread_clean);
 
-struct qnode *test_msg_queue = NULL;
-struct qnode *test_msg_queue_array[3] = { NULL };
-
-void test_start_thread(void)
+cqueue_t *test_message_queue(void)
 {
-	start_thread(60);
-}
+	cqueue_t *q = cq_new();
 
-void test_stop_thread(void)
-{
-	stop_thread();
-}
+	CREATE_MESSAGE(a, "hello");
+	cq_enqueue(q, a);
 
-void test_create_msg_queue(void)
-{
-	struct yall_subsystem_params con_p = { yall_debug, yall_subsys_enable, yall_console_output, { 0 }, { NULL } };
-	struct message *con_m = message_new(strdup("console_output"), yall_debug, &con_p);
-	struct qnode *con_n = qnode_new(con_m);
+	CREATE_MESSAGE(b, "1337");
+	cq_enqueue(q, b);
 
-	struct yall_subsystem_params file_p = { yall_debug, yall_subsys_enable, yall_file_output, { 0 }, { strdup("./yall.log") } };
-	struct message *file_m = message_new(strdup("file_output"), yall_debug, &file_p);
-	struct qnode *file_n = qnode_new(file_m);
+	CREATE_MESSAGE(c, "world");
+	cq_enqueue(q, c);
 
-	struct yall_subsystem_params slog_p = { yall_debug, yall_subsys_enable, yall_syslog_output, { 0 }, { NULL } };
-	struct message *slog_m = message_new(strdup("syslog_output"), yall_debug, &slog_p);
-	struct qnode *slog_n = qnode_new(slog_m);
-
-	test_msg_queue = con_n;
-	con_n->next = file_n;
-	file_n->next = slog_n;
-
-	test_msg_queue_array[0] = con_n;
-	test_msg_queue_array[1] = file_n;
-	test_msg_queue_array[2] = slog_n;
-}
-
-void test_delete_msg_queue(void)
-{
-	qnode_delete(test_msg_queue_array[0], message_delete_wrapper);
-	test_msg_queue_array[0] = NULL;
-
-	qnode_delete(test_msg_queue_array[1], message_delete_wrapper);
-	test_msg_queue_array[1] = NULL;
-
-	qnode_delete(test_msg_queue_array[2], message_delete_wrapper);
-	test_msg_queue_array[2] = NULL;
+	return q;
 }
