@@ -7,7 +7,7 @@ add_executable(yall_c main.c)
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options
@@ -33,5 +33,4 @@ target_compile_options(yall_c
 target_link_libraries(yall_c PRIVATE yall)
 
 set_target_properties(yall_c PROPERTIES
-	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/bin"
-	EXCLUDE_FROM_ALL On)
+	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/bin")

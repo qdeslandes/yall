@@ -11,6 +11,7 @@
 
 ## How to use
 
+
 Informations about how to use `yall` can be found on the [project wiki](https://naccyde.gitlab.io/yall/). As the documentation is under redaction, the old one can be found in [Git history](https://gitlab.com/naccyde/yall/blob/755569d405948297665aeaad41d4bb9f7856ad35/README.md).
 
 The major steps are :

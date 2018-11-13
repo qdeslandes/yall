@@ -22,22 +22,37 @@
  * SOFTWARE.
  */
 
-#include "writer/thread/test.h"
+#include "container/cqueue/test.h"
 
 /*
- * O.K.
- * Do not call free function on .fini step as it will try to free already freed memory
+ * Dequeue empty queue
  */
-Test(writer_thread, test_write_queue_messages0, .init=test_create_msg_queue)
+Test(container_cqueue, test_cq_dequeue0)
 {
-	write_queue_messages(test_msg_queue);
+	cqueue_t *q = test_cqueue_empty_queue();
+
+	cr_assert_eq(cq_dequeue(q), NULL);
 }
 
 /*
- * O.K.
- * NULL parameter
+ * Dequeue non-empty queue
  */
-Test(writer_thread, test_write_queue_messages1)
+Test(container_cqueue, test_cq_dequeue1)
 {
-	write_queue_messages(NULL);
+	cqueue_t *q = test_cqueue_queue();
+	struct test_cqueue_node_data *a = NULL;
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, cq_nodes[2]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, cq_nodes[1]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, cq_nodes[0]);
+
+	a = cq_dequeue(q);
+	cr_assert_eq(a, NULL);
+
+	cq_delete(q, NULL);
 }

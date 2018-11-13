@@ -104,6 +104,14 @@ private:
 class YallConfig
 {
 public:
+	void loadConfiguration(std::string configuration)
+	{
+		yall_error err = yall_load_configuration(configuration.c_str());
+
+		if (YALL_SUCCESS != err)
+			throw YallException(err);
+	}
+
 	void setStdHeaderTemplate(std::string stdHeaderTemplate)
 	{
 		yall_config_set_std_header_template(stdHeaderTemplate.c_str());

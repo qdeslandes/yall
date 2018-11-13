@@ -12,8 +12,8 @@ add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 
 if (UNIX)
 	# Compile options
-	set(_PVT_OPT -Wall -Wextra -std=gnu11 --coverage)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT -fprofile-arcs -ftest-coverage  -Wall -Wextra -std=gnu11)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options
@@ -65,7 +65,7 @@ add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options
@@ -114,21 +114,3 @@ if (MSVC_VERSION EQUAL 1900)
 	
 	set_property(TARGET unit PROPERTY FOLDER "launch")
 endif ()
-
-set_target_properties(yall_unit PROPERTIES EXCLUDE_FROM_ALL On)
-
-#[[
-	Coverage informations
-#]]
-
-add_custom_target(coverage
-	COMMAND python3 tests/validation/coverage.py --sourcesDir ${CMAKE_SOURCE_DIR} --outDir ${CMAKE_BINARY_DIR}/coverage --gcdaDir ${CMAKE_BINARY_DIR}
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Run coverage target")
-
-add_custom_target(html_coverage
-	COMMAND lcov --base-directory ${CMAKE_SOURCE_DIR} --directory ${CMAKE_BINARY_DIR} -c -o ${CMAKE_BINARY_DIR}/coverage.info
-	COMMAND lcov --remove ${CMAKE_BINARY_DIR}/coverage.info "*jansson*" -o ${CMAKE_BINARY_DIR}/coverage.info
-	COMMAND genhtml ${CMAKE_BINARY_DIR}/coverage.info --output-directory ${CMAKE_BINARY_DIR}/coverage
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Generate unit coverage HTML report")

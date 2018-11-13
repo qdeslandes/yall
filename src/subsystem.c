@@ -331,6 +331,7 @@ void _free_subsystems(struct yall_subsystem *s)
 void free_subsystems(void)
 {
 	_free_subsystems(subsystems);
+	subsystems = NULL;
 }
 
 /**
@@ -432,7 +433,7 @@ static void show_subsystems_tree_call(struct yall_call_data *d,
 		strncpy(&buff[strlen(buff)], op[curr_indent],
 			strlen(op[curr_indent])+1);
 
-		strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
+		//strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
 
 		yall_call_add_line(d, 0, buff);
 
