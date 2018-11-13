@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add `-g` flag to unit test debug build
 * Thread loop timer (integer overflow)
 * Stack overflow when too many messages are printed
+* Artifacts deployment script
 ### Security
 
 ## [1.7.7]

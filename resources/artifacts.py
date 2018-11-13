@@ -13,7 +13,7 @@ import subprocess
 import fnmatch
 
 owner = 'naccyde'
-repo = 'testing'
+repo = 'yall'
 prefixPath = 'build/out/packages'
         
 requiredDistros = {
