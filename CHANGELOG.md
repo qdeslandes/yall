@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Thread loop timer (integer overflow)
 * Stack overflow when too many messages are printed
 * Artifacts deployment script
+* Release script (reduce number of commits on develop)
 ### Security
 
 ## [1.7.7]

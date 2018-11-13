@@ -38,7 +38,7 @@ fi
 git checkout develop
 sed -i "s/Unreleased/$YALL_VERSION/g" CHANGELOG.md
 sed -i '6i## [Unreleased]\n### Added\n### Changed\n### Deprecated\n### Removed\n### Fixed\n### Security\n' CHANGELOG.md
-git commit -a -m"Update version to $YALL_VERSION"
+git commit -a -m"Release $YALL_VERSION"
 git pull
 git push
 
@@ -46,16 +46,12 @@ git push
 git checkout master
 git pull
 git merge --squash develop
-git commit -a -m"Merge branch 'develop' for version ${YALL_VERSION}"
+git commit -a -m"Release ${YALL_VERSION}"
 
 git tag ${YALL_VERSION} master
 
 git push
 git push --tags
-
-# Merge release commit on develop
 git checkout develop
-git merge master -m"Release ${YALL_VERSION}"
-git push
 
 echo "INFO: Released !"
