@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Stack overflow when too many messages are printed
 * Artifacts deployment script
 * Release script (reduce number of commits on develop)
+* Sonar analysis
 ### Security
 
 ## [1.7.7]
