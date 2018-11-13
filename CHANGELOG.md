@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * List mechanism
 ### Changed
 * Set queue as cqueue (concurrent queue)
+* Temporary disable unstable unit tests  (start_thread() on Windows)
 ### Deprecated
 ### Removed
 ### Fixed
