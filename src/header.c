@@ -140,10 +140,8 @@ static void set_matches_and_header(enum header_type hdr_type,
 
 void header_compile_format(enum header_type hdr_type, const char *format)
 {
-	// TODO : avoid using "int", use more clear type : uint16_t, ...
-
-	int hdr_len = 0;
-	int match_idx = 0;
+	uint32_t hdr_len = 0;
+	uint32_t match_idx = 0;
 	char *hdr = NULL;
 	enum yall_matches *matches = NULL;
 	bool seek_modifier = false;

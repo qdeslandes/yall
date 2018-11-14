@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
+* Use `int32_t` or `uint32_t` instead of `int` when possible
 ### Deprecated
 ### Removed
 * `message_delete_wrapper()` function

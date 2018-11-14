@@ -71,7 +71,8 @@ uint8_t start_thread(uint16_t frequency, cqueue_t *messages_queue)
 	thread_frequency = frequency;
 	messages = messages_queue;
 
-	int thread_ret = pthread_create(&thread, NULL, writer_thread, NULL);
+	int32_t thread_ret = (int32_t)pthread_create(&thread, NULL,
+		writer_thread, NULL);
 
 	if (thread_ret != 0)
 		ret = YALL_CANT_CREATE_THREAD;
