@@ -45,3 +45,8 @@ void test_stop_writer(void)
 {
 	writer_close();
 }
+
+void test_message_delete_wrapper(void *data)
+{
+	message_delete((struct message *)data);
+}

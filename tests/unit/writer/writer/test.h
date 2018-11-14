@@ -39,5 +39,6 @@
 
 void test_init_writer(void);
 void test_stop_writer(void);
+void test_message_delete_wrapper(void *data);
 
 #endif

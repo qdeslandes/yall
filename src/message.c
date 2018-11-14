@@ -56,11 +56,6 @@ void message_delete(struct message *msg)
 	free(msg);
 }
 
-void message_delete_wrapper(void *msg)
-{
-	message_delete((struct message *) msg);
-}
-
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args)
 {
