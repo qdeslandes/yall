@@ -4,8 +4,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'VS2017-Win2016'
-# or 'vs2015-win2012r2'
+  vmImage: 'vs2015-win2012r2'
+# 'VS2017-Win2016' or 'vs2015-win2012r2'
 
 variables:
   solution: '**/*.sln'
@@ -14,6 +14,9 @@ variables:
 
 steps:
  - script: choco install doxygen.install
+ - script: cmake -G"Visual Studio 14 2015 Win64"
+ - script: cmake --build . --config Debug --target ALL_BUILD
+ - script: cmake --build . --config Debug --target package
 
 #- task: NuGetToolInstaller@0
 
