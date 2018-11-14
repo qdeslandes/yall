@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'VS2017-Win2016'
+  vmImage: 'vs2015-win2012r2'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
 
 variables:
