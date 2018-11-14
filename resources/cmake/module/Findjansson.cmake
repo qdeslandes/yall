@@ -4,7 +4,7 @@
 
 if (MSVC_VERSION EQUAL 1800)
 	set(MSVC_SUFFIX "_msvc12")
-elseif(MSVC_VERSION EQUAL 1900)
+else ()
 	set(MSVC_SUFFIX "_msvc14")
 endif ()
 
