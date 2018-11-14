@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'vs2015-win2012r2'
+  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
 
 variables:
@@ -13,10 +13,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-# - script: choco install doxygen.install
+ - script: choco install doxygen.install
  - script: cmake -G"Visual Studio 15 2017"
  - script: cmake --build . --config Debug --target ALL_BUILD
  - script: cmake --build . --config Debug --target package
+ - script: cmake --build . --config Release --target ALL_BUILD
+ - script: cmake --build . --config Release --target package
 
 #- task: NuGetToolInstaller@0
 
