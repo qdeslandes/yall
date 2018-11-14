@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
- - script: choco install doxygen.install
+# - script: choco install doxygen.install
  - script: cmake -G"Visual Studio 15 2017"
  - script: cmake --build . --config Debug --target ALL_BUILD
  - script: cmake --build . --config Debug --target package
