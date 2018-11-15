@@ -20,6 +20,24 @@ jobs:
         maximumCpuCount: true
         configuration: release
         platform: x64
+    - task: MSBuild@1
+      inputs:
+        solution: 'build/package.vcxproj'
+        maximumCpuCount: true
+        configuration: debug
+        platform: x64
+    - task: MSBuild@1
+      inputs:
+        solution: 'build/ALL_BUILD.vcxproj'
+        maximumCpuCount: true
+        configuration: release
+        platform: x64
+    - task: MSBuild@1
+      inputs:
+        solution: 'build/package.vcxproj'
+        maximumCpuCount: true
+        configuration: debug
+        platform: x64
 #pool:
 #  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
