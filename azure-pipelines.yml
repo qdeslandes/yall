@@ -8,9 +8,12 @@ jobs:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
+    - script: mkdir build
+      displayName: Make Build Directory
     - task: CMake@1
       inputs:
-        workingDirectory: 'build.common'
+        workingDirectory: 'build'
+        cmakeArgs: '..'
     - task: MSBuild@1
       inputs:
         solution: 'build.common/ALL_BUILD.vcxproj'
