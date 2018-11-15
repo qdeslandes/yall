@@ -7,15 +7,15 @@ pool:
   vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-
 - task: CMake@1
   inputs:
-    workingDirectory: 'build' # Optional
-    #cmakeArgs: -DCMAKE_BUILD
+    workingDirectory: 'build.common'
+    cmakeArgs: '-DCMAKE_BUILD_TYPE=Release'
+
+- task: MSBuild@1
+  inputs:
+    solution: 'build.common/ALL_BUILD.vcxproj'
+    maximumCpuCount: true
 
 
 
