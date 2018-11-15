@@ -11,6 +11,10 @@ jobs:
     - task: CMake@1
       inputs:
         workingDirectory: 'build.common'
+    - task: MSBuild@1
+      inputs:
+        solution: 'build.common/ALL_BUILD.vcxproj'
+        maximumCpuCount: true
 #pool:
 #  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
