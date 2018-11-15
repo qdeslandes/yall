@@ -14,7 +14,7 @@ variables:
 
 - task: CMake@1
   inputs:
-    #workingDirectory: 'build' # Optional
+    workingDirectory: 'build' # Optional
     #cmakeArgs: -DCMAKE_BUILD
 
 
