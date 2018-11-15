@@ -12,13 +12,19 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
- - script: choco install doxygen.install
- - script: cmake -G"Visual Studio 15 2017"
- - script: cmake --build . --config Debug --target ALL_BUILD
- - script: cmake --build . --config Debug --target package
- - script: cmake --build . --config Release --target ALL_BUILD
- - script: cmake --build . --config Release --target package
+- task: CMake@1
+  inputs:
+    #workingDirectory: 'build' # Optional
+    #cmakeArgs: -DCMAKE_BUILD
+
+
+#steps:
+# - script: choco install doxygen.install
+# - script: cmake -G"Visual Studio 15 2017"
+# - script: cmake --build . --config Debug --target ALL_BUILD
+# - script: cmake --build . --config Debug --target package
+# - script: cmake --build . --config Release --target ALL_BUILD
+# - script: cmake --build . --config Release --target package
 
 #- task: NuGetToolInstaller@0
 
