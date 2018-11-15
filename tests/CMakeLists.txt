@@ -28,5 +28,5 @@ add_custom_target(coverage_test
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/validation/coverage.py --sourcesDir ${CMAKE_SOURCE_DIR} --outDir ${CMAKE_BINARY_DIR}/out/coverage --gcnoDir ${CMAKE_BINARY_DIR})
 
-add_custom_target(test
-    DEPENDS unit_test c_test cpp_test style_test coverage_test)
+#add_custom_target(test
+#    DEPENDS unit_test c_test cpp_test style_test coverage_test)
