@@ -3,11 +3,20 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-pool:
-  vmImage: 'VS2017-Win2016'
+jobs:
+  - job: Windows_VS2017_x86
+    pool:
+      vmImage: 'vs2017-win2016'
+    steps:
+    - task: CMake@1
+      inputs:
+        workingDirectory: 'build.common'
+        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCPPREST_EXCLUDE_BROTLI=OFF ..'
+#pool:
+#  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
 
-- task: CMake@1
+#- task: CMake@1
 #  inputs:
 #    workingDirectory: 'build.common'
 #    cmakeArgs: '-DCMAKE_BUILD_TYPE=Release'
