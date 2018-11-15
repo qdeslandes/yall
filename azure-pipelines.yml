@@ -18,6 +18,7 @@ jobs:
       inputs:
         solution: 'build/ALL_BUILD.vcxproj'
         maximumCpuCount: true
+        configuration: release
 #pool:
 #  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
