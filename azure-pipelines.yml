@@ -11,7 +11,6 @@ jobs:
     - task: CMake@1
       inputs:
         workingDirectory: 'build.common'
-        cmakeArgs: '-DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCPPREST_EXCLUDE_BROTLI=OFF ..'
 #pool:
 #  vmImage: 'VS2017-Win2016'
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
