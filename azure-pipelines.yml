@@ -6,7 +6,7 @@
 jobs:
   - job: Windows_VS2017_x86
     pool:
-      vmImage: 'vs2017-win2016'
+      vmImage: 'vs2015-win2012r2'
     steps:
     - script: mkdir build
       displayName: Make Build Directory
