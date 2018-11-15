@@ -8,14 +8,14 @@ pool:
 # 'VS2017-Win2016' or 'vs2015-win2012r2'
 
 - task: CMake@1
-  inputs:
-    workingDirectory: 'build.common'
-    cmakeArgs: '-DCMAKE_BUILD_TYPE=Release'
+#  inputs:
+#    workingDirectory: 'build.common'
+#    cmakeArgs: '-DCMAKE_BUILD_TYPE=Release'
 
-- task: MSBuild@1
-  inputs:
-    solution: 'build.common/ALL_BUILD.vcxproj'
-    maximumCpuCount: true
+#- task: MSBuild@1
+#  inputs:
+#    solution: 'build.common/ALL_BUILD.vcxproj'
+#    maximumCpuCount: true
 
 
 #steps:
