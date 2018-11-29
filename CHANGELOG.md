@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 * `message_delete_wrapper()` function
+* `coverage.py` for Codacy coverage
 ### Fixed
 * Show subsystems names inside tree ([#146](https://github.com/naccyde/yall/issues/176))
 ### Security
