@@ -34,8 +34,6 @@ Test(subsystem, test_show_subsystems_tree0, .init=test_init_yall, .fini=test_clo
 
 	yall_show_subsystems_tree();
 	cr_assert(1);
-
-	cr_assert_stderr_eq_str("");
 }
 
 /*
@@ -50,6 +48,4 @@ Test(subsystem, test_show_subsystems_tree1, .init=test_init_yall, .fini=test_clo
 	cr_assert(1);
 
 	yall_disable_debug();
-
-	cr_assert_stderr_neq_str("");
 }
