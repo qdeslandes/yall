@@ -433,7 +433,7 @@ static void show_subsystems_tree_call(struct yall_call_data *d,
 		strncpy(&buff[strlen(buff)], op[curr_indent],
 			strlen(op[curr_indent])+1);
 
-		strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
+		strncpy(&buff[strlen(buff)], s->name, buff_size-strlen(buff));
 
 		yall_call_add_line(d, 0, buff);
 
