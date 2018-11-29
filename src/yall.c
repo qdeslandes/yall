@@ -113,7 +113,6 @@ yall_error yall_log(const char *subsystem,
 	const char *format,
 	...)
 {
-	// TODO : prefix structs with "yall"
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
 	struct message *m = NULL;

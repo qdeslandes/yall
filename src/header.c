@@ -218,10 +218,6 @@ static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,
 		hc->date_long
 	};
 
-	/*
-	 * TODO : the way the header is printed is ABSOLUTELY BARBARIC
-	 * Also, we consider snprintf() will not return an error...
-	 */
 	wrote = (size_t)snprintf(buffer, len, hdr, ordered_content[matches[0]],
 		ordered_content[matches[1]], ordered_content[matches[2]],
 		ordered_content[matches[3]], ordered_content[matches[4]],
