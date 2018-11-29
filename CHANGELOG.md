@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+* Ensure `test_show_subsystems_tree` has output on stderr
 ### Changed
 * Use `int32_t` or `uint32_t` instead of `int` when possible
 ### Deprecated
