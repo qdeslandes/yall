@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Check parameter's output file when calling `_get_subsystem()`
 ### Changed
 * Use `int32_t` or `uint32_t` instead of `int` when possible
+* Update `README.md`
+* Add `CONTRIBUTING.md`
 ### Deprecated
 ### Removed
 * `message_delete_wrapper()` function

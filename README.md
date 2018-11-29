@@ -1,20 +1,21 @@
 # yall
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Naccyde/yall/develop/LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/naccyde/yall/master/LICENSE)
+[![Travis (.org) branch](https://img.shields.io/travis/naccyde/yall/master.svg?label=Linux)](https://travis-ci.com/naccyde/yall)
+[![AppVeyor branch](https://img.shields.io/appveyor/ci/naccyde/yall/master.svg?label=Windows)](https://ci.appveyor.com/project/Naccyde/yall)
+[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarcloud.io/yall/coverage.svg)](https://sonarcloud.io/dashboard?id=yall)
+[![SonarQube Tech Debt](https://img.shields.io/sonar/http/sonarcloud.io/yall/tech_debt.svg)](https://sonarcloud.io/dashboard?id=yall)
 
-[![!][1b]][1l] [![!][2b]][2l] [![!][3b]][3l] [![!][4b]][4l]
-
-`yall` is a subsystems based logging library. It allow to handle multiple ways to log message for differents parts of an application thanks to subsystems creation. Subsystems can inherit from one another, override parents parameters, ...
+`yall` is a subsystems based logging library. It allows to create subsystems which will manage all the logging parameters for an area of the application. Subsystems can inherit from one another, override parents parameters...
 
 `yall` is available on Linux and Windows (MSVC12 and MSVC14).
 
 
 ## How to use
 
+Informations about how to use `yall` can be found on the [project wiki](https://naccyde.github.io/yall/).
 
-Informations about how to use `yall` can be found on the [project wiki](https://naccyde.gitlab.io/yall/). As the documentation is under redaction, the old one can be found in [Git history](https://gitlab.com/naccyde/yall/blob/755569d405948297665aeaad41d4bb9f7856ad35/README.md).
-
-The major steps are :
+The main workflow to use yall is the following:
   * Initialize the library
   * Create subsystems
   * Log messages
@@ -35,10 +36,10 @@ Git LFS is required to clone the repository. yall use CMake as build system gene
 
 Then :
 
-    cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=<Release|Debug>
+    cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
     make -C build
 
-Launched inside the sources directory, these commands will create a `build` directory to run CMake inside, and build the library. The `CMAKE_BUILD_TYPE` variable will define what will be installed. On `Release` build, only required parts to use the library will be build and installed. On `Debug` build, all the required file to build with the library will be build and installed.
+Launched inside the sources directory, these commands will create a `build` directory to run CMake inside, and build the library. The `CMAKE_BUILD_TYPE` variable will define what will be installed. `Release` here can be changed to `Debug`, to build the library with the debug symbols.
 
 On Windows, the process is straightforward using CMake GUI and Visual Studio.
 
@@ -61,16 +62,5 @@ The way to contribute to the project is define is `CONTRIBUTING.md` (currently u
 
 For any problem that can't be solved using `Debugging` section of the documentation, there is multiple solutions :
 
-* Create an [issue](https://gitlab.com/naccyde/yall/issues) on the project, following the template.
-* Send a mail to the project's service desk : `incoming+naccyde/yall <at> gitlab <dot> com`.
 * Send a mail to the maintainer : `naccyde <at> naccyde <dot> eu`.
-
-
-[1b]: https://gitlab.com/naccyde/yall/badges/master/pipeline.svg
-[1l]: https://gitlab.com/naccyde/yall/commits/master
-[2b]: https://sonarcloud.io/api/badges/gate?key=yall
-[2l]: https://sonarcloud.io/dashboard?id=yall
-[3b]: https://sonarcloud.io/api/badges/measure?key=yall&metric=coverage
-[3l]: https://sonarcloud.io/dashboard?id=yall
-[4b]: https://sonarcloud.io/api/badges/measure?key=yall&metric=sqale_debt_ratio
-[4l]: https://sonarcloud.io/dashboard?id=yall
+* Fork the repository and create a pull-request.
