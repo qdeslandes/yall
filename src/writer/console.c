@@ -66,7 +66,7 @@ static uint8_t colors[8] = { 15, 10, 10, 14, 12, 12, 12, 12 };
 static void set_color(enum yall_log_level log_level)
 {
 	WORD wColor;
-	int color = colors[log_level];
+	uint16_t color = colors[log_level];
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
@@ -82,7 +82,7 @@ static void set_color(enum yall_log_level log_level)
 static void reset_color(void)
 {
 	WORD wColor;
-	int color = 15;
+	uint16_t color = 15;
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 

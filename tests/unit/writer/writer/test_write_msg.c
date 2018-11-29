@@ -43,5 +43,5 @@ Test(writer_writer, test_write_msg0)
 
 	message_delete(n);
 	
-	cq_delete(msg_queue, &message_delete_wrapper);
+	cq_delete(msg_queue, &test_message_delete_wrapper);
 }

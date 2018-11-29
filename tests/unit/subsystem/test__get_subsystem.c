@@ -25,10 +25,6 @@
 #include "subsystem/test.h"
 
 /*
- * TODO : Check the returned file name in case of file output type.
- */
-
-/*
  * O.K.
  * Empty subsystems list
  */
@@ -62,14 +58,17 @@ Test(subsystem, test__get_subsystem1, .init=create_subsystems, .fini=clean_subsy
 	cr_assert_eq(_get_subsystem("0", subsystems, &p), _subsystems[0]);
 	cr_assert_eq(p.log_level, yall_debug);
 	cr_assert_eq(p.output_type, yall_console_output);
+	cr_assert_eq(p.file.filename, NULL);
 
 	cr_assert_eq(_get_subsystem("01", subsystems, &p), _subsystems[5]);
 	cr_assert_eq(p.log_level, yall_debug);
 	cr_assert_eq(p.output_type, yall_console_output);
+	cr_assert_eq(p.file.filename, NULL);
 
 	cr_assert_eq(_get_subsystem("201", subsystems, &p), _subsystems[9]);
 	cr_assert_eq(p.log_level, yall_debug);
 	cr_assert_eq(p.output_type, yall_console_output);
+	cr_assert_str_eq(p.file.filename, "output_file.log");
 }
 
 /*

@@ -285,7 +285,7 @@ void create_subsystems(void)
 
 	_subsystems[9]->log_level = yall_debug;
 	_subsystems[9]->output_type = yall_inherited_output;
-	_subsystems[9]->file.filename = NULL;
+	_subsystems[9]->file.filename = strdup("output_file.log");
 	_subsystems[9]->status = yall_subsys_enable;
 	_subsystems[9]->delete_old_log_file = true;
 	_subsystems[9]->previous = _subsystems[8];
@@ -425,8 +425,10 @@ void create_subsystems(void)
 void clean_subsystems(void)
 {
 	for (int i = 0; i < _NB_TEST_SUBSYSTEMS; ++i) {
-		if (_subsystems[i])
+		if (_subsystems[i]) {
+			free((void *)_subsystems[i]->file.filename);
 			free(_subsystems[i]);
+		}
 
 		_subsystems[i] = NULL;
 	}

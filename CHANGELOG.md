@@ -5,9 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+* Ensure `test_show_subsystems_tree` has output on stderr
+* Check parameter's output file when calling `_get_subsystem()`
 ### Changed
+* Use `int32_t` or `uint32_t` instead of `int` when possible
 ### Deprecated
 ### Removed
+* `message_delete_wrapper()` function
+* `coverage.py` for Codacy coverage
 ### Fixed
 * Show subsystems names inside tree ([#146](https://github.com/naccyde/yall/issues/176))
 ### Security

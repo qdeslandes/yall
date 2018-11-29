@@ -31,8 +31,6 @@
 
 #include "yall/config/parameters.h"
 
-// TODO : remove the limited line length
-
 void init_call_data(struct yall_call_data *d)
 {
 	d->message_size = 1;

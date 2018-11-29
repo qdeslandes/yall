@@ -56,11 +56,6 @@ void message_delete(struct message *msg)
 	free(msg);
 }
 
-void message_delete_wrapper(void *msg)
-{
-	message_delete((struct message *) msg);
-}
-
 size_t generate_std_msg(char *log_buffer, size_t len,
 	const char *message_format, va_list args)
 {
@@ -87,10 +82,6 @@ void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d)
 
 		snprintf(&buffer[curr_len], len - curr_len, l->content);
 
-		/*
-		 * TODO : call_data free should be call in the same scope as
-		 * it is created.
-		 */
 		free(l->content);
 		free(l);
 	}

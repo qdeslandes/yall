@@ -88,14 +88,6 @@ struct message *message_new(char *data,
 void message_delete(struct message *msg);
 
 /**
- * \brief Used to suppress warnings as function deleting the message is called
- *	by a function requiring it to be as void (*)(void *).
- *	TODO: Delete
- * \param msg Message to delete. Can't be NULL.
- */
-void message_delete_wrapper(void *msg);
-
-/**
  * \brief Create the log message. It fills *buffer* we given data and specific
  *	format. By the way, the function returns the required buffer size of the
  *	length parameter is 0, by it does not add room for '\n' and '\0'.

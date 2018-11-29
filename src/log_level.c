@@ -25,6 +25,7 @@
 #include "yall/log_level.h"
 
 #include <string.h>
+#include <stdint.h>
 
 static struct log_level_str_set {
 	const char *log_level_name;
@@ -53,7 +54,7 @@ enum yall_log_level str_to_log_level(const char *str)
 	if (! str)
 		return ll;
 
-	for (int i = 0; i < 9; ++i) {
+	for (uint16_t i = 0; i < 9; ++i) {
 		if (strcmp(log_level_str[i].log_level_name, str) == 0) {
 			ll = i;
 			break;
