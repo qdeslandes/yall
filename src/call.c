@@ -31,64 +31,28 @@
 
 #include "yall/config/parameters.h"
 
-void init_call_data(struct yall_call_data *d)
+struct yall_call_data *call_data_new(void)
 {
+	struct yall_call_data *d = malloc(sizeof(struct yall_call_data));
+
 	d->message_size = 1;
 
+	// TODO: allocate header here or on demand ?
 	d->header = malloc(DEFAULT_LINE_SIZE);
 	d->header[0] = '\n';
 	d->header[1] = '\0';
 
-	d->lines = NULL;
+	d->lines = ll_new();
+
+	return d;
 }
 
-void add_line(struct yall_call_data *d, char *content)
+void call_data_delete(struct yall_call_data *d)
 {
-	struct yall_call_data_line *l = NULL;
-
-	l = malloc(sizeof(struct yall_call_data_line));
-
-	if (d->lines == NULL) {
-		d->lines = l;
-	} else {
-		struct yall_call_data_line *tmp = d->lines;
-
-		for ( ; tmp->next; tmp = tmp->next)
-			;
-		tmp->next = l;
-	}
-
-	l->content = content;
-	l->next = NULL;
-}
-
-struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = d->lines;
-
-	if (l) {
-		d->lines = l->next;
-		d->message_size -= strlen(l->content);
-	}
-
-	return l;
-}
-
-void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = NULL;
-
-	snprintf(buffer, len, "%s", d->header);
-	free(d->header);
-
-	while ((l = remove_first_line(d))) {
-		size_t curr_len = strlen(buffer);
-
-		snprintf(&buffer[curr_len], len - curr_len, l->content);
-
-		free(l->content);
-		free(l);
-	}
+	ll_delete(d->lines, &free);
+	// TODO: header should be freed here
+	//free(d->header);
+	free(d);
 }
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
@@ -115,7 +79,7 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 	...)
 {
-	va_list args;
+	va_list args = {{0}};
 	uint8_t i = 0;
 	uint8_t tab_width = yall_config_get_tab_width();
 	char *line_content = malloc(DEFAULT_LINE_SIZE);
@@ -139,6 +103,6 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 	line_content[lf+1] = '\0';
 
 	// Add the line to the data list
-	add_line(d, line_content);
+	ll_insert_last(d->lines, line_content);
 	d->message_size += strlen(line_content);
 }
