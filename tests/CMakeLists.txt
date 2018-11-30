@@ -2,6 +2,7 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
+add_subdirectory(benchmark)
 add_subdirectory(c)
 add_subdirectory(cpp)
 
