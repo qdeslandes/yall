@@ -169,28 +169,30 @@ static void ll_insert_node_at(llist_t *l, int32_t index, llist_node_t *n)
 	if (! next) {
 		l->head = n;
 		l->tail = n;
-		++l->size;
-		return;
-	}
-
-	if (next == l->head) {
-		l->head = n;
-		next->previous = n;
-		n->next = next;
-	} else if (next == l->tail && (-1 == index || index >= l->size)) {
+	} else if (-1 == index || index >= l->size) {
 		/*
-		 * The condition here ensure we want to replace the tail and
-		 * not the last element (inserting before the tail).
+		 * Here, we are sure we want to replace the tail of a non-empty
+		 * list.
 		 */
-		l->tail = n;
 		next->next = n;
 		n->previous = next;
+		l->tail = n;
 	} else {
+		/*
+		 * Here, we want to add 'n' before 'next' in the list. We have
+		 * to check whether 'next' is the head or not.
+		 */
+
 		previous = next->previous;
 
-		previous->next = n;
+		if (next == l->head)
+			l->head = n;
+		else
+			previous->next = n;
+
 		n->previous = previous;
 		n->next = next;
+
 		next->previous = n;
 	}
 
