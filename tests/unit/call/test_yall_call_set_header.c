@@ -29,18 +29,17 @@
  */
 Test(call, test_yall_call_set_header0)
 {
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_data_new();
 
-	yall_call_set_header(&d, "header");
-	cr_assert_str_eq(d.header, "header\n");
-	cr_assert_eq(d.message_size, 7);
+	yall_call_set_header(d, "header");
+	cr_assert_str_eq(d->header, "header\n");
+	cr_assert_eq(d->message_size, 7);
 
-	yall_call_set_header(&d, "header %c %d", 't', 3);
-	cr_assert_str_eq(d.header, "header t 3\n");
-	cr_assert_eq(d.message_size, 11);
+	yall_call_set_header(d, "header %c %d", 't', 3);
+	cr_assert_str_eq(d->header, "header t 3\n");
+	cr_assert_eq(d->message_size, 11);
 
-	free(d.header);
+	call_data_delete(d);
 }
 
 /*
@@ -48,12 +47,11 @@ Test(call, test_yall_call_set_header0)
  */
 Test(call, test_yall_call_set_header1)
 {
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_data_new();
 
-	yall_call_set_header(&d, _TEST_1088_LONG_CALL_HEADER);
-	cr_assert_str_eq(d.header, _TEST_1023_LONG_CALL_HEADER);
-	cr_assert_eq(d.message_size, 1023);
+	yall_call_set_header(d, _TEST_1088_LONG_CALL_HEADER);
+	cr_assert_str_eq(d->header, _TEST_1023_LONG_CALL_HEADER);
+	cr_assert_eq(d->message_size, 1023);
 
-	free(d.header);
+	call_data_delete(d);
 }

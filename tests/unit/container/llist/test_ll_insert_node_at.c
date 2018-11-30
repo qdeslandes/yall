@@ -38,8 +38,15 @@ Test(container_llist, test_ll_insert_node_at0)
 	cr_assert_eq(l->tail, n);
 	cr_assert_eq(l->size, 1);
 
+	llist_node_t *o = ll_node_new(NULL);
+	ll_insert_node_at(l, 1, o);
+	cr_assert_eq(l->head->next, o);
+	cr_assert_eq(l->tail, o);
+	cr_assert_eq(l->size, 2);
+
 	free(l);
 	free(n);
+	free(o);
 }
 
 /*

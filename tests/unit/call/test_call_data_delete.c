@@ -27,20 +27,10 @@
 /*
  * O.K.
  */
-Test(call, test_add_line0)
-{
-	struct yall_call_data d = { 0 };
+Test(call, test_call_data_delete0)
+{	
+	struct yall_call_data *d = call_data_new();
+	call_data_delete(d);
 
-	add_line(&d, "");
-	cr_assert_str_eq(d.lines->content, "");
-	cr_assert_eq(d.lines->next, NULL);
-
-	add_line(&d, " ");
-	cr_assert_str_eq(d.lines->next->content, " ");
-	cr_assert_eq(d.lines->next->next, NULL);
-
-	add_line(&d, NULL);
-	cr_assert_eq(d.lines->next->next->content, NULL);
-	cr_assert_eq(d.lines->next->next->next, NULL);
-	
+	cr_assert(1);
 }

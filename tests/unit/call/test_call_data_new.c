@@ -26,21 +26,14 @@
 
 /*
  * O.K.
- * Empty line set
  */
-Test(call, test_remove_first_line0)
-{
-	struct yall_call_data d = { 0 };
+Test(call, test_call_data_new0)
+{	
+	struct yall_call_data *d = call_data_new();
 
-	cr_assert_eq(NULL, remove_first_line(&d));
-}
+	cr_assert_eq(d->message_size, 1);
+	cr_assert(d->header);
+	cr_assert(d->lines);
 
-/*
- * O.K.
- * Non-empty line set
- */
-Test(call, test_remove_first_line1, .init=test_2_call_data_lines, .fini=test_clean_2_call_data_lines)
-{
-	cr_assert_eq(test_call_data_lines_array[0], remove_first_line(&test_call_data));
-	cr_assert_eq(test_call_data_lines_array[1], remove_first_line(&test_call_data));
+	call_data_delete(d);
 }

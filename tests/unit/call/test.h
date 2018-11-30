@@ -69,10 +69,4 @@
 	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
 	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-extern struct yall_call_data test_call_data;
-extern struct yall_call_data_line *test_call_data_lines_array[2];
-
-void test_2_call_data_lines(void);
-void test_clean_2_call_data_lines(void);
-
 #endif
