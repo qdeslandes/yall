@@ -28,7 +28,7 @@
  * O.K.
  * No debug mode
  */
-Test(subsystem, test_show_subsystems_tree0, .init=test_init_yall, .fini=test_close_yall)
+Test(subsystem, test_yall_show_subsystems_tree0, .init=test_init_yall, .fini=test_close_yall)
 {
 	yall_disable_debug();
 
@@ -39,7 +39,7 @@ Test(subsystem, test_show_subsystems_tree0, .init=test_init_yall, .fini=test_clo
 /*
  * Debug mode
  */
-Test(subsystem, test_show_subsystems_tree1, .init=test_init_yall, .fini=test_close_yall)
+Test(subsystem, test_yall_show_subsystems_tree1, .init=test_init_yall, .fini=test_close_yall)
 {
 	yall_set_subsystem("test", NULL, yall_debug, yall_console_output, NULL);
 	yall_enable_debug("test");

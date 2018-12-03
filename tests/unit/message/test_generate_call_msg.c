@@ -79,7 +79,7 @@ Test(message, test_generate_call_message1)
 
 	generate_call_msg(buffer, 2, &d);
 
-	cr_assert_str_eq(buffer, "0");
+	cr_assert_str_eq(buffer, "\n");
 }
 
 /*
@@ -108,7 +108,7 @@ Test(message, test_generate_call_message2)
 
 	generate_call_msg(buffer, 32, &d);
 
-	cr_assert_str_eq(buffer, "012");
+	cr_assert_str_eq(buffer, "\n0\n1\n2\n");
 }
 
 /*
@@ -137,5 +137,5 @@ Test(message, test_generate_call_message3)
 
 	generate_call_msg(buffer, 32, &d);
 
-	cr_assert_str_eq(buffer, "foofoofoofoobarbar");
+	cr_assert_str_eq(buffer, "foo\nfoofoo\nfoobar\nbar\n");
 }

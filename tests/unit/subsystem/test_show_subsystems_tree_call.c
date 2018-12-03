@@ -40,12 +40,12 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=test_init_yall, .fini=tes
 
 	show_subsystems_tree_call(&d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+	cr_assert_str_eq(d.header, "Subsystems tree :");
 
 #ifdef __linux__
-	cr_assert_str_eq(d.lines->content, "└── debug_subsys\n");
+	cr_assert_str_eq(d.lines->content, "└── debug_subsys");
 #else
-	cr_assert_str_eq(d.lines->content, "|-- debug_subsys\n");
+	cr_assert_str_eq(d.lines->content, "|-- debug_subsys");
 #endif
 }
 
@@ -67,14 +67,14 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=test_init_yall, .fini=tes
 
 	show_subsystems_tree_call(&d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+	cr_assert_str_eq(d.header, "Subsystems tree :");
 
 #ifdef __linux__
-	cr_assert_str_eq(d.lines->content, "├── 0\n");
-	cr_assert_str_eq(d.lines->next->next->next->content, "│   └── 02\n");
+	cr_assert_str_eq(d.lines->content, "├── 0");
+	cr_assert_str_eq(d.lines->next->next->next->content, "│   └── 02");
 #else
-	cr_assert_str_eq(d.lines->content, "|-- 0\n");
-	cr_assert_str_eq(d.lines->next->next->next->content, "|   |-- 02\n");
+	cr_assert_str_eq(d.lines->content, "|-- 0");
+	cr_assert_str_eq(d.lines->next->next->next->content, "|   |-- 02");
 #endif
 }
 
@@ -92,6 +92,6 @@ Test(subsystem, test_show_subsystems_tree_call2, .init=test_init_yall, .fini=tes
 
 	show_subsystems_tree_call(&d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+	cr_assert_str_eq(d.header, "Subsystems tree :");
 	cr_assert_eq(d.lines, NULL);
 }

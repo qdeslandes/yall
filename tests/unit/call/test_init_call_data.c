@@ -32,9 +32,7 @@ Test(call, test_init_call_data0)
 	struct yall_call_data d = { 0 };
 	init_call_data(&d);
 
-	cr_assert_eq(d.message_size, 1);
-	cr_assert(d.header != NULL);
-	cr_assert_eq(d.header[0], '\n');
-	cr_assert_eq(d.header[1], '\0');
+	cr_assert_eq(d.message_size, 0);
+	cr_assert_eq(d.header, NULL);
 	cr_assert_eq(d.lines, NULL);
 }
