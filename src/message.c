@@ -70,17 +70,17 @@ size_t generate_std_msg(char *log_buffer, size_t len,
 	return ret;
 }
 
-void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d)
+void generate_call_msg(char *buff, size_t len, struct yall_call_data *d)
 {
-	int32_t c_len = 0;
+	size_t c_len = 0;
 	struct yall_call_data_line *l = NULL;
 
-	c_len += snprintf(buffer, len, "%s\n", d->header);
+	c_len += (size_t)snprintf(buff, len, "%s\n", d->header);
 	free(d->header);
 
 	while ((l = remove_first_line(d))) {
-		c_len += snprintf(&buffer[c_len], len - c_len, l->content);
-		c_len += snprintf(&buffer[c_len], len - c_len, "\n");
+		c_len += (size_t)snprintf(&buff[c_len], len-c_len, l->content);
+		c_len += (size_t)snprintf(&buff[c_len], len-c_len, "\n");
 
 		free(l->content);
 		free(l);

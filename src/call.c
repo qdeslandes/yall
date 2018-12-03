@@ -124,7 +124,7 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 	
 	// Compute buffer size
 	va_start(args_cpy, format);
-	len = vsnprintf(NULL, 0, format, args_cpy);
+	len = (size_t)vsnprintf(NULL, 0, format, args_cpy);
 	va_end(args_cpy);
 
 	d->header = malloc(len + 1);
@@ -152,7 +152,8 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	// Compute buffer size
 	va_start(args_cpy, format);
-	len = vsnprintf(NULL, 0, format, args) + tab_width * indent;
+	len = (size_t)vsnprintf(NULL, 0U, format, args) + 
+		(size_t)tab_width * indent;
 	va_end(args_cpy);
 
 	content = malloc(len + 1);

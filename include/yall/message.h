@@ -109,6 +109,6 @@ size_t generate_std_msg(char *log_buffer, size_t len,
  * \param len Length of the log buffer.
  * \param d Call data to generate the log message from.
  */
-void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d);
+void generate_call_msg(char *buff, size_t len, struct yall_call_data *d);
 
 #endif
