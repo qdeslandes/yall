@@ -72,15 +72,15 @@ size_t generate_std_msg(char *log_buffer, size_t len,
 
 void generate_call_msg(char *buffer, size_t len, struct yall_call_data *d)
 {
+	int32_t c_len = 0;
 	struct yall_call_data_line *l = NULL;
 
-	snprintf(buffer, len, "%s", d->header);
+	c_len += snprintf(buffer, len, "%s\n", d->header);
 	free(d->header);
 
 	while ((l = remove_first_line(d))) {
-		size_t curr_len = strlen(buffer);
-
-		snprintf(&buffer[curr_len], len - curr_len, l->content);
+		c_len += snprintf(&buffer[c_len], len - c_len, l->content);
+		c_len += snprintf(&buffer[c_len], len - c_len, "\n");
 
 		free(l->content);
 		free(l);

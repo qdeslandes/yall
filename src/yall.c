@@ -231,7 +231,7 @@ yall_error yall_call_log(const char *subsystem,
 		line);
 
 	hdr_len = generate_call_hdr(NULL, 0, &hc);
-	buff_len = hdr_len + d.message_size + 1;
+	buff_len = hdr_len + call_get_size(&d);
 
 	buff = malloc(buff_len);
 	m = message_new(buff, log_level, &p);
