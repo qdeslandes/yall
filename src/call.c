@@ -45,19 +45,16 @@ size_t call_get_size(yall_call_data *d)
 	struct yall_call_data_line *l = d->lines;
 
 	len = d->message_size;
-	len += 2; // '\0' && header's '\n'
+	len += 2 + 10; // '\0' && header's '\n'
 
 	while (l) {
 		++nb_lines;
 		l = l->next;
 	}
 
-	if (! nb_lines)
-		++len;
-	else
-		len += nb_lines;
+	len += nb_lines;
 
-	return nb_lines;
+	return len;
 }
 
 void add_line(struct yall_call_data *d, char *content)
@@ -121,7 +118,7 @@ void yall_call_set_header(yall_call_data *d, const char *format, ...)
 		d->message_size -= strlen(d->header);
 		free(d->header);
 	}
-	
+
 	// Compute buffer size
 	va_start(args_cpy, format);
 	len = (size_t)vsnprintf(NULL, 0, format, args_cpy);
@@ -152,7 +149,7 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	// Compute buffer size
 	va_start(args_cpy, format);
-	len = (size_t)vsnprintf(NULL, 0U, format, args) + 
+	len = (size_t)vsnprintf(NULL, 0U, format, args) +
 		(size_t)tab_width * indent;
 	va_end(args_cpy);
 
@@ -160,7 +157,7 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	for (i = 0; i < tab_width * indent; ++i)
 		content[i] = ' ';
-	
+
 	// Write message in buffer
 	va_start(args, format);
 	vsprintf(&content[i], format, args);

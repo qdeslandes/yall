@@ -161,13 +161,13 @@ int main(int argc, char *argv[])
 
 	yall_load_configuration(config_file);
 	yall_show_subsystems_tree();
-
+/*
 	pthread_create(&threads[0], NULL, thread0, NULL);
 	pthread_create(&threads[1], NULL, thread1, NULL);
 	pthread_create(&threads[2], NULL, thread2, NULL);
 	pthread_create(&threads[3], NULL, thread3, NULL);
 	pthread_create(&threads[4], NULL, thread4, NULL);
-
+*/
 	YALL_DEBUG("yall_c_test", "%s, %d", yall_get_version_string(), yall_get_version());
 	YALL_DEBUG("io", "IO subsystem ready.");
 	YALL_INFO("yall_c_test", "Trying to reinit library : %s", yall_strerror(yall_init()));
@@ -182,10 +182,10 @@ int main(int argc, char *argv[])
 #ifdef _WIN32
 	getchar();
 #endif
-
+/*
 	for (int i = 0; i < 5; ++i)
 		pthread_join(threads[i], NULL);
-
+*/
 	yall_show_subsystems_tree();
 
 	yall_close();
