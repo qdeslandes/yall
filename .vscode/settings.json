@@ -14,5 +14,8 @@
 			120
 		],
     },
-	"C_Cpp.autoAddFileAssociations": false
+    "C_Cpp.autoAddFileAssociations": false,
+    "files.associations": {
+        "*.h":"c"
+    }
 }

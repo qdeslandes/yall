@@ -71,6 +71,12 @@ typedef struct yall_call_data {
  */
 void init_call_data(struct yall_call_data *d);
 
+/**
+ * \brief Return the computed length of the buffer to allocate in order to
+ *	store the full message, including '\0'.
+ * \param d Pointer to a yall_call_data object.
+ * \return Minimal size of the buffer to store the message.
+ */
 size_t call_get_buffer_length(yall_call_data *d);
 
 /**
