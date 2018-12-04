@@ -27,12 +27,13 @@
 /*
  * O.K.
  */
-Test(call, test_init_call_data0)
+Test(call, test_call_new0)
 {
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_new();
 
-	cr_assert_eq(d.message_size, 0);
-	cr_assert_eq(d.header, NULL);
-	cr_assert_eq(d.lines, NULL);
+	cr_assert_eq(d->message_size, 0);
+	cr_assert_eq(d->header, NULL);
+	cr_assert_eq(d->lines, NULL);
+
+	call_delete(d);
 }

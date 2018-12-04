@@ -25,68 +25,10 @@
 #include "call/test.h"
 
 /*
- * Empty call data
+ * O.K.
  */
-Test(call, test_call_get_buffer_length0)
+Test(call, test_call_delete0)
 {
 	struct yall_call_data *d = call_new();
-
-	cr_assert_eq(call_get_buffer_length(d), 2);
-
-	call_delete(d);
-}
-
-/*
- * Call data with header
- */
-Test(call, test_call_get_buffer_length1)
-{
-	struct yall_call_data *d = call_new();
-
-	yall_call_set_header(d, "testing");
-
-	cr_assert_eq(call_get_buffer_length(d), 2 + strlen("testing"));
-
-	call_delete(d);
-}
-
-/*
- * Call data with lines
- */
-Test(call, test_call_get_buffer_length2)
-{
-	struct yall_call_data *d = call_new();
-
-	yall_config_set_tab_width(2);
-
-	yall_call_add_line(d, 1, "Hello ! %s", "world ?");
-
-	cr_assert_eq(call_get_buffer_length(d), 22);
-
-	call_delete(d);
-}
-
-/*
- * Call data with header and lines
- */
-Test(call, test_call_get_buffer_length3)
-{
-	struct yall_call_data *d = call_new();
-
-	yall_config_set_tab_width(2);
-
-	yall_call_set_header(d, "testing");	// 7 characters
-	yall_call_add_line(d, 1, "Hello !");	// 9 characters
-	yall_call_add_line(d, 0, "%d", 32);	// 2 characters
-
-	/*
-	 * 18 characters
-	 * + 3 ('\n' for each line)
-	 * + 1 ('\0')
-	 * + 4 (default 1 indent added to each line)
-	 */
-
-	cr_assert_eq(call_get_buffer_length(d), 26);
-
 	call_delete(d);
 }

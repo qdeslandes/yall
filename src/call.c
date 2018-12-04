@@ -31,11 +31,28 @@
 
 #include "yall/config/parameters.h"
 
-void init_call_data(struct yall_call_data *d)
+yall_call_data *call_new(void)
 {
+	yall_call_data *d = malloc(sizeof(yall_call_data));
+
 	d->message_size = 0;
 	d->header = NULL;
 	d->lines = NULL;
+
+	return d;
+}
+
+void call_delete(yall_call_data *d)
+{
+	struct yall_call_data_line *l = NULL;
+
+	while ((l = remove_first_line(d))) {
+		free(l->content);
+		free(l);
+	}
+
+	free(d->header);
+	free(d);
 }
 
 size_t call_get_buffer_length(yall_call_data *d)

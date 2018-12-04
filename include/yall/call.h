@@ -65,11 +65,16 @@ typedef struct yall_call_data {
 } yall_call_data;
 
 /**
- * \brief Initialize a structure yall_call_data by setting header to "\n" and
- *	message_size to 1.
- * \param d Pointer to structure of type yall_call_data. Can't be NULL.
+ * \brief Create a new yall_call_data object and return its pointer.
+ * \return Pointer to a new yall_call_data object.
  */
-void init_call_data(struct yall_call_data *d);
+yall_call_data *call_new(void);
+
+/**
+ * \brief Delete the given yall_call_data object (including header and lines).
+ * \param Pointer to a valid yall_call_data object.
+ */
+void call_delete(yall_call_data *d);
 
 /**
  * \brief Return the computed length of the buffer to allocate in order to
