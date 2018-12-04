@@ -139,3 +139,16 @@ Test(message, test_generate_call_message3)
 
 	cr_assert_str_eq(buffer, "foo\nfoofoo\nfoobar\nbar\n");
 }
+
+/*
+ * Do not print '(null)' if header is not set
+ */
+Test(message, test_generate_call_message4)
+{
+	char buffer[64] = { 0 };
+	struct yall_call_data d = { 0, NULL, NULL };
+
+	generate_call_msg(buffer, 64, &d);
+
+	cr_assert_str_eq(buffer, "\n");
+}

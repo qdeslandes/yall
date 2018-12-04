@@ -75,7 +75,7 @@ void generate_call_msg(char *buff, size_t len, struct yall_call_data *d)
 	size_t c_len = 0;
 	struct yall_call_data_line *l = NULL;
 
-	c_len += (size_t)snprintf(buff, len, "%s\n", d->header);
+	c_len += (size_t)snprintf(buff, len, "%s\n", d->header?d->header:"");
 	free(d->header);
 
 	while ((l = remove_first_line(d))) {
