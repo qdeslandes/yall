@@ -28,9 +28,6 @@ environment:
           platform: x64
           generator: "Visual Studio 12 2013 Win64"
 
-install:
-    - ps: choco install doxygen.portable
-
 before_build:
     - cd c:\yall
     - cmake -G"%generator%"
