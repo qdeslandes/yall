@@ -29,7 +29,7 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 install:
-  - cmd: choco install doxygen.install
+  - cmd: choco install doxygen.portable
 
 before_build:
     - cd c:\yall
