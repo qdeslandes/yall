@@ -29,14 +29,7 @@ environment:
           generator: "Visual Studio 12 2013 Win64"
 
 install:
-  - ps: >-
-    If ($env:BUILD_DOCU -Match "true") {
-      $env:DOXYGEN_URL="http://doxygen.nl/files/doxygen-1.8.14.windows.x64.bin.zip"
-      appveyor DownloadFile $env:DOXYGEN_URL -FileName doxygen.zip
-      7z x doxygen.zip -oC:/projects/deps/doxygen-1.8.10 > $null
-      $env:PATH="C:/projects/deps/doxygen-1.8.10;$env:PATH"
-      doxygen --version
-    }
+    - ps: choco install doxygen.portable
 
 before_build:
     - cd c:\yall
