@@ -27,29 +27,7 @@
 /*
  * O.K.
  */
-Test(call, test_yall_call_set_header0)
+Test(call, test_call_get_size0)
 {
-	struct yall_call_data *d = call_new();
-
-	yall_call_set_header(d, "header");
-	cr_assert_str_eq(d->header, "header");
-	cr_assert_eq(d->message_size, 6);
-
-	yall_call_set_header(d, "header %c %d", 't', 3);
-	cr_assert_str_eq(d->header, "header t 3");
-	cr_assert_eq(d->message_size, 10);
-
-	call_delete(d);
-}
-
-/*
- * Too long header
- */
-Test(call, test_yall_call_set_header1)
-{
-	struct yall_call_data *d = call_new();
-
-	yall_call_set_header(d, _TEST_1088_LONG_CALL_HEADER);
-	cr_assert_str_eq(d->header, _TEST_1088_LONG_CALL_HEADER);
-	cr_assert_eq(d->message_size, 1088);
+	// TODO: WIP
 }

@@ -149,7 +149,11 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	// Compute buffer size
 	va_start(args_cpy, format);
+<<<<<<< HEAD
 	len = (size_t)vsnprintf(NULL, 0U, format, args_cpy) +
+=======
+	len = (size_t)vsnprintf(NULL, 0U, format, args) +
+>>>>>>> develop
 		(size_t)tab_width * indent;
 	va_end(args_cpy);
 

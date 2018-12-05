@@ -84,6 +84,8 @@ void call_delete(yall_call_data *d);
  */
 size_t call_get_buffer_length(yall_call_data *d);
 
+size_t call_get_size(yall_call_data *d);
+
 /**
  * \brief Add a line to the structure yall_call_data with the given content.
  * \param d Pointer to structure of type yall_call_data. Can't be NULL.
