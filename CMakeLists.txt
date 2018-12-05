@@ -42,7 +42,7 @@ find_package(jansson REQUIRED)
 find_package(pthread REQUIRED)
 find_package(criterion REQUIRED)
 
-if (WIN32)
+if (UNIX)
     find_package(Doxygen REQUIRED)
 endif ()
 
