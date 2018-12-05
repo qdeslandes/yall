@@ -33,7 +33,7 @@ Test(call, test_call_new0)
 
 	cr_assert_eq(d->message_size, 0);
 	cr_assert_eq(d->header, NULL);
-	cr_assert_eq(d->lines, NULL);
+	cr_assert(d->lines);
 
 	call_delete(d);
 }

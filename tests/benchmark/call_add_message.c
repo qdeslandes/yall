@@ -38,4 +38,8 @@ BENCHMARK(call_add_message(20, 20000));
  *	- Total time: 18.706s
  *	- Time for 20000 messages (avg.): 0.935s
  *	- Messages per second (avg.): 21384
+ * Use llist instead of a singly-linked-list
+ *	- Total time: 0.092s
+ *	- Time for 20000 messages (avg.): 0.005s
+ *	- Messages per second (avg.): 4335855
  */

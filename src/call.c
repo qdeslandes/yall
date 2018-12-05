@@ -37,20 +37,14 @@ yall_call_data *call_new(void)
 
 	d->message_size = 0;
 	d->header = NULL;
-	d->lines = NULL;
+	d->lines = ll_new();
 
 	return d;
 }
 
 void call_delete(yall_call_data *d)
 {
-	struct yall_call_data_line *l = NULL;
-
-	while ((l = remove_first_line(d))) {
-		free(l->content);
-		free(l);
-	}
-
+	ll_delete(d->lines, &free);
 	free(d->header);
 	free(d);
 }
@@ -58,52 +52,12 @@ void call_delete(yall_call_data *d)
 size_t call_get_buffer_length(yall_call_data *d)
 {
 	size_t len = 0;
-	size_t nb_lines = 0;
-	struct yall_call_data_line *l = d->lines;
 
 	len = d->message_size;
 	len += 2; // '\0' && header's '\n'
-
-	while (l) {
-		++nb_lines;
-		l = l->next;
-	}
-
-	len += nb_lines;
+	len += ll_get_size(d->lines); // '\n' for each line
 
 	return len;
-}
-
-void add_line(struct yall_call_data *d, char *content)
-{
-	struct yall_call_data_line *l = NULL;
-
-	l = malloc(sizeof(struct yall_call_data_line));
-
-	if (d->lines == NULL) {
-		d->lines = l;
-	} else {
-		struct yall_call_data_line *tmp = d->lines;
-
-		for ( ; tmp->next; tmp = tmp->next)
-			;
-		tmp->next = l;
-	}
-
-	l->content = content;
-	l->next = NULL;
-}
-
-struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = d->lines;
-
-	if (l) {
-		d->lines = l->next;
-		d->message_size -= strlen(l->content);
-	}
-
-	return l;
 }
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
@@ -165,5 +119,5 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	d->message_size += len;
 
-	add_line(d, content);
+	ll_insert_last(d->lines, content);
 }
