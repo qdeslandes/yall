@@ -33,13 +33,28 @@
 
 void init_call_data(struct yall_call_data *d)
 {
-	d->message_size = 1;
-
-	d->header = malloc(DEFAULT_LINE_SIZE);
-	d->header[0] = '\n';
-	d->header[1] = '\0';
-
+	d->message_size = 0;
+	d->header = NULL;
 	d->lines = NULL;
+}
+
+size_t call_get_size(yall_call_data *d)
+{
+	size_t len = 0;
+	size_t nb_lines = 0;
+	struct yall_call_data_line *l = d->lines;
+
+	len = d->message_size;
+	len += 2 + 10; // '\0' && header's '\n'
+
+	while (l) {
+		++nb_lines;
+		l = l->next;
+	}
+
+	len += nb_lines;
+
+	return len;
 }
 
 void add_line(struct yall_call_data *d, char *content)
@@ -94,51 +109,61 @@ void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
 {
 	va_list args;
-	// Create the proper format with \n
-	char *_format = malloc(strlen(format) + 2);
+	va_list args_cpy;
+	size_t len = 0;
 
-	if (d->header)
+	va_copy(args_cpy, args);
+
+	if (d->header) {
 		d->message_size -= strlen(d->header);
+		free(d->header);
+	}
 
-	snprintf(_format, strlen(format) + 2, "%s%c", format, '\n');
+	// Compute buffer size
+	va_start(args_cpy, format);
+	len = (size_t)vsnprintf(NULL, 0, format, args_cpy);
+	va_end(args_cpy);
 
+	d->header = malloc(len + 1);
+
+	// Write string in buffer
 	va_start(args, format);
-
-	vsnprintf(d->header, DEFAULT_LINE_SIZE, _format, args);
-	d->message_size += strlen(d->header);
-
+	vsprintf(d->header, format, args);
 	va_end(args);
 
-	free(_format);
+	d->message_size += len;
 }
 
 void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 	...)
 {
 	va_list args;
-	uint8_t i = 0;
+	va_list args_cpy;
+	size_t i = 0;
+	size_t len = 0;
+	char *content = NULL;
 	uint8_t tab_width = yall_config_get_tab_width();
-	char *line_content = malloc(DEFAULT_LINE_SIZE);
 
-	++indent; // To, defaultly, set all line at 1 tab
+	++indent; // Default to 1 tab for call messages
+	va_copy(args_cpy, args);
 
-	for ( ; i < tab_width * indent; ++i)
-		line_content[i] = ' ';
+	// Compute buffer size
+	va_start(args_cpy, format);
+	len = (size_t)vsnprintf(NULL, 0U, format, args) +
+		(size_t)tab_width * indent;
+	va_end(args_cpy);
 
-	// Create the message line
+	content = malloc(len + 1);
+
+	for (i = 0; i < tab_width * indent; ++i)
+		content[i] = ' ';
+
+	// Write message in buffer
 	va_start(args, format);
-	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE -
-		(uint32_t)(tab_width * indent), format, args);
+	vsprintf(&content[i], format, args);
 	va_end(args);
 
-	// Manage \n
-	size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ?
-		DEFAULT_LINE_SIZE - 2 : strlen(line_content);
+	d->message_size += len;
 
-	line_content[lf] = '\n';
-	line_content[lf+1] = '\0';
-
-	// Add the line to the data list
-	add_line(d, line_content);
-	d->message_size += strlen(line_content);
+	add_line(d, content);
 }

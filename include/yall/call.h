@@ -30,8 +30,6 @@
 
 #include "yall/utils.h"
 
-#define DEFAULT_LINE_SIZE       1024U
-
 /**
  * \struct yall_call_data_line
  * \brief Represent a line during a call to a macro YALL_CALL_xxx.
@@ -72,6 +70,8 @@ typedef struct yall_call_data {
  * \param d Pointer to structure of type yall_call_data. Can't be NULL.
  */
 void init_call_data(struct yall_call_data *d);
+
+size_t call_get_size(yall_call_data *d);
 
 /**
  * \brief Add a line to the structure yall_call_data with the given content.

@@ -231,12 +231,12 @@ yall_error yall_call_log(const char *subsystem,
 		line);
 
 	hdr_len = generate_call_hdr(NULL, 0, &hc);
-	buff_len = hdr_len + d.message_size + 1;
+	buff_len = hdr_len + call_get_size(&d);
 
 	buff = malloc(buff_len);
 	m = message_new(buff, log_level, &p);
 
-	generate_call_hdr(buff, hdr_len + 1, &hc);
+	generate_call_hdr(buff, buff_len, &hc);
 	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
 
 	write_msg(m);
