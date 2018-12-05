@@ -41,7 +41,10 @@ endif ()
 find_package(jansson REQUIRED)
 find_package(pthread REQUIRED)
 find_package(criterion REQUIRED)
-find_package(Doxygen REQUIRED)
+
+if (WIN32)
+    find_package(Doxygen REQUIRED)
+endif ()
 
 #[[
 	Project version
