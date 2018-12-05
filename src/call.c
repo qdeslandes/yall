@@ -31,21 +31,38 @@
 
 #include "yall/config/parameters.h"
 
-void init_call_data(struct yall_call_data *d)
+yall_call_data *call_new(void)
 {
+	yall_call_data *d = malloc(sizeof(yall_call_data));
+
 	d->message_size = 0;
 	d->header = NULL;
 	d->lines = NULL;
+
+	return d;
 }
 
-size_t call_get_size(yall_call_data *d)
+void call_delete(yall_call_data *d)
+{
+	struct yall_call_data_line *l = NULL;
+
+	while ((l = remove_first_line(d))) {
+		free(l->content);
+		free(l);
+	}
+
+	free(d->header);
+	free(d);
+}
+
+size_t call_get_buffer_length(yall_call_data *d)
 {
 	size_t len = 0;
 	size_t nb_lines = 0;
 	struct yall_call_data_line *l = d->lines;
 
 	len = d->message_size;
-	len += 2 + 10; // '\0' && header's '\n'
+	len += 2; // '\0' && header's '\n'
 
 	while (l) {
 		++nb_lines;
@@ -87,23 +104,6 @@ struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
 	}
 
 	return l;
-}
-
-void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = NULL;
-
-	snprintf(buffer, len, "%s", d->header);
-	free(d->header);
-
-	while ((l = remove_first_line(d))) {
-		size_t curr_len = strlen(buffer);
-
-		snprintf(&buffer[curr_len], len - curr_len, l->content);
-
-		free(l->content);
-		free(l);
-	}
 }
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
@@ -149,7 +149,7 @@ void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 
 	// Compute buffer size
 	va_start(args_cpy, format);
-	len = (size_t)vsnprintf(NULL, 0U, format, args) +
+	len = (size_t)vsnprintf(NULL, 0U, format, args_cpy) +
 		(size_t)tab_width * indent;
 	va_end(args_cpy);
 

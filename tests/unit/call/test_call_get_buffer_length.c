@@ -25,26 +25,68 @@
 #include "call/test.h"
 
 /*
- * O.K.
- * 0 sized buffer
+ * Empty call data
  */
-Test(call, test_convert_data_to_message0)
+Test(call, test_call_get_buffer_length0)
 {
-	struct yall_call_data d = { 0 };
-	char buffer[16] = { 0 };
+	struct yall_call_data *d = call_new();
 
-	convert_data_to_message(buffer, 0, &d);
-	cr_assert_eq(buffer[0], '\0');
+	cr_assert_eq(call_get_buffer_length(d), 2);
+
+	call_delete(d);
 }
 
 /*
- * O.K.
- * There is no need to call test_clean_2_call_data_lines as it is freed by the tested function
+ * Call data with header
  */
-Test(call, test_convert_data_to_message1, .init=test_2_call_data_lines)
+Test(call, test_call_get_buffer_length1)
 {
-	char buffer[16] = { 0 };
+	struct yall_call_data *d = call_new();
 
-	convert_data_to_message(buffer, 16, &test_call_data);
-	cr_assert_str_eq(buffer, "yalldatatest");
+	yall_call_set_header(d, "testing");
+
+	cr_assert_eq(call_get_buffer_length(d), 2 + strlen("testing"));
+
+	call_delete(d);
+}
+
+/*
+ * Call data with lines
+ */
+Test(call, test_call_get_buffer_length2)
+{
+	struct yall_call_data *d = call_new();
+
+	yall_config_set_tab_width(2);
+
+	yall_call_add_line(d, 1, "Hello ! %s", "world ?");
+
+	cr_assert_eq(call_get_buffer_length(d), 22);
+
+	call_delete(d);
+}
+
+/*
+ * Call data with header and lines
+ */
+Test(call, test_call_get_buffer_length3)
+{
+	struct yall_call_data *d = call_new();
+
+	yall_config_set_tab_width(2);
+
+	yall_call_set_header(d, "testing");	// 7 characters
+	yall_call_add_line(d, 1, "Hello !");	// 9 characters
+	yall_call_add_line(d, 0, "%d", 32);	// 2 characters
+
+	/*
+	 * 18 characters
+	 * + 3 ('\n' for each line)
+	 * + 1 ('\0')
+	 * + 4 (default 1 indent added to each line)
+	 */
+
+	cr_assert_eq(call_get_buffer_length(d), 26);
+
+	call_delete(d);
 }
