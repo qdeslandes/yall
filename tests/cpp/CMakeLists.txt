@@ -7,7 +7,7 @@ add_executable(yall_cpp main.cpp)
 if (UNIX)
 	# Compile options
 	set(_PVT_OPT -Wall -Wextra)
-	set(_PVT_OPT_DEBUG -O0)
+	set(_PVT_OPT_DEBUG -O0 -g)
 	set(_PVT_OPT_RELEASE -O3)
 elseif (WIN32)
 	# Compile options

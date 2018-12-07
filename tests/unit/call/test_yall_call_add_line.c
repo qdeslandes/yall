@@ -29,20 +29,20 @@
  */
 Test(call, test_yall_call_add_line0)
 {	
-	struct yall_call_data d = { 0, NULL, NULL };
+	yall_call_data *d = call_new();
 
 	yall_config_set_tab_width(2);
-	yall_call_add_line(&d, 0, "line");
-	cr_assert_str_eq(d.lines->content, "  line");
-	cr_assert_eq(d.message_size, strlen("  line"));
+	yall_call_add_line(d, 0, "line");
+	cr_assert_str_eq(ll_get_at(d->lines, 0), "  line");
+	cr_assert_eq(d->message_size, strlen("  line"));
 
 	yall_config_set_tab_width(1);
-	yall_call_add_line(&d, 3, "new_line");
-	cr_assert_str_eq(d.lines->next->content, "    new_line");
-	cr_assert_eq(d.message_size, strlen("  line") + strlen("    new_line"));
+	yall_call_add_line(d, 3, "new_line");
+	cr_assert_str_eq(ll_get_at(d->lines, 1), "    new_line");
+	cr_assert_eq(d->message_size, strlen("  line") + strlen("    new_line"));
 
 	yall_config_set_tab_width(0);
-	yall_call_add_line(&d, 1, "test %d %c", 3, 't');
-	cr_assert_str_eq(d.lines->next->next->content, "test 3 t");
-	cr_assert_eq(d.message_size, strlen("  line") + strlen("    new_line") + strlen("test 3 t"));
+	yall_call_add_line(d, 1, "test %d %c", 3, 't');
+	cr_assert_str_eq(ll_get_at(d->lines, 2), "test 3 t");
+	cr_assert_eq(d->message_size, strlen("  line") + strlen("    new_line") + strlen("test 3 t"));
 }

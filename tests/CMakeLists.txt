@@ -4,6 +4,7 @@
 
 add_subdirectory(c)
 add_subdirectory(cpp)
+add_subdirectory(benchmark)
 
 if (UNIX OR MSVC_VERSION EQUAL 1900)
     add_subdirectory(unit)
