@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Enforce use of explicit data types (e.g. `int32_t` instead of `int`)
 * Remove call data limited line length
 * Change `init_call_data()` to `call_new()` and `call_delete()`
-* Remove call data limited line length
+* Use `llist` instead of a custom linked-list for call data
 ### Deprecated
 ### Removed
 * `coverage.py` for Codacy coverage

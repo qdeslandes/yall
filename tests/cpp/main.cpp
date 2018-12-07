@@ -128,16 +128,16 @@ int main(void)
 
 	Device d = Device();
 
-        Yall::config().setTabWidth(4);
-        Yall::config().setStdHeaderTemplate("[%d] :: %L : %f : \n\t");
-        Yall::config().setCallHeaderTemplate("[%d] :: %-9l : %s : ");
+    Yall::config().setTabWidth(4);
+    Yall::config().setStdHeaderTemplate("[%d] :: %L : %f : \n\t");
+    Yall::config().setCallHeaderTemplate("[%d] :: %-9l : %s : ");
 
-        Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
-        Yall::setSubsystem("debug", "yall_test_cpp", yall_debug, yall_console_output, "");
-        Yall::enableDebug("debug");
+    Yall::setSubsystem("yall_cpp_test", "", yall_debug, yall_console_output, "");
+    Yall::setSubsystem("io", "yall_cpp_test", yall_debug, yall_console_output, "");
+    Yall::setSubsystem("memory", "yall_cpp_test", yall_debug, yall_console_output, "");
+    Yall::setSubsystem("scheduler", "yall_test_cpp", yall_debug, yall_console_output, "");
+    Yall::setSubsystem("debug", "yall_test_cpp", yall_debug, yall_console_output, "");
+    Yall::enableDebug("debug");
 
 	pthread_create(&threads[0], NULL, thread0, NULL);
 	pthread_create(&threads[1], NULL, thread1, NULL);
@@ -146,13 +146,13 @@ int main(void)
 	pthread_create(&threads[4], NULL, thread4, NULL);
 
 	YALL_DEBUG("yall_cpp_test", Yall::getVersionString() << " " << Yall::getVersion());
-        YALL_DEBUG("io", "IO subsystem ready.");
+    YALL_DEBUG("io", "IO subsystem ready.");
 	YALL_CALL_ERR("memory", memoryInfos, nullptr);
-        YALL_ALERT("scheduler" , "Using process 7034.");
+    YALL_ALERT("scheduler" , "Using process 7034.");
 
-        Yall::disableSubsystem("scheduler");
-        YALL_DEBUG("scheduler", "Starting process 52233.");
-        Yall::enableSubsystem("scheduler");
+    Yall::disableSubsystem("scheduler");
+    YALL_DEBUG("scheduler", "Starting process 52233.");
+    Yall::enableSubsystem("scheduler");
 
 	d.status();
 
@@ -166,7 +166,7 @@ int main(void)
 
 	Yall::closeAll();
 
-        return 0;
+    return 0;
 }
 
 void memoryInfos(YallData &d, const void *args)

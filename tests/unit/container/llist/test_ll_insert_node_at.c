@@ -172,3 +172,43 @@ Test(container_llist, test_ll_insert_node_at7)
 	test_llist_free_data(l);
 	free(n);
 }
+
+/*
+ * Add last 2 times in a row (was buggy)
+ */
+Test(container_llist, test_ll_insert_node_at8)
+{
+	llist_t *l = ll_new();
+
+	llist_node_t *n0 = ll_node_new(NULL);
+	llist_node_t *n1 = ll_node_new(NULL);
+
+	ll_insert_node_at(l, -1, n0);
+	ll_insert_node_at(l, -1, n1);
+
+	cr_assert_eq(l->head, n0);
+	cr_assert_eq(l->tail, n1);
+	cr_assert_eq(l->head->next, n1);
+
+	ll_delete(l, NULL);
+}
+
+/*
+ * Add first 2 times in a row (was buggy)
+ */
+Test(container_llist, test_ll_insert_node_at9)
+{
+	llist_t *l = ll_new();
+
+	llist_node_t *n0 = ll_node_new(NULL);
+	llist_node_t *n1 = ll_node_new(NULL);
+
+	ll_insert_node_at(l, 0, n0);
+	ll_insert_node_at(l, 0, n1);
+
+	cr_assert_eq(l->head, n1);
+	cr_assert_eq(l->tail, n0);
+	cr_assert_eq(l->head->next, n0);
+
+	ll_delete(l, NULL);
+}

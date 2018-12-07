@@ -29,6 +29,7 @@
 #include <stddef.h>
 
 #include "yall/utils.h"
+#include "yall/container/llist.h"
 
 /**
  * \struct yall_call_data_line
@@ -61,7 +62,7 @@ struct yall_call_data_line {
 typedef struct yall_call_data {
 	size_t message_size;
 	char *header;
-	struct yall_call_data_line *lines;
+	llist_t *lines;
 } yall_call_data;
 
 /**
@@ -83,16 +84,6 @@ void call_delete(yall_call_data *d);
  * \return Minimal size of the buffer to store the message.
  */
 size_t call_get_buffer_length(yall_call_data *d);
-
-size_t call_get_size(yall_call_data *d);
-
-/**
- * \brief Add a line to the structure yall_call_data with the given content.
- * \param d Pointer to structure of type yall_call_data. Can't be NULL.
- * \param content Nul-terminated string to add as a line on the final log
- *	message can't be NULL.
- */
-void add_line(struct yall_call_data *d, char *content);
 
 /**
  * \brief Remove and return the first line of the given yall_call_data.

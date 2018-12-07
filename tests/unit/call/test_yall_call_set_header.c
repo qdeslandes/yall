@@ -52,4 +52,6 @@ Test(call, test_yall_call_set_header1)
 	yall_call_set_header(d, _TEST_1088_LONG_CALL_HEADER);
 	cr_assert_str_eq(d->header, _TEST_1088_LONG_CALL_HEADER);
 	cr_assert_eq(d->message_size, 1088);
+
+	call_delete(d);
 }
