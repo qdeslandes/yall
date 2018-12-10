@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `convert_data_to_message()` function
 ### Fixed
 * Show subsystems names inside tree ([#146](https://github.com/naccyde/yall/issues/176))
+* Update subsystem name correctly when using an existing subsystem name
 ### Security
 
 ## [1.8.0]
