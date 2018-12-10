@@ -304,7 +304,7 @@ struct yall_subsystem *remove_subsystem(const char *name)
 		s->previous = NULL;
 		s->parent = NULL;
 
-		_YALL_DBG_INFO("Subsystem %d removed.", name);
+		_YALL_DBG_INFO("Subsystem %s removed.", name);
 	}
 
 	return s;
