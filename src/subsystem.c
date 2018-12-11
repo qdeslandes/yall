@@ -150,7 +150,6 @@ static void set_subsys_status(
  */
 static void reset_subsystem(struct yall_subsystem *s)
 {
-	//s->name[0] = '\0';
 	s->log_level = yall_inherited_level;
 	s->status = yall_inherited_status;
 	s->output_type = yall_inherited_output;
