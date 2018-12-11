@@ -31,24 +31,14 @@
 Test(message, test_generate_call_message0)
 {
 	char buffer[64] = { 0 };
-	struct yall_call_data d = { 3, NULL, NULL };
-	d.header = strdup("");
+	yall_call_data *d = call_new();
 
-	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
-	l->content = strdup("2");
-	l->next = NULL;
+	yall_call_set_header(d, "");
+	yall_call_add_line(d, 0, "2");
+	yall_call_add_line(d, 0, "1");
+	yall_call_add_line(d, 0, "0");
 
-	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
-	m->content = strdup("1");
-	m->next = l;
-
-	struct yall_call_data_line *n = malloc(sizeof(struct yall_call_data_line));
-	n->content = strdup("0");
-	n->next = m;
-
-	d.lines = n;
-
-	generate_call_msg(buffer, 0, &d);
+	generate_call_msg(buffer, 0, d);
 
 	cr_assert_str_eq(buffer, "");
 }
@@ -60,26 +50,16 @@ Test(message, test_generate_call_message0)
 Test(message, test_generate_call_message1)
 {
 	char buffer[2] = { 0 };
-	struct yall_call_data d = { 3, NULL, NULL };
-	d.header = strdup("");
+	yall_call_data *d = call_new();
 
-	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
-	l->content = strdup("2");
-	l->next = NULL;
+	yall_call_set_header(d, "");
+	yall_call_add_line(d, 0, "2");
+	yall_call_add_line(d, 0, "1");
+	yall_call_add_line(d, 0, "0");
 
-	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
-	m->content = strdup("1");
-	m->next = l;
+	generate_call_msg(buffer, 2, d);
 
-	struct yall_call_data_line *n = malloc(sizeof(struct yall_call_data_line));
-	n->content = strdup("0");
-	n->next = m;
-
-	d.lines = n;
-
-	generate_call_msg(buffer, 2, &d);
-
-	cr_assert_str_eq(buffer, "0");
+	cr_assert_str_eq(buffer, "\n");
 }
 
 /*
@@ -89,26 +69,16 @@ Test(message, test_generate_call_message1)
 Test(message, test_generate_call_message2)
 {
 	char buffer[64] = { 0 };
-	struct yall_call_data d = { 3, NULL, NULL };
-	d.header = strdup("");
+	yall_call_data *d = call_new();
 
-	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
-	l->content = strdup("2");
-	l->next = NULL;
+	yall_call_set_header(d, "");
+	yall_call_add_line(d, 0, "2");
+	yall_call_add_line(d, 0, "1");
+	yall_call_add_line(d, 0, "0");
 
-	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
-	m->content = strdup("1");
-	m->next = l;
+	generate_call_msg(buffer, 32, d);
 
-	struct yall_call_data_line *n = malloc(sizeof(struct yall_call_data_line));
-	n->content = strdup("0");
-	n->next = m;
-
-	d.lines = n;
-
-	generate_call_msg(buffer, 32, &d);
-
-	cr_assert_str_eq(buffer, "012");
+	cr_assert_str_eq(buffer, "\n2\n1\n0\n");
 }
 
 /*
@@ -118,24 +88,27 @@ Test(message, test_generate_call_message2)
 Test(message, test_generate_call_message3)
 {
 	char buffer[64] = { 0 };
-	struct yall_call_data d = { 3, NULL, NULL };
-	d.header = strdup("foo");
+	yall_call_data *d = call_new();
 
-	struct yall_call_data_line *l = malloc(sizeof(struct yall_call_data_line));
-	l->content = strdup("bar");
-	l->next = NULL;
+	yall_call_set_header(d, "foo");
+	yall_call_add_line(d, 0, "bar");
+	yall_call_add_line(d, 0, "foobar");
+	yall_call_add_line(d, 0, "foofoo");
 
-	struct yall_call_data_line *m = malloc(sizeof(struct yall_call_data_line));
-	m->content = strdup("foobar");
-	m->next = l;
+	generate_call_msg(buffer, 32, d);
 
-	struct yall_call_data_line *n = malloc(sizeof(struct yall_call_data_line));
-	n->content = strdup("foofoo");
-	n->next = m;
+	cr_assert_str_eq(buffer, "foo\nbar\nfoobar\nfoofoo\n");
+}
 
-	d.lines = n;
+/*
+ * Do not print '(null)' if header is not set
+ */
+Test(message, test_generate_call_message4)
+{
+	char buffer[64] = { 0 };
+	yall_call_data *d = call_new();
 
-	generate_call_msg(buffer, 32, &d);
+	generate_call_msg(buffer, 64, d);
 
-	cr_assert_str_eq(buffer, "foofoofoofoobarbar");
+	cr_assert_str_eq(buffer, "\n");
 }

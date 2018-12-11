@@ -38,14 +38,14 @@ fi
 git checkout develop
 sed -i "s/Unreleased/$YALL_VERSION/g" CHANGELOG.md
 sed -i '6i## [Unreleased]\n### Added\n### Changed\n### Deprecated\n### Removed\n### Fixed\n### Security\n' CHANGELOG.md
-git commit -a -m"Release $YALL_VERSION"
+git commit -a -m"[ci skip] Release $YALL_VERSION"
 git pull
 git push
 
 # Merging
 git checkout master
 git pull
-git merge --squash develop
+git merge -Xtheirs --squash develop
 git commit -a -m"Release ${YALL_VERSION}"
 
 git tag ${YALL_VERSION} master

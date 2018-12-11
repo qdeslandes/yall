@@ -37,7 +37,7 @@ struct llist_node_t {
 struct llist_t {
 	struct llist_node_t *head;
 	struct llist_node_t *tail;
-	int32_t size;
+	size_t size;
 };
 
 /**
@@ -96,6 +96,7 @@ static void *ll_node_delete(llist_node_t *n, void (*data_delete)(void *data))
  */
 static llist_node_t *ll_get_node_at(llist_t *l, int32_t index)
 {
+	int32_t size = (int32_t)l->size;
 	llist_node_t *n = NULL;
 
 	// List is empty
@@ -103,7 +104,7 @@ static llist_node_t *ll_get_node_at(llist_t *l, int32_t index)
 		goto end;
 
 	// We want the last element
-	if (-1 == index || index >= l->size)
+	if (-1 == index || index >= size)
 		return l->tail;
 
 	// We want an element inside the list
@@ -163,32 +164,25 @@ end:
  */
 static void ll_insert_node_at(llist_t *l, int32_t index, llist_node_t *n)
 {
+	int32_t size = (int32_t)l->size;
 	llist_node_t *next = ll_get_node_at(l, index);
 	llist_node_t *previous = NULL;
 
 	if (! next) {
 		l->head = n;
 		l->tail = n;
-		++l->size;
-		return;
-	}
-
-	if (next == l->head) {
-		l->head = n;
-		next->previous = n;
-		n->next = next;
-	} else if (next == l->tail && (-1 == index || index >= l->size)) {
-		/*
-		 * The condition here ensure we want to replace the tail and
-		 * not the last element (inserting before the tail).
-		 */
+	} else if (-1 == index || index >= size) {
 		l->tail = n;
 		next->next = n;
 		n->previous = next;
 	} else {
 		previous = next->previous;
 
-		previous->next = n;
+		if (next == l->head)
+			l->head = n;
+		else
+			previous->next = n;
+
 		n->previous = previous;
 		n->next = next;
 		next->previous = n;
@@ -221,6 +215,11 @@ void ll_delete(llist_t *l, void (*data_delete)(void *data))
 	}
 
 	free(l);
+}
+
+size_t ll_get_size(llist_t *l)
+{
+	return l->size;
 }
 
 void ll_insert_at(llist_t *l, int32_t index, void *data)

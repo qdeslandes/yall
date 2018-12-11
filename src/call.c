@@ -31,116 +31,93 @@
 
 #include "yall/config/parameters.h"
 
-// TODO : remove the limited line length
-
-void init_call_data(struct yall_call_data *d)
+yall_call_data *call_new(void)
 {
-	d->message_size = 1;
+	yall_call_data *d = malloc(sizeof(yall_call_data));
 
-	d->header = malloc(DEFAULT_LINE_SIZE);
-	d->header[0] = '\n';
-	d->header[1] = '\0';
+	d->message_size = 0;
+	d->header = NULL;
+	d->lines = ll_new();
 
-	d->lines = NULL;
+	return d;
 }
 
-void add_line(struct yall_call_data *d, char *content)
+void call_delete(yall_call_data *d)
 {
-	struct yall_call_data_line *l = NULL;
-
-	l = malloc(sizeof(struct yall_call_data_line));
-
-	if (d->lines == NULL) {
-		d->lines = l;
-	} else {
-		struct yall_call_data_line *tmp = d->lines;
-
-		for ( ; tmp->next; tmp = tmp->next)
-			;
-		tmp->next = l;
-	}
-
-	l->content = content;
-	l->next = NULL;
-}
-
-struct yall_call_data_line *remove_first_line(struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = d->lines;
-
-	if (l) {
-		d->lines = l->next;
-		d->message_size -= strlen(l->content);
-	}
-
-	return l;
-}
-
-void convert_data_to_message(char *buffer, size_t len, struct yall_call_data *d)
-{
-	struct yall_call_data_line *l = NULL;
-
-	snprintf(buffer, len, "%s", d->header);
+	ll_delete(d->lines, &free);
 	free(d->header);
+	free(d);
+}
 
-	while ((l = remove_first_line(d))) {
-		size_t curr_len = strlen(buffer);
+size_t call_get_buffer_length(yall_call_data *d)
+{
+	size_t len = 0;
 
-		snprintf(&buffer[curr_len], len - curr_len, l->content);
+	len = d->message_size;
+	len += 2; // '\0' && header's '\n'
+	len += ll_get_size(d->lines); // '\n' for each line
 
-		free(l->content);
-		free(l);
-	}
+	return len;
 }
 
 void yall_call_set_header(yall_call_data *d, const char *format, ...)
 {
 	va_list args;
-	// Create the proper format with \n
-	char *_format = malloc(strlen(format) + 2);
+	va_list args_cpy;
+	size_t len = 0;
 
-	if (d->header)
+	va_copy(args_cpy, args);
+
+	if (d->header) {
 		d->message_size -= strlen(d->header);
+		free(d->header);
+	}
 
-	snprintf(_format, strlen(format) + 2, "%s%c", format, '\n');
+	// Compute buffer size
+	va_start(args_cpy, format);
+	len = (size_t)vsnprintf(NULL, 0, format, args_cpy);
+	va_end(args_cpy);
 
+	d->header = malloc(len + 1);
+
+	// Write string in buffer
 	va_start(args, format);
-
-	vsnprintf(d->header, DEFAULT_LINE_SIZE, _format, args);
-	d->message_size += strlen(d->header);
-
+	vsprintf(d->header, format, args);
 	va_end(args);
 
-	free(_format);
+	d->message_size += len;
 }
 
 void yall_call_add_line(yall_call_data *d, uint8_t indent, const char *format,
 	...)
 {
 	va_list args;
-	uint8_t i = 0;
+	va_list args_cpy;
+	size_t i = 0;
+	size_t len = 0;
+	char *content = NULL;
 	uint8_t tab_width = yall_config_get_tab_width();
-	char *line_content = malloc(DEFAULT_LINE_SIZE);
 
-	++indent; // To, defaultly, set all line at 1 tab
+	++indent; // Default to 1 tab for call messages
+	va_copy(args_cpy, args);
 
-	for ( ; i < tab_width * indent; ++i)
-		line_content[i] = ' ';
+	// Compute buffer size
+	va_start(args_cpy, format);
+	len = (size_t)vsnprintf(NULL, 0U, format, args_cpy) +
+		(size_t)tab_width * indent;
+	va_end(args_cpy);
 
-	// Create the message line
+	content = malloc(len + 1);
+
+	for (i = 0; i < tab_width * indent; ++i)
+		content[i] = ' ';
+
+	// Write message in buffer
 	va_start(args, format);
-	vsnprintf(&line_content[i], DEFAULT_LINE_SIZE -
-		(uint32_t)(tab_width * indent), format, args);
+	vsprintf(&content[i], format, args);
 	va_end(args);
 
-	// Manage \n
-	size_t lf = strlen(line_content) == DEFAULT_LINE_SIZE - 1 ?
-		DEFAULT_LINE_SIZE - 2 : strlen(line_content);
+	d->message_size += len;
 
-	line_content[lf] = '\n';
-	line_content[lf+1] = '\0';
-
-	// Add the line to the data list
-	add_line(d, line_content);
-	d->message_size += strlen(line_content);
+	ll_insert_last(d->lines, content);
 }

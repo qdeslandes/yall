@@ -36,7 +36,7 @@
 
 struct {
 	const char *str;
-	int value;
+	int32_t value;
 } syslog_facilities_set[] = {
 	{ "yall_fac_kern", LOG_KERN },
 	{ "yall_fac_user", LOG_USER },
@@ -67,11 +67,11 @@ struct {
  * \param log_level yall log level.
  * \return Integer corresponding to the propre syslog log level.
  */
-static int get_syslog_level(enum yall_log_level ll)
+static uint8_t get_syslog_level(enum yall_log_level ll)
 {
 #ifdef __linux__
-	static int syslog_ll[] = { LOG_DEBUG, LOG_INFO, LOG_NOTICE, LOG_WARNING,
-		LOG_ERR, LOG_CRIT, LOG_ALERT , LOG_EMERG };
+	static uint8_t syslog_ll[] = { LOG_DEBUG, LOG_INFO, LOG_NOTICE,
+		LOG_WARNING, LOG_ERR, LOG_CRIT, LOG_ALERT , LOG_EMERG };
 
 	return syslog_ll[ll];
 #else
@@ -81,7 +81,7 @@ static int get_syslog_level(enum yall_log_level ll)
 
 enum yall_syslog_facility str_to_syslog_facility(const char *s)
 {
-	for (int i = 0; i < NB_FACILITIES; ++i) {
+	for (uint8_t i = 0; i < NB_FACILITIES; ++i) {
 		if (strcmp(syslog_facilities_set[i].str, s) == 0)
 			return syslog_facilities_set[i].value;
 	}
@@ -92,8 +92,8 @@ enum yall_syslog_facility str_to_syslog_facility(const char *s)
 void write_log_syslog(enum yall_log_level log_level, const char *msg)
 {
 #ifdef __linux__
-	syslog((int)LOG_MAKEPRI((int)yall_config_get_syslog_facility(),
-		get_syslog_level(log_level)), msg);
+	syslog((int32_t)LOG_MAKEPRI((int32_t)yall_config_get_syslog_facility(),
+		(int32_t)get_syslog_level(log_level)), msg);
 #else
 #endif
 }

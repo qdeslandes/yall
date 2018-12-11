@@ -113,7 +113,6 @@ yall_error yall_log(const char *subsystem,
 	const char *format,
 	...)
 {
-	// TODO : prefix structs with "yall"
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
 	struct message *m = NULL;
@@ -195,9 +194,9 @@ yall_error yall_call_log(const char *subsystem,
 {
 	yall_error ret = YALL_SUCCESS;
 	char *buff = NULL;
-	size_t hdr_len = 0;
+	size_t wrote = 0;
 	size_t buff_len = 0;
-	struct yall_call_data d = { 0 };
+	struct yall_call_data *d = NULL;
 	struct header_content hc = { 0 };
 	struct yall_subsystem_params p = { 0 };
 	struct message *m = NULL;
@@ -219,26 +218,26 @@ yall_error yall_call_log(const char *subsystem,
 		goto end;
 	}
 
-	init_call_data(&d);
+	d = call_new();
 
 	/*
 	 * Detailled informations about the following calls can be found inside
 	 * the sources of yall_log() function.
 	 */
-
-	formatter(&d, args);
+	formatter(d, args);
 
 	fill_header_content(&hc, subsystem, log_level, function_name, filename,
 		line);
 
-	hdr_len = generate_call_hdr(NULL, 0, &hc);
-	buff_len = hdr_len + d.message_size + 1;
+	buff_len = generate_call_hdr(NULL, 0, &hc) + call_get_buffer_length(d);
 
 	buff = malloc(buff_len);
 	m = message_new(buff, log_level, &p);
 
-	generate_call_hdr(buff, hdr_len + 1, &hc);
-	generate_call_msg(&buff[hdr_len], buff_len - hdr_len, &d);
+	wrote = generate_call_hdr(buff, buff_len, &hc);
+	generate_call_msg(&buff[wrote], buff_len - wrote, d);
+
+	call_delete(d);
 
 	write_msg(m);
 

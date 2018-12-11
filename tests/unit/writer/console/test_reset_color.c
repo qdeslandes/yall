@@ -38,6 +38,8 @@ Test(writer_console, test_reset_color0)
 #endif
 
 	/*
-	 * TODO : a second call to reset_call() crash.
+	 * Calling reset_color() a second time here generate a crash in unit
+	 * tests. This could come from unit test framework itself as the
+	 * function only prints to stderr.
 	 */
 }

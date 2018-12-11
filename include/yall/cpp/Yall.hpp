@@ -57,7 +57,7 @@ public:
 
 private:
 	std::string msg;
-	int num;
+	yall_error num;
 };
 
 class YallData

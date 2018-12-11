@@ -23,3 +23,7 @@ add_custom_target(_user_doc
 
 add_custom_target(doc
 	DEPENDS _doxygen_doc _coverage_doc _user_doc)
+
+if (WIN32)
+    set_target_properties(doc PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif ()

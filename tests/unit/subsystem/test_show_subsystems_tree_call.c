@@ -35,18 +35,19 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=test_init_yall, .fini=tes
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
 
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_new();
 
-	show_subsystems_tree_call(&d, NULL);
+	show_subsystems_tree_call(d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+	cr_assert_str_eq(d->header, "Subsystems tree :");
 
 #ifdef __linux__
-	// TODO: fix cr_assert_str_eq(d.lines->content, "└── debug_subsys\n");
+	cr_assert_str_eq(ll_get_at(d->lines, 0), "└── debug_subsys");
 #else
-	// TODO: fix cr_assert_str_eq(d.lines->content, "|-- debug_subsys\n");
+	cr_assert_str_eq(ll_get_at(d->lines, 0), "|-- debug_subsys");
 #endif
+
+	call_delete(d);
 }
 
 /*
@@ -62,20 +63,21 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=test_init_yall, .fini=tes
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
 
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_new();
 
-	show_subsystems_tree_call(&d, NULL);
+	show_subsystems_tree_call(d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
+	cr_assert_str_eq(d->header, "Subsystems tree :");
 
 #ifdef __linux__
-	// TODO: fix cr_assert_str_eq(d.lines->content, "├── 0\n");
-	// TODO: fix cr_assert_str_eq(d.lines->next->next->next->content, "│   └── 02\n");
+	cr_assert_str_eq(ll_get_at(d->lines, 0), "├── 0");
+	cr_assert_str_eq(ll_get_at(d->lines, 3), "│   └── 02");
 #else
-	// TODO: fix cr_assert_str_eq(d.lines->content, "|-- 0\n");
-	// TODO: fix cr_assert_str_eq(d.lines->next->next->next->content, "|   |-- 02\n");
+	cr_assert_str_eq(ll_get_at(d->lines, 0), "|-- 0");
+	cr_assert_str_eq(ll_get_at(d->lines, 3), "|   |-- 02");
 #endif
+
+	call_delete(d);
 }
 
 /*
@@ -87,11 +89,12 @@ Test(subsystem, test_show_subsystems_tree_call2, .init=test_init_yall, .fini=tes
 	yall_config_set_call_header_template("");
 	yall_config_set_tab_width(0);
 
-	struct yall_call_data d = { 0 };
-	init_call_data(&d);
+	struct yall_call_data *d = call_new();
 
-	show_subsystems_tree_call(&d, NULL);
+	show_subsystems_tree_call(d, NULL);
 
-	cr_assert_str_eq(d.header, "Subsystems tree :\n");
-	cr_assert_eq(d.lines, NULL);
+	cr_assert_str_eq(d->header, "Subsystems tree :");
+	cr_assert_eq(ll_get_at(d->lines, 0), NULL);
+
+	call_delete(d);
 }

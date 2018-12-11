@@ -160,6 +160,7 @@ int main(int argc, char *argv[])
 	yall_enable_debug("debug");
 
 	yall_load_configuration(config_file);
+
 	yall_show_subsystems_tree();
 
 	pthread_create(&threads[0], NULL, thread0, NULL);

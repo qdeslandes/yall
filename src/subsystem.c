@@ -145,14 +145,11 @@ static void set_subsys_status(
 /**
  * \brief reset_subsystem Used to reset the internal values of a subsystem. It
  *	is useless to set default values for string pointer as if they are NULL,
- *	the default value is used instead. On the other, default values which
- *	are not pointers must be set because they will contain garbage
- *	otherwise.
+ *	the default value is used instead. Subsystem's name isn't set neither.
  * \param s Pointer to the subsystem to reset.
  */
 static void reset_subsystem(struct yall_subsystem *s)
 {
-	s->name[0] = '\0';
 	s->log_level = yall_inherited_level;
 	s->status = yall_inherited_status;
 	s->output_type = yall_inherited_output;
@@ -304,7 +301,7 @@ struct yall_subsystem *remove_subsystem(const char *name)
 		s->previous = NULL;
 		s->parent = NULL;
 
-		_YALL_DBG_INFO("Subsystem %d removed.", name);
+		_YALL_DBG_INFO("Subsystem %s removed.", name);
 	}
 
 	return s;
@@ -433,7 +430,7 @@ static void show_subsystems_tree_call(struct yall_call_data *d,
 		strncpy(&buff[strlen(buff)], op[curr_indent],
 			strlen(op[curr_indent])+1);
 
-		//strncpy(&buff[strlen(buff)], s->name, strlen(s->name) + 1);
+		strncpy(&buff[strlen(buff)], s->name, buff_size-strlen(buff));
 
 		yall_call_add_line(d, 0, buff);
 

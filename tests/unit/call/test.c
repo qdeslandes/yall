@@ -35,29 +35,3 @@ static void test_call_clean(void)
 }
 
 TestSuite(call, .init=test_call_setup, .fini=test_call_clean);
-
-const char *test_header = NULL;
-struct yall_call_data test_call_data = { 0 };
-struct yall_call_data_line *test_call_data_lines_array[2] = { 0 };
-
-void test_2_call_data_lines(void)
-{
-	test_call_data.header = strdup("yall");
-	add_line(&test_call_data, strdup("data"));
-	add_line(&test_call_data, strdup("test"));
-
-	test_header = test_call_data.header;
-	test_call_data_lines_array[0] = test_call_data.lines;
-	test_call_data_lines_array[1] = test_call_data.lines->next;
-}
-
-void test_clean_2_call_data_lines(void)
-{
-	free((void *)test_header);
-
-	free(test_call_data_lines_array[0]->content);
-	free(test_call_data_lines_array[0]);
-
-	free(test_call_data_lines_array[1]->content);
-	free(test_call_data_lines_array[1]);
-}

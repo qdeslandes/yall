@@ -29,8 +29,7 @@
 #include <stddef.h>
 
 #include "yall/utils.h"
-
-#define DEFAULT_LINE_SIZE       1024U
+#include "yall/container/llist.h"
 
 /**
  * \struct yall_call_data_line
@@ -63,23 +62,28 @@ struct yall_call_data_line {
 typedef struct yall_call_data {
 	size_t message_size;
 	char *header;
-	struct yall_call_data_line *lines;
+	llist_t *lines;
 } yall_call_data;
 
 /**
- * \brief Initialize a structure yall_call_data by setting header to "\n" and
- *	message_size to 1.
- * \param d Pointer to structure of type yall_call_data. Can't be NULL.
+ * \brief Create a new yall_call_data object and return its pointer.
+ * \return Pointer to a new yall_call_data object.
  */
-void init_call_data(struct yall_call_data *d);
+yall_call_data *call_new(void);
 
 /**
- * \brief Add a line to the structure yall_call_data with the given content.
- * \param d Pointer to structure of type yall_call_data. Can't be NULL.
- * \param content Nul-terminated string to add as a line on the final log
- *	message can't be NULL.
+ * \brief Delete the given yall_call_data object (including header and lines).
+ * \param Pointer to a valid yall_call_data object.
  */
-void add_line(struct yall_call_data *d, char *content);
+void call_delete(yall_call_data *d);
+
+/**
+ * \brief Return the computed length of the buffer to allocate in order to
+ *	store the full message, including '\0'.
+ * \param d Pointer to a yall_call_data object.
+ * \return Minimal size of the buffer to store the message.
+ */
+size_t call_get_buffer_length(yall_call_data *d);
 
 /**
  * \brief Remove and return the first line of the given yall_call_data.
@@ -87,17 +91,6 @@ void add_line(struct yall_call_data *d, char *content);
  * \return First line of the given yall_call_data.
  */
 struct yall_call_data_line *remove_first_line(struct yall_call_data *d);
-
-/**
- * \brief Convert the content of the structure yall_call_data to a
- *	nul-terminated string inside *buffer* parameter. Limited to *len* bytes.
- * \param buffer Buffer to write the log message in.
- * \param len Maximum length of characters to write inside *buffer* including
- *	nul-terminating '\0'.
- * \param d Pointer to structure of type yall_call_data. Can't be NULL.
- */
-void convert_data_to_message(char *buffer, size_t len,
-	struct yall_call_data *d);
 
 /**
  * \brief Called by the user's formatter function, it allow to define the header

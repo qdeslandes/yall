@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [1.8.1]
+### Added
+* `CONTRIBUTING.md`
+* Check parameter's output file when calling `_get_subsystem()`
+### Changed
+* Enforce use of explicit data types (e.g. `int32_t` instead of `int`)
+* Remove call data limited line length
+* Change `init_call_data()` to `call_new()` and `call_delete()`
+* Use `llist` instead of a custom linked-list for call data
+### Deprecated
+### Removed
+* `coverage.py` for Codacy coverage
+* `message_delete_wrapper()` function
+* `convert_data_to_message()` function
+### Fixed
+* Show subsystems names inside tree ([#146](https://github.com/naccyde/yall/issues/176))
+* Update subsystem name correctly when using an existing subsystem name
+* Removing a subsystem now display the proper log message
+### Security
+
 ## [1.8.0]
 ### Added
 * Queue (non concurrent) mechanism

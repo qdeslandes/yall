@@ -26,6 +26,7 @@
 #define _YALL_CONTAINER_LLIST_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 typedef struct llist_node_t llist_node_t;
 typedef struct llist_t llist_t;
@@ -49,6 +50,8 @@ llist_t *ll_new(void);
  * \param data_delete Pointer to the function managing linked-list node's data.
  */
 void ll_delete(llist_t *l, void (*data_delete)(void *data));
+
+size_t ll_get_size(llist_t *l);
 
 /**
  * \brief Insert the data at the given position. If the position does not exists
