@@ -163,7 +163,7 @@ struct yall_subsystem *create_subsystem(const char *name,
 void add_subsystem(const char *parent, struct yall_subsystem *s);
 
 /**
- * \brief Update a given subsystem : from an existing subsystem it upadte its
+ * \brief Update a given subsystem : from an existing subsystem it update its
  *	parameters instead of creating a new one.
  * \param s The subsystem to update.
  * \param log_level New log level of the subsystem.

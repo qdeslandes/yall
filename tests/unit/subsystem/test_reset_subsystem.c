@@ -33,7 +33,7 @@ Test(subsystem, test_reset_subsystem0)
 
 	reset_subsystem(s);
 
-	cr_assert_str_eq(s->name, "");
+	//cr_assert_str_eq(s->name, "");
 	cr_assert_eq(s->log_level, yall_inherited_level);
 	cr_assert_eq(s->status, yall_inherited_status);
 	cr_assert_eq(s->output_type, yall_inherited_output);
