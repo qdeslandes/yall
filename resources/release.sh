@@ -46,9 +46,9 @@ git push
 git checkout master
 git pull
 git merge -Xtheirs --squash develop
-git commit -a -m"Release ${YALL_VERSION}"
+git commit -a -m"[ci skip] Release ${YALL_VERSION}"
 
-git tag ${YALL_VERSION} master
+git tag -a ${YALL_VERSION} -m "Release ${YALL_VERSION}"
 
 git push
 git push --tags
