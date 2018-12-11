@@ -20,14 +20,14 @@ then
     exit 1
 fi
 
-# Check if the directory is clean
+# Check if the directory is clean (1/2)
 if [ "$(git status --porcelain)" ]
 then
     echo "ERROR: Directory contains uncommitted changes"
     exit 1
 fi
 
-# Check if the directory is clean
+# Check if the directory is clean (2/2)
 if [ "$(git cherry -v)" ]
 then
     echo "ERROR: Directory contains unpushed commits"
@@ -45,7 +45,7 @@ git push
 # Merging
 git checkout master
 git pull
-git merge --squash develop
+git merge -s theirs --squash develop
 git commit -a -m"Release ${YALL_VERSION}"
 
 git tag ${YALL_VERSION} master
