@@ -3,8 +3,8 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/naccyde/yall/master/LICENSE)
 [![Travis (.org) branch](https://img.shields.io/travis/naccyde/yall/master.svg?label=Linux)](https://travis-ci.com/naccyde/yall)
 [![AppVeyor branch](https://img.shields.io/appveyor/ci/naccyde/yall/master.svg?label=Windows)](https://ci.appveyor.com/project/Naccyde/yall)
-[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarcloud.io/yall/coverage.svg)](https://sonarcloud.io/dashboard?id=yall)
-[![SonarQube Tech Debt](https://img.shields.io/sonar/http/sonarcloud.io/yall/tech_debt.svg)](https://sonarcloud.io/dashboard?id=yall)
+[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarcloud.io/yall/coverage.svg)](https://sonarcloud.io/dashboard?id=naccyde_yall)
+[![SonarQube Tech Debt](https://img.shields.io/sonar/http/sonarcloud.io/yall/tech_debt.svg)](https://sonarcloud.io/dashboard?id=naccyde_yall)
 
 `yall` is a subsystems based logging library. It allows to create subsystems which will manage all the logging parameters for an area of the application. Subsystems can inherit from one another, override parents parameters...
 

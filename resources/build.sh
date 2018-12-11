@@ -36,5 +36,5 @@ sonar-scanner \
     -Dsonar.cfamily.build-wrapper-output=${YALL_ROOT}/build/out/bw \
     -Dsonar.projectBaseDir=${YALL_ROOT} \
     -Dsonar.cfamily.gcov.reportsPath=${YALL_ROOT}/build/out/coverage \
-    -Dsonar.login=${SONAR_API_KEY} \
+    -Dsonar.login=${SONAR_TOKEN} \
     -Dsonar.projectVersion=${TRAVIS_TAG} ${SONAR_EXTRA_OPTIONS}
