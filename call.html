@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Call &mdash; yall 1.8.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C++" href="cpp.html" />
+    <link rel="prev" title="Log call" href="logs.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> yall
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.8.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subsystem.html">Subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Log call</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Call</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#custom-logging-function">Custom logging function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-macros">Logging macros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conditional-logging-macros">Conditional logging macros</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yall</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Call</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/call.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="call">
+<h1>Call<a class="headerlink" href="#call" title="Permalink to this headline">¶</a></h1>
+<p>During logging process, it is possible to call a custom logging function. This allow to format a multilines log message the way you want.</p>
+<div class="section" id="custom-logging-function">
+<h2>Custom logging function<a class="headerlink" href="#custom-logging-function" title="Permalink to this headline">¶</a></h2>
+<p>To use this feature, first you have to create a function with the following prototype : <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">formatter(yall_call_data</span> <span class="pre">*d,</span> <span class="pre">const</span> <span class="pre">void</span> <span class="pre">*args)</span></code>.</p>
+<p>On logging time, this function will be called with a <code class="docutils literal notranslate"><span class="pre">yall_call_data</span></code> parameter, which is used to store user’s generated log message, and <code class="docutils literal notranslate"><span class="pre">args</span></code> which are custom argument given during logging macro call.</p>
+<p>Inside this logging function, the following functions can be called to manipulate the <code class="docutils literal notranslate"><span class="pre">yall_call_data</span></code> parameter :</p>
+<dl class="function">
+<dt>
+<span class="target" id="call_8h_1a5fd9b8f68e02a60fd1bafda1788a7af5"></span><code class="descname">_YALL_PUBLIC void yall_call_set_header(yall_call_data  * d, const char * format, ...)</code></dt>
+<dd><p>Called by the user’s formatter function, it allow to define the header of the log message. This header will be added just after the standard info header (with subsystem name, date, …). </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">d</span></code>: Pointer to structure of type yall_call_data. Can’t be NULL. </li>
+<li><code class="docutils literal notranslate"><span class="pre">format</span></code>: Printf like format. All printf’s modifiers are allowed. Can’t be NULL. </li>
+<li><code class="docutils literal notranslate"><span class="pre">...</span></code>: Variadic parameters for the format. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="call_8h_1afbbc162daed2126a56933d8713239db7"></span><code class="descname">_YALL_PUBLIC void yall_call_add_line(yall_call_data  * d, uint8_t indent, const char * format, ...)</code></dt>
+<dd><p>Called by the user’s formatter function, it allow to add a line to the custom message. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">d</span></code>: Pointer to structure of type yall_call_data. Can’t be NULL. </li>
+<li><code class="docutils literal notranslate"><span class="pre">indent</span></code>: Number of tabulations to add before adding this line on the final log message. This is used to display prettier log messages. </li>
+<li><code class="docutils literal notranslate"><span class="pre">format</span></code>: Printf like format. All printf’s modifiers are allowed. Can’t be NULL. </li>
+<li><code class="docutils literal notranslate"><span class="pre">...</span></code>: Variadic parameters for the format. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="logging-macros">
+<h2>Logging macros<a class="headerlink" href="#logging-macros" title="Permalink to this headline">¶</a></h2>
+<dl class="macro">
+<dt id="c.YALL_CALL_EMERG">
+<span class="target" id="log_8h_1aaba2b791b72539af6b7cc792401f3628"></span><code class="descname">YALL_CALL_EMERG</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_EMERG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_ALERT">
+<span class="target" id="log_8h_1a03ff22cc5982d46e27655e1616427d88"></span><code class="descname">YALL_CALL_ALERT</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_ALERT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_CRIT">
+<span class="target" id="log_8h_1a653905b707a538a2adabf6c130c81dda"></span><code class="descname">YALL_CALL_CRIT</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_CRIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_ERR">
+<span class="target" id="log_8h_1afa4f83a6251a25632a54ae0c80ae8589"></span><code class="descname">YALL_CALL_ERR</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_ERR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_WARNING">
+<span class="target" id="log_8h_1a1c813242ea884aa5899c5aa509fab366"></span><code class="descname">YALL_CALL_WARNING</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_WARNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_NOTICE">
+<span class="target" id="log_8h_1a3c7c8c31b7ce8f2631acbd0ec0173804"></span><code class="descname">YALL_CALL_NOTICE</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_NOTICE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_INFO">
+<span class="target" id="log_8h_1a3725a1fcf339ec9d31797f2ef4876494"></span><code class="descname">YALL_CALL_INFO</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_INFO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_DEBUG">
+<span class="target" id="log_8h_1af92d5796edc773210cdb33f50a2fe9b2"></span><code class="descname">YALL_CALL_DEBUG</code><span class="sig-paren">(</span>subsystem, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_DEBUG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="conditional-logging-macros">
+<h2>Conditional logging macros<a class="headerlink" href="#conditional-logging-macros" title="Permalink to this headline">¶</a></h2>
+<dl class="macro">
+<dt id="c.YALL_CALL_EMERG_IF">
+<span class="target" id="log_8h_1a7d19867af05ba011027f3ad635575de1"></span><code class="descname">YALL_CALL_EMERG_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_EMERG_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_ALERT_IF">
+<span class="target" id="log_8h_1ac83d958906d38894e50f405f8f76a06c"></span><code class="descname">YALL_CALL_ALERT_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_ALERT_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_CRIT_IF">
+<span class="target" id="log_8h_1a6c9882a939ccd4f4597d171613840cf2"></span><code class="descname">YALL_CALL_CRIT_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_CRIT_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_ERR_IF">
+<span class="target" id="log_8h_1ae97bd620496b6f170ac7355e72938f37"></span><code class="descname">YALL_CALL_ERR_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_ERR_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_WARNING_IF">
+<span class="target" id="log_8h_1abce612f87c9b10d5c10afa691a8ff0eb"></span><code class="descname">YALL_CALL_WARNING_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_WARNING_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_NOTICE_IF">
+<span class="target" id="log_8h_1a1daf67b90cdc443b251ed8cd52d35c73"></span><code class="descname">YALL_CALL_NOTICE_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_NOTICE_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_INFO_IF">
+<span class="target" id="log_8h_1a774e1d435b50a90ac82757b7d83c94d0"></span><code class="descname">YALL_CALL_INFO_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_INFO_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="macro">
+<dt id="c.YALL_CALL_DEBUG_IF">
+<span class="target" id="log_8h_1aef1c820e7390c4201fed883f34086743"></span><code class="descname">YALL_CALL_DEBUG_IF</code><span class="sig-paren">(</span>subsystem, expr, function, args<span class="sig-paren">)</span><a class="headerlink" href="#c.YALL_CALL_DEBUG_IF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cpp.html" class="btn btn-neutral float-right" title="C++" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="logs.html" class="btn btn-neutral" title="Log call" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Quentin Deslandes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.8.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

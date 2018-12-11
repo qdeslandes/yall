@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Subsystem &mdash; yall 1.8.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Log call" href="logs.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> yall
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.8.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Subsystem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creation">Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#destruction">Destruction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Log call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call.html">Call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yall</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Subsystem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/subsystem.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="subsystem">
+<h1>Subsystem<a class="headerlink" href="#subsystem" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="creation">
+<h2>Creation<a class="headerlink" href="#creation" title="Permalink to this headline">¶</a></h2>
+<p>Subsystems are the major feature of the library as they store different sets of logging parameters. Creating a subsystem is defining a set of parameter about how to handle log messages affected to this specific subsystem.</p>
+<p>Subsystem creation is done with :</p>
+<dl class="function">
+<dt>
+<span class="target" id="yall_8h_1a996cc95d0d80edfe204da5a9182b191d"></span><code class="descname">_YALL_PUBLIC yall_error yall_set_subsystem(const char * name, const char * parent, enum  yall_log_level log_level, enum  yall_output_type output_type, const char * output_file)</code></dt>
+<dd><p>This is the main subsystems function. This function handle subsystems creation and update. If <em>name</em> is the name of an existing subsystem, it is updated : removed from the subsystems tree, updated and replaced in its correct position with correct inheritance. If <em>name</em> is not the name of an existing subsystem, it is created with the proper parameters and inserted in the subsystems tree at the proper place. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Error code depending of the success or failure of the function. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: Name of the subsystem to add or update. Can’t be NULL. </li>
+<li><code class="docutils literal notranslate"><span class="pre">parent</span></code>: Name of the parent to inherit from. If NULL, this subsystem will be at top-level of the tree. </li>
+<li><code class="docutils literal notranslate"><span class="pre">log_level</span></code>: Minimum log level to use for this subsystem. All the log messages with a log level below this one will be discarded. </li>
+<li><code class="docutils literal notranslate"><span class="pre">output_type</span></code>: Default output type for this subsystem. See yall_output_type. </li>
+<li><code class="docutils literal notranslate"><span class="pre">output_file</span></code>: File to use of the subsystem’s default output type is yall_file_output. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<p>If the subsystem name already exists, it will be updated with the given parameters.</p>
+<p>Each subsystem can have, a parent from which it can inherits some parameters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">log_level</span></code> can have one of the following values :</p>
+<dl class="type">
+<dt id="_CPPv314yall_log_level">
+<span id="_CPPv214yall_log_level"></span><span id="yall_log_level"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9"></span><em class="property">enum </em><code class="descname">yall_log_level</code><br /></dt>
+<dd><p>This enumerator stores the different log level used by the library. They are extracted from the Syslog protocol (RFC 5424). The last one : yall_inherited_level is used to inform that a subsystem inherit its log level from its parent. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv310yall_debug">
+<span id="_CPPv210yall_debug"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a7977833e113e5e0a773b4392df57f9c9"></span><code class="descname">yall_debug</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv39yall_info">
+<span id="_CPPv29yall_info"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a2a33d859be27ee036dbb54b445ed75a9"></span><code class="descname">yall_info</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv311yall_notice">
+<span id="_CPPv211yall_notice"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a25857f55878f93a70344bdb75d2d534d"></span><code class="descname">yall_notice</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv312yall_warning">
+<span id="_CPPv212yall_warning"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a4262c97589a2c3861438d7722e773d92"></span><code class="descname">yall_warning</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv38yall_err">
+<span id="_CPPv28yall_err"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a0cf2653fe1c63fea19485d8d222e43de"></span><code class="descname">yall_err</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv39yall_crit">
+<span id="_CPPv29yall_crit"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a4052ce687302bacb9a86216bf359c3e8"></span><code class="descname">yall_crit</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv310yall_alert">
+<span id="_CPPv210yall_alert"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a0e09d2088e591c90ede7785308e7dbd0"></span><code class="descname">yall_alert</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv310yall_emerg">
+<span id="_CPPv210yall_emerg"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9acc35fec9438d8b1df3710939a53e1b00"></span><code class="descname">yall_emerg</code><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv320yall_inherited_level">
+<span id="_CPPv220yall_inherited_level"></span><span class="target" id="log__level_8h_1a361765bae346196bbc65d452273d69c9a0f7be264adfff8d820c99bc1d80ec8a9"></span><code class="descname">yall_inherited_level</code><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<p><code class="docutils literal notranslate"><span class="pre">output_type</span></code> can have one of the following values :</p>
+<dl class="type">
+<dt id="_CPPv316yall_output_type">
+<span id="_CPPv216yall_output_type"></span><span id="yall_output_type"></span><span class="target" id="types_8h_1a2b3a1da17e2249614df4f87c9de84c1b"></span><em class="property">enum </em><code class="descname">yall_output_type</code><a class="headerlink" href="#_CPPv316yall_output_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum stores all the different output types for the subsystems. These values has to be power of 2, as they can be combined to write on multiple outputs. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv321yall_inherited_output">
+<span id="_CPPv221yall_inherited_output"></span><span class="target" id="types_8h_1a2b3a1da17e2249614df4f87c9de84c1ba627c96f7406b64621c15d9d45fff127e"></span><code class="descname">yall_inherited_output</code> = 0<a class="headerlink" href="#_CPPv321yall_inherited_output" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subsystem inherit its output type from its parent. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv319yall_console_output">
+<span id="_CPPv219yall_console_output"></span><span class="target" id="types_8h_1a2b3a1da17e2249614df4f87c9de84c1bab41458ec0cd25ce8ac5041d9c217eba8"></span><code class="descname">yall_console_output</code> = 1 &lt;&lt; 0<a class="headerlink" href="#_CPPv319yall_console_output" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subsystem log message will be wrote on console. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv316yall_file_output">
+<span id="_CPPv216yall_file_output"></span><span class="target" id="types_8h_1a2b3a1da17e2249614df4f87c9de84c1ba125da7568e299e2a84bc194b603f34be"></span><code class="descname">yall_file_output</code> = 1 &lt;&lt; 1<a class="headerlink" href="#_CPPv316yall_file_output" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subsystem log message will be wrote in file. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv318yall_syslog_output">
+<span id="_CPPv218yall_syslog_output"></span><span class="target" id="types_8h_1a2b3a1da17e2249614df4f87c9de84c1ba224a8e15115288a86626c9ab6c4e14f4"></span><code class="descname">yall_syslog_output</code> = 1 &lt;&lt; 2<a class="headerlink" href="#_CPPv318yall_syslog_output" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subsystem log message will be redirected to syslog. </p>
+</dd></dl>
+
+</dd></dl>
+
+<p>If <code class="docutils literal notranslate"><span class="pre">output_type</span></code> is <code class="docutils literal notranslate"><span class="pre">yall_file_output</span></code>, then <code class="docutils literal notranslate"><span class="pre">output_file</span></code> can be set to the output file name, or to <code class="docutils literal notranslate"><span class="pre">NULL</span></code> to use the parent’s output file.</p>
+<p>When using <cite>yall_syslog_output</cite>, the formatted output can be broken if using line feed. To avoid this, update syslog configuration to disable control characters escaping (on <cite>rsyslog</cite>, parameter is <cite>parser.escapeControlCharactersOnReceive</cite>).</p>
+</div>
+<div class="section" id="destruction">
+<h2>Destruction<a class="headerlink" href="#destruction" title="Permalink to this headline">¶</a></h2>
+<p>Subsystems are destroyed during library deinitialization. Currently, their is no way to specifically destroy a subsystem during execution.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="logs.html" class="btn btn-neutral float-right" title="Log call" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Quentin Deslandes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.8.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

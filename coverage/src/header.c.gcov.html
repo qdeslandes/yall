@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/header.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - header.c<span style="font-size: 80%;"> (source / <a href="header.c.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">72</td>
+            <td class="headerCovTableEntry">74</td>
+            <td class="headerCovTableEntryHi">97.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-11 15:17:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * MIT License
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Copyright (c) 2017 Quentin &quot;Naccyde&quot; Deslandes.
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       7 </span>            :  * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       8 </span>            :  * in the Software without restriction, including without limitation the rights
+<span class="lineNum">       9 </span>            :  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      10 </span>            :  * copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      11 </span>            :  * furnished to do so, subject to the following conditions:
+<span class="lineNum">      12 </span>            :  *
+<span class="lineNum">      13 </span>            :  * The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      14 </span>            :  * all copies or substantial portions of the Software.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      17 </span>            :  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      18 </span>            :  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      19 </span>            :  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      20 </span>            :  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      21 </span>            :  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<span class="lineNum">      22 </span>            :  * SOFTWARE.
+<span class="lineNum">      23 </span>            :  */
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            : #include &quot;yall/header.h&quot;
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : #include &lt;time.h&gt;
+<span class="lineNum">      28 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      29 </span>            : #include &lt;stdbool.h&gt;
+<span class="lineNum">      30 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      31 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : #include &quot;yall/error.h&quot;
+<span class="lineNum">      34 </span>            : #include &quot;yall/debug.h&quot;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : /*
+<span class="lineNum">      37 </span>            :  * The behaviour of the following code is specific to header generation : the
+<span class="lineNum">      38 </span>            :  * user can define a custom header to change the log level string position,
+<span class="lineNum">      39 </span>            :  * remove the date, ... To generate a correct header from the given format,
+<span class="lineNum">      40 </span>            :  * we define an array which will be used to match the given modifier (%s for
+<span class="lineNum">      41 </span>            :  * a subsystem, %f for the function name, ...) with the proper string during
+<span class="lineNum">      42 </span>            :  * header generation.
+<span class="lineNum">      43 </span>            :  *
+<span class="lineNum">      44 </span>            :  * Define the matches array size means no more than MATCHES_SIZE modifier will
+<span class="lineNum">      45 </span>            :  * be allowed inside the header format string.
+<span class="lineNum">      46 </span>            :  *
+<span class="lineNum">      47 </span>            :  * The header format length is also limited to YALL_HEADER_LEN, which means the
+<span class="lineNum">      48 </span>            :  * compiled header format can't exceed YALL_HEADER_LEN.
+<span class="lineNum">      49 </span>            :  */
+<span class="lineNum">      50 </span>            : #define MATCHES_SIZE    10
+<span class="lineNum">      51 </span>            : #define NBR_MODIFIERS   7       // The first index returns an empty string
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            : static enum yall_matches std_matches[MATCHES_SIZE] = { 0 };
+<span class="lineNum">      54 </span>            : static enum yall_matches call_matches[MATCHES_SIZE] = { 0 };
+<span class="lineNum">      55 </span>            : static char std_header_format[YALL_HEADER_LEN] = { 0 };
+<span class="lineNum">      56 </span>            : static char call_header_format[YALL_HEADER_LEN] = { 0 };
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            : /**
+<span class="lineNum">      59 </span>            :  * \brief Returns true is the given character is a yall modifier, false
+<span class="lineNum">      60 </span>            :  *      otherwise.
+<span class="lineNum">      61 </span>            :  * \param c Character to check whether it is a yall modifier.
+<span class="lineNum">      62 </span>            :  * \param match Pointer to an element of the modifiers matching array. It is
+<span class="lineNum">      63 </span>            :  *      used to order the modifiers set in the header and replace them properly
+<span class="lineNum">      64 </span>            :  *      during log message's header generation.
+<a name="65"><span class="lineNum">      65 </span>            :  * \return Boolean whether the character is a yall modifier.</a>
+<span class="lineNum">      66 </span>            :  */
+<span class="lineNum">      67 </span><span class="lineCov">          8 : static inline bool is_modifier(char c, enum yall_matches *match)</span>
+<span class="lineNum">      68 </span>            : {
+<span class="lineNum">      69 </span><span class="lineCov">          8 :         switch (c) {</span>
+<span class="lineNum">      70 </span><span class="lineCov">        150 :         case 's':</span>
+<span class="lineNum">      71 </span><span class="lineCov">        149 :                 *match = match_subsystem;</span>
+<span class="lineNum">      72 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      73 </span><span class="lineCov">        150 :         case 'l':</span>
+<span class="lineNum">      74 </span><span class="lineCov">        149 :                 *match = match_log_level;</span>
+<span class="lineNum">      75 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      76 </span><span class="lineCov">        170 :         case 'f':</span>
+<span class="lineNum">      77 </span><span class="lineCov">        169 :                 *match = match_function;</span>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      79 </span><span class="lineCov">          1 :         case 'F':</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :                 *match = match_filename;</span>
+<span class="lineNum">      81 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      82 </span><span class="lineCov">          1 :         case 'L':</span>
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :                 *match = match_line;</span>
+<span class="lineNum">      84 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      85 </span><span class="lineCov">        142 :         case 'd':</span>
+<span class="lineNum">      86 </span><span class="lineCov">        141 :                 *match = match_date;</span>
+<span class="lineNum">      87 </span><span class="lineCov">          1 :                 break;</span>
+<span class="lineNum">      88 </span>            :         default:
+<span class="lineNum">      89 </span>            :                 return false;
+<span class="lineNum">      90 </span>            :         }
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            :         return true;
+<span class="lineNum">      93 </span>            : }
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            : /**
+<span class="lineNum">      96 </span>            :  * \brief Fill the given buffer with the current date.
+<span class="lineNum">      97 </span>            :  * \param buff Buffer of at least YALL_DATE_LONG_LEN bytes used to store the
+<a name="98"><span class="lineNum">      98 </span>            :  *      current date time in ASCII.</a>
+<span class="lineNum">      99 </span>            :  */
+<span class="lineNum">     100 </span><span class="lineCov">      30408 : static void set_date(char *buff)</span>
+<span class="lineNum">     101 </span>            : {
+<span class="lineNum">     102 </span>            :         struct tm tm;
+<span class="lineNum">     103 </span><span class="lineCov">      30408 :         time_t t = time(NULL);</span>
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span>            : #       ifdef __linux__
+<span class="lineNum">     106 </span><span class="lineCov">      30408 :         localtime_r(&amp;t, &amp;tm);</span>
+<span class="lineNum">     107 </span>            : #       else
+<span class="lineNum">     108 </span>            :         localtime_s(&amp;tm, &amp;t);
+<span class="lineNum">     109 </span>            : #       endif
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span><span class="lineCov">      91224 :         snprintf(buff, YALL_DATE_LONG_LEN, &quot;%04d-%02d-%02d %02d:%02d:%02d&quot;,</span>
+<span class="lineNum">     112 </span><span class="lineCov">      30408 :                 tm.tm_year + 1900,</span>
+<span class="lineNum">     113 </span><span class="lineCov">      30408 :                 tm.tm_mon + 1,</span>
+<span class="lineNum">     114 </span>            :                 tm.tm_mday,
+<span class="lineNum">     115 </span>            :                 tm.tm_hour,
+<span class="lineNum">     116 </span>            :                 tm.tm_min,
+<span class="lineNum">     117 </span>            :                 tm.tm_sec);
+<span class="lineNum">     118 </span><span class="lineCov">      30408 : }</span>
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span>            : /**
+<span class="lineNum">     121 </span>            :  * \brief from an *header_type*, it match the proper *header* and *matches*
+<span class="lineNum">     122 </span>            :  *      array. This avoid redundant code to manage std_header and call_header.
+<span class="lineNum">     123 </span>            :  *      Here, std_header is not a specific case as it falls in the default
+<span class="lineNum">     124 </span>            :  *      values.
+<span class="lineNum">     125 </span>            :  * \param hdr_type Type of header to match.
+<span class="lineNum">     126 </span>            :  * \param header Pointer to a header format.
+<a name="127"><span class="lineNum">     127 </span>            :  * \param matches Pointer to an array of matches.</a>
+<span class="lineNum">     128 </span>            :  */
+<span class="lineNum">     129 </span><span class="lineCov">          3 : static void set_matches_and_header(enum header_type hdr_type,</span>
+<span class="lineNum">     130 </span>            :         char **header, enum yall_matches **matches)
+<span class="lineNum">     131 </span>            : {
+<span class="lineNum">     132 </span><span class="lineCov">          3 :         *matches = std_matches;</span>
+<span class="lineNum">     133 </span><span class="lineCov">          3 :         *header = std_header_format;</span>
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span><span class="lineCov">          3 :         if (call_header == hdr_type) {</span>
+<span class="lineNum">     136 </span><span class="lineCov">          1 :                 *matches = call_matches;</span>
+<span class="lineNum">     137 </span><span class="lineCov">          1 :                 *header = call_header_format;</span>
+<span class="lineNum">     138 </span>            :         }
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">          3 : }</span></a>
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span><span class="lineCov">        170 : void header_compile_format(enum header_type hdr_type, const char *format)</span>
+<span class="lineNum">     142 </span>            : {
+<span class="lineNum">     143 </span>            :         uint32_t hdr_len = 0;
+<span class="lineNum">     144 </span>            :         uint32_t match_idx = 0;
+<span class="lineNum">     145 </span>            :         char *hdr = NULL;
+<span class="lineNum">     146 </span>            :         enum yall_matches *matches = NULL;
+<span class="lineNum">     147 </span>            :         bool seek_modifier = false;
+<span class="lineNum">     148 </span>            :         bool allow_modifier = true;
+<span class="lineNum">     149 </span>            : 
+<span class="lineNum">     150 </span>            :         set_matches_and_header(hdr_type, &amp;hdr, &amp;matches);
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span><span class="lineCov">        170 :         memset(matches, 0, MATCHES_SIZE);</span>
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineCov">       5845 :         for ( ; *format &amp;&amp; hdr_len &lt; YALL_HEADER_LEN-1; ++format, ++hdr_len) {</span>
+<span class="lineNum">     155 </span><span class="lineCov">       5675 :                 if (*format == '%')</span>
+<span class="lineNum">     156 </span>            :                         seek_modifier = true;
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span><span class="lineCov">       5675 :                 if (seek_modifier &amp;&amp; allow_modifier &amp;&amp; is_modifier(*format,</span>
+<span class="lineNum">     159 </span><span class="lineCov">       3219 :                         &amp;matches[match_idx])) {</span>
+<span class="lineNum">     160 </span><span class="lineCov">        608 :                         ++match_idx;</span>
+<span class="lineNum">     161 </span><span class="lineCov">        608 :                         *hdr++ = 's';</span>
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span><span class="lineCov">        608 :                         if (match_idx &gt; MATCHES_SIZE) {</span>
+<span class="lineNum">     164 </span><span class="lineCov">          1 :                                 _YALL_DBG_ERR(</span>
+<span class="lineNum">     165 </span>            :                                         &quot;The header modifiers array is full.&quot;);
+<span class="lineNum">     166 </span>            :                                 allow_modifier = false;
+<span class="lineNum">     167 </span>            :                         }
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            :                         seek_modifier = false;
+<span class="lineNum">     170 </span>            :                 } else {
+<span class="lineNum">     171 </span><span class="lineCov">       5067 :                         *hdr++ = *format;</span>
+<span class="lineNum">     172 </span>            :                 }
+<span class="lineNum">     173 </span>            :         }
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span><span class="lineCov">        170 :         *hdr = '\0';</span>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">        170 : }</span></a>
+<span class="lineNum">     177 </span>            : 
+<span class="lineNum">     178 </span><span class="lineCov">      30407 : void fill_header_content(struct header_content *hc, const char *subsystem_name,</span>
+<span class="lineNum">     179 </span>            :         enum yall_log_level log_level, const char *function_name,
+<span class="lineNum">     180 </span>            :         const char *filename, int32_t line)
+<span class="lineNum">     181 </span>            : {
+<span class="lineNum">     182 </span><span class="lineCov">      30407 :         hc-&gt;subsystem = subsystem_name;</span>
+<span class="lineNum">     183 </span><span class="lineCov">      30407 :         hc-&gt;log_level = log_level_to_pretty_str(log_level);</span>
+<span class="lineNum">     184 </span><span class="lineCov">      30407 :         hc-&gt;function_name = function_name;</span>
+<span class="lineNum">     185 </span><span class="lineCov">      30407 :         hc-&gt;filename = filename;</span>
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span><span class="lineCov">      30407 :         snprintf(hc-&gt;line, YALL_LINE_STR_LEN, &quot;%d&quot;, line);</span>
+<span class="lineNum">     188 </span><span class="lineCov">      30407 :         set_date(hc-&gt;date_long);</span>
+<span class="lineNum">     189 </span><span class="lineCov">      30407 : }</span>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            : /**
+<span class="lineNum">     192 </span>            :  * \brief Main function handling header generation, the header format used
+<span class="lineNum">     193 </span>            :  *      depend of *hdr_type*.
+<span class="lineNum">     194 </span>            :  * \param hdr_type Type of header to use. See enum header_type for more.
+<span class="lineNum">     195 </span>            :  * \param buffer Buffer storing the generated header. This parameter can be NULL
+<span class="lineNum">     196 </span>            :  *      if *len* is 0.
+<span class="lineNum">     197 </span>            :  * \param len Maximum length to write on buffer. If this value is 0, then the
+<span class="lineNum">     198 </span>            :  *      function returns the length required for buffer parameter.
+<span class="lineNum">     199 </span>            :  * \param hc Content to write on the header : subsystem name, function name, ...
+<a name="200"><span class="lineNum">     200 </span>            :  *      Can't be NULL.</a>
+<span class="lineNum">     201 </span>            :  */
+<span class="lineNum">     202 </span><span class="lineCov">      60820 : static size_t generate_hdr(enum header_type hdr_type, char *buffer, size_t len,</span>
+<span class="lineNum">     203 </span>            :         struct header_content *hc)
+<span class="lineNum">     204 </span>            : {
+<span class="lineNum">     205 </span>            :         size_t wrote = 0;
+<span class="lineNum">     206 </span>            :         char *hdr = NULL;
+<span class="lineNum">     207 </span>            :         enum yall_matches *matches = NULL;
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span>            :         set_matches_and_header(hdr_type, &amp;hdr, &amp;matches);
+<span class="lineNum">     210 </span>            : 
+<span class="lineNum">     211 </span><span class="lineCov">     425740 :         const char *ordered_content[NBR_MODIFIERS] = {</span>
+<span class="lineNum">     212 </span>            :                 &quot;&quot;,
+<span class="lineNum">     213 </span><span class="lineCov">      60820 :                 hc-&gt;subsystem,</span>
+<span class="lineNum">     214 </span><span class="lineCov">      60820 :                 hc-&gt;log_level,</span>
+<span class="lineNum">     215 </span><span class="lineCov">      60820 :                 hc-&gt;function_name,</span>
+<span class="lineNum">     216 </span><span class="lineCov">      60820 :                 hc-&gt;filename,</span>
+<span class="lineNum">     217 </span><span class="lineCov">      60820 :                 hc-&gt;line,</span>
+<span class="lineNum">     218 </span><span class="lineCov">      60820 :                 hc-&gt;date_long</span>
+<span class="lineNum">     219 </span>            :         };
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span><span class="lineCov">     608200 :         wrote = (size_t)snprintf(buffer, len, hdr, ordered_content[matches[0]],</span>
+<span class="lineNum">     222 </span><span class="lineCov">     121640 :                 ordered_content[matches[1]], ordered_content[matches[2]],</span>
+<span class="lineNum">     223 </span><span class="lineCov">     121640 :                 ordered_content[matches[3]], ordered_content[matches[4]],</span>
+<span class="lineNum">     224 </span><span class="lineCov">     121640 :                 ordered_content[matches[5]], ordered_content[matches[6]],</span>
+<span class="lineNum">     225 </span><span class="lineCov">     121640 :                 ordered_content[matches[7]], ordered_content[matches[8]],</span>
+<span class="lineNum">     226 </span><span class="lineCov">      60820 :                 ordered_content[matches[9]]);</span>
+<span class="lineNum">     227 </span>            : 
+<span class="lineNum">     228 </span><span class="lineCov">      60820 :         return wrote;</span>
+<a name="229"><span class="lineNum">     229 </span>            : }</a>
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span><span class="lineCov">      30423 : size_t generate_std_hdr(char *buffer, size_t len, struct header_content *hc)</span>
+<span class="lineNum">     232 </span>            : {
+<span class="lineNum">     233 </span><span class="lineCov">      30423 :         return generate_hdr(std_header, buffer, len, hc);</span>
+<a name="234"><span class="lineNum">     234 </span>            : }</a>
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span><span class="lineCov">      30389 : size_t generate_call_hdr(char *buffer, size_t len, struct header_content *hc)</span>
+<span class="lineNum">     237 </span>            : {
+<span class="lineNum">     238 </span><span class="lineCov">      30389 :         return generate_hdr(call_header, buffer, len, hc);</span>
+<span class="lineNum">     239 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

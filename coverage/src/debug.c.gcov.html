@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/debug.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - debug.c<span style="font-size: 80%;"> (source / <a href="debug.c.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-11 15:17:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * MIT License
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Copyright (c) 2017 Quentin &quot;Naccyde&quot; Deslandes.
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       7 </span>            :  * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       8 </span>            :  * in the Software without restriction, including without limitation the rights
+<span class="lineNum">       9 </span>            :  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      10 </span>            :  * copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      11 </span>            :  * furnished to do so, subject to the following conditions:
+<span class="lineNum">      12 </span>            :  *
+<span class="lineNum">      13 </span>            :  * The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      14 </span>            :  * all copies or substantial portions of the Software.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      17 </span>            :  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      18 </span>            :  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      19 </span>            :  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      20 </span>            :  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      21 </span>            :  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<span class="lineNum">      22 </span>            :  * SOFTWARE.
+<span class="lineNum">      23 </span>            :  */
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            : #include &quot;yall/debug.h&quot;
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      28 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            : #include &quot;yall/subsystem.h&quot;
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : static bool debug = false;
+<a name="33"><span class="lineNum">      33 </span>            : static const char *debug_subsystem = NULL;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span><span class="lineCov">          8 : yall_error yall_enable_debug(const char *subsystem)</span>
+<span class="lineNum">      36 </span>            : {
+<span class="lineNum">      37 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">      38 </span>            :         struct yall_subsystem *s = NULL;
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span><span class="lineCov">          8 :         if (! yall_is_init())</span>
+<span class="lineNum">      41 </span>            :                 return YALL_NOT_INIT;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineCov">          7 :         s = get_subsystem(subsystem, NULL);</span>
+<span class="lineNum">      44 </span><span class="lineCov">          7 :         if (! s)</span>
+<span class="lineNum">      45 </span>            :                 return YALL_SUBSYS_NOT_EXISTS;
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :         /*
+<span class="lineNum">      48 </span>            :          * The order of the following instructions is critical : first we
+<span class="lineNum">      49 </span>            :          * define the subsystem, but the debug flag must be set to false.
+<span class="lineNum">      50 </span>            :          * Otherwise, it will search for the subsystem before creating it,
+<span class="lineNum">      51 </span>            :          * it will not find it and then try to log a debug message to
+<span class="lineNum">      52 </span>            :          * inform the user this subsystem is not found, which will lead
+<span class="lineNum">      53 </span>            :          * to a call to get_subsystem() which will search the subsystem,
+<span class="lineNum">      54 </span>            :          * but it will not find it, ...
+<span class="lineNum">      55 </span>            :          */
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span><span class="lineCov">          6 :         debug_subsystem = strdup(subsystem);</span>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span><span class="lineCov">          6 :         debug = true;</span>
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span><span class="lineCov">          6 :         _YALL_DBG_DEBUG(&quot;Debug mode activated.&quot;);</span>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">          6 :         return ret;</span>
+<a name="64"><span class="lineNum">      64 </span>            : }</a>
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineCov">         70 : yall_error yall_disable_debug(void)</span>
+<span class="lineNum">      67 </span>            : {
+<span class="lineNum">      68 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineCov">         70 :         if (! yall_is_init())</span>
+<span class="lineNum">      71 </span>            :                 return YALL_NOT_INIT;
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span><span class="lineCov">         75 :         _YALL_DBG_DEBUG(&quot;Debug mode disactivated.&quot;);</span>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span><span class="lineCov">         69 :         debug = false;</span>
+<span class="lineNum">      76 </span><span class="lineCov">         69 :         free((char *)debug_subsystem);</span>
+<span class="lineNum">      77 </span><span class="lineCov">         69 :         debug_subsystem = NULL;</span>
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span><span class="lineCov">         69 :         return ret;</span>
+<a name="80"><span class="lineNum">      80 </span>            : }</a>
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span><span class="lineCov">        328 : bool yall_is_debug(void)</span>
+<span class="lineNum">      83 </span>            : {
+<span class="lineNum">      84 </span><span class="lineCov">         69 :         return debug;</span>
+<a name="85"><span class="lineNum">      85 </span>            : }</a>
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span><span class="lineCov">          7 : const char *debug_subsystem_name(void)</span>
+<span class="lineNum">      88 </span>            : {
+<span class="lineNum">      89 </span><span class="lineCov">          6 :         return debug_subsystem;</span>
+<span class="lineNum">      90 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

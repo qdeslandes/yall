@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setup &mdash; yall 1.8.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> yall
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.8.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#use-yall">Use <cite>yall</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-the-library">Initialize the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#close-the-library">Close the library</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="subsystem.html">Subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Log call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call.html">Call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yall</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="use-yall">
+<h2>Use <cite>yall</cite><a class="headerlink" href="#use-yall" title="Permalink to this headline">¶</a></h2>
+<p>To use <cite>yall</cite>, you should add <code class="docutils literal notranslate"><span class="pre">${YALL_INSTALL_FOLDER}/include</span></code> to the list of include directories of your compiler, and <code class="docutils literal notranslate"><span class="pre">yall</span></code> to the linked libraries. Depending of the install location of the library, you should have to add <code class="docutils literal notranslate"><span class="pre">${YALL_INSTALL_FOLDER}/lib</span></code> to the link directories.</p>
+<p>If you use CMake, you can use CMake’s <code class="docutils literal notranslate"><span class="pre">find_package(yall)</span></code>. If the library is installed on Linux inside the default path (system path) then the CMake configuration file will be found, otherwise you should set <code class="docutils literal notranslate"><span class="pre">CMAKE_MODULES_PATH</span></code> to the install location of <code class="docutils literal notranslate"><span class="pre">yall</span></code>.</p>
+</div>
+<div class="section" id="initialize-the-library">
+<h2>Initialize the library<a class="headerlink" href="#initialize-the-library" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">yall_init()</span></code> is used to initialize the library. All other <code class="docutils literal notranslate"><span class="pre">yall</span></code> functions can’t be used before initialization is done. This step allow to start the writing thread and setup default configuration. An internal counter is incremented in order to keep track of all the initializations done.</p>
+<dl class="function">
+<dt>
+<span class="target" id="yall_8h_1ae60845a4145a239119c7a288564fa6cb"></span><code class="descname">_YALL_PUBLIC yall_error yall_init(void)</code></dt>
+<dd><p>Initialize the yall library. It set up the writers and increment the initialized counter. This function must be called prior to anyone else. It the initialization fails, the library can’t be used. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Error code whether it has been initialized. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<p>An object of type <code class="docutils literal notranslate"><span class="pre">yall_error</span></code> is returned, if the returned value is different than <code class="docutils literal notranslate"><span class="pre">YALL_SUCCESS</span></code> (from <code class="docutils literal notranslate"><span class="pre">yall/error.h</span></code>), then the function failed and you can’t use the library. You can get details about the error with a call to <code class="docutils literal notranslate"><span class="pre">yall_strerror(err_number)</span></code>.</p>
+</div>
+<div class="section" id="close-the-library">
+<h2>Close the library<a class="headerlink" href="#close-the-library" title="Permalink to this headline">¶</a></h2>
+<p>Once logging work is done, the library should be closed in order to close the writing thread and free all the buffers. Two different closing functions are available which are :</p>
+<dl class="function">
+<dt>
+<span class="target" id="yall_8h_1aadb1346cafbb20cd3bcff56612b3e2d7"></span><code class="descname">_YALL_PUBLIC yall_error yall_close(void)</code></dt>
+<dd><p>Close all the yall library set up. The function fail only if yall has not been previously initialized. If the function succeed, the initialization counter’s value is decremented. If <em>initialized</em> equals 0 once decremented, the library is cleaned. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Error code depending of the success or failure of the function. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="yall_8h_1a97a9441b5472cb208a2480a9e763dbac"></span><code class="descname">_YALL_PUBLIC void yall_close_all(void)</code></dt>
+<dd><p>Close the yall library for each time it has been initialized. After this function has been used, you can’t use the library anymore until it has been initialized. </p>
+</dd></dl>
+
+<p><code class="docutils literal notranslate"><span class="pre">yall_close()</span></code> should be called from shared / static libraries and <code class="docutils literal notranslate"><span class="pre">yall_close_all()</span></code> from executables. This avoid to close completely the library from a library as it is used from a base executable.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Quentin Deslandes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.8.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

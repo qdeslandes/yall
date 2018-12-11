@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration &mdash; yall 1.8.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Subsystem" href="subsystem.html" />
+    <link rel="prev" title="Setup" href="setup.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> yall
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.8.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#standard-header">Standard header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#call-header">Call header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tabulation-width">Tabulation width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="subsystem.html">Subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Log call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call.html">Call</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yall</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>The behaviour of the library can be configured through a set of functions. The currently customizable parameters are the following.</p>
+<p>Each configurable parameter has a <em>setter</em>, <em>resetter</em> and <em>getter</em>.</p>
+<div class="section" id="standard-header">
+<h2>Standard header<a class="headerlink" href="#standard-header" title="Permalink to this headline">¶</a></h2>
+<p>The standard header is the prefix used in front of each log message while calling a simple logging macro like <code class="docutils literal notranslate"><span class="pre">YALL_ERROR(...)</span></code>. The format of the header is in <code class="docutils literal notranslate"><span class="pre">printf()</span></code> style. Available modifiers are :</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">%s</span></code> : replace the modifier with the subsystem’s name.</li>
+<li><code class="docutils literal notranslate"><span class="pre">%l</span></code> : replace the modifier with the log’s level.</li>
+<li><code class="docutils literal notranslate"><span class="pre">%f</span></code> : replace the modifier with the calling function’s name.</li>
+<li><code class="docutils literal notranslate"><span class="pre">%F</span></code> : replace the modifier with the current filename.</li>
+<li><code class="docutils literal notranslate"><span class="pre">%L</span></code> : replace the modifier with the current line.</li>
+<li><code class="docutils literal notranslate"><span class="pre">%d</span></code> : replace the modifier with the date time of the log. The format of the date can’t be changed, it is : <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:MM:SS</span></code>.</li>
+</ul>
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a7af587a4dd10f081180069781c6a2946"></span><code class="descname">_YALL_PUBLIC void yall_config_set_std_header_template(const char * std_header_template)</code></dt>
+<dd><p>Set standard header template of the library. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">std_header_template</span></code>: Format of the standard header template to use. This format can contain all printf() modifier and all yall modifier available in is_modifier(). </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a557e5c7a599ac337d31ed2a24e3fbb80"></span><code class="descname">_YALL_PUBLIC void yall_config_reset_std_header_template(void)</code></dt>
+<dd><p>Reset standard header template to default values. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a76bcc6bb90cb292a83aaec48d7df6f3b"></span><code class="descname">_YALL_PUBLIC const char* yall_config_get_std_header_template(void)</code></dt>
+<dd><p>Returns the current standard header template format. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Current standard header template format as a nul-terminated string. </dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="call-header">
+<h2>Call header<a class="headerlink" href="#call-header" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a11f74767079ca7f877e57e3960db61b6"></span><code class="descname">_YALL_PUBLIC void yall_config_set_call_header_template(const char * call_header_template)</code></dt>
+<dd><p>Set call header template of the library. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">call_header_template</span></code>: Format of the call header template to use. This format can contain all printf() modifier and all yall modifier available in is_modifier(). </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1ac4e7671e450c18259b978738c4dc8f72"></span><code class="descname">_YALL_PUBLIC void yall_config_reset_call_header_template(void)</code></dt>
+<dd><p>Reset call header template to default values. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1abc9b7d0ca702ba28b911b6ab910ecde5"></span><code class="descname">_YALL_PUBLIC const char* yall_config_get_call_header_template(void)</code></dt>
+<dd><p>Returns the current call header template format. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Current call header template format as a nul-terminated string. </dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="tabulation-width">
+<h2>Tabulation width<a class="headerlink" href="#tabulation-width" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a282ee2c3aa01bd4f073f79d1abc5debe"></span><code class="descname">_YALL_PUBLIC void yall_config_set_tab_width(uint8_t tab_width)</code></dt>
+<dd><p>Set the call logs indent with. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">tab_width</span></code>: Width to use (in characters) when indenting call logs. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1a72ef7c88fceee89d5fa10ddc371913bc"></span><code class="descname">_YALL_PUBLIC void yall_config_reset_tab_width(void)</code></dt>
+<dd><p>Reset tabulation width to default values. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="parameters_8h_1af53ffe2f10305eace8d5fd1f04057f84"></span><code class="descname">_YALL_PUBLIC uint8_t yall_config_get_tab_width(void)</code></dt>
+<dd><p>Returns the current tabulation width value. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Current tabulation width value. </dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="configuration-file">
+<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>Library configuration can be stored in a plain text file as JSON data. The configuration file should contains a JSON object, which contains two JSON objects : <cite>config</cite> and <cite>subsystems</cite> :</p>
+<ul class="simple">
+<li><cite>config</cite> : store the library configuration. Parameters are :
+* <cite>std_header_template</cite>
+* <cite>call_header_template</cite>
+* <cite>tab_width</cite>
+* <cite>syslog_ident</cite>
+* <cite>syslog_facility</cite></li>
+<li><cite>subsystems</cite> : store the subsystems configuration. Parameters are :
+* <cite>parent</cite>
+* <cite>log_level</cite>
+* <cite>output_type</cite>
+* <cite>output_file</cite></li>
+</ul>
+<p>Values set to this parameters are the same as done inside code, for example, log level can be <cite>yall_debug</cite>, <cite>yall_inherited_level</cite>, etc…</p>
+<p>The configuration can the be loaded with :</p>
+<dl class="function">
+<dt>
+<span class="target" id="yall_8h_1a1b3cf662415f3ee81014d2d6ff9d03c2"></span><code class="descname">_YALL_PUBLIC yall_error yall_load_configuration(const char * filepath)</code></dt>
+<dd><p>Load the configuration stored in the parameter. This configuration file can store a list of configuration parameters and a list of subsystems to define. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>Error code whether the configuration has been loaded. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">filepath</span></code>: Path to the configuration file. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<p>Example of yall JSON configuration :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;config&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;std_header_template&quot;</span> <span class="p">:</span> <span class="s2">&quot;%f ::&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;call_header_template&quot;</span> <span class="p">:</span> <span class="s2">&quot;%l : %d ::&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tab_width&quot;</span> <span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="nt">&quot;syslog_ident&quot;</span> <span class="p">:</span> <span class="s2">&quot;mylibrary&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;syslog_facility&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall_fac_user&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;subsystems&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;root&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;log_level&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall_debug&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;output_type&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall_console_output&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;yall&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;parent&quot;</span> <span class="p">:</span> <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;log_level&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall_inherited_level&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;output_type&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall_file_output&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;output_file&quot;</span> <span class="p">:</span> <span class="s2">&quot;yall.log&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="subsystem.html" class="btn btn-neutral float-right" title="Subsystem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="setup.html" class="btn btn-neutral" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Quentin Deslandes
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.8.1',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

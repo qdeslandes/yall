@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - src/yall.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - yall.c<span style="font-size: 80%;"> (source / <a href="yall.c.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">88</td>
+            <td class="headerCovTableEntry">88</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-11 15:17:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * MIT License
+<span class="lineNum">       3 </span>            :  *
+<span class="lineNum">       4 </span>            :  * Copyright (c) 2017 Quentin &quot;Naccyde&quot; Deslandes.
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       7 </span>            :  * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       8 </span>            :  * in the Software without restriction, including without limitation the rights
+<span class="lineNum">       9 </span>            :  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      10 </span>            :  * copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      11 </span>            :  * furnished to do so, subject to the following conditions:
+<span class="lineNum">      12 </span>            :  *
+<span class="lineNum">      13 </span>            :  * The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      14 </span>            :  * all copies or substantial portions of the Software.
+<span class="lineNum">      15 </span>            :  *
+<span class="lineNum">      16 </span>            :  * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      17 </span>            :  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      18 </span>            :  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      19 </span>            :  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      20 </span>            :  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      21 </span>            :  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<span class="lineNum">      22 </span>            :  * SOFTWARE.
+<span class="lineNum">      23 </span>            :  */
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            : #include &quot;yall/yall.h&quot;
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : #include &lt;stdbool.h&gt;
+<span class="lineNum">      28 </span>            : #include &lt;stdarg.h&gt;
+<span class="lineNum">      29 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      30 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : #include &quot;yall/utils.h&quot;
+<span class="lineNum">      33 </span>            : #include &quot;yall/writer/writer.h&quot;
+<span class="lineNum">      34 </span>            : #include &quot;yall/message.h&quot;
+<span class="lineNum">      35 </span>            : #include &quot;yall/subsystem.h&quot;
+<span class="lineNum">      36 </span>            : #include &quot;yall/debug.h&quot;
+<span class="lineNum">      37 </span>            : #include &quot;yall/writer/writer.h&quot;
+<span class="lineNum">      38 </span>            : #include &quot;yall/queue.h&quot;
+<span class="lineNum">      39 </span>            : #include &quot;yall/config/reader.h&quot;
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            : #define WRITER_THREAD_FREQUENCY 60
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : #include &quot;version.h&quot;
+<span class="lineNum">      44 </span>            : #define YALL_VERSION_STR STRINGIFY(YALL_MAJOR) &quot;.&quot; STRINGIFY(YALL_MINOR) \
+<span class="lineNum">      45 </span>            :         &quot;.&quot; STRINGIFY(YALL_PATCH)
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : static uint32_t version = (YALL_MAJOR &lt;&lt; 16) | (YALL_MINOR &lt;&lt; 8) | YALL_PATCH;
+<span class="lineNum">      48 </span>            : static const char *version_string =
+<a name="49"><span class="lineNum">      49 </span>            :         &quot;yall, Quentin &lt;Naccyde&gt; Deslandes, version &quot; YALL_VERSION_STR;</a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineCov">          1 : uint32_t yall_get_version(void)</span>
+<span class="lineNum">      52 </span>            : {
+<span class="lineNum">      53 </span><span class="lineCov">          1 :         return version;</span>
+<a name="54"><span class="lineNum">      54 </span>            : }</a>
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineCov">          1 : const char *yall_get_version_string(void)</span>
+<span class="lineNum">      57 </span>            : {
+<span class="lineNum">      58 </span><span class="lineCov">          1 :         return version_string;</span>
+<span class="lineNum">      59 </span>            : }
+<span class="lineNum">      60 </span>            : 
+<a name="61"><span class="lineNum">      61 </span>            : static uint16_t initialized = 0;</a>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineCov">         74 : yall_error yall_init(void)</span>
+<span class="lineNum">      64 </span>            : {
+<span class="lineNum">      65 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineCov">         74 :         if (initialized) {</span>
+<span class="lineNum">      68 </span><span class="lineCov">          6 :                 ++initialized;</span>
+<span class="lineNum">      69 </span>            :                 ret = YALL_ALREADY_INIT;
+<span class="lineNum">      70 </span><span class="lineCov">          6 :                 goto end;</span>
+<span class="lineNum">      71 </span>            :         }
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span><span class="lineCov">         68 :         ++initialized;</span>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span><span class="lineCov">         68 :         config_setup();</span>
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span><span class="lineCov">         68 :         ret = writer_init(WRITER_THREAD_FREQUENCY);</span>
+<span class="lineNum">      78 </span><span class="lineCov">         68 :         if (ret)</span>
+<span class="lineNum">      79 </span>            :                 goto err;
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span><span class="lineCov">         67 : end:</span>
+<span class="lineNum">      82 </span>            :         return ret;
+<span class="lineNum">      83 </span>            : err:
+<span class="lineNum">      84 </span><span class="lineCov">          1 :         --initialized;</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :         return ret;</span>
+<a name="86"><span class="lineNum">      86 </span>            : }</a>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">         82 : uint16_t yall_is_init(void)</span>
+<span class="lineNum">      89 </span>            : {
+<span class="lineNum">      90 </span><span class="lineCov">         82 :         return initialized;</span>
+<a name="91"><span class="lineNum">      91 </span>            : }</a>
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span><span class="lineCov">          3 : yall_error yall_load_configuration(const char *filepath)</span>
+<span class="lineNum">      94 </span>            : {
+<span class="lineNum">      95 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">      96 </span>            : 
+<span class="lineNum">      97 </span><span class="lineCov">          3 :         if (! initialized) {</span>
+<span class="lineNum">      98 </span>            :                 ret = YALL_NOT_INIT;
+<span class="lineNum">      99 </span>            :                 goto end;
+<span class="lineNum">     100 </span>            :         }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span><span class="lineCov">          2 :         ret = read_config(filepath);</span>
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span><span class="lineCov">          3 : end:</span>
+<span class="lineNum">     105 </span><span class="lineCov">          3 :         return ret;</span>
+<a name="106"><span class="lineNum">     106 </span>            : }</a>
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span><span class="lineCov">      19625 : yall_error yall_log(const char *subsystem,</span>
+<span class="lineNum">     109 </span>            :         enum yall_log_level log_level,
+<span class="lineNum">     110 </span>            :         const char *function,
+<span class="lineNum">     111 </span>            :         const char *filename,
+<span class="lineNum">     112 </span>            :         int32_t line,
+<span class="lineNum">     113 </span>            :         const char *format,
+<span class="lineNum">     114 </span>            :         ...)
+<span class="lineNum">     115 </span>            : {
+<span class="lineNum">     116 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">     117 </span>            :         char *buff = NULL;
+<span class="lineNum">     118 </span>            :         struct message *m = NULL;
+<span class="lineNum">     119 </span>            :         va_list args;
+<span class="lineNum">     120 </span>            :         va_list args_cpy;
+<span class="lineNum">     121 </span>            :         size_t hdr_len = 0;
+<span class="lineNum">     122 </span>            :         size_t buff_len = 0;
+<span class="lineNum">     123 </span><span class="lineCov">      19625 :         struct header_content hc = { 0 };</span>
+<span class="lineNum">     124 </span><span class="lineCov">      19625 :         struct yall_subsystem_params p = { 0 };</span>
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span><span class="lineCov">      19625 :         if (! initialized) {</span>
+<span class="lineNum">     127 </span>            :                 ret = YALL_NOT_INIT;
+<span class="lineNum">     128 </span>            :                 goto end;
+<span class="lineNum">     129 </span>            :         }
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            :         /*
+<span class="lineNum">     132 </span>            :          * Find the subsystem's parameters. Useless to get the subsystem, or
+<span class="lineNum">     133 </span>            :          * to know if it is found. If the subsystem is not found, we use the
+<span class="lineNum">     134 </span>            :          * default parameters.
+<span class="lineNum">     135 </span>            :          */
+<span class="lineNum">     136 </span><span class="lineCov">      19622 :         get_subsystem(subsystem, &amp;p);</span>
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span><span class="lineCov">      19622 :         if (p.status == yall_subsys_disable) {</span>
+<span class="lineNum">     139 </span>            :                 ret = YALL_SUBSYS_DISABLED;
+<span class="lineNum">     140 </span>            :                 goto end;
+<span class="lineNum">     141 </span>            :         }
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span><span class="lineCov">      19621 :         if (log_level &lt; p.log_level) {</span>
+<span class="lineNum">     144 </span>            :                 ret = YALL_LOG_LEVEL_TOO_LOW;
+<span class="lineNum">     145 </span>            :                 goto end;
+<span class="lineNum">     146 </span>            :         }
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineCov">      15211 :         fill_header_content(&amp;hc, subsystem, log_level, function, filename,</span>
+<span class="lineNum">     149 </span>            :                 line);
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span><span class="lineCov">      15211 :         va_start(args, format);</span>
+<span class="lineNum">     152 </span>            : 
+<span class="lineNum">     153 </span>            :         /*
+<span class="lineNum">     154 </span>            :          * Make a copy of variadic arguments to compute the length of the future
+<span class="lineNum">     155 </span>            :          * log message.
+<span class="lineNum">     156 </span>            :          * &quot;+2&quot; is used for '\n' and '\0' at the end of the log message.
+<span class="lineNum">     157 </span>            :          */
+<span class="lineNum">     158 </span><span class="lineCov">      15211 :         va_copy(args_cpy, args);</span>
+<span class="lineNum">     159 </span><span class="lineCov">      15211 :         hdr_len = generate_std_hdr(NULL, 0, &amp;hc);</span>
+<span class="lineNum">     160 </span><span class="lineCov">      15211 :         buff_len = hdr_len + generate_std_msg(NULL, 0, format, args_cpy) + 2;</span>
+<span class="lineNum">     161 </span><span class="lineCov">      15211 :         va_end(args_cpy);</span>
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span>            :         // Allocate the log message buffer
+<span class="lineNum">     164 </span><span class="lineCov">      15211 :         buff = malloc(buff_len);</span>
+<span class="lineNum">     165 </span><span class="lineCov">      15211 :         m = message_new(buff, log_level, &amp;p);</span>
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span>            :         /*
+<span class="lineNum">     168 </span>            :          * Header generation, hdr_len does not take in account the '\0', so
+<span class="lineNum">     169 </span>            :          * if we remove the &quot;+1&quot;, the header will be cut 1 character too soon.
+<span class="lineNum">     170 </span>            :          */
+<span class="lineNum">     171 </span><span class="lineCov">      15211 :         generate_std_hdr(buff, hdr_len + 1, &amp;hc);</span>
+<span class="lineNum">     172 </span>            : 
+<span class="lineNum">     173 </span>            :         /*
+<span class="lineNum">     174 </span>            :          * Message generation : we give a pointer to the next free character of
+<span class="lineNum">     175 </span>            :          * the log buffer, the remaining buff length and the arguments.
+<span class="lineNum">     176 </span>            :          */
+<span class="lineNum">     177 </span><span class="lineCov">      15211 :         generate_std_msg(&amp;buff[hdr_len], buff_len - hdr_len, format, args);</span>
+<span class="lineNum">     178 </span><span class="lineCov">      15211 :         va_end(args);</span>
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span>            :         // Write message
+<span class="lineNum">     181 </span><span class="lineCov">      15211 :         write_msg(m);</span>
+<span class="lineNum">     182 </span>            : 
+<span class="lineNum">     183 </span><span class="lineCov">      19625 : end:</span>
+<span class="lineNum">     184 </span><span class="lineCov">      19625 :         return ret;</span>
+<a name="185"><span class="lineNum">     185 </span>            : }</a>
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span><span class="lineCov">      19608 : yall_error yall_call_log(const char *subsystem,</span>
+<span class="lineNum">     188 </span>            :         enum yall_log_level log_level,
+<span class="lineNum">     189 </span>            :         const char *function_name,
+<span class="lineNum">     190 </span>            :         const char *filename,
+<span class="lineNum">     191 </span>            :         int32_t line,
+<span class="lineNum">     192 </span>            :         void (*formatter)(yall_call_data *d, const void *args),
+<span class="lineNum">     193 </span>            :         const void *args)
+<span class="lineNum">     194 </span>            : {
+<span class="lineNum">     195 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">     196 </span>            :         char *buff = NULL;
+<span class="lineNum">     197 </span>            :         size_t wrote = 0;
+<span class="lineNum">     198 </span>            :         size_t buff_len = 0;
+<span class="lineNum">     199 </span>            :         struct yall_call_data *d = NULL;
+<span class="lineNum">     200 </span><span class="lineCov">      19608 :         struct header_content hc = { 0 };</span>
+<span class="lineNum">     201 </span><span class="lineCov">      19608 :         struct yall_subsystem_params p = { 0 };</span>
+<span class="lineNum">     202 </span>            :         struct message *m = NULL;
+<span class="lineNum">     203 </span>            : 
+<span class="lineNum">     204 </span><span class="lineCov">      19608 :         if (! initialized) {</span>
+<span class="lineNum">     205 </span>            :                 ret = YALL_NOT_INIT;
+<span class="lineNum">     206 </span>            :                 goto end;
+<span class="lineNum">     207 </span>            :         }
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span><span class="lineCov">      19605 :         get_subsystem(subsystem, &amp;p);</span>
+<span class="lineNum">     210 </span>            : 
+<span class="lineNum">     211 </span><span class="lineCov">      19605 :         if (p.status == yall_subsys_disable) {</span>
+<span class="lineNum">     212 </span>            :                 ret = YALL_SUBSYS_DISABLED;
+<span class="lineNum">     213 </span>            :                 goto end;
+<span class="lineNum">     214 </span>            :         }
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span><span class="lineCov">      19604 :         if (log_level &lt; p.log_level) {</span>
+<span class="lineNum">     217 </span>            :                 ret = YALL_LOG_LEVEL_TOO_LOW;
+<span class="lineNum">     218 </span>            :                 goto end;
+<span class="lineNum">     219 </span>            :         }
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span><span class="lineCov">      15194 :         d = call_new();</span>
+<span class="lineNum">     222 </span>            : 
+<span class="lineNum">     223 </span>            :         /*
+<span class="lineNum">     224 </span>            :          * Detailled informations about the following calls can be found inside
+<span class="lineNum">     225 </span>            :          * the sources of yall_log() function.
+<span class="lineNum">     226 </span>            :          */
+<span class="lineNum">     227 </span><span class="lineCov">      15194 :         formatter(d, args);</span>
+<span class="lineNum">     228 </span>            : 
+<span class="lineNum">     229 </span><span class="lineCov">      15194 :         fill_header_content(&amp;hc, subsystem, log_level, function_name, filename,</span>
+<span class="lineNum">     230 </span>            :                 line);
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span><span class="lineCov">      15194 :         buff_len = generate_call_hdr(NULL, 0, &amp;hc) + call_get_buffer_length(d);</span>
+<span class="lineNum">     233 </span>            : 
+<span class="lineNum">     234 </span><span class="lineCov">      15194 :         buff = malloc(buff_len);</span>
+<span class="lineNum">     235 </span><span class="lineCov">      15194 :         m = message_new(buff, log_level, &amp;p);</span>
+<span class="lineNum">     236 </span>            : 
+<span class="lineNum">     237 </span><span class="lineCov">      15194 :         wrote = generate_call_hdr(buff, buff_len, &amp;hc);</span>
+<span class="lineNum">     238 </span><span class="lineCov">      15194 :         generate_call_msg(&amp;buff[wrote], buff_len - wrote, d);</span>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">      15194 :         call_delete(d);</span>
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span><span class="lineCov">      15194 :         write_msg(m);</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span><span class="lineCov">      19608 : end:</span>
+<span class="lineNum">     245 </span><span class="lineCov">      19608 :         return ret;</span>
+<a name="246"><span class="lineNum">     246 </span>            : }</a>
+<span class="lineNum">     247 </span>            : 
+<span class="lineNum">     248 </span><span class="lineCov">         22 : yall_error yall_set_subsystem(const char *name,</span>
+<span class="lineNum">     249 </span>            :         const char *parent,
+<span class="lineNum">     250 </span>            :         enum yall_log_level log_level,
+<span class="lineNum">     251 </span>            :         enum yall_output_type output_type,
+<span class="lineNum">     252 </span>            :         const char *output_file)
+<span class="lineNum">     253 </span>            : {
+<span class="lineNum">     254 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">     255 </span>            : 
+<span class="lineNum">     256 </span><span class="lineCov">         22 :         if (! initialized) {</span>
+<span class="lineNum">     257 </span>            :                 ret = YALL_NOT_INIT;
+<span class="lineNum">     258 </span>            :                 goto end;
+<span class="lineNum">     259 </span>            :         }
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span><span class="lineCov">         21 :         if (! name) {</span>
+<span class="lineNum">     262 </span>            :                 ret = YALL_SUBSYS_NO_NAME;
+<span class="lineNum">     263 </span>            :                 goto end;
+<span class="lineNum">     264 </span>            :         }
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span><span class="lineCov">         20 :         struct yall_subsystem *s = remove_subsystem(name);</span>
+<span class="lineNum">     267 </span>            : 
+<span class="lineNum">     268 </span><span class="lineCov">         20 :         if (! s) {</span>
+<span class="lineNum">     269 </span><span class="lineCov">         19 :                 s = create_subsystem(name, log_level, output_type, output_file);</span>
+<span class="lineNum">     270 </span>            : 
+<span class="lineNum">     271 </span><span class="lineCov">         19 :                 if (! s) {</span>
+<span class="lineNum">     272 </span>            :                         ret = YALL_CANT_CREATE_SUBSYS;
+<span class="lineNum">     273 </span>            :                         goto end;
+<span class="lineNum">     274 </span>            :                 }
+<span class="lineNum">     275 </span>            :         } else {
+<span class="lineNum">     276 </span><span class="lineCov">          1 :                 update_subsystem(s, log_level, output_type, output_file);</span>
+<span class="lineNum">     277 </span>            :         }
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span><span class="lineCov">         20 :         add_subsystem(parent, s);</span>
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span><span class="lineCov">         22 : end:</span>
+<span class="lineNum">     282 </span><span class="lineCov">         22 :         return ret;</span>
+<a name="283"><span class="lineNum">     283 </span>            : }</a>
+<span class="lineNum">     284 </span>            : 
+<span class="lineNum">     285 </span><span class="lineCov">        139 : yall_error yall_close(void)</span>
+<span class="lineNum">     286 </span>            : {
+<span class="lineNum">     287 </span>            :         yall_error ret = YALL_SUCCESS;
+<span class="lineNum">     288 </span>            : 
+<span class="lineNum">     289 </span><span class="lineCov">        139 :         if (! initialized) {</span>
+<span class="lineNum">     290 </span>            :                 ret = YALL_NOT_INIT;
+<span class="lineNum">     291 </span>            :                 goto end;
+<span class="lineNum">     292 </span>            :         }
+<span class="lineNum">     293 </span>            : 
+<span class="lineNum">     294 </span><span class="lineCov">         71 :         if (initialized == 1) {</span>
+<span class="lineNum">     295 </span><span class="lineCov">         65 :                 _YALL_DBG_INFO(&quot;Close library.&quot;);</span>
+<span class="lineNum">     296 </span><span class="lineCov">         65 :                 yall_disable_debug();</span>
+<span class="lineNum">     297 </span><span class="lineCov">         65 :                 writer_close();</span>
+<span class="lineNum">     298 </span><span class="lineCov">         65 :                 free_subsystems();</span>
+<span class="lineNum">     299 </span><span class="lineCov">         65 :                 config_clean();</span>
+<span class="lineNum">     300 </span><span class="lineCov">         65 :                 initialized = 0;</span>
+<span class="lineNum">     301 </span>            :         } else {
+<span class="lineNum">     302 </span><span class="lineCov">          6 :                 --initialized;</span>
+<span class="lineNum">     303 </span>            :         }
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span><span class="lineCov">        139 : end:</span>
+<span class="lineNum">     306 </span><span class="lineCov">        139 :         return ret;</span>
+<a name="307"><span class="lineNum">     307 </span>            : }</a>
+<span class="lineNum">     308 </span>            : 
+<span class="lineNum">     309 </span><span class="lineCov">         66 : void yall_close_all(void)</span>
+<span class="lineNum">     310 </span>            : {
+<span class="lineNum">     311 </span><span class="lineCov">        134 :         while (yall_close() != YALL_NOT_INIT)</span>
+<span class="lineNum">     312 </span>            :                 ;
+<span class="lineNum">     313 </span><span class="lineCov">         66 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

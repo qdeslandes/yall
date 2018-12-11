@@ -1,0 +1,27 @@
+var subsystem_8c =
+[
+    [ "VERTICAL", "subsystem_8c.html#adf764cbdea00d65edcd07bb9953ad2b7a1a88641fcd39f2ed3e58a18526e97138", null ],
+    [ "VERTICAL_RIGHT", "subsystem_8c.html#adf764cbdea00d65edcd07bb9953ad2b7a67f421d90059dab5a8924346dc841c66", null ],
+    [ "LIGHT_UP_RIGHT", "subsystem_8c.html#adf764cbdea00d65edcd07bb9953ad2b7a7962a9304ca486675246591261cecbd7", null ],
+    [ "EMPTY", "subsystem_8c.html#adf764cbdea00d65edcd07bb9953ad2b7a2f0d18fc0d0fa4a6cd92dc328501874d", null ],
+    [ "_free_subsystem", "subsystem_8c.html#a33e7ce8a077432356bb15ff81fe5666b", null ],
+    [ "_free_subsystems", "subsystem_8c.html#ab2a8b52f4961b58450d17f12dafb329a", null ],
+    [ "_get_subsystem", "subsystem_8c.html#a6b29eae9b678a9587ef59dc3d435249d", null ],
+    [ "add_subsystem", "subsystem_8c.html#a27a5333280316103d7f4a490656071d4", null ],
+    [ "create_subsystem", "subsystem_8c.html#a8813ad62fe7ebbef71e7f81ed8e9ef25", null ],
+    [ "free_subsystems", "subsystem_8c.html#a852835939a85ca37d87499e8462c82b3", null ],
+    [ "get_next_subsystem", "subsystem_8c.html#a8b3a2b2d5e217ec2d8789ee4a00a2f8d", null ],
+    [ "get_subsystem", "subsystem_8c.html#a67a9630b43bd6238ac7ac4631002893a", null ],
+    [ "remove_subsystem", "subsystem_8c.html#a51a8c2dde69c91d43bd2bdd4ea90abcc", null ],
+    [ "reset_subsystem", "subsystem_8c.html#a3c035c7805dc9610047a03395da9c639", null ],
+    [ "set_default_params", "subsystem_8c.html#adeef5610166a5ca63cfcf3074a7d3eb8", null ],
+    [ "set_subsys_status", "subsystem_8c.html#af3d26f3b38e18f8ae9f22c79e62012c4", null ],
+    [ "show_subsystems_tree_call", "subsystem_8c.html#ac2a9b317c45d10497e330556422fdc23", null ],
+    [ "update_subsystem", "subsystem_8c.html#a7094dbc5ac09763c5d36a916c97badff", null ],
+    [ "yall_disable_subsystem", "subsystem_8c.html#a2b14173938ad07e6a7e6f0f8ef0d133b", null ],
+    [ "yall_enable_subsystem", "subsystem_8c.html#ae07d39575661936f85065d04e9f51580", null ],
+    [ "yall_show_subsystems_tree", "subsystem_8c.html#a98dfe518a0ddbe235015bf36b3d91e8b", null ],
+    [ "connectors", "subsystem_8c.html#abc1292cec24762b05e18ec15a440a92e", null ],
+    [ "default_params", "subsystem_8c.html#ab8442507d1b35808421ff14d0f35f9d4", null ],
+    [ "subsystems", "subsystem_8c.html#a056e4874b26cac0a03ccde63b261906e", null ]
+];
