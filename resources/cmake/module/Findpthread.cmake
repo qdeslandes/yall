@@ -2,27 +2,15 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-if (UNIX)
-    find_path(pthread_INCLUDE_DIR
-        NAMES pthread.h
-        PATHS ${pthread_HINTS} / /usr /usr/local
-        PATH_SUFFIXES include)
-        
-    find_library(pthread_LIBRARY
-        NAMES pthread
-        PATHS ${pthread_HINTS} / /usr /usr/local
-        PATH_SUFFIXES lib)
-elseif (WIN32)
-    find_path(pthread_INCLUDE_DIR
-        NAMES pthread.h
-        PATHS ${pthread_HINTS} C:/
-        PATH_SUFFIXES include)
-
-    find_library(pthread_LIBRARY
-        NAMES pthreadVC2
-        PATHS ${pthread_HINTS} C:/
-        PATH_SUFFIXES lib)
-endif ()
+find_path(pthread_INCLUDE_DIR
+    NAMES pthread.h
+    PATHS ${pthread_HINTS} / /usr /usr/local
+    PATH_SUFFIXES include)
+    
+find_library(pthread_LIBRARY
+    NAMES pthread
+    PATHS ${pthread_HINTS} / /usr /usr/local
+    PATH_SUFFIXES lib)
 
 set(pthread_INCLUDE_DIRS "${pthread_INCLUDE_DIR}")
 set(pthread_LIBRARIES "${pthread_LIBRARY}")

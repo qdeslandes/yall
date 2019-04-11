@@ -26,16 +26,10 @@
 
 #include <stdlib.h>
 #include <malloc.h>
-
-#ifdef __linux__
 #include <stdatomic.h>
+
 #define yall_aligned_alloc(alignment, size) aligned_alloc(alignment, size)
 #define yall_aligned_free(ptr) free(ptr)
-#elif _WIN32
-#include <Windows.h>
-#define yall_aligned_alloc(alignment, size) _aligned_malloc(size, alignment)
-#define yall_aligned_free(ptr) _aligned_free(ptr)
-#endif
 
 #include "yall/message.h"
 

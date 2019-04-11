@@ -2,33 +2,15 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-if (MSVC_VERSION EQUAL 1800)
-	set(MSVC_SUFFIX "_msvc12")
-elseif(MSVC_VERSION EQUAL 1900)
-	set(MSVC_SUFFIX "_msvc14")
-endif ()
-
-if (UNIX)
-    find_path(jansson_INCLUDE_DIR
-        NAMES jansson.h
-        PATHS ${jansson_HINTS} / /usr /usr/local
-        PATH_SUFFIXES include)
-        
-    find_library(jansson_LIBRARY
-        NAMES jansson
-        PATHS ${jansson_HINTS} / /usr /usr/local
-        PATH_SUFFIXES lib)
-elseif (WIN32)
-    find_path(jansson_INCLUDE_DIR
-        NAMES jansson.h
-        PATHS ${jansson_HINTS} C:/
-        PATH_SUFFIXES include)
-
-    find_library(jansson_LIBRARY
-        NAMES jansson${MSVC_SUFFIX}
-        PATHS ${jansson_HINTS} C:/
-        PATH_SUFFIXES lib)
-endif ()
+find_path(jansson_INCLUDE_DIR
+    NAMES jansson.h
+    PATHS ${jansson_HINTS} / /usr /usr/local
+    PATH_SUFFIXES include)
+    
+find_library(jansson_LIBRARY
+    NAMES jansson
+    PATHS ${jansson_HINTS} / /usr /usr/local
+    PATH_SUFFIXES lib)
 
 set(jansson_INCLUDE_DIRS "${jansson_INCLUDE_DIR}")
 set(jansson_LIBRARIES "${jansson_LIBRARY}")

@@ -10,32 +10,10 @@ file(GLOB_RECURSE YALL_SRCS ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/incl
 
 add_library(yall_unit_src_obj OBJECT ${YALL_SRCS})
 
-if (UNIX)
-	# Compile options
-	set(_PVT_OPT -fprofile-arcs -ftest-coverage  -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0 -g)
-	set(_PVT_OPT_RELEASE -O3)
-elseif (WIN32)
-	# Compile options
-
-	#[[
-		* 4005 : macro redefinition
-		* 4172 : returning local variable address (warned on a MSVC file)
-		* 4204 : non-const initializer
-		* 4668 : macro not defined, replaced by 0
-		* 4706 : assignment within conditional expression
-		* 4710 : function not inlined
-		* 4774 : argument is not a string literal
-		* 4996 : "strdup" deprecated
-		* 4820 : padding
-	#]]
-
-	set(_PVT_OPT /wd4005 /wd4172 /wd4204 /wd4668 /wd4706 /wd4710 /wd4774 /wd4996 /wd4820 /Wall)
-	set(_PVT_OPT_DEBUG /Od)
-	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-	
-	set_property(TARGET yall_unit_src_obj PROPERTY FOLDER "tests")
-endif ()
+# Compile options
+set(_PVT_OPT -fprofile-arcs -ftest-coverage  -Wall -Wextra -std=gnu11)
+set(_PVT_OPT_DEBUG -O0 -g)
+set(_PVT_OPT_RELEASE -O3)
 
 target_compile_options(yall_unit_src_obj
 	PRIVATE
@@ -62,32 +40,10 @@ file(GLOB_RECURSE YALL_UNIT_SRCS *.c *.h)
 
 add_executable(yall_unit $<TARGET_OBJECTS:yall_unit_src_obj> ${YALL_UNIT_SRCS})
 
-if (UNIX)
-	# Compile options
-	set(_PVT_OPT -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0 -g)
-	set(_PVT_OPT_RELEASE -O3)
-elseif (WIN32)
-	# Compile options
-
-	#[[
-		* 4204 : non-const initializer
-		* 4221 : initialize pointer with automatic variable
-		* 4255 : no function prototype given
-		* 4267 : conversion from size_t to int
-		* 4464 : relative path contains ".." (on Criterion)
-		* 4668 : macro not defined, replaced by 0
-		* 4710 : function not inlined
-		* 4820 : padding
-		* 4996 : "strdup" deprecated
-	#]]
-
-	set(_PVT_OPT /wd4204 /wd4221 /wd4255 /wd4267 /wd4464 /wd4668 /wd4710 /wd4820 /wd4996 /Wall)
-	set(_PVT_OPT_DEBUG /Od)
-	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-	
-	set_property(TARGET yall_unit PROPERTY FOLDER "tests")
-endif ()
+# Compile options
+set(_PVT_OPT -Wall -Wextra -std=gnu11)
+set(_PVT_OPT_DEBUG -O0 -g)
+set(_PVT_OPT_RELEASE -O3)
 
 target_compile_options(yall_unit
 	PRIVATE
@@ -108,9 +64,3 @@ target_link_libraries(yall_unit
 		criterion::criterion
 		$<IF:$<C_COMPILER_ID:GNU>,m,>
 		$<IF:$<C_COMPILER_ID:GNU>,gcov,>)
-
-if (MSVC_VERSION EQUAL 1900)
-	add_custom_target(unit COMMAND yall_unit --ascii WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/external/bin)
-	
-	set_property(TARGET unit PROPERTY FOLDER "launch")
-endif ()

@@ -17,4 +17,4 @@ Features
 * Write logs inside console or file.
 * Call custom function to format logs output.
 * Use specific lockless thread to avoiding latency.
-* Runs on Linux and Windows (build with GCC, MSVC 12 & MSVC 14).
+* Runs on Linux (see `legacy` branch on GitHub for Windows support).

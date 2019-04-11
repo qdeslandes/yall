@@ -66,11 +66,8 @@ ParameterizedTest(
 	fflush(stderr);
 
 	char output[32] = { 0 };
-#ifdef __linux__
 	snprintf(output, 32, "\033[%dmsentence\033[0m", p->code);
-#elif _WIN32
-	snprintf(output, 32, "sentence");
-#endif
+
 	cr_assert_stderr_eq_str(output);
 }
 

@@ -180,10 +180,6 @@ int main(int argc, char *argv[])
 	YALL_DEBUG("scheduler", "Starting process 52233.");
 	yall_enable_subsystem("scheduler");
 
-#ifdef _WIN32
-	getchar();
-#endif
-
 	for (int i = 0; i < 5; ++i)
 		pthread_join(threads[i], NULL);
 

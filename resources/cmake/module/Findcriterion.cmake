@@ -2,27 +2,15 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # For details see the LICENSE file distributed with yall.
 
-if (UNIX)
-    find_path(criterion_INCLUDE_DIR
-        NAMES criterion/criterion.h
-        PATHS ${criterion_HINTS} / /usr /usr/local
-        PATH_SUFFIXES include)
-        
-    find_library(criterion_LIBRARY
-        NAMES criterion
-        PATHS ${criterion_HINTS} / /usr /usr/local
-        PATH_SUFFIXES lib)
-elseif (WIN32)
-    find_path(criterion_INCLUDE_DIR
-        NAMES criterion/criterion.h
-        PATHS ${criterion_HINTS} C:/
-        PATH_SUFFIXES include)
-
-    find_library(criterion_LIBRARY
-        NAMES criterion
-        PATHS ${criterion_HINTS} C:/
-        PATH_SUFFIXES lib)
-endif ()
+find_path(criterion_INCLUDE_DIR
+    NAMES criterion/criterion.h
+    PATHS ${criterion_HINTS} / /usr /usr/local
+    PATH_SUFFIXES include)
+    
+find_library(criterion_LIBRARY
+    NAMES criterion
+    PATHS ${criterion_HINTS} / /usr /usr/local
+    PATH_SUFFIXES lib)
 
 set(criterion_INCLUDE_DIRS "${criterion_INCLUDE_DIR}")
 set(criterion_LIBRARIES "${criterion_LIBRARY}")

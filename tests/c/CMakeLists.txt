@@ -4,25 +4,10 @@
 
 add_executable(yall_c main.c)
 
-if (UNIX)
-	# Compile options
-	set(_PVT_OPT -Wall -Wextra -std=gnu11)
-	set(_PVT_OPT_DEBUG -O0 -g)
-	set(_PVT_OPT_RELEASE -O3)
-elseif (WIN32)
-	# Compile options
-
-	#[[
-		* 4115 : named type defininition in parenthesis
-		* 4820 : padding
-	#]]
-
-	set(_PVT_OPT /wd4115 /wd4820 /Wall)
-	set(_PVT_OPT_DEBUG /Od)
-	set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-	
-	set_property(TARGET yall_c PROPERTY FOLDER "tests")
-endif ()
+# Compile options
+set(_PVT_OPT -Wall -Wextra -std=gnu11)
+set(_PVT_OPT_DEBUG -O0 -g)
+set(_PVT_OPT_RELEASE -O3)
 
 target_compile_options(yall_c
 	PRIVATE

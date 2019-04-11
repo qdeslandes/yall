@@ -46,13 +46,8 @@
 #include "yall/config/reader.h"
 #include "yall/config/parameters.h"
 
-#ifdef __linux__
-#	   include <semaphore.h>
-#	   define NULL_FILE "/dev/null"
-#elif _WIN32
-#	   include <Windows.h>
-#	   define NULL_FILE "nul"
-#endif
+#include <semaphore.h>
+#define NULL_FILE "/dev/null"
 
 #define _NB_TEST_SUBSYSTEMS 16
 #define _YALL_TEST_JSON_FILE "./yall.json"
@@ -100,16 +95,8 @@ void *_tests_malloc(size_t size);
 TESTS_REDEFINE_PROTO_LIGHT(fopen);
 FILE *_tests_fopen(const char *pathname, const char *mode);
 
-#ifdef __linux__
 TESTS_REDEFINE_PROTO(sem_wait, (sem_t *sem));
 TESTS_REDEFINE_PROTO(sem_init, (sem_t *sem, int pshared, unsigned int value));
-#elif _WIN32
-TESTS_REDEFINE_PROTO_LIGHT(CreateMutex);
-HANDLE test(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName);
-
-TESTS_REDEFINE_PROTO_LIGHT(WaitForSingleObject);
-DWORD _tests_WaitForSingleObject( HANDLE hHandle,  DWORD dwMilliseconds);
-#endif
 
 extern struct yall_subsystem *subsystems;
 extern struct yall_subsystem *_subsystems[_NB_TEST_SUBSYSTEMS];

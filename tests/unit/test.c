@@ -26,21 +26,8 @@
 
 #include <yall/yall.h>
 #include <fcntl.h>
-
-#ifdef __linux__
 #include <semaphore.h>
 #include <unistd.h>
-#elif _WIN32
-#include <Windows.h>
-#include <io.h>
-
-#define dup _dup
-#define dup2 _dup2
-#define fileno _fileno
-#define open _open
-#define close _close
-#define O_RDWR _O_RDWR
-#endif
 
 struct yall_subsystem *subsystems;
 struct yall_subsystem *_subsystems[_NB_TEST_SUBSYSTEMS] = { 0 };
@@ -92,28 +79,8 @@ TESTS_REDEFINE(strlen, -2, (const char *str), str)
 TESTS_REDEFINE(pthread_create, -1, (pthread_t *thread, const pthread_attr_t *attr,
 	void *(*start_routine) (void *), void *arg), thread, attr, start_routine, arg)
 
-#ifdef __linux__
 TESTS_REDEFINE(sem_wait, -1, (sem_t *sem), sem)
 TESTS_REDEFINE(sem_init, -1, (sem_t *sem, int pshared, unsigned int value), sem, pshared, value)
-#elif _WIN32
-TESTS_REDEFINE_LIGHT(CreateMutex)
-HANDLE _tests_CreateMutex(LPSECURITY_ATTRIBUTES lpMutexAttributes, BOOL bInitialOwner, LPCTSTR lpName)
-{
-	if (CreateMutex_fail)
-		return NULL;
-
-	return CreateMutex(lpMutexAttributes, bInitialOwner, lpName);
-}
-
-TESTS_REDEFINE_LIGHT(WaitForSingleObject)
-DWORD _tests_WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds)
-{
-	if (WaitForSingleObject_fail)
-		return 1;
-
-	return WaitForSingleObject(hHandle, dwMilliseconds);
-}
-#endif
 
 void test_init_yall(void)
 {

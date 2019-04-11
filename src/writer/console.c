@@ -27,14 +27,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 #include "yall/utils.h"
 #include "yall/debug.h"
 
-#ifdef __linux__
 static uint8_t colors[8] = { 97, 92, 92, 93, 91, 91, 91, 91 };
 
 /**
@@ -55,43 +50,6 @@ static void reset_color(void)
 {
 	fprintf(stderr, "\033[0m");
 }
-#elif _WIN32
-static uint8_t colors[8] = { 15, 10, 10, 14, 12, 12, 12, 12 };
-
-/**
- * \brief Set console text color.
- * \param log_level Value of type enum yall_log_level to deduct the color of the
- *	text.
- */
-static void set_color(enum yall_log_level log_level)
-{
-	WORD wColor;
-	uint16_t color = colors[log_level];
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-	if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
-		SetConsoleTextAttribute(hStdOut, wColor);
-	}
-}
-
-/**
- * \brief Reset console text color.
- */
-static void reset_color(void)
-{
-	WORD wColor;
-	uint16_t color = 15;
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-	if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		wColor = (csbi.wAttributes & 0xF0) + (color & 0x0F);
-		SetConsoleTextAttribute(hStdOut, wColor);
-	}
-}
-#endif
 
 yall_error write_log_console(enum yall_log_level log_level, const char *msg)
 {

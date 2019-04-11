@@ -26,10 +26,6 @@
 
 #include <stdio.h>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 #include "yall/utils.h"
 #include "yall/debug.h"
 
