@@ -61,11 +61,7 @@ configure_package_config_file(
 	"${CMAKE_BINARY_DIR}/cmake/yall-config.cmake"
 	INSTALL_DESTINATION lib/cmake/yall)
 
-if (UNIX)
-	configure_file(${CMAKE_SOURCE_DIR}/resources/cmake/yall_targets-release.cmake.linux ${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake COPYONLY)
-else ()
-	configure_file(${CMAKE_SOURCE_DIR}/resources/cmake/yall_targets-release.cmake.windows ${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake COPYONLY)
-endif ()
+configure_file(${CMAKE_SOURCE_DIR}/resources/cmake/yall_targets-release.cmake.linux ${CMAKE_BINARY_DIR}/cmake/yall_targets-release.cmake COPYONLY)
 
 install(
 	FILES ${CMAKE_SOURCE_DIR}/README.md

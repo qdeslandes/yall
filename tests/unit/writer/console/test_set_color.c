@@ -38,13 +38,9 @@ ParameterizedTest(struct param_set_color *p, writer_console, test_set_color0)
 {
 	set_color(p->ll);
 
-#ifdef __linux__
 	/* Craft the string required */
 	char output[32] = { 0 };
 	snprintf(output, 32, "\033[%dm", p->code);
 
 	cr_assert_stderr_eq_str(output);
-#else
-    cr_assert(1);
-#endif
 }

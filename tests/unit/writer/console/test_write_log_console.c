@@ -39,14 +39,10 @@ ParameterizedTest(
 {
 	cr_assert_eq(YALL_SUCCESS, write_log_console(p->ll, ""));
 
-    #ifdef __linux__
 	char output[32] = { 0 };
 	snprintf(output, 32, "\033[%dm\033[0m", p->code);
 
 	cr_assert_stderr_eq_str(output);
-    #else
-    cr_assert(1);
-    #endif
 }
 
 /*
@@ -77,11 +73,7 @@ ParameterizedTest(
 Test(writer_console,
 	test_write_log_console2)
 {
-    #ifdef __linux__
 	disable_fprintf();
 	cr_assert_eq(write_log_console(yall_debug, "nope"), YALL_CONSOLE_WRITE_ERR);
 	enable_fprintf();
-    #else
-    cr_assert(1);
-    #endif
 }

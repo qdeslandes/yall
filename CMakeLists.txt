@@ -25,7 +25,7 @@ set(CMAKE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
-if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "")
+if (CMAKE_BUILD_TYPE STREQUAL "")
 	set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
@@ -34,10 +34,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmak
 find_package(jansson REQUIRED)
 find_package(pthread REQUIRED)
 find_package(criterion REQUIRED)
-
-if (UNIX)
-    find_package(Doxygen REQUIRED)
-endif ()
+find_package(Doxygen REQUIRED)
 
 #[[
 	Project version

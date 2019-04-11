@@ -49,10 +49,8 @@ struct qnode {
 };
 
 /**
- * \brief Create a new node with the given data. On windows, the implementation
- *	use an aligned version of malloc to get a memory pointer. *next* pointer
- *	of the created node *MUST* be set to NULL, as it is used to check the
- *	queue's tail.
+ * \brief Create a new node with the given data. *next* pointer of the created
+ *	node *MUST* be set to NULL, as it is used to check the queue's tail.
  * \param data Data to store on the node.
  * \return The new node.
  */

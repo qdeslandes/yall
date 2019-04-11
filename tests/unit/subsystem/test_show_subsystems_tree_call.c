@@ -41,11 +41,7 @@ Test(subsystem, test_show_subsystems_tree_call0, .init=test_init_yall, .fini=tes
 
 	cr_assert_str_eq(d->header, "Subsystems tree :");
 
-#ifdef __linux__
 	cr_assert_str_eq(ll_get_at(d->lines, 0), "└── debug_subsys");
-#else
-	cr_assert_str_eq(ll_get_at(d->lines, 0), "|-- debug_subsys");
-#endif
 
 	call_delete(d);
 }
@@ -69,13 +65,8 @@ Test(subsystem, test_show_subsystems_tree_call1, .init=test_init_yall, .fini=tes
 
 	cr_assert_str_eq(d->header, "Subsystems tree :");
 
-#ifdef __linux__
 	cr_assert_str_eq(ll_get_at(d->lines, 0), "├── 0");
 	cr_assert_str_eq(ll_get_at(d->lines, 3), "│   └── 02");
-#else
-	cr_assert_str_eq(ll_get_at(d->lines, 0), "|-- 0");
-	cr_assert_str_eq(ll_get_at(d->lines, 3), "|   |-- 02");
-#endif
 
 	call_delete(d);
 }

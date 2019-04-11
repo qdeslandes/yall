@@ -24,7 +24,6 @@
 
 #include "subsystem/test.h"
 
-#ifdef __linux__
 /*
  * Currently set this tests for Linux only, as on Windows they are really slow.
  * However, Windows and Linux code for this feature are identical, so there
@@ -58,4 +57,3 @@ Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), su
 	cr_assert_eq(s->output_type, ot);
 	cr_assert_str_eq(s->file.filename, of);
 }
-#endif

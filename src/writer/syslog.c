@@ -25,10 +25,7 @@
 #include "yall/writer/syslog.h"
 
 #include <string.h>
-
-#ifdef __linux__
-#	include <syslog.h>
-#endif
+#include <syslog.h>
 
 #include "yall/config/parameters.h"
 
@@ -69,14 +66,10 @@ struct {
  */
 static uint8_t get_syslog_level(enum yall_log_level ll)
 {
-#ifdef __linux__
 	static uint8_t syslog_ll[] = { LOG_DEBUG, LOG_INFO, LOG_NOTICE,
 		LOG_WARNING, LOG_ERR, LOG_CRIT, LOG_ALERT , LOG_EMERG };
 
 	return syslog_ll[ll];
-#else
-	return yall_fac_user;
-#endif
 }
 
 enum yall_syslog_facility str_to_syslog_facility(const char *s)
@@ -91,9 +84,6 @@ enum yall_syslog_facility str_to_syslog_facility(const char *s)
 
 void write_log_syslog(enum yall_log_level log_level, const char *msg)
 {
-#ifdef __linux__
 	syslog((int32_t)LOG_MAKEPRI((int32_t)yall_config_get_syslog_facility(),
 		(int32_t)get_syslog_level(log_level)), msg);
-#else
-#endif
 }

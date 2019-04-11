@@ -44,7 +44,6 @@ Test(yall, test_yall_log1, .init=test_init_yall, .fini=test_close_yall)
 	cr_assert_eq(yall_log("toolongnameforasubsysteminthelibrary", yall_err, "", "", 43, ""), YALL_SUCCESS);
 }
 
-#ifdef __linux__
 /*
  * Currently set this tests for Linux only, as on Windows they are really slow.
  * However, Windows and Linux code for this feature are identical, so there
@@ -74,7 +73,6 @@ Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line, char *f
 
 	cr_assert_eq(ret, waiting_for);
 }
-#endif
 
 /*
  * O.K.

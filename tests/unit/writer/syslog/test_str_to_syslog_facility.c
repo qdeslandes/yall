@@ -33,9 +33,5 @@ ParameterizedTestParameters(writer_syslog, test_str_to_syslog_facility0) {
  */
 ParameterizedTest(struct param_set_syslog_level *p, writer_syslog, test_str_to_syslog_facility0)
 {
-    #ifdef __linux__
 	cr_assert_eq(p->syslog_ll, get_syslog_level(p->yall_ll));
-    #else
-    cr_assert(1);
-    #endif
 }
