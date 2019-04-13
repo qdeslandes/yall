@@ -171,7 +171,7 @@ def getReleaseMessage(changelog, tag):
 
     s = """
 
-Each `yall` Linux release is available from `.deb` and `.rpm` repositories :
+Each `yall` release is available from `.deb` and `.rpm` repositories :
 * `.deb` : `curl -s https://packagecloud.io/install/repositories/naccyde/yall/script.deb.sh | sudo bash`
 * `.rpm` : `curl -s https://packagecloud.io/install/repositories/naccyde/yall/script.rpm.sh | sudo bash`
 

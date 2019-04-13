@@ -45,11 +45,6 @@ Test(yall, test_yall_log1, .init=test_init_yall, .fini=test_close_yall)
 }
 
 /*
- * Currently set this tests for Linux only, as on Windows they are really slow.
- * However, Windows and Linux code for this feature are identical, so there
- * shouldn't be any problem.
- */
-/*
  * Test on getting subsystem and checking log level
  */
 TheoryDataPoints(yall, test_yall_log2) = {
