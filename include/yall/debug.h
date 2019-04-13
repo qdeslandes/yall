@@ -30,13 +30,7 @@
 #	include <stdio.h>
 #	include <stdarg.h>
 #	include <pthread.h>
-
-#	ifdef __linux__
-#		include <semaphore.h>
-#	elif _WIN32
-#		include <Windows.h>
-#		include <synchapi.h>
-#	endif
+#	include <semaphore.h>
 
 #	define fprintf		_tests_fprintf
 #	define snprintf		_tests_snprintf
@@ -56,21 +50,12 @@
 	int _tests_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
 		void *(*start_routine) (void *), void *arg);
 
-#	ifdef __linux__
-#		define sem_init _tests_sem_init
-#		define sem_wait _tests_sem_wait
-		int _tests_sem_init(sem_t *sem, int pshared,
-			unsigned int value);
-		int _tests_sem_wait(sem_t *sem);
-#	elif _WIN32
-#		define CreateMutex _tests_CreateMutex
-#		define WaitForSingleObject _tests_WaitForSingleObject
-		HANDLE _tests_CreateMutex(
-			LPSECURITY_ATTRIBUTES lpMutexAttributes,
-			BOOL bInitialOwner, LPCTSTR lpName);
-		DWORD _tests_WaitForSingleObject(HANDLE hHandle,
-			DWORD dwMilliseconds);
-#	endif
+#	define sem_init _tests_sem_init
+#	define sem_wait _tests_sem_wait
+	int _tests_sem_init(sem_t *sem, int pshared,
+		unsigned int value);
+	int _tests_sem_wait(sem_t *sem);
+
 #endif
 
 #include <stdbool.h>
@@ -80,7 +65,6 @@
 #include "yall/yall.h"
 #include "yall/error.h"
 #include "yall/utils.h"
-#include "yall/msvc/defines.h"
 
 /**
  * \brief Enable the debug mode on the library. This function must be called

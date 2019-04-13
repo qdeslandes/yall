@@ -25,16 +25,10 @@
 #include "yall/container/cqueue.h"
 
 #include <stdlib.h>
-
-#ifdef __linux__
 #include <stdatomic.h>
+
 #define yall_aligned_alloc(alignment, size) aligned_alloc(alignment, size)
 #define yall_aligned_free(ptr) free(ptr)
-#elif _WIN32
-#include <Windows.h>
-#define yall_aligned_alloc(alignment, size) _aligned_malloc(size, alignment)
-#define yall_aligned_free(ptr) _aligned_free(ptr)
-#endif
 
 /**
  * \struct cqueue_node_t
@@ -142,12 +136,7 @@ void cq_enqueue(cqueue_t *q, void *data)
 	do {
 		head = q->nodes;
 		n->next = head;
-#ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&q->nodes, &head, n));
-#else
-	} while (head !=
-		InterlockedCompareExchangePointer(&q->nodes, n, head));
-#endif
 }
 
 void *cq_dequeue(cqueue_t *q)
@@ -160,12 +149,7 @@ void *cq_dequeue(cqueue_t *q)
 
 	do {
 		n = q->nodes;
-#ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&q->nodes, &n, n->next));
-#else
-	} while (n !=
-		InterlockedCompareExchangePointer(&q->nodes, n->next, n));
-#endif
 
 	if (n) {
 		data = n->data;
@@ -187,12 +171,7 @@ void cq_swap(cqueue_t *from, cqueue_t *to)
 
 	do {
 		head = from->nodes;
-#ifdef __linux__
 	} while (! atomic_compare_exchange_weak(&from->nodes, &head, NULL));
-#else
-	} while (head !=
-		InterlockedCompareExchangePointer(&from->nodes, NULL, head));
-#endif
 
 	to->nodes = head;
 

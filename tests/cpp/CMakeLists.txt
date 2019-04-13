@@ -4,32 +4,10 @@
 
 add_executable(yall_cpp main.cpp)
 
-if (UNIX)
-	# Compile options
-	set(_PVT_OPT -Wall -Wextra)
-	set(_PVT_OPT_DEBUG -O0 -g)
-	set(_PVT_OPT_RELEASE -O3)
-elseif (WIN32)
-	# Compile options
-
-	#[[
-		* 4127 : constant conditional expression
-		* 4350 : behaviour changed for allocator
-		* 4365 : conversion from int to uint64_t
-		* 4514 : unreferenced inline function removed
-		* 4625 : copy constructor implicitly deleted
-		* 4626 : assignment operator implicitly deleted
-		* 4640 : construction of local static object is not thread safe
-		* 4710 : function not inlined
-		* 4820 : padding
-	#]]
-
-	set(_PVT_OPT /wd4127 /wd4350 /wd4365 /wd4514 /wd4625 /wd4626 /wd4640 /wd4710 /wd4820 /Wall)
-	set(_PVT_OPT_DEBUG /Od)
-    set(_PVT_OPT_RELEASE /W4 /O2 /MP)
-
-	set_property(TARGET yall_cpp PROPERTY FOLDER "tests")
-endif ()
+# Compile options
+set(_PVT_OPT -Wall -Wextra)
+set(_PVT_OPT_DEBUG -O0 -g)
+set(_PVT_OPT_RELEASE -O3)
 
 target_compile_options(yall_cpp
 	PRIVATE

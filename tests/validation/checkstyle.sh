@@ -13,7 +13,6 @@
 #    * SPACING : because "if (! var)" is better than "if (!var)"
 #    * GLOBAL_INITIALISERS : same as INITIALISED_STATIC
 #    * NEW_TYPEDEFS : typedef are used to obsfuscate struct internals to user
-#    * USE_FUNC : __func__ is use on Windows, which leads to a false positive
 #
 # This script should be run from the root of the repository
 #
@@ -32,7 +31,7 @@ do
     esac
 
     $ROOT_DIR/tests/validation/checkpatch.pl -q \
-        --ignore CONST_STRUCT,INITIALISED_STATIC,SPACING,GLOBAL_INITIALISERS,NEW_TYPEDEFS,USE_FUNC \
+        --ignore CONST_STRUCT,INITIALISED_STATIC,SPACING,GLOBAL_INITIALISERS,NEW_TYPEDEFS \
         --no-tree \
         -f $file
 done

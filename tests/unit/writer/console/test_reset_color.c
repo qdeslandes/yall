@@ -31,11 +31,7 @@ Test(writer_console, test_reset_color0)
 {
 	reset_color();
 
-#ifdef __linux__
 	cr_assert_stderr_eq_str("\033[0m");
-#else
-    cr_assert(1);
-#endif
 
 	/*
 	 * Calling reset_color() a second time here generate a crash in unit

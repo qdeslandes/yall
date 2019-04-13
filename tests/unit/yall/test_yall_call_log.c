@@ -34,12 +34,6 @@ Test(yall, test_yall_call_log0)
 	cr_assert_eq(yall_call_log("toolongnameforasubsysteminthelibrary", yall_debug, "", "main.c", 43, tests_call_log_function, NULL), YALL_NOT_INIT);
 }
 
-#ifdef __linux__
-/*
- * Currently set this tests for Linux only, as on Windows they are really slow.
- * However, Windows and Linux code for this feature are identical, so there
- * shouldn't be any problem.
- */
 /*
  * Test on getting subsystem and checking log level
  */
@@ -63,7 +57,6 @@ Theory((char *s, enum yall_log_level ll, char *f, char *F, int32_t line), yall, 
 
 	cr_assert_eq(ret, waiting_for);
 }
-#endif
 
 /*
  * O.K.

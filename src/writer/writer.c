@@ -24,10 +24,6 @@
 
 #include "yall/writer/writer.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 #include "yall/container/cqueue.h"
 #include "yall/error.h"
 #include "yall/writer/thread.h"

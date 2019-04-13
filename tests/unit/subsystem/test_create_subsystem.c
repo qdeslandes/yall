@@ -24,12 +24,6 @@
 
 #include "subsystem/test.h"
 
-#ifdef __linux__
-/*
- * Currently set this tests for Linux only, as on Windows they are really slow.
- * However, Windows and Linux code for this feature are identical, so there
- * shouldn't be any problem.
- */
 TheoryDataPoints(subsystem, test_create_subsystem0) = {
 	DataPoints(char *, "short", "middlename", "toolongnameforasubsystemidkwhattodowiththat"),
 	DataPoints(enum yall_log_level, yall_debug, yall_info, yall_notice, yall_warning, yall_err, yall_crit, yall_alert, yall_emerg),
@@ -58,4 +52,3 @@ Theory((char *n, enum yall_log_level ll, enum yall_output_type ot, char *of), su
 	cr_assert_eq(s->output_type, ot);
 	cr_assert_str_eq(s->file.filename, of);
 }
-#endif

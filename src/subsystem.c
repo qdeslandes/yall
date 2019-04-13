@@ -368,19 +368,11 @@ enum {
 	EMPTY
 };
 
-#ifdef __linux__
 static const char *connectors[4] = {
 	"│   ",
 	"├── ",
 	"└── ",
 	"    "};
-#else
-static const char *connectors[4] = {
-	"|   ",
-	"|-- ",
-	"|-- ",
-	"    " };
-#endif
 
 /**
  * \brief Call function use with _YALL_DBG_CALL_xxx to disable the subsystems

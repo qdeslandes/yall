@@ -8,7 +8,7 @@
 
 `yall` is a subsystems based logging library. It allows to create subsystems which will manage all the logging parameters for an area of the application. Subsystems can inherit from one another, override parents parameters...
 
-`yall` is available on Linux and Windows (MSVC12 and MSVC14).
+`yall` is available on Linux (for Windows support, see `legacy` branch on GitHub).
 
 
 ## How to use

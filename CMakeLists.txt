@@ -25,26 +25,16 @@ set(CMAKE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
-if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "")
+if (CMAKE_BUILD_TYPE STREQUAL "")
 	set(CMAKE_BUILD_TYPE "Release")
 endif ()
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/resources/cmake/module")
 
-if (WIN32)
-	set_property(GLOBAL PROPERTY USE_FOLDERS On)
-	set(pthread_HINTS "${pthread_HINTS}" "${CMAKE_SOURCE_DIR}/external")
-	set(criterion_HINTS "${criterion_HINTS}" "${CMAKE_SOURCE_DIR}/external")
-	set(jansson_HINTS "${jansson_HINTS}" "${CMAKE_SOURCE_DIR}/external")
-endif ()
-
 find_package(jansson REQUIRED)
 find_package(pthread REQUIRED)
 find_package(criterion REQUIRED)
-
-if (UNIX)
-    find_package(Doxygen REQUIRED)
-endif ()
+find_package(Doxygen REQUIRED)
 
 #[[
 	Project version
@@ -80,23 +70,13 @@ set(CMAKE_DEBUG_POSTFIX d)
 #[[
 	System specific variables
 #]]
-if (UNIX)
-	if (CMAKE_COMPILER_IS_GNUCC)
-		set(COMPILER "gcc-${CMAKE_C_COMPILER_VERSION}")
-	else ()
-		set(COMPILER "linux_unknow")
-	endif ()
-
-	link_directories(${CMAKE_SOURCE_DIR}/external/lib/linux)
-elseif (WIN32)
-	if (MSVC_VERSION EQUAL 1900)
-		set(COMPILER "msvc14")
-	elseif (MSVC_VERSION EQUAL 1800)
-		set(COMPILER "msvc12")
-	else ()
-		set(COMPILER "windows_unknow")
-	endif ()
+if (CMAKE_COMPILER_IS_GNUCC)
+    set(COMPILER "gcc-${CMAKE_C_COMPILER_VERSION}")
+else ()
+    set(COMPILER "linux_unknow")
 endif ()
+
+link_directories(${CMAKE_SOURCE_DIR}/external/lib/linux)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/out/public/doxygen)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/out/coverage)

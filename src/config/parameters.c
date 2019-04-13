@@ -26,10 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef __linux__
 #include <syslog.h>
-#endif
 
 #include "yall/debug.h"
 #include "yall/header.h"
@@ -147,10 +144,8 @@ void yall_config_set_syslog_ident(const char *ident)
 	free((void *)current_config.syslog_ident);
 	current_config.syslog_ident = strdup(ident);
 
-#ifdef __linux__
 	closelog();
 	openlog(current_config.syslog_ident, 0, current_config.syslog_facility);
-#endif
 }
 
 void yall_config_reset_syslog_ident(void)
@@ -167,10 +162,8 @@ void yall_config_set_syslog_facility(enum yall_syslog_facility f)
 {
 	current_config.syslog_facility = f;
 
-#ifdef __linux__
 	closelog();
 	openlog(current_config.syslog_ident, 0, current_config.syslog_facility);
-#endif
 }
 
 void yall_config_reset_syslog_facility(void)
